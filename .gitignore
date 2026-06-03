@@ -1,2 +1,6 @@
 .DS_Store
 *.DS_Store
+
+# 제작과정 원본(4배 PNG)·피그마 ex 참고 — webp만 커밋, 소스는 로컬 보관
+/process/
+/jaringobi process ex/
