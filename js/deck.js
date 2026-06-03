@@ -33,9 +33,9 @@
       if (v.videoWidth && v.videoHeight)
         v.style.objectFit = v.videoHeight > v.videoWidth ? "contain" : "cover";
       try { v.currentTime = 0; } catch (e) {}
-      v.muted = false;
+      v.muted = true;           // 인트로 영상은 무음(자동재생 안정 + 소리 없음)
       const pr = v.play();      // loop 속성으로 무한 반복
-      if (pr && pr.catch) pr.catch(() => { v.muted = true; v.play().catch(() => {}); });
+      if (pr && pr.catch) pr.catch(() => {});
     } else {
       setTimeout(() => v.pause(), 850);   // 이탈 시 정지 → 한 번에 1개만 디코딩
     }

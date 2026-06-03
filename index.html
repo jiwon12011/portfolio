@@ -240,7 +240,7 @@
 
   <!-- ===== 프로젝트 인트로 패널 (오른쪽에서 슬라이드 인) ===== -->
   <section class="project-intro deck-panel" id="intro-jaringobi" data-project="jaringobi" aria-hidden="true">
-    <video class="project-intro__video" playsinline loop preload="none"
+    <video class="project-intro__video" playsinline loop muted preload="none"
            src="img/jaringobi/jaringobi_intro.mp4"></video>
     <div class="intro-grad" aria-hidden="true"></div>
 
@@ -324,6 +324,299 @@
       </aside>
 
       <!-- 하단 우측: 인터랙션 안내 -->
+      <div class="intro-hints">
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
+          <div><b>CLICK</b><p>프로젝트 상세 보기</p></div>
+        </div>
+        <span class="intro-hint__sep"></span>
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 36"><rect x="5" y="2" width="14" height="22" rx="7"/><line x1="12" y1="7" x2="12" y2="11"/></svg>
+          <div><b>SCROLL</b><p>다음 프로젝트로 이동</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       다른 프로젝트 인트로 — 자린고비 구조 복제(임시 텍스트). 영상만 연결.
+       순서/문구는 나중에 교체. 플레디스는 영상 없어 보류.
+  ==================================================================== -->
+
+  <!-- ── 귀혼 ── -->
+  <section class="project-intro deck-panel" id="intro-gwihon" data-project="gwihon" aria-hidden="true">
+    <video class="project-intro__video" playsinline loop muted preload="none"
+           src="img/hon/hon_intro.mp4"></video>
+    <div class="intro-grad" aria-hidden="true"></div>
+
+    <div class="intro-ui">
+      <header class="intro-top">
+        <button class="intro-brand" type="button" data-go-main aria-label="메인으로">
+          <span class="intro-brand__mark" aria-hidden="true">⌗</span> PORTFOLIO 2026
+        </button>
+        <nav class="intro-nav">
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+            <span class="intro-nav__txt"><b>PROJECTS</b><i>Selected Works</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 18A2 2 0 006.3 21h11.4a2 2 0 001.8-3L14 9V3"/><path d="M8 15h8"/></svg>
+            <span class="intro-nav__txt"><b>LAB</b><i>AI &amp; Experiments</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0114 0"/></svg>
+            <span class="intro-nav__txt"><b>ABOUT</b><i>Profile &amp; Resume</i></span>
+          </a>
+        </nav>
+      </header>
+
+      <div class="intro-info">
+        <p class="intro-info__eyebrow">PROJECT 02</p>
+        <h1 class="intro-info__title">귀혼</h1>
+        <p class="intro-info__sub">Personal Project</p>
+        <span class="intro-info__rule" aria-hidden="true"></span>
+        <!-- TODO: 실제 소개 문구로 교체 -->
+        <p class="intro-info__desc">프로젝트 소개 준비 중 —<br />임시 텍스트입니다</p>
+
+        <div class="intro-index intro-index--gap">
+          <p class="intro-index__label">PROCESS INDEX</p>
+          <ul>
+            <li class="is-current"><span>01</span> Overview</li>
+            <li><span>02</span> Desk Research</li>
+            <li><span>03</span> Goal &amp; Persona</li>
+            <li><span>04</span> Problem Solving</li>
+            <li><span>05</span> Visual</li>
+            <li><span>06</span> Experience</li>
+            <li><span>07</span> Outcome</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="intro-pager"><span>02 / 05</span><div class="intro-pager__bar"><i style="--p:40%"></i></div></div>
+
+      <aside class="intro-list">
+        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
+        <ul>
+          <li class="intro-list__item" data-go="jaringobi">
+            <img src="img/main/main_jaringobi.webp" alt="" />
+            <div><span>01</span><h4>자린고비</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item is-active" data-go="gwihon">
+            <img src="img/main/main_hon.webp" alt="" />
+            <div><span>02</span><h4>귀혼</h4><p>UXUI / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="pledis">
+            <img src="img/main/main_pledis.webp" alt="" />
+            <div><span>03</span><h4>플레디스</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="yumi">
+            <img src="img/main/main_yumi.webp" alt="" />
+            <div><span>04</span><h4>유미의 세포들</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="poze">
+            <img src="img/main/main_poze.webp" alt="" />
+            <div><span>05</span><h4>POZE</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="intro-hints">
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
+          <div><b>CLICK</b><p>프로젝트 상세 보기</p></div>
+        </div>
+        <span class="intro-hint__sep"></span>
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 36"><rect x="5" y="2" width="14" height="22" rx="7"/><line x1="12" y1="7" x2="12" y2="11"/></svg>
+          <div><b>SCROLL</b><p>다음 프로젝트로 이동</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 유미의 세포들 ── -->
+  <section class="project-intro deck-panel" id="intro-yumi" data-project="yumi" aria-hidden="true">
+    <video class="project-intro__video" playsinline loop muted preload="none"
+           src="img/yumi_cell/yumicell_intro.mp4"></video>
+    <div class="intro-grad" aria-hidden="true"></div>
+
+    <div class="intro-ui">
+      <header class="intro-top">
+        <button class="intro-brand" type="button" data-go-main aria-label="메인으로">
+          <span class="intro-brand__mark" aria-hidden="true">⌗</span> PORTFOLIO 2026
+        </button>
+        <nav class="intro-nav">
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+            <span class="intro-nav__txt"><b>PROJECTS</b><i>Selected Works</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 18A2 2 0 006.3 21h11.4a2 2 0 001.8-3L14 9V3"/><path d="M8 15h8"/></svg>
+            <span class="intro-nav__txt"><b>LAB</b><i>AI &amp; Experiments</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0114 0"/></svg>
+            <span class="intro-nav__txt"><b>ABOUT</b><i>Profile &amp; Resume</i></span>
+          </a>
+        </nav>
+      </header>
+
+      <div class="intro-info">
+        <p class="intro-info__eyebrow">PROJECT 04</p>
+        <h1 class="intro-info__title">유미의 세포들</h1>
+        <p class="intro-info__sub">Personal Project</p>
+        <span class="intro-info__rule" aria-hidden="true"></span>
+        <!-- TODO: 실제 소개 문구로 교체 -->
+        <p class="intro-info__desc">프로젝트 소개 준비 중 —<br />임시 텍스트입니다</p>
+
+        <div class="intro-index intro-index--gap">
+          <p class="intro-index__label">PROCESS INDEX</p>
+          <ul>
+            <li class="is-current"><span>01</span> Overview</li>
+            <li><span>02</span> Desk Research</li>
+            <li><span>03</span> Goal &amp; Persona</li>
+            <li><span>04</span> Problem Solving</li>
+            <li><span>05</span> Visual</li>
+            <li><span>06</span> Experience</li>
+            <li><span>07</span> Outcome</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="intro-pager"><span>04 / 05</span><div class="intro-pager__bar"><i style="--p:80%"></i></div></div>
+
+      <aside class="intro-list">
+        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
+        <ul>
+          <li class="intro-list__item" data-go="jaringobi">
+            <img src="img/main/main_jaringobi.webp" alt="" />
+            <div><span>01</span><h4>자린고비</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="gwihon">
+            <img src="img/main/main_hon.webp" alt="" />
+            <div><span>02</span><h4>귀혼</h4><p>UXUI / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="pledis">
+            <img src="img/main/main_pledis.webp" alt="" />
+            <div><span>03</span><h4>플레디스</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item is-active" data-go="yumi">
+            <img src="img/main/main_yumi.webp" alt="" />
+            <div><span>04</span><h4>유미의 세포들</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="poze">
+            <img src="img/main/main_poze.webp" alt="" />
+            <div><span>05</span><h4>POZE</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="intro-hints">
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
+          <div><b>CLICK</b><p>프로젝트 상세 보기</p></div>
+        </div>
+        <span class="intro-hint__sep"></span>
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 36"><rect x="5" y="2" width="14" height="22" rx="7"/><line x1="12" y1="7" x2="12" y2="11"/></svg>
+          <div><b>SCROLL</b><p>다음 프로젝트로 이동</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── POZE ── -->
+  <section class="project-intro deck-panel" id="intro-poze" data-project="poze" aria-hidden="true">
+    <video class="project-intro__video" playsinline loop muted preload="none"
+           src="img/poze/poze_intro.mp4"></video>
+    <div class="intro-grad" aria-hidden="true"></div>
+
+    <div class="intro-ui">
+      <header class="intro-top">
+        <button class="intro-brand" type="button" data-go-main aria-label="메인으로">
+          <span class="intro-brand__mark" aria-hidden="true">⌗</span> PORTFOLIO 2026
+        </button>
+        <nav class="intro-nav">
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+            <span class="intro-nav__txt"><b>PROJECTS</b><i>Selected Works</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 18A2 2 0 006.3 21h11.4a2 2 0 001.8-3L14 9V3"/><path d="M8 15h8"/></svg>
+            <span class="intro-nav__txt"><b>LAB</b><i>AI &amp; Experiments</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0114 0"/></svg>
+            <span class="intro-nav__txt"><b>ABOUT</b><i>Profile &amp; Resume</i></span>
+          </a>
+        </nav>
+      </header>
+
+      <div class="intro-info">
+        <p class="intro-info__eyebrow">PROJECT 05</p>
+        <h1 class="intro-info__title">POZE</h1>
+        <p class="intro-info__sub">Personal Project</p>
+        <span class="intro-info__rule" aria-hidden="true"></span>
+        <!-- TODO: 실제 소개 문구로 교체 -->
+        <p class="intro-info__desc">프로젝트 소개 준비 중 —<br />임시 텍스트입니다</p>
+
+        <div class="intro-index intro-index--gap">
+          <p class="intro-index__label">PROCESS INDEX</p>
+          <ul>
+            <li class="is-current"><span>01</span> Overview</li>
+            <li><span>02</span> Desk Research</li>
+            <li><span>03</span> Goal &amp; Persona</li>
+            <li><span>04</span> Problem Solving</li>
+            <li><span>05</span> Visual</li>
+            <li><span>06</span> Experience</li>
+            <li><span>07</span> Outcome</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="intro-pager"><span>05 / 05</span><div class="intro-pager__bar"><i style="--p:100%"></i></div></div>
+
+      <aside class="intro-list">
+        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
+        <ul>
+          <li class="intro-list__item" data-go="jaringobi">
+            <img src="img/main/main_jaringobi.webp" alt="" />
+            <div><span>01</span><h4>자린고비</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="gwihon">
+            <img src="img/main/main_hon.webp" alt="" />
+            <div><span>02</span><h4>귀혼</h4><p>UXUI / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="pledis">
+            <img src="img/main/main_pledis.webp" alt="" />
+            <div><span>03</span><h4>플레디스</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="yumi">
+            <img src="img/main/main_yumi.webp" alt="" />
+            <div><span>04</span><h4>유미의 세포들</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item is-active" data-go="poze">
+            <img src="img/main/main_poze.webp" alt="" />
+            <div><span>05</span><h4>POZE</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+        </ul>
+      </aside>
+
       <div class="intro-hints">
         <div class="intro-hint">
           <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
