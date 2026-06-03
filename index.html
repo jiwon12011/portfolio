@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jiwon — Visual & Experience Design</title>
+  <meta name="description" content="Designing worlds worth staying in. Visual & experience design portfolio." />
+
+  <!-- LCP 이미지 preload (배경/캐릭터) -->
+  <link rel="preload" as="image" href="img/main/main_bg.webp" type="image/webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="img/main/main_cha.webp" type="image/webp" />
+
+  <!-- Pretendard (KR/EN) — 비동기 로드로 렌더 블로킹 제거 -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preload" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+        onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  </noscript>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ======================================================================
+       SCENE
+       배경 사진(테라스+캐릭터) 위에 글래스 카드가 떠있는 한 화면.
+       카드는 .orbit-stage 안에 있고, 각 .card-arm 에는 캐릭터(중앙) 기준
+       data-angle / data-radius / data-orbit-speed 가 미리 계산돼 있다.
+       → 나중에 orbit 붙일 때 DOM 변경 없이 transform 만 얹으면 된다.
+  ======================================================================= -->
+  <main class="scene deck-panel" data-project="main">
+    <!-- 디자인 캔버스(1466×847) = orbit-stage. transform:scale 로 뷰포트에 균일 확대.
+         배경/캐릭터/카드 모두 이 안의 siblings → backdrop-filter 유지 + 앞뒤 가림 동작 -->
+    <div class="orbit-stage">
+      <div class="scene__sky" aria-hidden="true"></div>
+      <img class="scene__photo" src="img/main/main_bg.webp" alt="" aria-hidden="true"
+           fetchpriority="high" decoding="async" onerror="this.style.display='none'" />
+      <img class="scene__character" src="img/main/main_cha.webp" alt="" aria-hidden="true" decoding="async" />
+
+      <!-- 1. VISUAL ARCHIVE — 링크 카드 -->
+      <div class="card-arm" data-card="visual-archive"
+           data-angle="-144" data-radius="498" data-orbit-speed="1"
+           style="--x:17.1%; --y:15.3%; --w:203px;">
+        <article class="card card--link">
+          <a class="card__hit" href="#" aria-label="Visual Archive 보기"></a>
+          <img class="card__thumb-sm" src="img/main/main_banner1.webp" alt="Visual Archive" onerror="this.classList.add('is-empty')" />
+          <div class="card__meta">
+            <h3 class="card__title">VISUAL ARCHIVE</h3>
+            <p class="card__desc">Banner &amp; Campaign</p>
+          </div>
+          <span class="card__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </article>
+      </div>
+
+      <!-- 2. 자린고비 — 음악 플레이어 카드 (TEAM) -->
+      <div class="card-arm" data-card="jaringobi"
+           data-angle="-94" data-radius="323" data-orbit-speed="1"
+           style="--x:38.3%; --y:11.2%; --w:340px;">
+        <article class="card card--player">
+          <img class="card__thumb" src="img/main/main_jaringobi.webp" alt="자린고비" onerror="this.classList.add('is-empty')" />
+          <div class="card__body">
+            <div class="card__head">
+              <div class="card__meta">
+                <h3 class="card__title">자린고비</h3>
+                <p class="card__sub">TEAM PROJECT</p>
+              </div>
+              <button class="card__like" type="button" aria-label="좋아요">
+                <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/></svg>
+              </button>
+            </div>
+            <div class="player">
+              <div class="player__bar"><span style="--p:55%"></span></div>
+              <div class="player__controls">
+                <button type="button" class="player__skip" aria-label="이전 트랙" disabled><svg viewBox="0 0 24 24"><path d="M7 5h2v14H7zM20 5v14l-9-7z"/></svg></button>
+                <button type="button" class="player__play is-playing" aria-label="재생/일시정지">
+                  <svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
+                </button>
+                <button type="button" class="player__skip" aria-label="다음 트랙" disabled><svg viewBox="0 0 24 24"><path d="M17 5h2v14h-2zM4 5l9 7-9 7z"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- 3. 귀혼 — 이미지 + 재생 카드 -->
+      <div class="card-arm" data-card="gwihon"
+           data-angle="-30" data-radius="491" data-orbit-speed="1"
+           style="--x:73.3%; --y:11.8%; --w:202px;">
+        <article class="card card--cover">
+          <img class="card__art" src="img/main/main_hon.webp" alt="귀혼" onerror="this.classList.add('is-empty')" />
+          <div class="card__row">
+            <div class="card__meta">
+              <h3 class="card__title">귀혼</h3>
+              <p class="card__sub">PERSONAL PROJECT</p>
+            </div>
+            <button class="card__like" type="button" aria-label="좋아요">
+              <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/></svg>
+            </button>
+          </div>
+          <button class="card__play" type="button" aria-label="재생">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </article>
+      </div>
+
+      <!-- 4. ABOUT ME — 텍스트 카드 -->
+      <div class="card-arm" data-card="about"
+           data-angle="-178" data-radius="467" data-orbit-speed="1"
+           style="--x:14.5%; --y:45.8%; --w:155px;">
+        <article class="card card--about">
+          <div class="card__meta">
+            <h3 class="card__title">ABOUT ME</h3>
+            <p class="card__desc">Visual &amp; experience design</p>
+          </div>
+          <p class="card__lead">Designing worlds worth staying in</p>
+          <a class="card__more" href="#about">
+            VIEW MORE
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </article>
+      </div>
+
+      <!-- 5. 플레디스 — 이미지 + 재생 카드 -->
+      <div class="card-arm" data-card="pledis"
+           data-angle="-167" data-radius="261" data-orbit-speed="1"
+           style="--x:27.3%; --y:34.0%; --w:202px;">
+        <article class="card card--cover">
+          <img class="card__art" src="img/main/main_pledis.webp" alt="플레디스" onerror="this.classList.add('is-empty')" />
+          <div class="card__row">
+            <div class="card__meta">
+              <h3 class="card__title">플레디스</h3>
+              <p class="card__sub">PERSONAL PROJECT</p>
+            </div>
+            <button class="card__like" type="button" aria-label="좋아요">
+              <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/></svg>
+            </button>
+          </div>
+          <button class="card__play" type="button" aria-label="재생">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </article>
+      </div>
+
+      <!-- 6. 유미의 세포들 — 이미지 + 재생 카드 -->
+      <div class="card-arm" data-card="yumi"
+           data-angle="-13" data-radius="205" data-orbit-speed="1"
+           style="--x:58.3%; --y:36.6%; --w:202px;">
+        <article class="card card--cover">
+          <img class="card__art" src="img/main/main_yumi.webp" alt="유미의 세포들" onerror="this.classList.add('is-empty')" />
+          <div class="card__row">
+            <div class="card__meta">
+              <h3 class="card__title">유미의 세포들</h3>
+              <p class="card__sub">PERSONAL PROJECT</p>
+            </div>
+            <button class="card__like" type="button" aria-label="좋아요">
+              <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/></svg>
+            </button>
+          </div>
+          <button class="card__play" type="button" aria-label="재생">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </article>
+      </div>
+
+      <!-- 7. POZE — 음악 플레이어 카드 -->
+      <div class="card-arm" data-card="poze"
+           data-angle="144" data-radius="363" data-orbit-speed="1"
+           style="--x:19.3%; --y:75.0%; --w:359px;">
+        <article class="card card--player">
+          <img class="card__thumb" src="img/main/main_poze.webp" alt="POZE" onerror="this.classList.add('is-empty')" />
+          <div class="card__body">
+            <div class="card__head">
+              <div class="card__meta">
+                <h3 class="card__title">POZE</h3>
+                <p class="card__sub">PERSONAL PROJECT</p>
+              </div>
+              <button class="card__like" type="button" aria-label="좋아요">
+                <svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"/></svg>
+              </button>
+            </div>
+            <div class="player">
+              <div class="player__bar"><span style="--p:42%"></span></div>
+              <div class="player__controls">
+                <button type="button" class="player__skip" aria-label="이전 트랙" disabled><svg viewBox="0 0 24 24"><path d="M7 5h2v14H7zM20 5v14l-9-7z"/></svg></button>
+                <button type="button" class="player__play is-playing" aria-label="재생/일시정지">
+                  <svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
+                </button>
+                <button type="button" class="player__skip" aria-label="다음 트랙" disabled><svg viewBox="0 0 24 24"><path d="M17 5h2v14h-2zM4 5l9 7-9 7z"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- 8. CONTENT LAB — 텍스트 + 썸네일 카드 -->
+      <div class="card-arm" data-card="content-lab"
+           data-angle="45" data-radius="288" data-orbit-speed="1"
+           style="--x:58.3%; --y:74.6%; --w:203px;">
+        <article class="card card--lab">
+          <div class="card__meta">
+            <h3 class="card__title">CONTENT LAB</h3>
+            <p class="card__desc">Core strengths and expertise</p>
+          </div>
+          <div class="card__lab-grid">
+            <p class="card__lead--sm">Creating<br />trend-driven<br />social content</p>
+            <div class="card__lab-stack" aria-hidden="true">
+              <img src="img/main/main_ma2.webp" alt="" onerror="this.classList.add('is-empty')" />
+              <img src="img/main/main_ma1.webp" alt="" onerror="this.classList.add('is-empty')" />
+              <img src="img/main/main_ma3.webp" alt="" onerror="this.classList.add('is-empty')" />
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- 9. SKILLS — 패널 카드 -->
+      <div class="card-arm" data-card="skills"
+           data-angle="12" data-radius="423" data-orbit-speed="1"
+           style="--x:74.7%; --y:59.0%; --w:143px;">
+        <article class="card card--skills">
+          <div class="card__meta">
+            <h3 class="card__title">Skills</h3>
+            <p class="card__desc">Core strengths and expertise</p>
+          </div>
+          <ul class="skills">
+            <li><span>UI/UX</span><i style="--p:90%"></i></li>
+            <li><span>Visual</span><i style="--p:85%"></i></li>
+            <li><span>Branding</span><i style="--p:75%"></i></li>
+            <li><span>Web</span><i style="--p:70%"></i></li>
+            <li><span>AI</span><i style="--p:60%"></i></li>
+          </ul>
+        </article>
+      </div>
+
+    </div><!-- /.orbit-stage -->
+  </main>
+
+  <!-- ===== 프로젝트 인트로 패널 (오른쪽에서 슬라이드 인) ===== -->
+  <section class="project-intro deck-panel" id="intro-jaringobi" data-project="jaringobi" aria-hidden="true">
+    <video class="project-intro__video" playsinline loop preload="none"
+           src="img/jaringobi/jaringobi_intro.mp4"></video>
+    <!-- 메인으로 돌아가기(닫기 버튼 아님 — 은은한 back, 스크롤 위/Esc 로도 됨) -->
+    <button class="project-intro__back" type="button" aria-label="메인으로 돌아가기">
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+      <span>메인</span>
+    </button>
+  </section>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/orbit.js" defer></script>
+  <script src="js/deck.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+/* =======================================================================
+   Jiwon Portfolio — Glassmorphism floating cards
+   순수 정적 / 배경 사진 위 글래스 카드 / orbit-ready 구조
+   ---------------------------------------------------------------------
+   구조: .scene > .orbit-stage > .card-arm(좌표) > .card(글래스)
+   각 .card-arm 에 --x/--y(현재 정적 좌표), data-angle/radius(궤도 예약)
+======================================================================= */
+
+:root {
+  /* 텍스트: 전부 흰색. 위계는 폰트 굵기(weight)로만 표현 */
+  --ink:        #ffffff;
+  --ink-strong: #ffffff;
+  --ink-sub:    rgba(255, 255, 255, 0.96);
+  --ink-faint:  rgba(255, 255, 255, 0.80);
+
+  /* 블루 액센트: #7FAEE5 → #E2EFFF 그라데이션 */
+  --blue-1: #7FAEE5;
+  --blue-2: #E2EFFF;
+  --blue-grad: linear-gradient(120deg, #7FAEE5 0%, #E2EFFF 100%);
+
+  /* 글래스 토큰 (살짝 블루 틴트 + 글로우) */
+  --glass-bg:     linear-gradient(140deg, rgba(255,255,255,0.20), rgba(210,230,255,0.12));
+  --glass-stroke: rgba(255, 255, 255, 0.50);
+  --glass-blur:   20px;
+  --glass-shadow: 0 18px 48px -16px rgba(30, 45, 75, 0.42),
+                  0 0 0 1px rgba(127, 174, 229, 0.12),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.50);
+
+  /* 텍스트 그림자 — 글래스가 불투명해져 가볍게. 큰 글씨용/작은 글씨용 분리 */
+  --text-veil:    0 1px 3px rgba(16, 30, 55, 0.30);
+  --text-veil-sm: 0 1px 1.5px rgba(16, 30, 55, 0.20);
+
+  --radius-card: 20px;
+  --radius-img:  14px;
+
+  --ctrl:     rgba(255, 255, 255, 0.96);
+  --ctrl-ink: #3a5a8c;   /* 흰 원 위 글리프 대비 확보 */
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+               system-ui, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background: #c9d3da;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------------------------------------------------------------- SCENE */
+/* .scene = 뷰포트 고정 스케일러. .orbit-stage = 1466×847 디자인 캔버스를
+   transform:scale 로 cover 확대 → 1440/1920 동일 비율. 배경·캐릭터·카드를
+   모두 캔버스 안 siblings 로 둬서 backdrop-filter 와 앞/뒤 가림을 동시에 만족. */
+.scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #0d1521;
+}
+
+
+.scene__photo,
+.scene__character {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.scene__photo { z-index: 1; }
+
+/* 캐릭터: 배경과 같은 캔버스의 투명 PNG. orbit 의 중심축이자
+   z:10 기준 레이어 — 뒤(z<10) 카드는 가려지고 앞(z>10) 카드는 덮는다. */
+.scene__character {
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* 원본 사진 들어오기 전, 석양 테라스 톤의 폴백 하늘 */
+.scene__sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 8%, #aebfce 0%, #b9c4cf 30%, transparent 55%),
+    radial-gradient(140% 120% at 82% 100%, #f6d9b8 0%, #f0c79e 22%, transparent 60%),
+    radial-gradient(120% 110% at 12% 92%, #d8cbbf 0%, transparent 55%),
+    linear-gradient(180deg, #9fb4c8 0%, #c3c8c9 46%, #e7d4bf 100%);
+}
+.scene__photo:not([style*="display: none"]) ~ .scene__sky { opacity: 0; }
+
+/* ----------------------------------------------- ORBIT STAGE (디자인 캔버스) */
+.orbit-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1466px;
+  height: 847px;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+  transform-origin: center center;
+}
+
+/* 씬 컬러그레이딩 — 배경 위(z:3, 카드/캐릭터 아래)에 따뜻-차가운 시네마 톤 */
+.orbit-stage::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 26%, rgba(255,186,112,0.10) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(110,155,205,0.07) 0%, transparent 42%, rgba(150,150,182,0.10) 100%);
+  mix-blend-mode: soft-light;
+}
+/* 비네트 — 가장자리 어둡게 해서 중앙을 '조명받은 무대'처럼 */
+.orbit-stage::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 46%, transparent 40%, rgba(16,26,46,0.42) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* SVG 궤도 링 */
+.orbit-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* 파티클 canvas */
+.orbit-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* 좌표 래퍼 — image#4 정적 배치(--x/--y). 카드는 배경(z:1)·캐릭터(z:10)
+   위에 떠 있어야 하므로 z-index 20. (패럴랙스 transform 은 hero.js) */
+.card-arm {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w, 220px);
+  z-index: 20;
+}
+
+/* ------------------------------------------------------------- CARD 공통 */
+.card {
+  position: relative;
+  border-radius: var(--radius-card);
+  /* Milky frosted — backdrop-filter 없이도 유리로 읽히게 반투명 레이어링.
+     (orbit 은 transform 으로 카드를 움직이므로 backdrop-filter 가 무력화됨 →
+      흐림 대신 우윳빛 반투명 + rim light + 그림자로 글래스를 만든다) */
+  /* 4겹 레이어드 글래스: ①상단 스펙큘러 ②좌우 색수차(좌 따뜻/우 차가움)
+     ③수직 명도 리듬(두께감) ④베이스 — backdrop-filter 없이 굴절감/깊이 */
+  background:
+    radial-gradient(140% 85% at 50% -8%, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.22) 24%, transparent 50%),
+    linear-gradient(90deg, rgba(255,222,198,0.13) 0%, rgba(255,255,255,0) 38%, rgba(182,212,255,0.13) 100%),
+    linear-gradient(180deg, rgba(240,248,255,0.54) 0%, rgba(220,238,255,0.42) 38%, rgba(202,226,255,0.34) 68%, rgba(184,212,247,0.28) 100%),
+    radial-gradient(140% 110% at 50% 42%, rgba(220,235,255,0.18) 0%, rgba(200,220,250,0.12) 50%, rgba(150,180,220,0.06) 100%);
+  border: 1px solid rgba(255,255,255,0.34);
+  /* 4단계: 외곽 블룸 · rim 글로우 · 깊이 그림자 · inset 상단 하이라이트 */
+  box-shadow:
+    0 24px 54px -14px rgba(20, 40, 76, 0.46),
+    0 0 2px rgba(255,255,255,1),
+    0 0 14px rgba(222,240,255,0.82),
+    0 0 30px rgba(165,205,255,0.52),
+    0 0 60px rgba(130,180,250,0.32),
+    inset 0 1px 2px rgba(255,255,255,0.72),
+    inset 0 -1px 1px rgba(20,40,80,0.07);
+  padding: 14px;
+  transform: translateZ(0);
+  transition: transform .45s cubic-bezier(.2,.7,.2,1),
+              box-shadow .45s cubic-bezier(.2,.7,.2,1);
+}
+
+/* 가장자리 빛 라인 — gradient border (mask-composite 링) */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.6px;                 /* = 링 두께 */
+  /* 상단 집중 림 라이트(유리 반사) — 위 밝고 아래로 사그라듦 */
+  background: linear-gradient(180deg,
+    rgba(255,255,255,1) 0%,
+    rgba(246,251,255,0.82) 6%,
+    rgba(216,236,255,0.42) 42%,
+    rgba(176,206,241,0.18) 80%,
+    rgba(150,190,235,0.12) 100%);
+  filter: drop-shadow(0 0 2px rgba(255,255,255,0.85))
+          drop-shadow(0 0 6px rgba(206,233,255,0.95))
+          drop-shadow(0 0 12px rgba(176,210,255,0.55));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 30px 66px -12px rgba(28, 48, 84, 0.50),
+    0 0 2px rgba(255,255,255,0.95),
+    0 0 14px rgba(200,222,255,0.56),
+    0 0 30px rgba(127,174,229,0.32),
+    inset 0 1px 2px rgba(255,255,255,0.60),
+    inset 0 -1px 1px rgba(20,40,80,0.08);
+}
+
+.card__meta { min-width: 0; }
+/* ── 타입 계층 ──────────────────────────────────────────────
+   L1 타이틀(프로젝트명)  : player 20 · cover 16
+   L1' 워드마크(라벨카드)  : 14, 트래킹
+   L2 eyebrow(대문자)     : 10, PERSONAL PROJECT 류
+   L2' descriptor(소문자) : 9, Banner & Campaign 류 (tertiary)
+   L3 lead               : 16 · body 12
+*/
+.card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;             /* L1 — 가장 굵게 */
+  letter-spacing: -0.01em;
+  color: var(--ink-strong);
+  line-height: 1.25;
+  text-shadow: var(--text-veil);
+}
+.card--player .card__title { font-size: 20px; }
+.card--cover  .card__title { font-size: 16px; white-space: nowrap; }
+/* 영문 워드마크형 라벨 카드 */
+.card--about .card__title,
+.card--link  .card__title,
+.card--lab   .card__title,
+.card--skills .card__title { font-size: 14px; font-weight: 800; letter-spacing: 0.04em; }
+
+/* eyebrow — 프로젝트 카드의 대문자 소제목 (L2 — 중간 굵기) */
+.card__sub {
+  margin: 5px 0 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-sub);
+  line-height: 1.15;
+  text-shadow: var(--text-veil-sm);
+}
+
+/* descriptor — 라벨 카드의 소문자 설명 (L3 — 가늘게) */
+.card__desc {
+  margin: 4px 0 0;
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--ink-faint);
+  line-height: 1.35;
+  text-shadow: var(--text-veil-sm);
+}
+
+/* 이미지 로드 실패시 자리표시 톤 */
+.is-empty,
+.card__thumb.is-empty,
+.card__art.is-empty {
+  background: linear-gradient(135deg, rgba(255,255,255,.5), rgba(200,210,225,.5));
+}
+img.is-empty { color: transparent; }
+
+/* 하트 / 화살표 / 컨트롤 아이콘 */
+.card__like {
+  flex: none;
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  border: 0; background: none; cursor: pointer;
+  color: var(--ink-faint);
+  transition: color .25s, transform .25s;
+}
+.card__like:hover,
+.card__like.is-liked { color: #ff5d73; }
+.card__like:hover { transform: scale(1.12); }
+.card__like svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.card__like.is-liked svg { fill: currentColor; }   /* 좋아요 시 채움(상태=클래스) */
+
+/* ------------------------------------------------- PLAYER (음악 카드) */
+.card--player { display: flex; gap: 12px; align-items: center; padding: 14px; }
+.card__thumb {
+  flex: none;
+  width: 92px; height: 92px;
+  border-radius: var(--radius-img);
+  object-fit: cover;
+  align-self: center;
+  box-shadow: 0 8px 20px -8px rgba(0,0,0,.35);
+}
+.card__body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+.card__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px; }
+
+.player { display: flex; flex-direction: column; gap: 7px; margin-top: 2px; }
+.player__bar {
+  position: relative;
+  height: 5px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.22);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.10), inset 0 -1px 0 rgba(255,255,255,0.08);
+}
+.player__bar span {
+  position: absolute; inset: 0 auto 0 0;
+  width: var(--p, 50%);
+  background: linear-gradient(90deg, #7FAEE5 0%, #B6D5F7 100%);
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(127,174,229,0.55), inset 0 1px 0 rgba(255,255,255,0.30);
+}
+/* 노브 — 채움 끝 흰 원(중앙 정렬) */
+.player__bar span::after {
+  content: "";
+  position: absolute; right: -5px; top: 50%;
+  width: 10px; height: 10px; border-radius: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(20,40,80,0.35), 0 0 2px rgba(127,174,229,0.50);
+}
+.player__controls {
+  display: flex; align-items: center; justify-content: center; gap: 18px;
+}
+/* 비활성(미구현) 스킵 버튼 — 정직하게 흐리게 */
+.player__skip[disabled] { opacity: 0.4; cursor: default; }
+.player__controls button {
+  border: 0; background: none; cursor: pointer; padding: 0;
+  color: var(--ink-strong);
+  display: grid; place-items: center;
+}
+.player__controls button svg { width: 22px; height: 22px; fill: currentColor; }
+.player__controls button.player__play {   /* 명시도 ↑ : 흰 원 위 진한 블루 글리프 */
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--ctrl) !important;
+  color: var(--ctrl-ink);
+  box-shadow: 0 6px 16px -4px rgba(20,40,70,.35), 0 0 18px rgba(127,174,229,.40);
+}
+.player__play svg { width: 18px !important; height: 18px !important; }
+
+/* ------------------------------------------------- COVER (이미지+재생) */
+/* 귀혼·플레디스·유미 3개 카드 동일 규격(폭 202 · padding 12 · gap 통일) */
+.card--cover { padding: 12px 12px 14px; }
+.card__art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.15 / 1;
+  object-fit: cover;
+  border-radius: 16px;
+}
+.card__row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 11px 1px 1px; min-height: 28px;
+}
+.card__play {
+  position: absolute;
+  right: 13px; bottom: 13px;
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 0; cursor: pointer;
+  background: var(--ctrl);
+  color: var(--ctrl-ink);
+  display: grid; place-items: center;
+  box-shadow: 0 8px 18px -6px rgba(20,40,70,.32), 0 0 16px rgba(127,174,229,.32);
+  transition: transform .25s;
+}
+.card__play:hover { transform: scale(1.08); }
+.card__play svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* ------------------------------------------------------ LINK (archive) */
+.card--link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 15px 13px;
+}
+.card__hit { position: absolute; inset: 0; border-radius: inherit; }
+.card__thumb-sm {
+  flex: none;
+  width: 48px; height: 48px;
+  border-radius: 11px; object-fit: cover;
+  box-shadow: 0 6px 16px -8px rgba(0,0,0,.4);
+}
+/* 링크 카드는 폭이 좁아 타이틀/설명 한 줄 고정 */
+.card--link .card__title { font-size: 11px; letter-spacing: 0.05em; white-space: nowrap; }
+.card--link .card__desc  { white-space: nowrap; }
+.card__arrow {
+  margin-left: auto;
+  flex: none;
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  color: var(--ink-strong);
+}
+.card__arrow svg, .card__more svg {
+  width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ----------------------------------------------------------- ABOUT ME */
+.card--about { padding: 18px 16px; }
+.card--about .card__meta { margin-bottom: 6px; }
+.card__lead {
+  margin: 16px 0 16px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.38;
+  letter-spacing: -0.005em;
+  color: var(--ink-strong);
+  text-shadow: var(--text-veil);
+}
+.card__lead--sm { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.45; }
+.card__more {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+  text-decoration: none;
+}
+.card__more svg { transition: transform .3s; }
+.card__more:hover svg { transform: translateX(4px); }
+
+/* ------------------------------------------------------- CONTENT LAB */
+.card--lab { padding: 16px 14px; }
+.card__lab-grid {
+  margin-top: 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+}
+.card__lead--sm {
+  margin: 0; font-size: 11.5px; font-weight: 600; line-height: 1.42;
+  color: var(--ink); text-shadow: var(--text-veil);
+}
+/* 부채꼴 겹침 스택 (폰 스크린샷 3장) */
+.card__lab-stack { position: relative; flex: none; width: 80px; height: 64px; }
+.card__lab-stack img {
+  position: absolute; top: 0;
+  width: 46px; height: 60px;
+  border-radius: 8px; object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.50);
+  box-shadow: 0 5px 14px -4px rgba(18,36,72,0.45), inset 0 1px 1px rgba(255,255,255,0.15);
+}
+.card__lab-stack img:nth-child(1) { left: 0;    transform: rotate(-8deg); z-index: 1; }
+.card__lab-stack img:nth-child(2) { left: 17px; top: -2px; transform: rotate(0deg); z-index: 2; }
+.card__lab-stack img:nth-child(3) { left: 34px; transform: rotate(8deg);  z-index: 3; }
+.card__lab-stack img.is-empty { border-color: rgba(255,255,255,0.40); }
+
+/* ----------------------------------------------------------- SKILLS */
+.card--skills { padding: 16px 14px; }
+.skills { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.skills li {
+  display: grid; grid-template-columns: 56px 1fr; align-items: center; gap: 8px;
+  font-size: 10px; color: var(--ink); letter-spacing: 0.04em;
+  text-shadow: var(--text-veil-sm);
+}
+.skills i {
+  position: relative; height: 3px; border-radius: 3px;
+  background: rgba(255,255,255,0.20);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.10);
+}
+.skills i::before {
+  content: ""; position: absolute; inset: 0 auto 0 0;
+  width: var(--p, 70%); background: var(--blue-grad); border-radius: 3px;
+  box-shadow: 0 0 10px rgba(127,174,229,0.6);
+}
+.skills i::after {
+  content: ""; position: absolute; top: 50%; left: var(--p, 70%);
+  width: 9px; height: 9px; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff; box-shadow: 0 2px 5px rgba(20,40,80,0.40), 0 0 1px rgba(127,174,229,0.40);
+}
+
+/* ------------------------------- 진입/패럴랙스: hero.js(GSAP)가 전담 */
+.card-arm { opacity: 0; }       /* 인트로 fade-in 전 숨김 */
+.no-js .card-arm { opacity: 1; }
+
+/* 키보드 포커스 가시성 — 글래스 위에서도 또렷한 흰 링 */
+.card a:focus-visible,
+.card button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ------------------------------------------------- reduced motion 존중 */
+@media (prefers-reduced-motion: reduce) {
+  .card-arm { opacity: 1; }
+  .card, .card__play, .card__like, .card__more svg { transition: none; }
+}
+
+/* ===================================================================
+   PROJECT DECK — 메인(1)·프로젝트 인트로(2,3,4…)가 가로로 나열된
+   루프 캐러셀. 스크롤 다운=다음, 업=이전, 끝↔처음 순환. (개수 동적)
+   각 패널은 .deck-panel — 한 번에 하나만 화면(translateX 0), 나머지는 밖.
+   transform/transition 은 deck.js 가 인라인으로 제어.
+=================================================================== */
+.deck-panel {
+  position: fixed; inset: 0;
+  will-change: transform;
+}
+/* 메인 패널(히어로)도 덱의 일부 — z 동등하게 */
+.scene.deck-panel  { z-index: 50; }
+.project-intro     { z-index: 50; background: #0a0d12; overflow: hidden; }
+
+.project-intro__video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;            /* 세로 영상이면 JS가 contain 으로 전환 */
+  background: #0a0d12;
+}
+
+/* 메인으로 돌아가기 — 닫기버튼 아님. 좌상단 은은한 back(스크롤 업/Esc/←) */
+.project-intro__back {
+  position: absolute; top: 26px; left: 28px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 15px 9px 11px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(18,26,38,0.40);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  color: #fff; font: 600 12px/1 Pretendard, sans-serif; letter-spacing: 0.02em;
+  cursor: pointer;
+  opacity: 0; transform: translateX(-8px);
+  transition: opacity .4s ease .45s, transform .4s ease .45s, background .2s;
+}
+.deck-panel.is-active .project-intro__back { opacity: 0.85; transform: none; }
+.project-intro__back:hover { opacity: 1; background: rgba(40,52,72,0.6); }
+.project-intro__back svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 인트로 열 수 있는 카드는 포인터 커서 */
+.card-arm[data-card="jaringobi"] .card { cursor: pointer; }
