@@ -26,6 +26,8 @@
     if (heroVid) { heroVid.muted = true; const p = heroVid.play(); if (p && p.catch) p.catch(() => {}); }
     /* 뒤 인트로 영상은 팝업 동안 정지 */
     document.querySelectorAll(".project-intro video").forEach((v) => v.pause());
+    /* 모달이 보이게 됐으니 스크롤 모션 위치 재계산 */
+    if (window.__makingRefresh) requestAnimationFrame(() => window.__makingRefresh());
   };
   const close = () => {
     modal.classList.remove("is-open");
