@@ -1077,35 +1077,34 @@ html.process-open { overflow: hidden; }
 }
 #play-cursor.is-on { display: flex; }
 .pc-disc {
-  position: relative; width: 52px; height: 52px; display: grid; place-items: center;
+  position: relative; width: 42px; height: 42px; display: grid; place-items: center;
   border-radius: 50%;
-  background: linear-gradient(160deg, rgba(255,255,255,0.52), rgba(220,236,255,0.34));
-  border: 1px solid rgba(255,255,255,0.72);
-  box-shadow: 0 12px 30px -10px rgba(20,40,76,0.5), 0 0 20px rgba(202,230,255,0.55),
-              inset 0 1px 2px rgba(255,255,255,0.85);
-  color: #21364f;
+  background: linear-gradient(160deg, rgba(255,255,255,0.42), rgba(228,236,247,0.26));
+  border: 1px solid rgba(255,255,255,0.55);
+  box-shadow: 0 8px 20px -12px rgba(15,28,52,0.45), inset 0 1px 1.5px rgba(255,255,255,0.6);
+  color: #2a3c52;
   opacity: 0; transform: scale(0.55);
   transition: opacity .28s ease, transform .32s cubic-bezier(.2,.8,.2,1);
 }
 #play-cursor.is-on .pc-disc { opacity: 1; transform: scale(1); }
-.pc-disc svg { width: 20px; height: 20px; fill: currentColor; margin-left: 2px; }
-/* 펄스 링 */
+.pc-disc svg { width: 17px; height: 17px; fill: currentColor; margin-left: 2px; }
+/* 펄스 링 — 은은하게 */
 .pc-disc::after {
   content: ""; position: absolute; inset: -1px; border-radius: 50%;
-  border: 1.5px solid rgba(160,200,255,0.7); opacity: 0; transform: scale(1);
+  border: 1px solid rgba(255,255,255,0.5); opacity: 0; transform: scale(1);
 }
-#play-cursor.is-idle .pc-disc::after { animation: pcPulse 1.5s ease-out infinite; }
-@keyframes pcPulse { 0%{opacity:.7;transform:scale(1)} 100%{opacity:0;transform:scale(1.9)} }
+#play-cursor.is-idle .pc-disc::after { animation: pcPulse 1.7s ease-out infinite; }
+@keyframes pcPulse { 0%{opacity:.45;transform:scale(1)} 100%{opacity:0;transform:scale(1.5)} }
 /* 클릭 순간 살짝 눌림 */
 #play-cursor.is-press .pc-disc { transform: scale(0.82); }
 
 .pc-label {
-  font: 700 10px/1 Pretendard, sans-serif; letter-spacing: 0.22em; color: #fff;
-  text-shadow: 0 1px 4px rgba(16,30,55,0.55);
+  font: 700 9px/1 Pretendard, sans-serif; letter-spacing: 0.2em; color: rgba(255,255,255,0.9);
+  text-shadow: 0 1px 4px rgba(16,30,55,0.5);
   opacity: 0; transform: translateY(-4px);
   transition: opacity .28s ease .04s, transform .28s ease .04s;
 }
-#play-cursor.is-on .pc-label { opacity: .95; transform: translateY(0); }
+#play-cursor.is-on .pc-label { opacity: .62; transform: translateY(0); }
 
 /* 데스크탑: 인트로 클릭영역에서 OS 커서 숨김(커스텀 커서가 대체) */
 @media (hover: hover) and (pointer: fine) {
@@ -1120,11 +1119,11 @@ html.process-open { overflow: hidden; }
 
 /* 클릭 ripple */
 .pc-ripple {
-  position: fixed; z-index: 89; width: 60px; height: 60px; margin: -30px 0 0 -30px;
-  border-radius: 50%; border: 1.5px solid rgba(180,214,255,0.8); pointer-events: none;
+  position: fixed; z-index: 89; width: 52px; height: 52px; margin: -26px 0 0 -26px;
+  border-radius: 50%; border: 1px solid rgba(255,255,255,0.55); pointer-events: none;
   will-change: transform, opacity; animation: pcRipple .62s ease-out forwards;
 }
-@keyframes pcRipple { 0%{opacity:.55;transform:scale(.3)} 100%{opacity:0;transform:scale(3.4)} }
+@keyframes pcRipple { 0%{opacity:.4;transform:scale(.3)} 100%{opacity:0;transform:scale(2.8)} }
 
 /* 터치 / 모션최소화 → 커서·ripple 비활성 */
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
