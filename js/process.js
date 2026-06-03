@@ -30,14 +30,30 @@
     /* 모달이 보이게 됐으니 스크롤 모션 위치 재계산 */
     if (window.__makingRefresh) requestAnimationFrame(() => window.__makingRefresh());
   };
-  const close = () => {
-    modal.classList.remove("is-open");
+  const panel = modal.querySelector(".process__panel");
+  const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const finishClose = () => {
+    modal.classList.remove("is-open", "is-closing");
     modal.setAttribute("aria-hidden", "true");
     document.documentElement.classList.remove("process-open");
     if (heroVid) heroVid.pause();          // 이탈 시 정지 → 디코딩 절약
     /* 닫히면 활성 인트로 영상 재생 재개 */
     const back = document.querySelector(".project-intro.is-active video");
     if (back) { const p = back.play(); if (p && p.catch) p.catch(() => {}); }
+  };
+  const close = () => {
+    if (!modal.classList.contains("is-open") || modal.classList.contains("is-closing")) return;
+    if (reduceMotion()) { finishClose(); return; }
+    /* 퇴장 애니메이션을 보여준 뒤 정리(애니메이션 끝나면 즉시, 안전망 타이머 포함) */
+    modal.classList.add("is-closing");
+    let done = false;
+    const onEnd = (e) => {
+      if (e.target !== panel) return;
+      done = true; panel.removeEventListener("animationend", onEnd); finishClose();
+    };
+    panel.addEventListener("animationend", onEnd);
+    setTimeout(() => { if (!done) { panel.removeEventListener("animationend", onEnd); finishClose(); } }, 420);
   };
 
   document.querySelectorAll(".intro-process").forEach((b) =>

@@ -23,9 +23,9 @@
   const CENTERS = [
     { x: 355,  y: 190 }, // visual-archive
     { x: 733,  y: 158 }, // jaringobi
-    { x: 1184, y: 233 }, // gwihon
+    { x: 506,  y: 420 }, // gwihon  (플레디스와 위치 교환 → 좌중앙)
     { x: 293,  y: 461 }, // about
-    { x: 506,  y: 420 }, // pledis
+    { x: 1184, y: 233 }, // pledis  (귀혼과 위치 교환 → 우상단)
     { x: 960,  y: 434 }, // yumi
     { x: 467,  y: 695 }, // poze
     { x: 965,  y: 682 }, // content-lab
