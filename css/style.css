@@ -1297,3 +1297,7 @@ html.process-open { overflow: hidden; }
   .s7-traits { grid-template-columns: 1fr; }
   .s7-ext__imgs { grid-template-columns: 1fr; }
 }
+
+/* ── SECTION 8 (절약을 플레이하다 — 통 이미지) ── */
+#sec8 { padding: 0; }                       /* 통 이미지 풀블리드 */
+.s8-hero { display: block; width: 100%; height: auto; border-radius: 0; }

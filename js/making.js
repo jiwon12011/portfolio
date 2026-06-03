@@ -89,6 +89,9 @@
     gsap.from(".s7-board", { opacity: 0, y: 34, duration: .9, ease: "power3.out", scrollTrigger: ST(".s7-board", "top 86%") });
     gsap.from("#sec7 .s7-ext .mk-rise", { opacity: 0, y: 30, stagger: .12, duration: .8, ease: "power3.out", scrollTrigger: ST(".s7-ext", "top 86%") });
 
+    /* ── SECTION 8 ── */
+    gsap.from(".s8-hero", { opacity: 0, y: 36, duration: 1, ease: "power3.out", scrollTrigger: ST(".s8-hero", "top 88%") });
+
     /* 본문 이미지 로드되면 위치 재계산(레이아웃 점프 보정) */
     scroller.querySelectorAll(".process__making img").forEach((img) => {
       if (!img.complete) img.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
