@@ -778,6 +778,24 @@ html.process-open { overflow: hidden; }
 .process__tracks .is-active i { color: rgba(255,255,255,0.68); }
 .process__tracks .is-active .process__tplay { fill: #fff; opacity: 1; }
 
+/* GO TO APP — 플레이리스트 하단 CTA (가벼운 고스트) */
+.process__cta {
+  margin-top: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 14px; border-radius: 12px; text-decoration: none;
+  color: #2c7f53; font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
+  background: rgba(255,255,255,0.26);
+  border: 1px solid rgba(44,127,83,0.48);
+  transition: background .2s, border-color .2s, transform .18s;
+}
+.process__cta:hover { background: rgba(44,127,83,0.12);
+  border-color: rgba(44,127,83,0.85); transform: translateY(-1px); }
+.process__cta:active { transform: translateY(0); }
+.process__cta:focus-visible { outline: 2px solid rgba(44,127,83,0.7); outline-offset: 2px; }
+.process__cta-go { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+.process__cta:hover .process__cta-go { transform: translateX(3px); }
+
 /* NOW PLAYING 미니플레이어 */
 .process__now { margin-top: 16px; display: grid;
   grid-template-columns: auto 1fr; grid-template-areas: "art meta" "ctrl ctrl";
@@ -834,7 +852,10 @@ html.process-open { overflow: hidden; }
   border-radius: 50%; border: 1px solid rgba(80,96,60,0.28); background: rgba(255,255,255,0.42);
   color: #3c4a30; cursor: pointer; display: grid; place-items: center; font-size: 14px;
   transition: background .2s, transform .2s; }
-.pcard__go:hover { background: rgba(118,138,92,0.42); color: #fff; transform: translateX(2px); }
+.pcard:hover .pcard__go { background: rgba(118,138,92,0.42); color: #fff; transform: translateX(2px); }
+/* 카드 전체를 덮는 링크(stretched) — 어디를 눌러도 이동 */
+.pcard__link { position: absolute; inset: 0; z-index: 3; border-radius: inherit;
+  -webkit-tap-highlight-color: transparent; }
 
 /* 컬러 태그 — 연한 파스텔 캡슐 + 짙은 글씨 (Image #22) */
 .ptag { align-self: flex-start; padding: 5px 13px; border-radius: 999px;
@@ -1318,7 +1339,7 @@ html.process-open { overflow: hidden; }
 .s9-phone--1 { left: 38%; top: 22%; width: 20.5%; z-index: 3; }
 .s9-phone--2 { left: 65%; top: 23%; width: 19.5%; z-index: 2; }
 /* 인증샷 가이드 — 우측 폰 아래로 길게 이어지는 카드 */
-.s9-extra { left: 66%; top: 64%; width: 16.5%; z-index: 1;
+.s9-extra { left: 66%; top: 62%; width: 16.5%; z-index: 1;
   filter: drop-shadow(0 1.4cqw 2.4cqw rgba(20,34,18,0.16)); }
 
 /* ── SECTION 10 (02 GROWTH) — 배경 풀블리드 + 폰3 + 캐릭터 + 가운데 타이틀 ── */

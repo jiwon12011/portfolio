@@ -23,6 +23,7 @@
     modal.setAttribute("aria-hidden", "false");
     document.documentElement.classList.add("process-open");
     content.scrollTop = 0;
+    if (window.__processSpy) requestAnimationFrame(() => window.__processSpy());
     if (heroVid) { heroVid.muted = true; const p = heroVid.play(); if (p && p.catch) p.catch(() => {}); }
     /* 뒤 인트로 영상은 팝업 동안 정지 */
     document.querySelectorAll(".project-intro video").forEach((v) => v.pause());
@@ -74,22 +75,24 @@
       setActive(a.dataset.track);
     }));
 
-  /* ---- 스크롤스파이 ---- */
+  /* ---- 스크롤스파이 (스크롤 위치 기반) ----
+     컨테이너 40% 지점을 기준선으로, 그 위로 올라온 마지막 섹션을 활성화.
+     맨 위(첫 섹션이 아직 기준선 아래)면 current=null → 아무 트랙도 선택 안 함. */
   const sections = anchors
     .map((a) => document.getElementById(a.dataset.track))
     .filter(Boolean);
 
-  if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((en) => {
-          if (en.isIntersecting) setActive(en.target.id);
-        });
-      },
-      { root: content, rootMargin: "-45% 0px -45% 0px", threshold: 0 }
-    );
-    sections.forEach((s) => io.observe(s));
-  }
+  const updateSpy = () => {
+    const ctop = content.getBoundingClientRect().top;
+    const line = content.clientHeight * 0.4;
+    let current = null;
+    for (const s of sections) {
+      if (s.getBoundingClientRect().top - ctop - 8 <= line) current = s.id;
+    }
+    setActive(current);
+  };
+  content.addEventListener("scroll", updateSpy, { passive: true });
+  window.__processSpy = updateSpy;
 
   /* ---- NOW PLAYING 재생/일시정지(아이콘만) ---- */
   const PLAY  = "M8 5v14l11-7z";
