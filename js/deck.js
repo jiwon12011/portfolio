@@ -41,6 +41,23 @@
     }
   }
 
+  /* 활성 프로젝트 = 해당 패널 자신 → 패널 안 리스트의 active(이퀄라이저)·페이저 동기화.
+     패널마다 자기 프로젝트를 하이라이트하므로 패널이 늘어나도 자동으로 맞는다. */
+  const projPanels = panels.filter((p) => p.dataset.project && p.dataset.project !== "main");
+  const pad2 = (v) => String(v).padStart(2, "0");
+  function syncIntro(p) {
+    if (!p || !p.dataset.project || p.dataset.project === "main") return;
+    const proj = p.dataset.project;
+    p.querySelectorAll(".intro-list__item").forEach((it) =>
+      it.classList.toggle("is-active", it.dataset.go === proj));
+    const n = projPanels.indexOf(p) + 1, tot = projPanels.length;
+    const pg = p.querySelector(".intro-pager span");
+    if (pg && n > 0) pg.textContent = `${pad2(n)} / ${pad2(tot)}`;
+    const bar = p.querySelector(".intro-pager__bar i");
+    if (bar && tot) bar.style.setProperty("--p", (n / tot) * 100 + "%");
+  }
+  projPanels.forEach(syncIntro);   // 초기 1회
+
   /* 현재+다음+이전 패널 영상만 미리 버퍼(멀리 있는 건 안 받음 → 초기 가볍게) */
   function preloadNeighbors() {
     if (N < 2) return;
@@ -66,6 +83,7 @@
     out.classList.remove("is-active"); inc.classList.add("is-active");
     out.setAttribute("aria-hidden", "true"); inc.setAttribute("aria-hidden", "false");
     media(out, false); media(inc, true);
+    syncIntro(inc);
     root.classList.toggle("off-main", to !== 0);
     idx = to;
     preloadNeighbors();           // 다음 슬라이드 대비 옆 영상 버퍼
@@ -73,14 +91,18 @@
   const go   = (dir) => { if (N >= 2) slide((idx + dir + N) % N, dir); };  // 루프
   const goTo = (t)   => { if (t !== idx) slide(t, t > idx ? 1 : -1); };    // 점프
 
+  /* 제작과정 팝업이 열려 있으면 뒤 배경(프로젝트 전환)은 잠금 */
+  const locked = () => document.documentElement.classList.contains("process-open");
+
   /* 휠 — 한 제스처 = 한 칸 (쿨다운) */
   window.addEventListener("wheel", (e) => {
-    if (lock) return;
+    if (lock || locked()) return;
     if (e.deltaY > 8) go(1); else if (e.deltaY < -8) go(-1);
   }, { passive: true });
 
   /* 키보드 */
   document.addEventListener("keydown", (e) => {
+    if (locked()) return;
     if (e.key === "ArrowDown" || e.key === "PageDown") go(1);
     else if (e.key === "ArrowUp" || e.key === "PageUp") go(-1);
     else if (e.key === "Escape" && idx !== 0) goTo(0);
@@ -99,9 +121,14 @@
     });
   });
 
-  /* back 버튼 → 메인 */
-  document.querySelectorAll(".project-intro__back").forEach((b) =>
-    b.addEventListener("click", () => goTo(0)));
+  /* 인트로 오버레이: 우측 프로젝트 리스트 → 해당 패널, 브랜드 로고 → 메인 */
+  document.querySelectorAll("[data-go]").forEach((el) =>
+    el.addEventListener("click", () => {
+      const t = panels.findIndex((p) => p.dataset.project === el.dataset.go);
+      if (t >= 0) goTo(t);
+    }));
+  document.querySelectorAll("[data-go-main]").forEach((el) =>
+    el.addEventListener("click", () => goTo(0)));
 
   /* 터치 스와이프(수평) */
   let tx = 0, ty = 0;
@@ -109,7 +136,7 @@
     tx = e.touches[0].clientX; ty = e.touches[0].clientY;
   }, { passive: true });
   window.addEventListener("touchend", (e) => {
-    if (lock) return;
+    if (lock || locked()) return;
     const dx = e.changedTouches[0].clientX - tx;
     const dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;

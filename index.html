@@ -242,15 +242,225 @@
   <section class="project-intro deck-panel" id="intro-jaringobi" data-project="jaringobi" aria-hidden="true">
     <video class="project-intro__video" playsinline loop preload="none"
            src="img/jaringobi/jaringobi_intro.mp4"></video>
-    <!-- 메인으로 돌아가기(닫기 버튼 아님 — 은은한 back, 스크롤 위/Esc 로도 됨) -->
-    <button class="project-intro__back" type="button" aria-label="메인으로 돌아가기">
-      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
-      <span>메인</span>
-    </button>
+    <div class="intro-grad" aria-hidden="true"></div>
+
+    <div class="intro-ui">
+      <!-- 헤더 -->
+      <header class="intro-top">
+        <button class="intro-brand" type="button" data-go-main aria-label="메인으로">
+          <span class="intro-brand__mark" aria-hidden="true">⌗</span> PORTFOLIO 2026
+        </button>
+        <nav class="intro-nav">
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+            <span class="intro-nav__txt"><b>PROJECTS</b><i>Selected Works</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 18A2 2 0 006.3 21h11.4a2 2 0 001.8-3L14 9V3"/><path d="M8 15h8"/></svg>
+            <span class="intro-nav__txt"><b>LAB</b><i>AI &amp; Experiments</i></span>
+          </a>
+          <a href="#" class="intro-nav__item">
+            <svg class="intro-nav__ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0114 0"/></svg>
+            <span class="intro-nav__txt"><b>ABOUT</b><i>Profile &amp; Resume</i></span>
+          </a>
+        </nav>
+      </header>
+
+      <!-- 좌측: 프로젝트 정보 -->
+      <div class="intro-info">
+        <p class="intro-info__eyebrow">PROJECT 01</p>
+        <h1 class="intro-info__title">자린고비</h1>
+        <p class="intro-info__sub">Team Project</p>
+        <span class="intro-info__rule" aria-hidden="true"></span>
+        <p class="intro-info__desc">소비를 게임처럼 — 절약을<br />습관으로 만드는 모바일 서비스</p>
+
+        <div class="intro-index intro-index--gap">
+          <p class="intro-index__label">PROCESS INDEX</p>
+          <ul>
+            <li class="is-current"><span>01</span> Overview</li>
+            <li><span>02</span> Research</li>
+            <li><span>03</span> Concept</li>
+            <li><span>04</span> Design System</li>
+            <li><span>05</span> Prototype</li>
+            <li><span>06</span> Outcome</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 하단 좌측: 페이지네이션 -->
+      <div class="intro-pager"><span>01 / 05</span><div class="intro-pager__bar"><i style="--p:20%"></i></div></div>
+
+      <!-- 우측: 프로젝트 리스트 -->
+      <aside class="intro-list">
+        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
+        <ul>
+          <li class="intro-list__item is-active" data-go="jaringobi">
+            <img src="img/main/main_jaringobi.webp" alt="" />
+            <div><span>01</span><h4>자린고비</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="gwihon">
+            <img src="img/main/main_hon.webp" alt="" />
+            <div><span>02</span><h4>귀혼</h4><p>UXUI / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="pledis">
+            <img src="img/main/main_pledis.webp" alt="" />
+            <div><span>03</span><h4>플레디스</h4><p>Branding / 2025</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="yumi">
+            <img src="img/main/main_yumi.webp" alt="" />
+            <div><span>04</span><h4>유미의 세포들</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+          <li class="intro-list__item" data-go="poze">
+            <img src="img/main/main_poze.webp" alt="" />
+            <div><span>05</span><h4>POZE</h4><p>Branding / 2024</p></div>
+            <span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- 하단 우측: 인터랙션 안내 -->
+      <div class="intro-hints">
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
+          <div><b>CLICK</b><p>프로젝트 상세 보기</p></div>
+        </div>
+        <span class="intro-hint__sep"></span>
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 36"><rect x="5" y="2" width="14" height="22" rx="7"/><line x1="12" y1="7" x2="12" y2="11"/></svg>
+          <div><b>SCROLL</b><p>다음 프로젝트로 이동</p></div>
+        </div>
+      </div>
+    </div>
   </section>
+
+  <!-- 재생버튼 커서 — 인트로 위에서 마우스를 따라다니며 클릭 유도(데스크탑 전용) -->
+  <div id="play-cursor" aria-hidden="true">
+    <span class="pc-disc"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+    <span class="pc-label">PLAY</span>
+  </div>
+
+  <!-- ===================================================================
+       제작 과정 모달 — 뮤직플레이어형. VIEW PROCESS 클릭 시 오픈.
+       좌측 고정 PLAYLIST 네비(스크롤스파이) + 우측 스크롤 콘텐츠.
+  ==================================================================== -->
+  <div class="process" id="process" data-project="jaringobi"
+       role="dialog" aria-modal="true" aria-hidden="true" aria-label="자린고비 제작 과정">
+    <div class="process__scrim" data-close></div>
+
+    <div class="process__panel">
+      <!-- 좌측: 고정 플레이리스트 -->
+      <aside class="process__nav">
+        <button class="process__back" type="button" data-close>
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>BACK TO PROJECT
+        </button>
+
+        <p class="process__label">PLAYLIST
+          <span class="process__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </p>
+
+        <ol class="process__tracks">
+          <li class="is-active"><a href="#psec-01" data-track="psec-01"><b>01</b><span><h4>배경, 목표</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#psec-02" data-track="psec-02"><b>02</b><span><h4>시장 조사, 인사이트</h4><i>DESK RESEARCH</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#psec-03" data-track="psec-03"><b>03</b><span><h4>서비스 방향</h4><i>GOAL &amp; PERSONA</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#psec-04" data-track="psec-04"><b>04</b><span><h4>시행착오</h4><i>PROBLEM SOLVING</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#psec-05" data-track="psec-05"><b>05</b><span><h4>브랜드</h4><i>VISUAL</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#psec-06" data-track="psec-06"><b>06</b><span><h4>사용자 경험</h4><i>EXPERIENCE DETAILS</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#psec-07" data-track="psec-07"><b>07</b><span><h4>회고 및 결과</h4><i>END</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+        </ol>
+
+        <div class="process__now">
+          <img class="process__now-art" src="img/jaringobi/make_logo.png" alt="" />
+          <div class="process__now-meta">
+            <span>NOW PLAYING</span>
+            <strong>자린고비 <span class="process__eq process__eq--sm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></strong>
+          </div>
+          <div class="process__now-ctrl">
+            <button type="button" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+            <button type="button" class="is-play" aria-label="일시정지"><svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+            <button type="button" aria-label="다음"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 우측: 스크롤 콘텐츠 -->
+      <div class="process__content">
+        <!-- 01 OVERVIEW -->
+        <section class="process__sec" id="psec-01">
+          <div class="process__hero">
+            <video class="process__hero-media" src="img/jaringobi/jaringobi_process.mp4"
+                   muted loop autoplay playsinline preload="metadata"></video>
+          </div>
+          <div class="process__cards">
+            <article class="pcard pcard--info">
+              <h3>Team Project</h3>
+              <dl>
+                <dt>Period</dt><dd>2weeks <i>(26.05)</i></dd>
+                <dt>Contribution</dt><dd>70% <i>(기획, 디자인, 개발, 마케팅)</i></dd>
+              </dl>
+              <p class="pcard__tool-label">Tool</p>
+              <div class="pcard__tools">
+                <img src="img/jaringobi/figma_icon.png" alt="Figma" />
+                <img src="img/jaringobi/photoshop_icon.png" alt="Photoshop" />
+                <img src="img/jaringobi/vercel_icon.png" alt="Vercel" />
+                <img src="img/jaringobi/react_icon.png" alt="React" />
+                <img src="img/jaringobi/supabase_icon.png" alt="Supabase" />
+              </div>
+            </article>
+
+            <article class="pcard pcard--shot">
+              <button class="pcard__go" type="button" aria-label="자세히">&#8594;</button>
+              <span class="ptag">LIVE SERVICE</span>
+              <h3>Google Play 출시</h3>
+              <p>2026.06 정식 출시 완료</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/jaringobi/make_playstore.png" alt="Google Play 출시 화면" />
+            </article>
+
+            <article class="pcard">
+              <button class="pcard__go" type="button" aria-label="자세히">&#8594;</button>
+              <span class="ptag ptag--mkt">MARKETING</span>
+              <h3>TikTok 캠페인</h3>
+              <p>숏폼 콘텐츠로 인지도 확산</p>
+              <div class="pcard__tiktok">
+                <span class="tk-dot tk-dot--a"></span>
+                <span class="tk-dot tk-dot--b"></span>
+                <span class="tk-dot tk-dot--c"></span>
+                <span class="tk-dot tk-dot--d"></span>
+                <span class="tk-dot tk-dot--e"></span>
+                <span class="tk-dot tk-dot--f"></span>
+                <img src="img/jaringobi/make_tiktok.png" alt="TikTok" />
+              </div>
+            </article>
+
+            <article class="pcard pcard--shot">
+              <button class="pcard__go" type="button" aria-label="자세히">&#8594;</button>
+              <span class="ptag">PROCESS</span>
+              <h3>작업 기록 정리</h3>
+              <p>기획부터 출시까지의 기록</p>
+              <div class="pcard__shotwrap">
+                <span class="pcard__notion" aria-hidden="true"><img src="img/jaringobi/notion_icon.png" alt="" /></span>
+                <img class="pcard__shot" src="img/jaringobi/make_notionscreen.png" alt="Notion 작업 기록" />
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- ── 제작 과정 본문 — 히어로부터 아래로 쭉 ── -->
+        <div class="process__making">
+          <img class="making__hero" src="img/jaringobi/process/hero.webp"
+               alt="자린고비 — 절약을 플레이하다" loading="lazy" />
+          <!-- 이후 section1~14 콘텐츠가 여기 아래로 이어짐 -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="js/main.js" defer></script>
   <script src="js/orbit.js" defer></script>
   <script src="js/deck.js" defer></script>
+  <script src="js/process.js" defer></script>
 </body>
 </html>
