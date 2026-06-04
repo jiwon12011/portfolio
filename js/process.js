@@ -50,19 +50,17 @@
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
       document.documentElement.classList.add("process-open");
-      content.style.contentVisibility = "";                 /* 재오픈 시 렌더 복원 */
-      content.scrollTop = 0;
-      requestAnimationFrame(updateSpy);
+      content.scrollTop = 0;                                 /* 재오픈은 항상 상단부터 */
+      requestAnimationFrame(() => { content.scrollTop = 0; updateSpy(); });  /* 렌더 후 한 번 더 확실히 */
       if (heroVid) { heroVid.muted = true; const p = heroVid.play(); if (p && p.catch) p.catch(() => {}); }
       document.querySelectorAll(".project-intro video").forEach((v) => v.pause());
-      if (window.__makingRefresh) requestAnimationFrame(() => window.__makingRefresh());
+      if (window.__makingRefresh) requestAnimationFrame(() => { window.__makingRefresh(); content.scrollTop = 0; });
     };
     const finishClose = () => {
       panel.style.willChange = "";                          /* 레이어 해제 */
       modal.classList.remove("is-open", "is-closing");
       modal.setAttribute("aria-hidden", "true");
       document.documentElement.classList.remove("process-open");
-      content.style.contentVisibility = "hidden";           /* 닫힌 모달 비트맵 GPU 텍스처 해제 */
       if (heroVid) heroVid.pause();
       const back = document.querySelector(".project-intro.is-active video");
       if (back) setTimeout(() => {                           /* display:none·합성 flush 이후 디코더 시작 */
