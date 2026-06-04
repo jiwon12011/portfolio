@@ -20,10 +20,11 @@
     const w = window.innerWidth;
     const s = Math.max(w / DW, window.innerHeight / DH);
     root.style.setProperty("--scale", s.toFixed(5));
-    // 1920 등 넓은 화면에서 cover 로 카드가 커 보이는 걸 완화 — 배경/인물은 그대로,
-    // 카드만 살짝 축소(1440 이하=1 → 1920≈0.88).
-    const k = w <= 1440 ? 1 : Math.max(0.85, 1 - (w - 1440) * 0.00025);
+    // 넓은 화면에서 카드만 — ①크기 축소(--card-k) ②중앙으로 살짝 모으기(__cardGather).
+    // 배경/인물/씬 배율은 그대로. 1440 이하=영향 없음.
+    const k = w <= 1440 ? 1 : Math.max(0.80, 1 - (w - 1440) * 0.00031);   // 1920 ≈ 0.85
     root.style.setProperty("--card-k", k.toFixed(4));
+    window.__cardGather = w <= 1440 ? 1 : Math.max(0.86, 1 - (w - 1440) * 0.00017); // 1920 ≈ 0.92
   }
   fitScale();
   window.addEventListener("resize", fitScale, { passive: true });

@@ -105,15 +105,19 @@
     const someFocused = focusIdx !== -1;   // 어딘가 포커스 중
     const isFocused = focusIdx === i;
 
+    /* 넓은 화면에서 카드를 중앙(733, 423.5)으로 살짝 모으기(gather).
+       main.js 가 window.__cardGather 를 설정(1440 이하=1, 1920≈0.92). */
+    const G = window.__cardGather || 1;
     /* 정면화: 위치는 그대로 두고 '제자리에서' 커지게만 한다.
        (중앙으로 이동시키면 커서가 카드를 들락거려 호버 on/off 가 떨림→지진) */
-    const x = rotX;
+    const x = 733 + (rotX - 733) * G;
     const scale   = lerp(base.scale,   FRONT_SCALE, fa);
     let   opacity = lerp(base.opacity, 1.0,         fa);
     let   blur    = base.blur * (1 - fa);  // 정면화될수록 blur 제거
     let   zi      = isFocused ? FRONT_Z : base.zi;
 
-    const y = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * 4; // bobbing ±4px (황금비 분산)
+    const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * 4; // bobbing ±4px (황금비 분산)
+    const y = 423.5 + (yRaw - 423.5) * G;
 
     /* 다른 카드가 포커스됐고 나는 아니면 dim(어둡게+뒤로) */
     if (someFocused && !isFocused) {
