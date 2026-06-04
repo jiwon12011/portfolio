@@ -91,12 +91,13 @@
   const go   = (dir) => { if (N >= 2) slide((idx + dir + N) % N, dir); };  // 루프
   const goTo = (t)   => { if (t !== idx) slide(t, t > idx ? 1 : -1); };    // 점프
 
-  /* 제작과정 팝업이 열려 있으면 뒤 배경(프로젝트 전환)은 잠금 */
-  const locked = () => document.documentElement.classList.contains("process-open");
+  /* 제작과정·About 오버레이가 열려 있으면 뒤 배경(프로젝트 전환)은 잠금 */
+  const locked = () => document.documentElement.classList.contains("process-open")
+    || document.documentElement.classList.contains("about-open");
 
-  /* 휠 — 한 제스처 = 한 칸 (쿨다운) */
+  /* 휠 — 한 제스처 = 한 칸 (쿨다운). About 닫힌 직후 가드 동안은 잔여 스크롤 무시 */
   window.addEventListener("wheel", (e) => {
-    if (lock || locked()) return;
+    if (lock || locked() || performance.now() < (window.__deckGuardUntil || 0)) return;
     if (e.deltaY > 8) go(1); else if (e.deltaY < -8) go(-1);
   }, { passive: true });
 
