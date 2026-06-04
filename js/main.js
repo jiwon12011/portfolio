@@ -17,8 +17,13 @@
     // cover: 배경 사진이 화면을 꽉 채우고 인물·카드 전부 같은 배율로 커진다.
     // (세로 긴 창일수록 좋음. 아주 납작한 창에선 위/아래 카드가 일부 잘릴 수 있음 →
     //  전체화면 ⌃⌘F 권장)
-    const s = Math.max(window.innerWidth / DW, window.innerHeight / DH);
+    const w = window.innerWidth;
+    const s = Math.max(w / DW, window.innerHeight / DH);
     root.style.setProperty("--scale", s.toFixed(5));
+    // 1920 등 넓은 화면에서 cover 로 카드가 커 보이는 걸 완화 — 배경/인물은 그대로,
+    // 카드만 살짝 축소(1440 이하=1 → 1920≈0.88).
+    const k = w <= 1440 ? 1 : Math.max(0.85, 1 - (w - 1440) * 0.00025);
+    root.style.setProperty("--card-k", k.toFixed(4));
   }
   fitScale();
   window.addEventListener("resize", fitScale, { passive: true });

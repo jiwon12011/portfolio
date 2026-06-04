@@ -272,7 +272,7 @@
         <h1 class="intro-info__title">자린고비</h1>
         <p class="intro-info__sub">Team Project</p>
         <span class="intro-info__rule" aria-hidden="true"></span>
-        <p class="intro-info__desc">소비를 게임처럼 — 절약을<br />습관으로 만드는 모바일 서비스</p>
+        <p class="intro-info__desc">소비를 게임처럼<br /><br />절약을 습관으로 만드는 모바일 서비스</p>
 
         <div class="intro-index intro-index--gap">
           <p class="intro-index__label">PROCESS INDEX</p>
@@ -375,8 +375,7 @@
         <h1 class="intro-info__title">귀혼</h1>
         <p class="intro-info__sub">Personal Project</p>
         <span class="intro-info__rule" aria-hidden="true"></span>
-        <!-- TODO: 실제 소개 문구로 교체 -->
-        <p class="intro-info__desc">프로젝트 소개 준비 중 —<br />임시 텍스트입니다</p>
+        <p class="intro-info__desc">스크롤만으로 귀혼의 세계를<br />탐험하는 인터랙티브 웹 경험</p>
 
         <div class="intro-index intro-index--gap">
           <p class="intro-index__label">PROCESS INDEX</p>
@@ -471,8 +470,7 @@
         <h1 class="intro-info__title">유미의 세포들</h1>
         <p class="intro-info__sub">Personal Project</p>
         <span class="intro-info__rule" aria-hidden="true"></span>
-        <!-- TODO: 실제 소개 문구로 교체 -->
-        <p class="intro-info__desc">프로젝트 소개 준비 중 —<br />임시 텍스트입니다</p>
+        <p class="intro-info__desc">유미의 세포들 세계관을 한곳에<br />담아낸 팬 아카이브 플랫폼</p>
 
         <div class="intro-index intro-index--gap">
           <p class="intro-index__label">PROCESS INDEX</p>
@@ -567,8 +565,7 @@
         <h1 class="intro-info__title">POZE</h1>
         <p class="intro-info__sub">Personal Project</p>
         <span class="intro-info__rule" aria-hidden="true"></span>
-        <!-- TODO: 실제 소개 문구로 교체 -->
-        <p class="intro-info__desc">프로젝트 소개 준비 중 —<br />임시 텍스트입니다</p>
+        <p class="intro-info__desc">브랜드 아이덴티티부터 커머스 경험까지<br />구축한 뷰티 플랫폼</p>
 
         <div class="intro-index intro-index--gap">
           <p class="intro-index__label">PROCESS INDEX</p>
@@ -1182,6 +1179,110 @@
                    aria-label="자린고비 제작 과정 마무리 영상"></video>
           </section>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       POZE 제작 과정 모달 (뮤직플레이어형) — 자린고비 구조 복제. 첫 화면.
+       TODO: 웹/어드민/노션 URL(현재 placeholder), 본문 섹션(pz1~pz5)
+  ==================================================================== -->
+  <div class="process process--poze" id="process-poze" data-project="poze"
+       role="dialog" aria-modal="true" aria-hidden="true" aria-label="POZE 제작 과정">
+    <div class="process__scrim" data-close></div>
+
+    <div class="process__panel">
+      <aside class="process__nav">
+        <button class="process__back" type="button" data-close>
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>BACK TO PROJECT
+        </button>
+
+        <p class="process__label">PLAYLIST
+          <span class="process__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </p>
+
+        <ol class="process__tracks">
+          <li><a href="#pz1" data-track="pz1"><b>01</b><span><h4>브랜드 소개</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pz2" data-track="pz2"><b>02</b><span><h4>비주얼 무드</h4><i>VISUAL DIRECTION</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pz3" data-track="pz3"><b>03</b><span><h4>사용자 경험</h4><i>EXPERIENCE</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pz4" data-track="pz4"><b>04</b><span><h4>리빌드 과정</h4><i>REBUILD</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pz5" data-track="pz5"><b>05</b><span><h4>결과 및 마무리</h4><i>OUTCOME</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+        </ol>
+
+        <a class="process__cta" href="#" rel="noopener" aria-label="POZE 웹사이트로 이동" data-needs-url>
+          <span>GO TO WEB</span>
+          <svg class="process__cta-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 6l6 6-6 6"/></svg>
+        </a>
+
+        <div class="process__now">
+          <img class="process__now-art" src="img/poze/poze_logo.webp" alt="" />
+          <div class="process__now-meta">
+            <span>NOW PLAYING</span>
+            <strong>POZE <span class="process__eq process__eq--sm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></strong>
+          </div>
+          <div class="process__now-ctrl">
+            <button type="button" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+            <button type="button" class="is-play" aria-label="일시정지"><svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+            <button type="button" aria-label="다음"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="process__content">
+        <section class="process__sec" id="pzsec-01">
+          <div class="process__hero">
+            <video class="process__hero-media" src="img/poze/poze_process.mp4"
+                   muted loop autoplay playsinline preload="metadata"></video>
+          </div>
+          <div class="process__cards">
+            <article class="pcard pcard--info">
+              <h3>Personal Project</h3>
+              <dl>
+                <dt>Period</dt><dd>2weeks <i>(26.03)</i></dd>
+                <dt>Contribution</dt><dd>100% <i>(기획, 디자인, 개발)</i></dd>
+              </dl>
+              <p class="pcard__tool-label">Tool</p>
+              <div class="pcard__tools">
+                <img src="img/jaringobi/process/FIGMA.webp" alt="Figma" />
+                <img src="img/jaringobi/process/PHOTOSHOP.webp" alt="Photoshop" />
+                <img src="img/jaringobi/process/CLAUDE.webp" alt="Claude" />
+                <img src="img/poze/codex_icon.webp" alt="Codex" />
+                <img src="img/poze/gemini_icon.webp" alt="Gemini" />
+                <img src="img/poze/cafe24_icon.webp" alt="Cafe24" />
+              </div>
+            </article>
+
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" rel="noopener" aria-label="POZE 웹사이트 바로가기" data-needs-url></a>
+              <span class="ptag">GO TO WEB</span>
+              <h3>웹사이트 바로가기</h3>
+              <p>Immersive Editorial Commerce</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/poze/poze_process_mokup.webp" alt="POZE 웹사이트 — ENTER THE POZE" />
+            </article>
+
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" rel="noopener" aria-label="POZE 어드민 시스템" data-needs-url></a>
+              <span class="ptag">ADMIN SYSTEM</span>
+              <h3>운영까지 고려한 설계</h3>
+              <p>Curated Brand Management</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/poze/poze_intro_mokup2.webp" alt="POZE 어드민 대시보드" />
+            </article>
+
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" rel="noopener" aria-label="POZE 작업 기록 (Notion)" data-needs-url></a>
+              <span class="ptag">PROCESS</span>
+              <h3>작업 기록 정리</h3>
+              <p>기획부터 출시까지의 기록</p>
+              <div class="pcard__shotwrap">
+                <span class="pcard__notion" aria-hidden="true"><img src="img/jaringobi/notion_icon.png" alt="" /></span>
+                <img class="pcard__shot" src="img/poze/poze_process_notion.webp" alt="Notion 작업 기록" />
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
     </div>
   </div>
