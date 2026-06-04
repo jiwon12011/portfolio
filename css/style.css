@@ -1865,7 +1865,7 @@ html.process-open { overflow: hidden; }
 @keyframes aboutOut { to { opacity:0; transform: translateY(12px); } }
 html.about-open { overflow: hidden; }
 
-.about__scroll { height: 100%; overflow-y: auto; overflow-x: hidden; }
+.about__scroll { height: 100%; overflow: hidden; display: flex; align-items: center; }
 .about__back { position: fixed; top: 24px; right: 30px; z-index: 5;
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(255,255,255,0.72); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
@@ -1875,49 +1875,49 @@ html.about-open { overflow: hidden; }
 .about__back svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .about__back:hover { background: #fff; transform: translateX(-2px); box-shadow: 0 6px 18px -8px rgba(0,0,0,0.2); }
 
-.about__inner { display: grid; grid-template-columns: 330px 1fr; gap: clamp(40px, 5vw, 82px);
-  max-width: 1200px; margin: 0 auto; padding: clamp(48px, 7vh, 88px) clamp(28px, 4vw, 56px) 92px; }
+.about__inner { display: grid; grid-template-columns: clamp(238px, 20vw, 300px) 1fr; gap: clamp(34px, 4vw, 72px);
+  width: 100%; max-width: 1180px; margin: 0 auto; padding: clamp(18px, 3vh, 38px) clamp(28px, 4vw, 56px); align-items: start; }
 
 /* 좌측 프로필 */
-.about__h { margin: 0 0 22px; font-size: clamp(34px, 3.3vw, 48px); font-weight: 700; letter-spacing: -0.01em; }
-.about__photo { display: block; width: 100%; height: auto; aspect-ratio: 720 / 959; object-fit: cover; object-position: center top;
+.about__h { margin: 0 0 clamp(12px, 1.8vh, 20px); font-size: clamp(27px, 2.6vw, 42px); font-weight: 700; letter-spacing: -0.01em; }
+.about__photo { display: block; width: 100%; height: auto; max-height: 47vh; aspect-ratio: 720 / 959; object-fit: cover; object-position: center top;
   border-radius: 4px; background: #f0f0f0; }
-.about__name { margin: 22px 0 8px; font-size: 30px; font-weight: 700; }
-.about__role { margin: 0 0 2px; font-size: 17px; color: #2a2a2a; }
-.about__rule { display: block; height: 1px; background: #d5d5d5; margin: 24px 0; }
-.about__meta { margin: 0; display: grid; gap: 9px; }
-.about__metarow { display: grid; grid-template-columns: 56px 1fr; font-size: 14px; }
+.about__name { margin: clamp(12px, 1.8vh, 20px) 0 5px; font-size: clamp(22px, 2vw, 28px); font-weight: 700; }
+.about__role { margin: 0 0 2px; font-size: clamp(13px, 1.05vw, 16px); color: #2a2a2a; }
+.about__rule { display: block; height: 1px; background: #d5d5d5; margin: clamp(12px, 1.8vh, 20px) 0; }
+.about__meta { margin: 0; display: grid; gap: clamp(5px, 0.8vh, 8px); }
+.about__metarow { display: grid; grid-template-columns: 54px 1fr; font-size: 13px; }
 .about__metarow dt { font-weight: 700; letter-spacing: 0.03em; }
 .about__metarow dd { margin: 0; color: #444; }
 
 /* 우측 콘텐츠 */
-.about__lead { margin: 6px 0 clamp(44px, 6vh, 72px); font-size: clamp(20px, 1.7vw, 25px); font-weight: 500; line-height: 1.5; color: #2b2b2b; }
+.about__lead { margin: 2px 0 clamp(20px, 3.4vh, 52px); font-size: clamp(17px, 1.4vw, 24px); font-weight: 500; line-height: 1.5; color: #2b2b2b; }
 .about__lead b { color: #59a2ee; font-weight: 700; }
-.about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 4.2vw, 72px) clamp(36px, 4vw, 64px); align-items: start; }
-.about__title { margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid #d5d5d5;
-  font-size: 19px; font-weight: 700; letter-spacing: 0.02em; }
+.about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vh, 48px) clamp(30px, 3.5vw, 62px); align-items: start; }
+.about__title { margin: 0 0 clamp(10px, 1.4vh, 15px); padding-bottom: clamp(7px, 1vh, 11px); border-bottom: 1px solid #d5d5d5;
+  font-size: clamp(16px, 1.3vw, 19px); font-weight: 700; letter-spacing: 0.02em; }
 
-.about__edu { display: grid; gap: 16px; }
-.about__edu p { margin: 0; font-size: 16px; line-height: 1.55; color: #2a2a2a; }
+.about__edu { display: grid; gap: clamp(10px, 1.5vh, 15px); }
+.about__edu p { margin: 0; font-size: clamp(13px, 1.05vw, 16px); line-height: 1.5; color: #2a2a2a; }
 
-.about__cert { margin: 0; display: grid; gap: 13px; }
-.about__certrow { display: grid; grid-template-columns: 52px 1fr; align-items: baseline; font-size: 16px; }
+.about__cert { margin: 0; display: grid; gap: clamp(8px, 1.3vh, 12px); }
+.about__certrow { display: grid; grid-template-columns: 50px 1fr; align-items: baseline; font-size: clamp(13px, 1.05vw, 16px); }
 .about__certrow dt { font-weight: 700; }
 .about__certrow dd { margin: 0; color: #333; }
 
-.about__skillgroup { margin-bottom: 18px; }
+.about__skillgroup { margin-bottom: clamp(9px, 1.5vh, 16px); }
 .about__skillgroup:last-child { margin-bottom: 0; }
-.about__sub { margin: 0 0 10px; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; color: #59a2ee; }
-.about__pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.about__pill { display: inline-flex; align-items: center; padding: 7px 15px; border-radius: 999px;
-  font-size: 14px; font-weight: 500; color: #3a3a3a; }
+.about__sub { margin: 0 0 clamp(6px, 1vh, 9px); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: #59a2ee; }
+.about__pills { display: flex; flex-wrap: wrap; gap: 7px; }
+.about__pill { display: inline-flex; align-items: center; padding: clamp(5px, 0.7vh, 7px) 14px; border-radius: 999px;
+  font-size: clamp(12px, 1vw, 14px); font-weight: 500; color: #3a3a3a; }
 .about__pill--pink   { background: #ffeaf7; }
 .about__pill--blue   { background: #eef2ff; }
 .about__pill--purple { background: #f5eaff; }
 
-.about__strength { display: grid; gap: 18px; }
-.about__str h5 { margin: 0 0 4px; font-size: 16px; font-weight: 600; }
-.about__str p { margin: 0; font-size: 13px; color: #797979; line-height: 1.5; }
+.about__strength { display: grid; gap: clamp(11px, 1.7vh, 17px); }
+.about__str h5 { margin: 0 0 3px; font-size: clamp(14px, 1.1vw, 16px); font-weight: 600; }
+.about__str p { margin: 0; font-size: clamp(11px, 0.95vw, 13px); color: #797979; line-height: 1.45; }
 
 @media (max-width: 880px) {
   .about__inner { grid-template-columns: 1fr; }
