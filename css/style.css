@@ -585,14 +585,20 @@ img.is-empty { color: transparent; }
 .intro-brand__mark { font-size: 18px; line-height: 1; opacity: 0.9;
   font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20; }
 .intro-nav { display: flex; gap: clamp(22px, 2.2vw, 40px); }
-.intro-nav__item { display: flex; align-items: flex-start; gap: 8px; text-decoration: none; color: var(--it-title); }
-.intro-nav__ico { font-size: 20px; line-height: 1; flex: none; color: var(--it-muted);
-  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; transition: color .2s;
-  /* 굵은 라벨(첫 줄 ~15px)에 광학 정렬: align-items:flex-start + 라벨 높이 박스에 글리프 중앙 */
-  height: 15px; display: flex; align-items: center; justify-content: center; }
-.intro-nav__item:hover .intro-nav__ico { color: var(--it-title); }
-/* Material 글리프 잉크 편차 광학 보정 — science(플라스크)는 바닥이 무거워 살짝 올림 */
-.intro-nav__item:nth-child(2) .intro-nav__ico { transform: translateY(-1px); }
+.intro-nav__item { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--it-title); }
+/* 아이콘을 반투명 글래스 칩에 담아 단위감·고급감 + 무게 보강(라벨 700에 맞춰 wght 500) */
+.intro-nav__ico { flex: none; width: 33px; height: 33px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; line-height: 1; color: var(--it-title);
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.30), 0 5px 14px -6px rgba(0,0,0,0.22);
+  backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
+  transition: background .22s, border-color .22s, transform .22s, color .22s; }
+.intro-nav__item:hover .intro-nav__ico {
+  background: rgba(255,255,255,0.17); border-color: rgba(255,255,255,0.30);
+  color: var(--it-accent); transform: translateY(-3px); }
 .intro-nav__txt { display: flex; flex-direction: column; gap: 2px; }
 .intro-nav__txt b { font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; }
 .intro-nav__txt i { font-size: 10.5px; font-style: normal; color: var(--muted); }
