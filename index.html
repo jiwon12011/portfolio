@@ -20,6 +20,11 @@
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   </noscript>
 
+  <!-- Playfair Display (POZE 에디토리얼 세리프) — 비동기 -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" media="print" onload="this.media='all'"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" />
+
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -1250,9 +1255,9 @@
         <ol class="process__tracks">
           <li><a href="#pz1" data-track="pz1"><b>01</b><span><h4>브랜드 소개</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
           <li><a href="#pz2" data-track="pz2"><b>02</b><span><h4>비주얼 무드</h4><i>VISUAL DIRECTION</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
-          <li><a href="#pz3" data-track="pz3"><b>03</b><span><h4>사용자 경험</h4><i>EXPERIENCE</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
-          <li><a href="#pz4" data-track="pz4"><b>04</b><span><h4>리빌드 과정</h4><i>REBUILD</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
-          <li><a href="#pz5" data-track="pz5"><b>05</b><span><h4>결과 및 마무리</h4><i>OUTCOME</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pz-s6" data-track="pz-s6"><b>03</b><span><h4>리빌드 과정</h4><i>REBUILD</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pz-s8" data-track="pz-s8"><b>04</b><span><h4>사용자 경험</h4><i>EXPERIENCE</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pz-s10" data-track="pz-s10"><b>05</b><span><h4>결과 및 마무리</h4><i>OUTCOME</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
         </ol>
 
         <a class="process__cta" href="https://jiwon12011.github.io/POZE_2026/index.html" target="_blank" rel="noopener" aria-label="POZE 웹사이트로 이동">
@@ -1329,6 +1334,160 @@
             </article>
           </div>
         </section>
+
+        <!-- ── POZE 제작 과정 본문 (에디토리얼 풀블리드) — ex_poze 참고 ── -->
+        <div class="process__making process__making--poze">
+
+          <!-- SECTION 1 · 에디토리얼 인트로 (poze / in everyday life) -->
+          <section class="pz-sec" id="pz1">
+            <img class="pz-band" src="img/poze/process/section1_1.webp" alt="POZE 에디토리얼" loading="lazy" />
+            <img class="pz-band" src="img/poze/process/section1_2.webp" alt="" loading="lazy" />
+            <img class="pz-band" src="img/poze/process/section1_3.webp" alt="" loading="lazy" />
+            <span class="pz-serif pz-serif--poze">poze</span>
+            <span class="pz-serif pz-serif--everyday">in everyday life</span>
+          </section>
+
+          <!-- SECTION 2 · 브랜드 철학 (좌 세리프 카피 / 우 플랫레이) -->
+          <section class="pz-sec pz-sec--split" id="pz-s2">
+            <img class="pz-split-img" src="img/poze/process/section2_1.webp" alt="POZE 플랫레이 — 글래스·핸드크림·립스틱" loading="lazy" />
+            <p class="pz-quote">POZE was created<br />for quiet moments.<br /><br />Not for fast scrolling,<br />but for slow immersion.</p>
+          </section>
+
+          <!-- SECTION 3 · 브랜드 무드 — 중앙 곡선 플로우 + 좌우 교차 3포인트 -->
+          <section class="pz-sec pz-flow" id="pz2">
+            <img class="pz-flow__path" src="img/poze/process/section3_path.svg" alt="" aria-hidden="true" loading="lazy" />
+            <span class="pz-flow__c pz-flow__c1">BRAND MOOD</span>
+            <span class="pz-flow__c pz-flow__c2">EDITORIAL FLOW</span>
+            <span class="pz-flow__c pz-flow__c3">QIET INTERACTION</span>
+            <div class="pz-flow__blk pz-flow__b1">
+              <span class="pz-flow__num">01</span>
+              <span class="pz-flow__t">BRAND MOOD</span>
+              <span class="pz-flow__line"></span>
+              <p class="pz-flow__d">빛과 여백, 부드러운 분위기를 통해<br />브랜드의 공기감을 표현했습니다.</p>
+            </div>
+            <div class="pz-flow__blk pz-flow__b2">
+              <span class="pz-flow__num">02</span>
+              <span class="pz-flow__t">EDITORIAL FLOW</span>
+              <span class="pz-flow__line"></span>
+              <p class="pz-flow__d">이미지와 여백의 흐름을 통해<br />브랜드의 분위기가 자연스럽게 이어지도록 구성했습니다.</p>
+            </div>
+            <div class="pz-flow__blk pz-flow__b3">
+              <span class="pz-flow__num">03</span>
+              <span class="pz-flow__t">QIET INTERACTION</span>
+              <span class="pz-flow__line"></span>
+              <p class="pz-flow__d">부드러운 움직임과 전환을 통해 사용자의 몰입감을 유지했습니다.</p>
+            </div>
+          </section>
+
+          <!-- SECTION 4 — POZE Logo Analysis -->
+          <section class="pz-sec pz-sec--logo" id="pz-s4">
+            <h3 class="pz-logo__title">POZE<br />Logo Analysis</h3>
+
+            <div class="pz-logo__id">
+              <span class="pz-logo__idh">Identity Elements</span>
+              <ul class="pz-logo__idlist">
+                <li>Clean Stroke</li>
+                <li>Round Form</li>
+                <li>Balance</li>
+                <li>Straight Edge</li>
+              </ul>
+            </div>
+
+            <div class="pz-logo__center">
+              <img class="pz-logo__img" src="img/poze/process/section4_logo.webp"
+                   alt="POZE 로고 분석 — Clean Stroke·Round Form·Balance·Straight Edge" loading="lazy" />
+              <p class="pz-logo__desc">POZE is a beauty brand that captures quiet moments<br />and delicate emotions. We communicate the essence of beauty<br />through minimal design and thoughtful details.</p>
+            </div>
+          </section>
+
+          <!-- SECTION 5 — 풀블리드 에디토리얼 (POZE The Glow Primer) -->
+          <section class="pz-sec pz-sec--full" id="pz-s5">
+            <img class="pz-full-img" src="img/poze/process/section5.webp"
+                 alt="POZE The Glow Primer — 펼친 책 위 반으로 자른 무화과와 프라이머 튜브 에디토리얼 컷" loading="lazy" />
+          </section>
+
+          <!-- SECTION 6 — REBUILT FOR IMMERSION (좌 이미지 / 우 텍스트 split) -->
+          <section class="pz-sec pz-sec--rebuilt" id="pz-s6">
+            <img class="pz-rebuilt__img" src="img/poze/process/section6_1.webp"
+                 alt="손에 쥔 POZE 프라이머 — 몰입을 위한 리빌드" loading="lazy" />
+            <div class="pz-rebuilt__txt">
+              <h3 class="pz-rebuilt__title">REBUILT<br />FOR IMMERSION</h3>
+              <p class="pz-rebuilt__sub">브랜드의 분위기와 흐름을 온전히 담기 위해<br />독립 구조로 다시 설계했습니다.</p>
+            </div>
+          </section>
+
+          <!-- SECTION 7 — COLOR DIRECTION (3 컬러 스와치 카드) -->
+          <section class="pz-sec pz-sec--color" id="pz-s7">
+            <h3 class="pz-color__title">COLOR<br />DIRECTION</h3>
+            <div class="pz-color__cards">
+              <article class="pz-color__card pz-color__card--cream">
+                <div class="pz-color__top">
+                  <span class="pz-color__name">Cream Beige</span>
+                  <span class="pz-color__role">Base Color</span>
+                  <span class="pz-color__rule"></span>
+                </div>
+                <div class="pz-color__bottom">
+                  <span class="pz-color__hex">#F9F4F0</span>
+                  <p class="pz-color__desc">크림톤이 섞인 베이지 컬러를 사용해<br />부드럽고 조용한 무드를 표현했습니다.</p>
+                </div>
+              </article>
+              <article class="pz-color__card pz-color__card--dusty">
+                <div class="pz-color__top">
+                  <span class="pz-color__name">Dusty Rose</span>
+                  <span class="pz-color__role">Point Tone</span>
+                  <span class="pz-color__rule"></span>
+                </div>
+                <div class="pz-color__bottom">
+                  <span class="pz-color__hex">#8B695F</span>
+                  <p class="pz-color__desc">채도를 낮춘 더스티 로즈를 사용해<br />여성스러움과 감각적인 분위기를 표현했습니다.</p>
+                </div>
+              </article>
+              <article class="pz-color__card pz-color__card--rosewood">
+                <div class="pz-color__top">
+                  <span class="pz-color__name">Rosewood Brown</span>
+                  <span class="pz-color__role">Typography Color</span>
+                  <span class="pz-color__rule"></span>
+                </div>
+                <div class="pz-color__bottom">
+                  <span class="pz-color__hex">#251A13</span>
+                  <p class="pz-color__desc">붉은 기가 은은하게 섞인 브라운 톤을 사용해<br />부드러운 긴장감이 유지되도록 표현했습니다.</p>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- SECTION 8 — POZE 웹사이트 목업 (오른쪽 사진 sticky pin) -->
+          <section class="pz-shop" id="pz-s8">
+            <img class="pz-shop__top" src="img/poze/process/section8_1.webp"
+                 alt="POZE 웹사이트 — ENTER THE POZE 히어로 & Your Signature Presence 제품 그리드" loading="lazy" />
+            <div class="pz-shop__row">
+              <img class="pz-shop__long" src="img/poze/process/section8_2_1.webp"
+                   alt="POZE 제품 카드 — Facial Mist · Cleansing Foam · Moisture Cream" loading="lazy" />
+              <img class="pz-shop__sticky" src="img/poze/process/section8_2.webp"
+                   alt="POZE 모델 컷 — 제품을 든 모델" loading="lazy" />
+            </div>
+          </section>
+
+          <!-- SECTION 9 — 모바일 목업 (핸드폰 위 hover 시 내부 이미지 스크롤) -->
+          <section class="pz-phone" id="pz-s9">
+            <div class="pz-phone__device" tabindex="0" aria-label="POZE 모바일 사이트 미리보기 — 마우스를 올리면 스크롤됩니다">
+              <div class="pz-phone__screen">
+                <div class="pz-phone__track">
+                  <img class="pz-phone__shot" src="img/poze/process/poze_mobile.webp"
+                       alt="POZE 모바일 사이트 — ENTER THE POZE" loading="lazy" />
+                </div>
+              </div>
+              <img class="pz-phone__frame" src="img/poze/process/phone_mokup.webp" alt="" aria-hidden="true" loading="lazy" />
+            </div>
+          </section>
+
+          <!-- SECTION 10 — 풀블리드 마무리 컷 (바닷가 버스정류장 POZE 광고) -->
+          <section class="pz-sec pz-sec--full" id="pz-s10">
+            <img class="pz-full-img" src="img/poze/process/section10.webp"
+                 alt="바닷가 버스정류장 POZE 광고 — Every Moment, Pose Your Beauty" loading="lazy" />
+          </section>
+
+        </div>
       </div>
     </div>
   </div>
@@ -1341,5 +1500,6 @@
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="js/making.js" defer></script>
+  <script src="js/making-poze.js" defer></script>
 </body>
 </html>

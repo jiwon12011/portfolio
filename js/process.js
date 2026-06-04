@@ -81,7 +81,13 @@
         const sec = document.getElementById(a.dataset.track);
         if (!sec) return;
         const top = sec.getBoundingClientRect().top - content.getBoundingClientRect().top + content.scrollTop - 6;
-        content.scrollTo({ top, behavior: "smooth" });
+        /* GSAP 으로 scrollTop 직접 트윈 — ScrollTrigger 가 있는 커스텀 스크롤러에선
+           네이티브 scrollTo({smooth}) 가 중간에 끊겨, 매 프레임 scrollTop 을 직접 보간. */
+        if (window.gsap) {
+          window.gsap.to(content, { scrollTop: top, duration: 0.8, ease: "power2.inOut", overwrite: "auto" });
+        } else {
+          content.scrollTo({ top, behavior: "smooth" });
+        }
         setActive(a.dataset.track);
       }));
 

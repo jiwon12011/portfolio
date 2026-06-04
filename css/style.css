@@ -941,6 +941,8 @@ html.process-open { overflow: hidden; }
 .process__content { flex: 1; min-width: 0; overflow-y: auto; overflow-x: hidden;
   display: flex; flex-direction: column; gap: clamp(15px,1.5vw,29px);
   padding-right: 6px; scroll-behavior: smooth; }
+  /* scroll-behavior:smooth = 네비 클릭 scrollTo 부드러운 이동.
+     휠 스크롤엔 영향 없고(scrollTo/앵커만), 섹션8은 네이티브 sticky라 pin 충돌도 없음. */
 .process__content::-webkit-scrollbar { width: 8px; }
 .process__content::-webkit-scrollbar-thumb { background: rgba(90,104,76,0.28); border-radius: 4px; }
 /* 01 섹션이 첫 화면 높이를 꽉 채움(다음 섹션이 안 비치게): 히어로=남는 공간, 카드=고정 */
@@ -1219,6 +1221,170 @@ html.process-open { overflow: hidden; }
   width: 100%; height: auto; display: block; border-radius: 0;
   aspect-ratio: 1600 / 962;     /* 로드 전 공간 확보 → 스크롤 점프 방지 */
 }
+
+/* ── POZE 본문 (에디토리얼 풀블리드, ex_poze 참고) ── */
+.process__making--poze { background: #efe9e2; box-shadow: 0 24px 60px -32px rgba(40,30,24,0.45);
+  overflow: visible;                       /* 네이티브 position:sticky(섹션8) 허용 — overflow:hidden 조상이 있으면 sticky가 안 먹음 */
+}
+.pz-sec { position: relative; container-type: inline-size; background: #efe9e2; overflow: hidden; }
+.pz-sec .pz-band { display: block; width: 100%; height: auto; }
+.pz-serif {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  color: #fff; font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-weight: 400; font-size: 4.45cqw; line-height: 1.3; letter-spacing: 0.01em;
+  white-space: nowrap; text-shadow: 0 2px 16px rgba(50,38,30,0.30); pointer-events: none;
+}
+.pz-serif--poze     { top: 28.5%; }   /* 디자인 top472/1620 — image1 하단 */
+.pz-serif--everyday { top: 63.2%; }   /* 디자인 top1038/1620 — image2/3 경계 */
+
+/* 섹션2 — 좌 세리프 카피 / 우 플랫레이 (디자인 1440×907) */
+.pz-sec--split { aspect-ratio: 1440 / 907; background: #e0d6cf; }
+.pz-split-img {
+  position: absolute; right: 0; top: 0; width: 50%; height: 100%;
+  object-fit: cover; display: block;
+}
+.pz-quote {
+  position: absolute; left: 7.15%; top: 53%; margin: 0;     /* 디자인 left103/top482 */
+  color: #251a13; text-align: left;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-weight: 400; font-size: 2.5cqw; line-height: 1.34; letter-spacing: 0.003em;
+}
+
+/* 섹션3 — 브랜드 무드 곡선 플로우 (디자인 1440×949, 다크) */
+.pz-flow { aspect-ratio: 1440 / 949; background: #251a13; color: #d3c1af; }
+.pz-flow__path { position: absolute; left: 45.4%; top: 9.48%; width: 12.85%; height: auto; display: block; }
+.pz-flow__c {                 /* 중앙 라벨 — 점 아래 */
+  position: absolute; font-weight: 300; font-size: 1.11cqw; white-space: nowrap; color: #d3c1af;
+}
+.pz-flow__c1 { left: 45.76%; top: 22.97%; }   /* BRAND MOOD (659/218) */
+.pz-flow__c2 { left: 45.14%; top: 52.05%; }   /* EDITORIAL FLOW (650/494) */
+.pz-flow__c3 { left: 44.58%; top: 79.03%; }   /* QIET INTERACTION (642/750) */
+.pz-flow__blk { position: absolute; display: flex; flex-direction: column; align-items: flex-start; font-size: 1.11cqw; }
+.pz-flow__b1 { left: 8.82%; top: 20.44%; }    /* 127/194 */
+.pz-flow__b2 { left: 66.94%; top: 42.15%; }   /* 964/400 */
+.pz-flow__b3 { left: 8.82%; top: 68.7%; }     /* 127/652 */
+.pz-flow__num { font-weight: 300; color: #d3c1af; }
+.pz-flow__t { margin-top: 0.15em; font-weight: 600; color: #d3c1af; letter-spacing: 0.03em; }
+.pz-flow__line { width: 3.12cqw; height: 1px; background: #d3c1af; margin: 1.25cqw 0; } /* 45px */
+.pz-flow__d { margin: 0; font-weight: 300; color: #d3c1af; line-height: 1.55; }
+
+/* 섹션4 — POZE Logo Analysis (디자인 1440×949, 라이트 토프) */
+.pz-sec--logo { aspect-ratio: 1440 / 949; background: #e0d6cf; color: #201916; }
+.pz-logo__title {                              /* 좌상단 제목 (180/157) */
+  position: absolute; left: 12.5%; top: 16.54%; margin: 0;
+  font-family: "Playfair Display", Georgia, serif; font-weight: 400;
+  font-size: 2.5cqw; line-height: 1.3; color: #251a13;
+}
+.pz-logo__id {                                 /* 우측 Identity Elements (990/212) */
+  position: absolute; left: 68.75%; top: 22.34%; width: 14.51cqw;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1.25cqw;
+}
+.pz-logo__idh { font-weight: 500; font-size: 1.25cqw; letter-spacing: 0.1em; color: #201916; }
+.pz-logo__idlist {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; gap: 0.694cqw;
+}
+.pz-logo__idlist li { font-weight: 300; font-size: 1.25cqw; letter-spacing: 0.1em; color: #201916; }
+.pz-logo__center {                             /* 중앙 그룹 (345/401, w750) */
+  position: absolute; left: 23.96%; top: 42.25%; width: 52.08%;
+  display: flex; flex-direction: column; align-items: center; gap: 6.94cqw;
+}
+.pz-logo__img { width: 28.4cqw; height: auto; display: block; }   /* group-176 409px */
+.pz-logo__desc {                               /* 3줄 구조 유지 (cqw로 스케일 → 넘칠 일 없음) */
+  margin: 0; text-align: center; white-space: nowrap;
+  font-weight: 400; font-size: 1.528cqw; line-height: 1.299; letter-spacing: 0.1em; color: #201916;
+}
+
+/* 섹션5 — 풀블리드 에디토리얼 이미지 한 장 */
+.pz-sec--full { background: #241a13; }
+.pz-full-img { display: block; width: 100%; height: auto; }
+
+/* 섹션6 — REBUILT FOR IMMERSION (디자인 1440×829, 좌 이미지 / 우 텍스트) */
+.pz-sec--rebuilt { aspect-ratio: 1440 / 829; background: #e0d6cf; color: #251a13; }
+.pz-rebuilt__img {                             /* 좌측 이미지 714px = 49.58% */
+  position: absolute; left: 0; top: 0; width: 49.58%; height: 100%;
+  object-fit: cover; display: block;
+}
+.pz-rebuilt__txt {                             /* 우측 텍스트 (866/418, w404) */
+  position: absolute; left: 60.14%; top: 50.42%; width: 28.06%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2.22cqw;
+}
+.pz-rebuilt__title {
+  margin: 0; font-family: "Playfair Display", Georgia, serif; font-weight: 400;
+  font-size: 2.5cqw; line-height: 1.3; color: #251a13;
+}
+.pz-rebuilt__sub { margin: 0; font-weight: 400; font-size: 1.667cqw; line-height: 1.3; color: #251a13; }
+
+/* 섹션7 — COLOR DIRECTION (디자인 1440×579, 3 스와치 카드) */
+.pz-sec--color { aspect-ratio: 1440 / 579; background: #e0d6cf; color: #251a13; }
+.pz-color__title {                             /* 좌측 제목 (124/115) */
+  position: absolute; left: 8.61%; top: 19.86%; margin: 0;
+  font-family: "Playfair Display", Georgia, serif; font-weight: 400;
+  font-size: 2.5cqw; line-height: 1.3; color: #251a13;
+}
+.pz-color__cards {                             /* 카드 행 (406/115) */
+  position: absolute; left: 28.19%; top: 19.86%;
+  display: flex; flex-direction: row; gap: 2.78cqw; align-items: stretch;
+}
+.pz-color__card {                              /* 280.19×348.92, 패딩 45/30/42/23 */
+  width: 19.46cqw; height: 24.23cqw;
+  padding: 3.15cqw 1.63cqw 2.94cqw 2.1cqw;
+  display: flex; flex-direction: column; justify-content: space-between;
+  box-shadow: 0 0.21cqw 0.21cqw rgba(0, 0, 0, 0.1);
+}
+.pz-color__card--cream    { background: #f9f4f0; color: #251a13; }
+.pz-color__card--dusty    { background: #8b695f; color: #f9f4f0; }
+.pz-color__card--rosewood { background: #251a13; color: #f9f4f0; }
+.pz-color__top { display: flex; flex-direction: column; align-items: flex-start; }
+.pz-color__name { font-weight: 500; font-size: 1.111cqw; }
+.pz-color__role { margin-top: 0.55cqw; font-weight: 300; font-size: 0.833cqw; }
+.pz-color__rule { margin-top: 1.05cqw; width: 2.36cqw; height: 1px; background: currentColor; }
+.pz-color__bottom { display: flex; flex-direction: column; gap: 0.45cqw; }
+.pz-color__hex { font-weight: 300; font-size: 0.764cqw; letter-spacing: 0.02em; }
+.pz-color__desc { margin: 0; font-weight: 300; font-size: 0.833cqw; line-height: 1.45; }
+
+/* 섹션8 — POZE 웹사이트 목업 (디자인 1440 기준; 오른쪽 사진은 JS로 pin)
+   · 정적 레이아웃 = 디자인 그대로 + reduced-motion 폴백
+   · sticky는 making 블록 overflow:hidden 때문에 CSS 대신 ScrollTrigger pin */
+.pz-shop { position: relative; background: #e0d6cf; }
+.pz-shop__top {                                /* 상단 목업 — 모달 폭 끝까지 풀블리드 */
+  display: block; width: 100%; height: auto; margin: 0;
+}
+.pz-shop__row {                                /* 하단 2단 — 가로 꽉, 좌 컬럼+우 사진이 폭을 분할 */
+  display: flex; align-items: flex-start; justify-content: center;
+  width: 100%; margin: 0;
+}
+.pz-shop__long   { width: 48.07%; height: auto; display: block; }  /* 548/1140 비율 유지 */
+.pz-shop__sticky {                             /* 우측 사진 — 네이티브 sticky로 뷰포트 높이 꽉 채워 고정
+                                                  (height는 JS가 스크롤러 높이에 맞춰 지정,
+                                                   JS 미동작/reduced-motion이면 height:auto 폴백) */
+  width: 51.93%; height: auto; display: block; object-fit: cover; object-position: center;
+  position: sticky; top: 0; align-self: flex-start;
+}
+
+/* 섹션9 — 모바일 목업 (핸드폰 안에서 hover 스크롤; 화면 밖으로 이미지 안 보임) */
+.pz-phone {
+  position: relative; aspect-ratio: 1264 / 711; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background:                                  /* 블러 무화과 배경 + 핸드폰 대비용 다크 베일 */
+    linear-gradient(rgba(22,14,9,0.30), rgba(22,14,9,0.42)),
+    url("../img/poze/process/section9_bg.webp") center / cover no-repeat,
+    #160f0a;
+}
+.pz-phone__device {                            /* 핸드폰 — 섹션 높이에 맞춰 스케일 */
+  position: relative; height: 88%; aspect-ratio: 1736 / 3068;
+  outline: none; will-change: transform;
+}
+.pz-phone__frame {                             /* 목업 프레임(화면 투명) — 맨 위, 클릭 통과 */
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 2; pointer-events: none; display: block;
+}
+.pz-phone__screen {                            /* 화면 영역(측정값) — 여기서 overflow:hidden 으로 클립 */
+  position: absolute; left: 13.36%; top: 4.73%; width: 73.44%; height: 90.45%;
+  overflow: hidden; border-radius: 7.5% / 4.4%; background: #0e0e10; z-index: 1;
+}
+.pz-phone__track { padding: 0 0 30px; will-change: transform; }  /* 위:0(화면 시작점에 맞춤) / 아래:30 보더 */
+.pz-phone__shot { display: block; width: 100%; height: auto; }
 
 /* =======================================================================
    제작 과정 섹션 — 공통 타입 스케일 (모든 섹션 재사용)
