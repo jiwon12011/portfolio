@@ -25,6 +25,9 @@
     const anchors = tracks.map((li) => li.querySelector("a"));
     const heroVid = modal.querySelector(".process__hero-media");
 
+    /* 이미지 디코딩을 메인 스레드 밖에서 → 스크롤 중 디코딩 블로킹/freeze 완화 */
+    modal.querySelectorAll("img").forEach((i) => { i.decoding = "async"; });
+
     const setActive = (id) =>
       tracks.forEach((li) =>
         li.classList.toggle("is-active", li.querySelector("a").dataset.track === id));
@@ -47,6 +50,7 @@
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
       document.documentElement.classList.add("process-open");
+      content.style.contentVisibility = "";                 /* 재오픈 시 렌더 복원 */
       content.scrollTop = 0;
       requestAnimationFrame(updateSpy);
       if (heroVid) { heroVid.muted = true; const p = heroVid.play(); if (p && p.catch) p.catch(() => {}); }
@@ -54,16 +58,23 @@
       if (window.__makingRefresh) requestAnimationFrame(() => window.__makingRefresh());
     };
     const finishClose = () => {
+      panel.style.willChange = "";                          /* 레이어 해제 */
       modal.classList.remove("is-open", "is-closing");
       modal.setAttribute("aria-hidden", "true");
       document.documentElement.classList.remove("process-open");
+      content.style.contentVisibility = "hidden";           /* 닫힌 모달 비트맵 GPU 텍스처 해제 */
       if (heroVid) heroVid.pause();
       const back = document.querySelector(".project-intro.is-active video");
-      if (back) { const p = back.play(); if (p && p.catch) p.catch(() => {}); }
+      if (back) setTimeout(() => {                           /* display:none·합성 flush 이후 디코더 시작 */
+        if (back.readyState < 2) back.load();
+        const p = back.play(); if (p && p.catch) p.catch(() => {});
+      }, 160);
     };
     const close = () => {
       if (!modal.classList.contains("is-open") || modal.classList.contains("is-closing")) return;
       if (reduceMotion()) { finishClose(); return; }
+      panel.style.willChange = "transform, opacity";        /* 닫힘 직전 레이어 예약 */
+      modal.querySelectorAll(".process__eq i").forEach((i) => (i.style.animationPlayState = "paused"));
       modal.classList.add("is-closing");
       let done = false;
       const onEnd = (e) => {
@@ -84,11 +95,12 @@
         /* GSAP 으로 scrollTop 직접 트윈 — ScrollTrigger 가 있는 커스텀 스크롤러에선
            네이티브 scrollTo({smooth}) 가 중간에 끊겨, 매 프레임 scrollTop 을 직접 보간. */
         if (window.gsap) {
-          window.gsap.to(content, { scrollTop: top, duration: 0.8, ease: "power2.inOut", overwrite: "auto" });
+          window.gsap.to(content, { scrollTop: top, duration: 0.5, ease: "power2.out", overwrite: "auto" });
         } else {
           content.scrollTo({ top, behavior: "smooth" });
         }
         setActive(a.dataset.track);
+        content.dispatchEvent(new Event("process:navscroll"));  /* 오버스크롤 종료 navLock 트리거 */
       }));
 
     /* 닫기(back/scrim) + Esc */
@@ -112,6 +124,10 @@
           (i.style.animationPlayState = playing ? "running" : "paused"));
       });
     }
+
+    /* process-exit.js(오버스크롤 종료)가 close 를 받아가도록 전역 레지스트리 등록 */
+    window.__processCtrl = window.__processCtrl || {};
+    window.__processCtrl[modal.dataset.project] = { open, close };
 
     return { open, close };
   }

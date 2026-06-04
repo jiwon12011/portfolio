@@ -353,6 +353,7 @@
       const phoneIn = () => {
         const dist = phoneTrack.scrollHeight - phoneScreen.clientHeight;
         if (dist <= 4) return;
+        phoneTrack.style.willChange = "transform";   /* hover 동안만 GPU 힌트 */
         gsap.killTweensOf(phoneTrack);
         gsap.to(phoneTrack, {
           y: -dist, duration: Math.max(3, dist / 300), ease: "none",  /* ≈300px/s 프리뷰 스크롤 */
@@ -361,7 +362,8 @@
       };
       const phoneOut = () => {
         gsap.killTweensOf(phoneTrack);
-        gsap.to(phoneTrack, { y: 0, duration: 0.6, ease: "power2.out" });
+        gsap.to(phoneTrack, { y: 0, duration: 0.6, ease: "power2.out",
+          onComplete: () => { phoneTrack.style.willChange = "auto"; } });
       };
       phoneDevice.addEventListener("mouseenter", phoneIn);
       phoneDevice.addEventListener("mouseleave", phoneOut);

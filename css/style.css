@@ -582,11 +582,17 @@ img.is-empty { color: transparent; }
   background: none; border: 0; cursor: pointer; color: var(--it-title);
   font-size: 14px; font-weight: 700; letter-spacing: 0.14em;
 }
-.intro-brand__mark { font-size: 17px; opacity: 0.9; }
-.intro-nav { display: flex; gap: clamp(20px, 2.4vw, 46px); }
-.intro-nav__item { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--it-title); }
-.intro-nav__ico { width: 19px; height: 19px; flex: none; fill: none; stroke: var(--it-muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .2s; }
-.intro-nav__item:hover .intro-nav__ico { stroke: var(--it-title); }
+.intro-brand__mark { font-size: 18px; line-height: 1; opacity: 0.9;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20; }
+.intro-nav { display: flex; gap: clamp(22px, 2.2vw, 40px); }
+.intro-nav__item { display: flex; align-items: flex-start; gap: 8px; text-decoration: none; color: var(--it-title); }
+.intro-nav__ico { font-size: 20px; line-height: 1; flex: none; color: var(--it-muted);
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; transition: color .2s;
+  /* 굵은 라벨(첫 줄 ~15px)에 광학 정렬: align-items:flex-start + 라벨 높이 박스에 글리프 중앙 */
+  height: 15px; display: flex; align-items: center; justify-content: center; }
+.intro-nav__item:hover .intro-nav__ico { color: var(--it-title); }
+/* Material 글리프 잉크 편차 광학 보정 — science(플라스크)는 바닥이 무거워 살짝 올림 */
+.intro-nav__item:nth-child(2) .intro-nav__ico { transform: translateY(-1px); }
 .intro-nav__txt { display: flex; flex-direction: column; gap: 2px; }
 .intro-nav__txt b { font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; }
 .intro-nav__txt i { font-size: 10.5px; font-style: normal; color: var(--muted); }
@@ -826,6 +832,10 @@ html.process-open { overflow: hidden; }
 .process.is-open  .process__scrim { animation: procScrimIn .42s ease both; }
 .process.is-open  .process__panel { animation: procPanelIn .56s cubic-bezier(.22,1,.36,1) both; }
 .process.is-closing .process__scrim { animation: procScrimOut .26s ease both; }
+/* 닫힘 중엔 backdrop-filter 비활성 → 전체화면 블러 매프레임 재합성 제거(렉 핵심).
+   scrim/칩이 어차피 사라지므로 블러 제거가 시각적으로 묻힘 */
+.process.is-closing .process__scrim,
+.process.is-closing .process__exit-glass { backdrop-filter: none; -webkit-backdrop-filter: none; }
 .process.is-closing .process__panel { animation: procPanelOut .30s cubic-bezier(.4,0,.7,1) both; }
 
 @keyframes procScrimIn  { from { opacity: 0; } to { opacity: 1; } }
@@ -836,7 +846,7 @@ html.process-open { overflow: hidden; }
 }
 @keyframes procPanelOut {
   from { opacity: 1; transform: none; }
-  to   { opacity: 0; transform: translateY(14px) scale(.986); }
+  to   { opacity: 0; transform: translateY(18px); }   /* scale 제거 — backdrop-filter 매프레임 재합성 방지 */
 }
 @media (prefers-reduced-motion: reduce) {
   .process.is-open .process__scrim, .process.is-open .process__panel,
@@ -945,6 +955,47 @@ html.process-open { overflow: hidden; }
      휠 스크롤엔 영향 없고(scrollTo/앵커만), 섹션8은 네이티브 sticky라 pin 충돌도 없음. */
 .process__content::-webkit-scrollbar { width: 8px; }
 .process__content::-webkit-scrollbar-thumb { background: rgba(90,104,76,0.28); border-radius: 4px; }
+
+/* ===== 오버스크롤 종료 안내 칩 (process-exit.js 가 동적 생성) =====
+   바닥 근접 시 떠오르고, 더 내릴수록 --p(0~1)로 게이지가 차오름 → 임계 도달 시 닫힘 */
+.process__exit {                               /* 본문 끝 + 여백 뒤, 흐름 안에 중앙 배치 */
+  align-self: center; margin: 100px 0 60px;
+  opacity: 0; pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
+}
+.process.is-near-end .process__exit { opacity: 1; transform: translateY(0); }
+.process__exit-glass {
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 16px; border-radius: 999px;
+  background: rgba(28,22,16,0.42);
+  backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 12px 34px -16px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.22);
+}
+.process__exit-arrow { display: flex; flex: none; }
+.process__exit-arrow svg { width: 15px; height: 15px; fill: none; stroke: rgba(255,255,255,0.8);
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; animation: pexArrow 1.5s ease-in-out infinite; }
+@keyframes pexArrow { 0%,100%{ transform: translateY(0); opacity:.7 } 50%{ transform: translateY(2px); opacity:1 } }
+.process__exit-label { font-size: 12.5px; font-weight: 500; letter-spacing: .01em; white-space: nowrap;
+  color: rgba(255,255,255,0.92); text-shadow: 0 1px 2px rgba(0,0,0,.3); }
+.process__exit-track { position: relative; width: 54px; height: 3px; border-radius: 2px;
+  background: rgba(255,255,255,0.18); overflow: hidden; flex: none; }
+.process__exit-fill { position: absolute; top: 0; bottom: 0; left: 0; width: calc(var(--p,0) * 100%);
+  background: rgba(255,255,255,0.92); border-radius: 2px; }
+.process.is-exit-armed .process__exit-fill { background: linear-gradient(90deg,#ffd9a8,#ff9e9e); box-shadow: 0 0 10px rgba(255,158,158,.6); }
+.process.is-exit-armed .process__exit-glass { border-color: rgba(255,200,170,0.42); }
+/* POZE 톤 (다크 토프 + 핑크) */
+.process--poze .process__exit-glass { background: rgba(40,30,24,0.5); border-color: rgba(222,178,182,0.24); }
+.process--poze .process__exit-label { color: rgba(241,227,219,0.95); }
+.process--poze .process__exit-arrow svg { stroke: rgba(241,227,219,0.82); }
+.process--poze .process__exit-fill { background: rgba(233,205,210,0.92); }
+.process--poze.is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(233,194,201,.95), rgba(210,142,160,1)); box-shadow: 0 0 10px rgba(210,142,160,.55); }
+@media (prefers-reduced-motion: reduce) {
+  .process__exit { transition: opacity .15s ease; transform: none; }
+  .process.is-near-end .process__exit { transform: none; }
+  .process__exit-arrow svg { animation: none; }
+}
 /* 01 섹션이 첫 화면 높이를 꽉 채움(다음 섹션이 안 비치게): 히어로=남는 공간, 카드=고정 */
 #psec-01, #pzsec-01 { height: 100%; flex: none; display: flex; flex-direction: column; }
 
@@ -1299,6 +1350,15 @@ html.process-open { overflow: hidden; }
 .pz-sec--full { background: #241a13; }
 .pz-full-img { display: block; width: 100%; height: auto; }
 
+/* lazy 이미지 공간 예약(aspect-ratio) — 로드 전에도 섹션 높이가 정확해야
+   네비 클릭 스크롤 목표가 안 밀리고(내려가다 마는 문제 해결), 로드 시 레이아웃
+   점프(CLS)·스크롤 끊김도 사라짐. 값=줄인 webp 실제 치수 */
+.pz-band            { aspect-ratio: 1500 / 563; }
+#pz-s5  .pz-full-img { aspect-ratio: 1500 / 1046; }
+#pz-s10 .pz-full-img { aspect-ratio: 1500 / 845; }
+.pz-shop__top       { aspect-ratio: 1500 / 1906; }
+.pz-shop__long      { aspect-ratio: 1100 / 3079; }
+
 /* 섹션6 — REBUILT FOR IMMERSION (디자인 1440×829, 좌 이미지 / 우 텍스트) */
 .pz-sec--rebuilt { aspect-ratio: 1440 / 829; background: #e0d6cf; color: #251a13; }
 .pz-rebuilt__img {                             /* 좌측 이미지 714px = 49.58% */
@@ -1372,8 +1432,7 @@ html.process-open { overflow: hidden; }
     #160f0a;
 }
 .pz-phone__device {                            /* 핸드폰 — 섹션 높이에 맞춰 스케일 */
-  position: relative; height: 88%; aspect-ratio: 1736 / 3068;
-  outline: none; will-change: transform;
+  position: relative; height: 88%; aspect-ratio: 1736 / 3068; outline: none;
 }
 .pz-phone__frame {                             /* 목업 프레임(화면 투명) — 맨 위, 클릭 통과 */
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -1383,7 +1442,7 @@ html.process-open { overflow: hidden; }
   position: absolute; left: 13.36%; top: 4.73%; width: 73.44%; height: 90.45%;
   overflow: hidden; border-radius: 7.5% / 4.4%; background: #0e0e10; z-index: 1;
 }
-.pz-phone__track { padding: 0 0 30px; will-change: transform; }  /* 위:0(화면 시작점에 맞춤) / 아래:30 보더 */
+.pz-phone__track { padding: 0 0 30px; }  /* 위:0(화면 시작점에 맞춤) / 아래:30 보더 — will-change는 hover 때만 JS가 부여 */
 .pz-phone__shot { display: block; width: 100%; height: auto; }
 
 /* =======================================================================

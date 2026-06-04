@@ -279,6 +279,11 @@
      last : 직전 프레임 ts. tShow : 누적 표시 시간(intro/파티클용). */
   let last = null, rafId = null, tShow = 0;
   function tick(ts) {
+    if (document.documentElement.classList.contains("process-open")) {
+      last = ts;                            // 모달 열림 중엔 갱신 생략(GPU 절약), dt 베이스만 리셋
+      rafId = requestAnimationFrame(tick);
+      return;
+    }
     if (last === null) last = ts;
     let dt = (ts - last) / 1000;
     last = ts;
