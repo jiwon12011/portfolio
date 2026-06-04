@@ -150,6 +150,12 @@ body {
   width: var(--w, 220px);
   z-index: 20;
 }
+/* 고스트 카드: 비인터랙티브(시각 전용). orbit.js 가 transform/opacity/filter 로 제어. */
+.card-arm--ghost,
+.card-arm--ghost * {
+  pointer-events: none;
+  user-select: none;
+}
 /* 넓은 화면(>1440)에서 카드만 살짝 축소 — 씬/배경 배율(--scale)·카드 위치는 그대로 두고
    카드 비주얼만 --card-k 로 줄인다(1440=1, 1920≈0.88). card-arm 의 orbit transform 과 분리. */
 .card-arm > .card { transform: scale(var(--card-k, 1)); transform-origin: center center; }
