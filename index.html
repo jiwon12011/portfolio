@@ -1495,9 +1495,102 @@
     </div>
   </div>
 
+  <!-- ===== ABOUT (Profile) 풀페이지 오버레이 ===== -->
+  <section class="about" id="about" aria-hidden="true">
+    <button class="about__back" type="button" data-about-close aria-label="닫기">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg> BACK
+    </button>
+    <div class="about__scroll">
+      <div class="about__inner">
+        <!-- 좌측: 프로필 -->
+        <aside class="about__side">
+          <h2 class="about__h">Profile</h2>
+          <img class="about__photo" src="img/about/profile.webp" alt="서지원 프로필 사진" loading="lazy" width="720" height="959" />
+          <h3 class="about__name">서지원</h3>
+          <p class="about__role">UI/UX Designer</p>
+          <p class="about__role">Service Planner</p>
+          <span class="about__rule" aria-hidden="true"></span>
+          <dl class="about__meta">
+            <div class="about__metarow"><dt>BIRTH</dt><dd>2001. 12 .01</dd></div>
+            <div class="about__metarow"><dt>EMAIL</dt><dd>jiwon12011@gmail.com</dd></div>
+            <div class="about__metarow"><dt>INSTA</dt><dd>@o1.12.o1</dd></div>
+          </dl>
+        </aside>
+        <!-- 우측: 콘텐츠 -->
+        <div class="about__main">
+          <p class="about__lead">기획부터 구현까지 연결하는 디자이너<br /><b>서지원</b>입니다.</p>
+          <div class="about__grid">
+            <!-- 윗줄: EDUCATION | CERTIFICATION -->
+            <section class="about__block">
+              <h4 class="about__title">EDUCATION</h4>
+              <div class="about__edu">
+                <p>산업디자인학과 졸업</p>
+                <p>웹디자인 실무 과정 수료<br />웹 퍼블리싱 과정 수료</p>
+              </div>
+            </section>
+            <section class="about__block">
+              <h4 class="about__title">CERTIFICATION</h4>
+              <dl class="about__cert">
+                <div class="about__certrow"><dt>2026</dt><dd>웹디자인개발기능사(취득예정)</dd></div>
+                <div class="about__certrow"><dt>2022</dt><dd>Adobe Certified Expert PS</dd></div>
+                <div class="about__certrow"><dt>2022</dt><dd>Adobe Certified Expert AI</dd></div>
+                <div class="about__certrow"><dt>2022</dt><dd>GTQ 1급</dd></div>
+                <div class="about__certrow"><dt>2021</dt><dd>CS LEADERS</dd></div>
+              </dl>
+            </section>
+            <!-- 아랫줄: SKILLS | STRENGTH -->
+            <section class="about__block">
+              <h4 class="about__title">SKILLS</h4>
+              <div class="about__skillgroup">
+                <p class="about__sub about__sub--design">DESIGN</p>
+                <div class="about__pills">
+                  <span class="about__pill about__pill--pink">Figma</span>
+                  <span class="about__pill about__pill--pink">Photoshop</span>
+                  <span class="about__pill about__pill--pink">Illustrator</span>
+                </div>
+              </div>
+              <div class="about__skillgroup">
+                <p class="about__sub about__sub--dev">DEVELOPMENT</p>
+                <div class="about__pills">
+                  <span class="about__pill about__pill--blue">HTML / CSS</span>
+                  <span class="about__pill about__pill--blue">JavaScript</span>
+                  <span class="about__pill about__pill--blue">Vue.js</span>
+                  <span class="about__pill about__pill--blue">React Native</span>
+                  <span class="about__pill about__pill--blue">GSAP</span>
+                  <span class="about__pill about__pill--blue">Supabase</span>
+                </div>
+              </div>
+              <div class="about__skillgroup">
+                <p class="about__sub about__sub--ai">AI TOOLS</p>
+                <div class="about__pills">
+                  <span class="about__pill about__pill--purple">ChatGPT</span>
+                  <span class="about__pill about__pill--purple">Claude</span>
+                  <span class="about__pill about__pill--purple">Gemini</span>
+                  <span class="about__pill about__pill--purple">Midjourney</span>
+                  <span class="about__pill about__pill--purple">Firefly</span>
+                </div>
+              </div>
+            </section>
+            <section class="about__block">
+              <h4 class="about__title">STRENGTH</h4>
+              <div class="about__strength">
+                <div class="about__str"><h5>UI / UX Design</h5><p>사용자 중심의 경험 설계와 인터페이스 디자인</p></div>
+                <div class="about__str"><h5>Branding</h5><p>브랜드 아이덴티티 기획 및 디자인</p></div>
+                <div class="about__str"><h5>Web Publishing</h5><p>웹 퍼블리싱 및 인터랙션 구현</p></div>
+                <div class="about__str"><h5>Service Planning</h5><p>서비스 기획 및 사용자 플로우 설계</p></div>
+                <div class="about__str"><h5>AI Workflow</h5><p>콘텐츠 제작 자동화 및 AI 활용 워크플로우 구축</p></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <script src="js/main.js" defer></script>
   <script src="js/orbit.js" defer></script>
   <script src="js/deck.js" defer></script>
+  <script src="js/about.js" defer></script>
   <script src="js/process.js" defer></script>
   <script src="js/process-exit.js" defer></script>
   <!-- GSAP (제작과정 스크롤 모션) -->
