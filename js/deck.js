@@ -16,7 +16,12 @@
   let idx = 0, lock = false;
   const COOLDOWN = 880;
   const EASE = "transform .8s cubic-bezier(.76,0,.18,1)";
-  const tr = (p, on) => { p.style.transition = on ? EASE : "none"; };
+  const tr = (p, on) => {
+    if (!on) { p.style.transition = "none"; return; }
+    /* 모션 민감 사용자: 좌우 슬라이드(전정 자극) 즉시 전환으로 */
+    p.style.transition = matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "transform .01ms linear" : EASE;
+  };
 
   /* 초기 배치: 0번 화면, 나머지는 오른쪽 밖 */
   panels.forEach((p, i) => {
@@ -64,7 +69,12 @@
     const keep = new Set([idx, (idx + 1) % N, (idx - 1 + N) % N]);
     panels.forEach((p, i) => {
       const v = p.querySelector("video");
-      if (v && keep.has(i) && v.preload !== "auto") { v.preload = "auto"; v.load(); }
+      if (!v) return;
+      if (keep.has(i)) {
+        if (v.preload !== "auto") { v.preload = "auto"; v.load(); }
+      } else if (!p.classList.contains("is-active") && v.preload !== "none") {
+        v.preload = "none";        /* keep 범위 밖 — 버퍼 해제 힌트(한 바퀴 돌 때 메모리 누적 방지) */
+      }
     });
   }
 

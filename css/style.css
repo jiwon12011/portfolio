@@ -713,10 +713,10 @@ img.is-empty { color: transparent; }
 }
 
 /* 좌측 프로젝트 정보 — 헤더 아래부터 한 컬럼으로(충돌 방지) */
-.intro-info { position: absolute; left: var(--pad); top: clamp(134px, 18.5vh, 206px); max-width: min(42vw, 540px); }
+.intro-info { position: absolute; left: var(--pad); top: clamp(140px, 19vh, 212px); max-width: min(42vw, 540px); }  /* 우측 목차(.intro-list)와 상단 정렬 일치 */
 .intro-info__eyebrow { margin:0 0 12px; font-size: 12px; letter-spacing: 0.24em; color: var(--muted); font-weight: 600; }
 .intro-info__title { margin: 0; font-size: clamp(34px, 3.9vw, 75px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.04; color: var(--it-title); }
-.intro-info__sub { margin: 12px 0 0; font-size: clamp(13px, 1vw, 19px); color: var(--it-text); }
+.intro-info__sub { margin: 16px 0 0; font-size: clamp(13px, 1vw, 19px); color: var(--it-text); }
 .intro-info__rule { display:block; width: 34px; height: 1px; background: var(--it-muted); margin: 16px 0; }
 .intro-info__desc { margin: 0; font-size: clamp(12.5px, 0.95vw, 18px); line-height: 1.55; color: var(--it-muted); }
 
@@ -731,7 +731,7 @@ img.is-empty { color: transparent; }
 .intro-process svg { width: 16px; height: 16px; fill:none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .intro-process__hint { margin: 10px 0 0; font-size: 11px; color: var(--muted); }
 
-.intro-index { margin-top: 18px; width: fit-content; max-width: 280px; padding: 14px 18px; border-radius: 14px; background: var(--glass); border: 1px solid var(--line); }
+.intro-index { margin-top: 16px; width: fit-content; max-width: 280px; padding: 14px 18px; border-radius: 14px; background: var(--glass); border: 1px solid var(--line); }
 .intro-index__label { margin: 0 0 11px; font-size: 11px; letter-spacing: 0.16em; color: var(--muted); font-weight: 700; }
 .intro-index ul { list-style: none; margin: 0; padding: 0 0 0 14px; display: grid; gap: 8px; }
 .intro-index li { display: grid; grid-template-columns: 28px 1fr; align-items: center; font-size: 12.5px; color: var(--it-muted); position: relative; }
@@ -799,6 +799,29 @@ img.is-empty { color: transparent; }
 .intro-mouse line { stroke: var(--it-title); stroke-width:2; stroke-linecap:round; animation: introScroll 1.6s ease-in-out infinite; }
 .intro-scroll__line { width:1px; height: 34px; background: linear-gradient(var(--it-muted), transparent); }
 @keyframes introScroll { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(5px);opacity:.35} }
+
+/* ── 패널 진입 시 좌측 정보 스태거 등장(시네마틱) — .project-intro__back 패턴 확장 ── */
+.project-intro:not(.is-active) .intro-info__eyebrow,
+.project-intro:not(.is-active) .intro-info__title,
+.project-intro:not(.is-active) .intro-info__sub,
+.project-intro:not(.is-active) .intro-info__rule,
+.project-intro:not(.is-active) .intro-info__desc,
+.project-intro:not(.is-active) .intro-index { opacity: 0; transform: translateY(14px); }
+.project-intro.is-active .intro-info__eyebrow { transition: opacity .45s ease .32s, transform .5s cubic-bezier(.22,1,.36,1) .32s; }
+.project-intro.is-active .intro-info__title   { transition: opacity .5s ease .42s, transform .55s cubic-bezier(.22,1,.36,1) .42s; }
+.project-intro.is-active .intro-info__sub     { transition: opacity .4s ease .52s, transform .45s cubic-bezier(.22,1,.36,1) .52s; }
+.project-intro.is-active .intro-info__rule    { transition: opacity .35s ease .58s; }
+.project-intro.is-active .intro-info__desc    { transition: opacity .4s ease .60s, transform .45s cubic-bezier(.22,1,.36,1) .60s; }
+.project-intro.is-active .intro-index         { transition: opacity .4s ease .68s, transform .45s cubic-bezier(.22,1,.36,1) .68s; }
+@media (prefers-reduced-motion: reduce) {
+  .project-intro:not(.is-active) .intro-info__eyebrow,
+  .project-intro:not(.is-active) .intro-info__title,
+  .project-intro:not(.is-active) .intro-info__sub,
+  .project-intro:not(.is-active) .intro-info__rule,
+  .project-intro:not(.is-active) .intro-info__desc,
+  .project-intro:not(.is-active) .intro-index { opacity: 1; transform: none; }
+  .intro-mouse line { animation: none; }
+}
 
 /* 인터랙션 안내(우하단) */
 .intro-hints { position: absolute; right: var(--pad); bottom: var(--pad); display: flex; align-items: stretch; gap: 18px; padding: 15px 20px; border-radius: 15px; background: var(--glass); border: 1px solid var(--line); }
