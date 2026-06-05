@@ -11,13 +11,14 @@
    · deck.js 보다 먼저 로드 → deck 의 [data-go] 바인딩이 렌더된 항목을 잡음.
 ======================================================================= */
 (() => {
-  /* ▼ 프로젝트 추가는 여기 한 줄. 순서 = 목차 순환 순서 */
+  /* ▼ 프로젝트 추가는 여기 한 줄. 순서 = 목차 순환 순서.
+     preview = 호버 미리보기용 경량 클립(없으면 정적 썸네일만) */
   const PROJECTS = [
-    { key: "jaringobi", num: "01", title: "자린고비",      sub: "Branding / 2025", thumb: "img/main/main_jaringobi.webp" },
-    { key: "gwihon",    num: "02", title: "귀혼",          sub: "UXUI / 2025",     thumb: "img/main/main_hon.webp" },
+    { key: "jaringobi", num: "01", title: "자린고비",      sub: "Branding / 2025", thumb: "img/main/main_jaringobi.webp", preview: "img/jaringobi/jaringobi_thumb.mp4" },
+    { key: "gwihon",    num: "02", title: "귀혼",          sub: "UXUI / 2025",     thumb: "img/main/main_hon.webp",       preview: "img/hon/hon_thumb.mp4" },
     { key: "pledis",    num: "03", title: "플레디스",      sub: "Branding / 2025", thumb: "img/main/main_pledis.webp" },
-    { key: "yumi",      num: "04", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp" },
-    { key: "poze",      num: "05", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp" },
+    { key: "yumi",      num: "04", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp",      preview: "img/yumi_cell/yumicell_thumb.mp4" },
+    { key: "poze",      num: "05", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
   ];
 
   const N = PROJECTS.length;
@@ -27,7 +28,8 @@
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
   const itemHTML = (p, slot, active) =>
-    '<li class="intro-list__item' + (active ? " is-active" : "") + '" data-go="' + p.key + '" data-slot="' + slot + '">' +
+    '<li class="intro-list__item' + (active ? " is-active" : "") + '" data-go="' + p.key + '" data-slot="' + slot + '"' +
+      (p.preview ? ' data-preview="' + p.preview + '"' : "") + ">" +
       '<img src="' + p.thumb + '" alt="" loading="lazy" />' +
       "<div><span>" + esc(p.num) + "</span><h4>" + esc(p.title) + "</h4><p>" + esc(p.sub) + "</p></div>" +
       '<span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +

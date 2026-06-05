@@ -773,9 +773,16 @@ img.is-empty { color: transparent; }
 .intro-list__item[data-slot="2"],
 .intro-list__item[data-slot="-2"] { opacity: .36; }
 .intro-list__item:hover { opacity: 1; }                 /* 호버 시 또렷(미리보기 강조) */
-/* 썸네일 호버 — 살짝 확대(가벼운 미리보기; 영상 재생은 2단계) */
+/* 썸네일 호버 — 살짝 확대 */
 .intro-list__item img { transition: transform .28s cubic-bezier(.34,1.5,.64,1); }
 .intro-list__item:hover img { transform: scale(1.08); }
+/* 호버 영상 미리보기 — 공유 video 1개를 썸네일 위로 띄워 재생(intro-toc-preview.js).
+   썸네일 img 와 동일한 scale(1.08)·origin 으로 확대해 어긋남 없음 + 살짝 scale-in */
+.intro-list__preview { position: absolute; z-index: 2; border-radius: 9px; object-fit: cover;
+  opacity: 0; pointer-events: none; box-shadow: 0 6px 16px -8px rgba(0,0,0,.5);
+  transform: scale(.96); transform-origin: center center;
+  transition: opacity .22s ease, transform .28s cubic-bezier(.34,1.5,.64,1); }
+.intro-list__preview.is-on { opacity: 1; transform: scale(1.08); }
 @media (prefers-reduced-motion: reduce) {
   .intro-list__item img, .intro-list__item:hover img { transition: none; transform: none; }
 }
