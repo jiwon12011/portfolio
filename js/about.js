@@ -83,13 +83,16 @@
     }
   });
 
-  /* 메인 오빗의 ABOUT ME 카드 → 이력서 섹션 */
-  document.querySelectorAll('.card-arm[data-card="about"]').forEach((arm) => {
+  /* 메인 오빗의 ABOUT ME 카드 → 이력서, Skills 카드 → 이력서(스킬 섹션 포함) */
+  document.querySelectorAll('.card-arm[data-card="about"], .card-arm[data-card="skills"]').forEach((arm) => {
     arm.style.cursor = "pointer";
-    arm.addEventListener("click", (e) => {
-      if (e.target.closest("button")) return;
-      e.preventDefault();
-      open("resume");
+    arm.setAttribute("role", "button");
+    arm.setAttribute("tabindex", "0");
+    arm.setAttribute("aria-label", (arm.dataset.card === "skills" ? "Skills" : "About") + " — 이력서 보기");
+    const go = (e) => { if (e.target.closest("button")) return; e.preventDefault(); open("resume"); };
+    arm.addEventListener("click", go);
+    arm.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("resume"); }
     });
   });
 

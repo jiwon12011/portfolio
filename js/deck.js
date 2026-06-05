@@ -72,6 +72,9 @@
     if (lock || to === idx || to < 0 || to >= N) return;
     lock = true; setTimeout(() => { lock = false; }, COOLDOWN);
     const out = panels[idx], inc = panels[to];
+    /* 전환 직전에만 GPU 레이어 승격(끝나면 해제 → 비활성 패널 VRAM 점유 제거) */
+    out.style.willChange = inc.style.willChange = "transform";
+    setTimeout(() => { out.style.willChange = ""; inc.style.willChange = ""; }, 850);
     /* 들어오는 패널을 진행 방향 반대편에 즉시 배치(트랜지션 없이) */
     tr(inc, false);
     inc.style.transform = `translateX(${dir > 0 ? 100 : -100}%)`;
@@ -116,9 +119,17 @@
     const arm = document.querySelector(`.card-arm[data-card="${proj}"]`);
     if (!arm) return;
     arm.style.cursor = "pointer";
+    const title = (arm.querySelector(".card__title") || {}).textContent || proj;
+    arm.setAttribute("role", "button");
+    arm.setAttribute("tabindex", "0");
+    arm.setAttribute("aria-label", title.trim() + " 프로젝트 보기");
+    const nav = () => goTo(panels.indexOf(p));
     arm.addEventListener("click", (e) => {
       if (e.target.closest("button, a")) return;
-      goTo(panels.indexOf(p));
+      nav();
+    });
+    arm.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); nav(); }
     });
   });
 

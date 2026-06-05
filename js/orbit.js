@@ -120,6 +120,7 @@
 
   function placeArm(arm, i, introAlpha) {
     const c = CENTERS[i];
+    if (!c) return;                        // 카드 수 > CENTERS 길이일 때 조용히 무시(런타임 에러 방지)
     const θ = theta0[i] + phase;
     const s = Math.sin(θ);
     const z = Math.cos(θ);                 // depth: 앞(+1) ~ 뒤(-1)
@@ -145,7 +146,8 @@
     let   blur    = base.blur * (1 - fa);  // 정면화될수록 blur 제거
     let   zi      = isFocused ? FRONT_Z : base.zi;
 
-    const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * 4; // bobbing ±4px (황금비 분산)
+    const bobAmp = 2 + 2 * ((z + 1) / 2);  // 깊이 비례: 뒤(z=-1) ±2px ~ 앞(z=+1) ±4px (원근 일치)
+    const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp; // bobbing(황금비 분산)
     const y = 423.5 + (yRaw - 423.5) * G;
 
     /* 고스트: 일반 뒤 카드보다 한 톤 더 distant — 추가 scale/opacity 감소 */
@@ -266,7 +268,8 @@
     canvas.height = cH;
   }
 
-  const MAX_P = matchMedia("(max-width:768px)").matches ? 0 : 42;
+  const _lowEnd = (navigator.hardwareConcurrency || 8) <= 4;   // 저사양/태블릿 보호
+  const MAX_P = matchMedia("(max-width:768px)").matches ? 0 : (_lowEnd ? 16 : 30);
   const parts = Array.from({ length: MAX_P }, (_, i) => ({
     ring: i % RING_YS.length,
     phase: Math.PI * 2 * (i / MAX_P),
@@ -306,7 +309,7 @@
     /* 카드별 정면화 진행도 lerp(부드러운 전이) */
     arms.forEach((_, i) => {
       const target = i === focusIdx ? 1 : 0;
-      focusAmt[i] += (target - focusAmt[i]) * Math.min(dt * 7, 1);
+      focusAmt[i] += (target - focusAmt[i]) * Math.min(dt * 4, 1);  // CSS hover(.45s)와 속도 맞춤(튐 방지)
     });
 
     /* 인트로: 카드마다 시작 시간을 어긋나게(stagger) + ease → 시네마틱 진입 */
