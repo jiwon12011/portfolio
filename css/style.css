@@ -625,12 +625,12 @@ img.is-empty { color: transparent; }
    터치/모바일은 enhance 안 함 → 기존 우상단 글래스 칩 그대로.
 ====================================================================== */
 .intro-nav--pearl { position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 100px; height: 54px; z-index: 7; }
+  width: 124px; height: 64px; z-index: 7; }
 .intro-nav--pearl.is-open { width: 224px; height: 178px; }   /* 펼치는 동안 호버영역 확장(부채꼴+라벨 포함) → 이동 중 안 닫힘 */
 
 /* 진주 — 상단 가장자리에 ~54%만 빼꼼(풀탭). 아래로 살짝 bob = "당겨봐" 힌트 */
-.intro-nav__pearl { position: absolute; top: -39px; left: 50%; transform: translateX(-50%);
-  width: 84px; height: 84px; padding: 0; border: 0; cursor: pointer;
+.intro-nav__pearl { position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+  width: 110px; height: 110px; padding: 0; border: 0; cursor: pointer;
   background: transparent; border-radius: 50%; -webkit-tap-highlight-color: transparent;
   transition: opacity .3s ease, transform .42s cubic-bezier(.34,1.4,.5,1); }
 .intro-nav__orb { position: relative; display: block; width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
