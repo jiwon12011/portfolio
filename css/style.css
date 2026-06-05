@@ -105,6 +105,7 @@ body {
   height: 847px;
   transform: translate(-50%, -50%) scale(var(--scale, 1));
   transform-origin: center center;
+  perspective: 1100px;        /* 포커스 카드 rotateY 입체감(orbit.js) */
 }
 
 /* 씬 컬러그레이딩 — 배경 위(z:3, 카드/캐릭터 아래)에 따뜻-차가운 시네마 톤 */
@@ -112,8 +113,8 @@ body {
   content: "";
   position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 26%, rgba(255,186,112,0.10) 0%, transparent 55%),
-    linear-gradient(180deg, rgba(110,155,205,0.07) 0%, transparent 42%, rgba(150,150,182,0.10) 100%);
+    radial-gradient(ellipse 80% 60% at 50% 26%, rgba(255,186,112,0.13) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(110,155,205,0.09) 0%, transparent 42%, rgba(150,150,182,0.12) 100%);
   mix-blend-mode: soft-light;
 }
 /* 비네트 — 가장자리 어둡게 해서 중앙을 '조명받은 무대'처럼 */
@@ -123,6 +124,14 @@ body {
   background: radial-gradient(ellipse at 50% 46%, transparent 40%, rgba(16,26,46,0.42) 100%);
   mix-blend-mode: multiply;
 }
+
+/* ── 정체성 워드마크(좌상단) — 인트로 .intro-brand 와 동일 위치·크기·#마크 ── */
+.scene-name { position: absolute; left: clamp(28px, 3.4vw, 65px); top: clamp(28px, 3.4vw, 65px);
+  z-index: 6; margin: 0; display: inline-flex; align-items: center; gap: 10px; pointer-events: none;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.14em;
+  color: #fff; text-shadow: 0 1px 10px rgba(10,18,40,0.5); }
+.scene-name__mark { font-size: 18px; line-height: 1; opacity: 0.9;
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20; }
 
 /* SVG 궤도 링 */
 .orbit-ring-svg {
@@ -177,7 +186,8 @@ body {
   border: 1px solid rgba(255,255,255,0.42);
   /* 4단계: 외곽 블룸 · rim 글로우 · 깊이 그림자 · inset 상단 하이라이트 */
   box-shadow:
-    0 24px 54px -14px rgba(20, 40, 76, 0.46),
+    0 28px 60px -16px rgba(16, 26, 46, 0.52),
+    0 8px 22px -8px rgba(0,0,0,0.20),            /* 근거리 그림자 — 공중에 떠 있는 느낌 */
     0 0 2px rgba(255,255,255,1),
     0 0 14px rgba(222,240,255,0.82),
     0 0 30px rgba(165,205,255,0.52),
@@ -221,10 +231,12 @@ body {
 /* 호버 글로우만(상승은 orbit focusAmt 가 담당 — translateY 중복 시 포커스 카드에서 미세 진동) */
 .card:hover {
   box-shadow:
-    0 30px 66px -12px rgba(28, 48, 84, 0.50),
+    0 36px 80px -12px rgba(16, 26, 46, 0.62),
+    0 10px 30px -6px rgba(0,0,0,0.28),           /* 근거리 — 조명받아 떠오른 느낌 */
     0 0 2px rgba(255,255,255,0.95),
-    0 0 14px rgba(200,222,255,0.56),
-    0 0 30px rgba(127,174,229,0.32),
+    0 0 18px rgba(200,222,255,0.62),
+    0 0 36px rgba(127,174,229,0.42),
+    0 0 28px rgba(255,186,112,0.16),             /* 노을 톤 따뜻한 글로우(배경과 호응) */
     inset 0 1px 2px rgba(255,255,255,0.60),
     inset 0 -1px 1px rgba(20,40,80,0.08);
 }

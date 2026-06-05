@@ -96,6 +96,11 @@
     });
   });
 
+  /* 서명 CTA 등 [data-about-open] → 해당 섹션 열기 */
+  document.querySelectorAll("[data-about-open]").forEach((el) => {
+    el.addEventListener("click", (e) => { e.preventDefault(); open(el.dataset.aboutOpen || "resume"); });
+  });
+
   /* 닫기 (BACK / scrim) + Esc */
   about.querySelectorAll("[data-about-close]").forEach((btn) => btn.addEventListener("click", close));
   document.addEventListener("keydown", (e) => {

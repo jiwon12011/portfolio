@@ -112,11 +112,12 @@
   /* 한 카드 배치
      · 회전 위치(rotX/rotZ)와 정면 위치(z=1, x=CX) 사이를 focusAmt 로 블렌드.
      · 비포커스 카드는 다른 카드가 포커스됐을 때 dim(어둡게+뒤로). */
-  const FRONT_SCALE = 1.28;   // 정면화 카드 최대 스케일(임팩트↑)
+  const FRONT_SCALE = 1.2;    // 정면화 카드 최대 스케일(과하지 않게)
   const FRONT_Z     = 30;     // 정면화 카드 zIndex
   const DIM_OPACITY = 0.42;   // 다른 카드 dim 시 곱
   const DIM_BRIGHT  = 0.78;   // 다른 카드 dim 밝기
-  const DIM_SCALE   = 0.88;   // 다른 카드 dim 시 축소(원근 분리↑)
+  const DIM_SCALE   = 0.82;   // 다른 카드 dim 시 축소(원근 분리↑ — 주변이 더 비킴)
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function placeArm(arm, i, introAlpha) {
     const c = CENTERS[i];
@@ -168,14 +169,16 @@
       return;
     }
 
-    applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha);
+    const tiltY = (isFocused && !reduceMotion) ? z * -3.5 * fa : 0;  // 깊이(z) 기반 미세 기울임(은은하게)
+    applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, tiltY);
   }
 
   /* transform/opacity/filter 인라인 적용 (공통) */
-  function applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha) {
+  function applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, rotY) {
     const introScale = lerp(0.9, 1, introAlpha);  // 진입 시 살짝 작게 시작 → 떠오르듯
+    const tilt = rotY ? ` rotateY(${rotY.toFixed(2)}deg)` : "";  // 포커스 카드 입체 기울임
     arm.style.transform =
-      `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${(scale * introScale).toFixed(4)})`;
+      `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${(scale * introScale).toFixed(4)})${tilt}`;
     arm.style.opacity = (opacity * introAlpha).toFixed(4);
     arm.style.zIndex = zi;
     const f = [];
