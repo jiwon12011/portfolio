@@ -1500,7 +1500,14 @@
     <button class="about__back" type="button" data-about-close aria-label="닫기">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg> BACK
     </button>
+    <nav class="about-nav" aria-label="섹션 이동">
+      <a class="about-nav__item is-active" href="#sec-resume" data-section="resume" aria-current="true"><span class="about-nav__label">이력서</span><span class="about-nav__dot" aria-hidden="true"></span></a>
+      <a class="about-nav__item" href="#sec-marketing" data-section="marketing"><span class="about-nav__label">마케팅</span><span class="about-nav__dot" aria-hidden="true"></span></a>
+      <a class="about-nav__item" href="#sec-projects" data-section="projects"><span class="about-nav__label">프로젝트</span><span class="about-nav__dot" aria-hidden="true"></span></a>
+    </nav>
     <div class="about__scroll">
+      <section class="about__section" id="sec-resume" data-section="resume" tabindex="-1">
+      <span class="about__eyebrow" aria-hidden="true">01 — RESUME</span>
       <div class="about__inner">
         <!-- 좌측: 프로필 -->
         <aside class="about__side">
@@ -1584,6 +1591,21 @@
           </div>
         </div>
       </div>
+      </section>
+      <section class="about__section about__section--ph" id="sec-marketing" data-section="marketing" tabindex="-1">
+        <span class="about__eyebrow" aria-hidden="true">02 — MARKETING</span>
+        <div class="about__ph">
+          <h2 class="about__sectitle">AI Experiments &amp; Marketing</h2>
+          <p class="about__phnote">AI로 콘텐츠를 이렇게 만들어봤습니다 — 곧 채워질 섹션</p>
+        </div>
+      </section>
+      <section class="about__section about__section--ph" id="sec-projects" data-section="projects" tabindex="-1">
+        <span class="about__eyebrow" aria-hidden="true">03 — PROJECTS</span>
+        <div class="about__ph">
+          <h2 class="about__sectitle">Banner &amp; Visual Works</h2>
+          <p class="about__phnote">배너·캠페인 비주얼 갤러리 — 곧 채워질 섹션</p>
+        </div>
+      </section>
     </div>
   </section>
 
@@ -1593,7 +1615,6 @@
   <script src="js/deck.js" defer></script>
   <script src="js/intro-toc-preview.js" defer></script>
   <script src="js/about.js" defer></script>
-  <script src="js/about-exit.js" defer></script>
   <script src="js/intro-nav.js" defer></script>
   <script src="js/process.js" defer></script>
   <script src="js/process-exit.js" defer></script>
