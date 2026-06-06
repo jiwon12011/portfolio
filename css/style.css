@@ -971,6 +971,43 @@ img.is-empty { color: transparent; }
     linear-gradient(0deg, rgba(26,21,15,0.34) 0%, transparent 18%);
 }
 
+/* mathhub — 교육 플랫폼: 네이비 + 소프트블루 + 퍼플 액센트 */
+#intro-mathhub .intro-ui {
+  --it-accent: #7fb0e8; --it-title: #eef3fb; --it-text: #d8e2f2; --it-muted: rgba(216,226,242,0.66);
+  --it-box-bg: rgba(28,40,68,0.34); --it-box-border: rgba(127,176,232,0.42); --it-on-accent: #16233e;
+  --it-eq: linear-gradient(180deg, #cfe0f7, #7fb0e8);
+}
+#intro-mathhub .intro-grad {
+  background:
+    linear-gradient(90deg, rgba(16,24,44,0.66) 0%, rgba(16,24,44,0.30) 30%, transparent 56%),
+    linear-gradient(180deg, rgba(16,24,44,0.42) 0%, transparent 22%),
+    linear-gradient(0deg, rgba(16,24,44,0.34) 0%, transparent 18%);
+}
+/* 상상의 문 — 방탈출: navy + gold */
+#intro-sangsang .intro-ui {
+  --it-accent: #e0c179; --it-title: #f3eede; --it-text: #e4dcc6; --it-muted: rgba(228,220,198,0.68);
+  --it-box-bg: rgba(20,26,44,0.36); --it-box-border: rgba(224,193,121,0.40); --it-on-accent: #1a2138;
+  --it-eq: linear-gradient(180deg, #f0dca6, #e0c179);
+}
+#intro-sangsang .intro-grad {
+  background:
+    linear-gradient(90deg, rgba(12,16,32,0.70) 0%, rgba(12,16,32,0.34) 30%, transparent 56%),
+    linear-gradient(180deg, rgba(12,16,32,0.44) 0%, transparent 22%),
+    linear-gradient(0deg, rgba(12,16,32,0.36) 0%, transparent 18%);
+}
+/* LOOM — AI 아카이브: 라벤더 퍼플 */
+#intro-loom .intro-ui {
+  --it-accent: #b6a6dc; --it-title: #f1ecf8; --it-text: #ddd3ec; --it-muted: rgba(221,211,236,0.66);
+  --it-box-bg: rgba(46,38,66,0.34); --it-box-border: rgba(182,166,220,0.42); --it-on-accent: #241d36;
+  --it-eq: linear-gradient(180deg, #d8ccf0, #b6a6dc);
+}
+#intro-loom .intro-grad {
+  background:
+    linear-gradient(90deg, rgba(26,20,40,0.66) 0%, rgba(26,20,40,0.30) 30%, transparent 56%),
+    linear-gradient(180deg, rgba(26,20,40,0.42) 0%, transparent 22%),
+    linear-gradient(0deg, rgba(26,20,40,0.34) 0%, transparent 18%);
+}
+
 /* =======================================================================
    제작 과정 모달 (process) — 뮤직플레이어형
    · 뒤 배경: blur + 어둡게(scrim, backdrop-filter — transform 밖이라 정상)
@@ -2040,6 +2077,58 @@ html.about-open { overflow: hidden; }
 .about__ph { padding: 0 clamp(28px, 5vw, 80px); }
 .about__sectitle { margin: 0; font-size: clamp(28px, 3.6vw, 54px); font-weight: 800; letter-spacing: -0.02em; color: #1a1a1a; line-height: 1.08; }
 .about__phnote { margin: 16px 0 0; font-size: clamp(13px, 1.05vw, 17px); color: #9a9a9a; }
+
+/* ── VISUAL ARCHIVE 배너 갤러리(프로젝트 섹션) ── */
+.about__section--gallery { justify-content: flex-start; padding: clamp(78px, 12vh, 140px) 0 clamp(60px, 10vh, 110px); }
+.banner-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 clamp(28px, 4vw, 56px); }
+.banner-head { margin-bottom: clamp(22px, 3vh, 38px); }
+.banner-sub { margin: 10px 0 0; font-size: clamp(12px, 1vw, 15px); color: #8a8a8a; letter-spacing: 0.02em; }
+.banner-sub #banner-count { color: #1a1a1a; font-weight: 700; }
+
+.banner-grid { columns: 2; column-gap: 18px; }
+@media (max-width: 560px) { .banner-grid { columns: 1; } }
+.banner-item--wide { column-span: all; margin-top: 4px; }   /* 가로배너 = 풀폭으로 한 줄씩 크게 */
+
+.banner-item { break-inside: avoid; display: block; width: 100%; margin: 0 0 18px; padding: 0; border: 0;
+  position: relative; border-radius: 14px; overflow: hidden; cursor: pointer; background: #ececef;
+  box-shadow: 0 10px 28px -14px rgba(20,28,50,0.32);
+  opacity: 0; transform: translateY(46px) scale(.9);
+  transition: opacity .6s ease, transform .75s cubic-bezier(.16,.84,.3,1.06); }
+.banner-item.is-in { opacity: 1; transform: none; }
+.banner-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.banner-item:hover img { transform: scale(1.04); }
+.banner-item:hover { box-shadow: 0 20px 44px -16px rgba(20,28,50,0.42); }
+.banner-item__cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: #fff; opacity: 0;
+  background: linear-gradient(transparent, rgba(15,20,34,0.62)); transition: opacity .25s ease; pointer-events: none; }
+.banner-item:hover .banner-item__cap { opacity: 1; }
+.banner-item:focus-visible { outline: 2px solid #59a2ee; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .banner-item { opacity: 1; transform: none; transition: none; }
+  .banner-item img, .banner-item:hover img { transition: none; transform: none; }
+}
+
+/* 라이트박스 */
+html.lb-open { overflow: hidden; }
+.banner-lb { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center;
+  background: rgba(13,18,30,0.94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.banner-lb.is-open { display: flex; animation: lbIn .26s ease both; }
+@keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+.banner-lb__fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.banner-lb__fig img { max-width: 92vw; max-height: 84vh; border-radius: 8px; box-shadow: 0 28px 70px -22px rgba(0,0,0,0.7); }
+.banner-lb__cap { font-size: 13px; letter-spacing: 0.04em; color: rgba(255,255,255,0.92); }
+.banner-lb__btn { position: absolute; display: inline-flex; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border-radius: 50%; cursor: pointer; color: #fff;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background .2s, transform .2s; }
+.banner-lb__btn:hover { background: rgba(255,255,255,0.2); }
+.banner-lb__btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.banner-lb__close { top: clamp(18px, 3vh, 30px); right: clamp(18px, 3vw, 34px); }
+.banner-lb__prev { left: clamp(12px, 2.5vw, 30px); top: 50%; transform: translateY(-50%); }
+.banner-lb__next { right: clamp(12px, 2.5vw, 30px); top: 50%; transform: translateY(-50%); }
+.banner-lb__prev:hover { transform: translateY(-50%) scale(1.06); }
+.banner-lb__next:hover { transform: translateY(-50%) scale(1.06); }
+@media (max-width: 560px) { .banner-lb__prev, .banner-lb__next { top: auto; bottom: 22px; transform: none; } }
 
 /* 우측 인페이지 인디케이터 — 점 기본, 호버/활성 시 라벨(흰 배경이라 다크 톤) */
 .about-nav { position: fixed; right: clamp(16px, 2vw, 30px); top: 50%; transform: translateY(-50%);

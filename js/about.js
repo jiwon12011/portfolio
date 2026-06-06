@@ -41,7 +41,11 @@
     if (!sec || !scroller) return;
     const top = topOf(sec);
     setActive(id);
-    if (instant || reduce() || !window.gsap) { scroller.scrollTop = top; return; }
+    if (instant || reduce() || !window.gsap) {
+      if (sec.scrollIntoView) sec.scrollIntoView({ block: "start" });   /* 네이티브 계산 — 레이아웃 미정착에도 안정 */
+      else scroller.scrollTop = top;
+      return;
+    }
     window.gsap.to(scroller, { scrollTop: top, duration: 0.7, ease: "power3.inOut", overwrite: "auto" });
   };
   navItems.forEach((n) =>
@@ -54,6 +58,8 @@
     document.documentElement.classList.add("about-open");
     const id = anchor || "resume";
     requestAnimationFrame(() => { jumpTo(id, true); spy(); });   /* 오픈은 해당 섹션으로 즉시 */
+    setTimeout(() => { jumpTo(id, true); spy(); }, 300);         /* 이미지·갤러리 레이아웃 정착 후 보정 */
+    window.dispatchEvent(new CustomEvent("about:open", { detail: id }));  /* 갤러리 등장 트리거 등 */
   };
   const finishClose = () => {
     about.classList.remove("is-open", "is-closing");
@@ -99,6 +105,19 @@
   /* 서명 CTA 등 [data-about-open] → 해당 섹션 열기 */
   document.querySelectorAll("[data-about-open]").forEach((el) => {
     el.addEventListener("click", (e) => { e.preventDefault(); open(el.dataset.aboutOpen || "resume"); });
+  });
+
+  /* 오빗 VISUAL ARCHIVE → 프로젝트(배너) 섹션, CONTENT LAB → 마케팅 섹션 */
+  [["visual-archive", "projects", "Visual Archive"], ["content-lab", "marketing", "Content Lab"]].forEach(([card, anchor, label]) => {
+    document.querySelectorAll('.card-arm[data-card="' + card + '"]').forEach((arm) => {
+      arm.style.cursor = "pointer";
+      arm.setAttribute("role", "button");
+      arm.setAttribute("tabindex", "0");
+      arm.setAttribute("aria-label", label + " 보기");
+      const go = (e) => { if (e && e.target.closest("button")) return; if (e) e.preventDefault(); open(anchor); };
+      arm.addEventListener("click", go);
+      arm.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(anchor); } });
+    });
   });
 
   /* 닫기 (BACK / scrim) + Esc */

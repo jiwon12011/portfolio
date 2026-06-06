@@ -19,6 +19,9 @@
     { key: "pledis",    num: "03", title: "플레디스",      sub: "Branding / 2025", thumb: "img/main/main_pledis.webp" },
     { key: "yumi",      num: "04", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp",      preview: "img/yumi_cell/yumicell_thumb.mp4" },
     { key: "poze",      num: "05", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
+    { key: "mathhub",   num: "06", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp" },
+    { key: "sangsang",  num: "07", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp" },
+    { key: "loom",      num: "08", title: "LOOM",          sub: "AI App / 2026",   thumb: "img/main/main_loom.webp" },
   ];
 
   const N = PROJECTS.length;
