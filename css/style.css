@@ -2325,6 +2325,47 @@ html.lb-open { overflow: hidden; }
 .mktg-desc p { margin: 0; }
 .mktg-desc p + p { margin-top: 0.64%; }
 
+/* CTA 버튼 — 설명 텍스트 아래, 아이콘 위 */
+.mktg-cta {
+  position: absolute;
+  left: 5.26%;
+  top: 73.2%;
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(8px, 0.83vw, 16px);
+  padding: clamp(10px, 0.83vw, 16px) clamp(16px, 1.46vw, 28px) clamp(10px, 0.83vw, 16px) clamp(12px, 1.04vw, 20px);
+  background: #ffffff;
+  border: 1.5px solid rgba(253, 53, 136, 0.22);
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 4px 20px -8px rgba(253, 53, 136, 0.18);
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
+  white-space: nowrap;
+}
+.mktg-cta:hover {
+  box-shadow: 0 8px 30px -8px rgba(253, 53, 136, 0.30);
+  transform: translateY(-2px);
+}
+.mktg-cta__icon {
+  width: clamp(22px, 1.77vw, 34px);
+  height: clamp(22px, 1.77vw, 34px);
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+.mktg-cta__text {
+  font-size: clamp(13px, 0.94vw, 18px);
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+}
+.mktg-cta__arrow {
+  color: #fd3588;
+  font-size: clamp(14px, 1.04vw, 20px);
+  font-weight: 400;
+  margin-left: clamp(8px, 0.83vw, 16px);
+}
+
 /* icon circles: Figma 70px, gap 20px */
 .mktg-platform-icons {
   display: flex;
@@ -2394,6 +2435,7 @@ html.lb-open { overflow: hidden; }
   .mktg-title  { position: relative; left: auto; top: auto; padding: 16px 28px 0; display: block; font-size: clamp(36px, 10vw, 64px); }
   .mktg-ch-list { position: relative; left: auto; top: auto; padding: 20px 28px 0; }
   .mktg-desc   { position: relative; left: auto; top: auto; padding: 12px 28px 0; width: auto; }
+  .mktg-cta    { position: relative; left: auto; top: auto; margin: 20px 28px 0; }
   .mktg-platform-icons { position: relative; left: auto; top: auto; padding: 20px 28px 180px; }
   .mktg-img--phone  { left: 5%; top: auto; bottom: 2%; width: 44vw; }
   .mktg-img--celeb  { left: 50%; top: auto; bottom: 28%; width: 34vw; }
