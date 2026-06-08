@@ -2084,7 +2084,8 @@ html.process-open { overflow: hidden; }
 @keyframes aboutOut { to { opacity:0; transform: translateY(12px); } }
 html.about-open { overflow: hidden; }
 
-.about__scroll { height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.about__scroll { height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.about__scroll::-webkit-scrollbar { display: none; }
 
 /* 3섹션 — 각 섹션 최소 한 화면, 콘텐츠 세로 중앙 */
 .about__section { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
@@ -2255,92 +2256,153 @@ html.lb-open { overflow: hidden; }
 
 /* ===================================================================
    MARKETING SECTION — AI Experiments (단미 Beauty Content Lab)
+   Figma Frame 342 — 1920×1022 기준 비율 변환 (절대 포지셔닝)
 =================================================================== */
 .about__section--mktg {
-  justify-content: center;
-  padding: clamp(72px, 10vh, 120px) clamp(28px, 5vw, 72px) clamp(48px, 7vh, 80px);
-  background:
-    radial-gradient(110% 80% at 75% -5%, #5b2742 0%, rgba(91,39,66,0) 55%),
-    radial-gradient(120% 90% at 0% 110%, #3a1730 0%, rgba(58,23,48,0) 60%),
-    linear-gradient(155deg, #2a1124 0%, #3d1a30 50%, #2b1326 100%);
-  color: #fff;
+  background: linear-gradient(180deg, #f1cdcb 0%, #f9dfde 100%);
+  /* 1920×1022 Figma 비율 유지 — 1440에서 766px, 1920에서 1022px */
+  height: max(100svh, calc(100vw * 1022 / 1920));
+  padding: 0;
+  overflow: hidden;
 }
-.about__section--mktg .about__eyebrow { color: rgba(255,255,255,0.5); }
 
-.mktg-wrap { width: 100%; max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: clamp(28px, 4vh, 52px); }
+/* 기본 eyebrow 숨김 — 섹션 자체 kicker 사용 */
+.about__section--mktg > .about__eyebrow { display: none; }
 
-/* top row: text + phone */
-.mktg-top { display: grid; grid-template-columns: 1fr auto; gap: clamp(28px, 4vw, 60px); align-items: start; }
-
-.mktg-text { display: flex; flex-direction: column; gap: clamp(14px, 2vh, 22px); }
+/* ---- 텍스트 (Figma left: 101/1920 = 5.26%, heights as % of 1022) ---- */
 .mktg-kicker {
-  display: inline-flex; align-items: center; gap: 9px;
-  font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-  color: rgba(255,255,255,0.55); font-weight: 600;
+  margin: 0;
+  color: #fd3588;
+  font-size: clamp(14px, 1.46vw, 28px);
+  font-weight: 500;
+  position: absolute;
+  left: 5.26%;
+  top: 11.64%;
 }
-.mktg-kicker::before { content: ""; width: 22px; height: 1px; background: linear-gradient(90deg, #F4A9C0, #FBD6C4); }
+
 .mktg-title {
-  margin: 0; font-size: clamp(26px, 3.4vw, 50px); font-weight: 800;
-  letter-spacing: -0.025em; line-height: 1.1; color: #fff;
+  margin: 0;
+  color: #000000;
+  font-size: clamp(38px, 5vw, 96px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  position: absolute;
+  left: 5.26%;
+  top: 19.28%;
 }
-.mktg-title em {
-  font-style: italic; font-weight: 500;
-  background: linear-gradient(118deg, #F4A9C0 0%, #FBD6C4 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.mktg-desc { margin: 0; font-size: clamp(13px, 1.1vw, 16px); color: rgba(255,255,255,0.75); line-height: 1.65; max-width: 480px; }
 
-/* channel icons */
-.mktg-channels { display: flex; flex-wrap: wrap; gap: 10px; }
-.mktg-ch {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.82);
-  padding: 6px 14px 6px 8px; border-radius: 999px;
-  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+.mktg-ch-list {
+  display: flex;
+  flex-direction: row;
+  gap: clamp(10px, 1.04vw, 20px);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  left: 5.26%;
+  top: 54.5%;
 }
-.mktg-ch img { width: 20px; height: 20px; object-fit: contain; }
 
-/* phone mockup */
-.mktg-phone { flex-shrink: 0; width: clamp(120px, 14vw, 200px); }
-.mktg-phone img { display: block; width: 100%; height: auto; border-radius: 20px; box-shadow: 0 28px 60px -20px rgba(40,12,30,0.7); }
-
-/* stats strip */
-.mktg-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.4vw, 18px); }
-.mktg-stat {
-  padding: clamp(16px, 2.2vh, 24px) clamp(14px, 1.8vw, 22px);
-  background: linear-gradient(140deg, rgba(255,255,255,0.11), rgba(255,225,235,0.05));
-  border: 1px solid rgba(255,255,255,0.20); border-radius: 16px;
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  position: relative; overflow: hidden;
+.mktg-ch-list span {
+  color: #fd3588;
+  font-size: clamp(13px, 1.04vw, 20px);
+  font-weight: 400;
 }
-.mktg-stat::after { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: linear-gradient(90deg, #F4A9C0, #FBD6C4); opacity: 0.8; }
-.mktg-stat__n {
-  display: block; font-size: clamp(22px, 2.8vw, 38px); font-weight: 800; letter-spacing: -0.03em; line-height: 1;
-  background: linear-gradient(120deg, #fff 0%, #FBD6C4 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.mktg-stat__l { display: block; margin-top: 8px; font-size: clamp(11px, 0.95vw, 13px); font-weight: 600; color: rgba(255,255,255,0.9); }
-.mktg-stat small { display: block; margin-top: 3px; font-size: 11px; color: rgba(255,255,255,0.5); }
 
-/* content cards */
-.mktg-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(8px, 1.2vw, 16px); }
-.mktg-cards img { display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 12px 30px -12px rgba(40,12,30,0.6); }
-
-/* CTA link */
-.mktg-cta {
-  display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
-  font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  color: rgba(255,255,255,0.9); text-decoration: none;
-  padding: 12px 22px; border-radius: 999px;
-  background: rgba(244,169,192,0.15); border: 1px solid rgba(244,169,192,0.35);
-  transition: background .2s, border-color .2s, transform .2s;
+.mktg-desc {
+  margin: 0;
+  position: absolute;
+  left: 5.26%;
+  top: 61.25%;
+  width: clamp(240px, 29.9vw, 575px);
+  color: #333333;
+  font-size: clamp(13px, 1.25vw, 24px);
+  font-weight: 500;
+  line-height: 1.55;
 }
-.mktg-cta:hover { background: rgba(244,169,192,0.25); border-color: rgba(244,169,192,0.6); transform: translateX(3px); }
-.mktg-cta svg { width: 16px; height: 16px; fill: none; stroke: #F4A9C0; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.mktg-desc p { margin: 0; }
+.mktg-desc p + p { margin-top: 0.64%; }
+
+/* icon circles: Figma 70px, gap 20px */
+.mktg-platform-icons {
+  display: flex;
+  gap: clamp(8px, 1.04vw, 20px);
+  position: absolute;
+  left: 5.26%;
+  top: 82%;
+}
+
+.mktg-pi {
+  width: clamp(40px, 3.65vw, 70px);
+  height: clamp(40px, 3.65vw, 70px);
+  border-radius: 50%;
+  background: #fdf7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mktg-pi img { width: 56%; height: 56%; object-fit: contain; }
+
+/* ---- 이미지 공통 ---- */
+.mktg-img {
+  position: absolute;
+  object-fit: cover;
+  display: block;
+}
+
+/* 폰 목업: Figma left=736/1920=38.33%, top=63/1022=6.16%, w=447px */
+.mktg-img--phone {
+  left: 38.33%;
+  top: 6.16%;
+  width: clamp(160px, 23.28vw, 447px);
+  height: auto;
+  aspect-ratio: 447 / 896;
+}
+
+/* 연예인 카드 — Figma left=1234/1920=64.27%, top=106/1022=10.37%, w=338px */
+.mktg-img--celeb {
+  left: 64.27%;
+  top: 10.37%;
+  width: clamp(140px, 17.6vw, 338px);
+  aspect-ratio: 338 / 423;
+  border-radius: clamp(10px, 1.3vw, 25px);
+  border: 2px solid #ffffff;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.20);
+}
+
+/* 바디루틴 카드 — Figma left=1624/1920=84.58%, top=275/1022=26.91%, w=231px */
+.mktg-img--body {
+  left: 84.58%;
+  top: 26.91%;
+  width: clamp(90px, 12.03vw, 231px);
+  aspect-ratio: 231 / 294;
+  border-radius: clamp(10px, 1.3vw, 25px);
+}
+
+/* 신상뷰티 카드 — Figma left=1306/1920=68.02%, top=583/1022=57.04%, w=290px */
+.mktg-img--beauty {
+  left: 68.02%;
+  top: 57.04%;
+  width: clamp(120px, 15.1vw, 290px);
+  aspect-ratio: 290 / 354;
+  border-radius: clamp(10px, 1.3vw, 25px);
+  border: 2px solid #ffffff;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.20);
+}
 
 @media (max-width: 760px) {
-  .mktg-top { grid-template-columns: 1fr; }
-  .mktg-phone { width: clamp(100px, 35vw, 160px); order: -1; margin-bottom: -8px; }
-  .mktg-stats { grid-template-columns: 1fr 1fr; }
-  .mktg-stat:last-child { grid-column: 1 / -1; }
+  .about__section--mktg { height: auto; min-height: 100svh; overflow: visible; }
+  .mktg-kicker { position: relative; left: auto; top: auto; padding: 60px 28px 0; display: block; }
+  .mktg-title  { position: relative; left: auto; top: auto; padding: 16px 28px 0; display: block; font-size: clamp(36px, 10vw, 64px); }
+  .mktg-ch-list { position: relative; left: auto; top: auto; padding: 20px 28px 0; }
+  .mktg-desc   { position: relative; left: auto; top: auto; padding: 12px 28px 0; width: auto; }
+  .mktg-platform-icons { position: relative; left: auto; top: auto; padding: 20px 28px 180px; }
+  .mktg-img--phone  { left: 5%; top: auto; bottom: 2%; width: 44vw; }
+  .mktg-img--celeb  { left: 50%; top: auto; bottom: 28%; width: 34vw; }
+  .mktg-img--body   { left: 80%; top: auto; bottom: 20%; width: 20vw; }
+  .mktg-img--beauty { left: 50%; top: auto; bottom: 1%;  width: 30vw; }
 }
