@@ -2252,3 +2252,95 @@ html.lb-open { overflow: hidden; }
   .about.is-open, .about.is-closing, .about.is-closing.about--exit-down { animation: none; }
   .about__exit-arrow svg { animation: none; }
 }
+
+/* ===================================================================
+   MARKETING SECTION — AI Experiments (단미 Beauty Content Lab)
+=================================================================== */
+.about__section--mktg {
+  justify-content: center;
+  padding: clamp(72px, 10vh, 120px) clamp(28px, 5vw, 72px) clamp(48px, 7vh, 80px);
+  background:
+    radial-gradient(110% 80% at 75% -5%, #5b2742 0%, rgba(91,39,66,0) 55%),
+    radial-gradient(120% 90% at 0% 110%, #3a1730 0%, rgba(58,23,48,0) 60%),
+    linear-gradient(155deg, #2a1124 0%, #3d1a30 50%, #2b1326 100%);
+  color: #fff;
+}
+.about__section--mktg .about__eyebrow { color: rgba(255,255,255,0.5); }
+
+.mktg-wrap { width: 100%; max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: clamp(28px, 4vh, 52px); }
+
+/* top row: text + phone */
+.mktg-top { display: grid; grid-template-columns: 1fr auto; gap: clamp(28px, 4vw, 60px); align-items: start; }
+
+.mktg-text { display: flex; flex-direction: column; gap: clamp(14px, 2vh, 22px); }
+.mktg-kicker {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55); font-weight: 600;
+}
+.mktg-kicker::before { content: ""; width: 22px; height: 1px; background: linear-gradient(90deg, #F4A9C0, #FBD6C4); }
+.mktg-title {
+  margin: 0; font-size: clamp(26px, 3.4vw, 50px); font-weight: 800;
+  letter-spacing: -0.025em; line-height: 1.1; color: #fff;
+}
+.mktg-title em {
+  font-style: italic; font-weight: 500;
+  background: linear-gradient(118deg, #F4A9C0 0%, #FBD6C4 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.mktg-desc { margin: 0; font-size: clamp(13px, 1.1vw, 16px); color: rgba(255,255,255,0.75); line-height: 1.65; max-width: 480px; }
+
+/* channel icons */
+.mktg-channels { display: flex; flex-wrap: wrap; gap: 10px; }
+.mktg-ch {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.82);
+  padding: 6px 14px 6px 8px; border-radius: 999px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+}
+.mktg-ch img { width: 20px; height: 20px; object-fit: contain; }
+
+/* phone mockup */
+.mktg-phone { flex-shrink: 0; width: clamp(120px, 14vw, 200px); }
+.mktg-phone img { display: block; width: 100%; height: auto; border-radius: 20px; box-shadow: 0 28px 60px -20px rgba(40,12,30,0.7); }
+
+/* stats strip */
+.mktg-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.4vw, 18px); }
+.mktg-stat {
+  padding: clamp(16px, 2.2vh, 24px) clamp(14px, 1.8vw, 22px);
+  background: linear-gradient(140deg, rgba(255,255,255,0.11), rgba(255,225,235,0.05));
+  border: 1px solid rgba(255,255,255,0.20); border-radius: 16px;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  position: relative; overflow: hidden;
+}
+.mktg-stat::after { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: linear-gradient(90deg, #F4A9C0, #FBD6C4); opacity: 0.8; }
+.mktg-stat__n {
+  display: block; font-size: clamp(22px, 2.8vw, 38px); font-weight: 800; letter-spacing: -0.03em; line-height: 1;
+  background: linear-gradient(120deg, #fff 0%, #FBD6C4 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.mktg-stat__l { display: block; margin-top: 8px; font-size: clamp(11px, 0.95vw, 13px); font-weight: 600; color: rgba(255,255,255,0.9); }
+.mktg-stat small { display: block; margin-top: 3px; font-size: 11px; color: rgba(255,255,255,0.5); }
+
+/* content cards */
+.mktg-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(8px, 1.2vw, 16px); }
+.mktg-cards img { display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 12px 30px -12px rgba(40,12,30,0.6); }
+
+/* CTA link */
+.mktg-cta {
+  display: inline-flex; align-items: center; gap: 10px; align-self: flex-start;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.9); text-decoration: none;
+  padding: 12px 22px; border-radius: 999px;
+  background: rgba(244,169,192,0.15); border: 1px solid rgba(244,169,192,0.35);
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.mktg-cta:hover { background: rgba(244,169,192,0.25); border-color: rgba(244,169,192,0.6); transform: translateX(3px); }
+.mktg-cta svg { width: 16px; height: 16px; fill: none; stroke: #F4A9C0; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 760px) {
+  .mktg-top { grid-template-columns: 1fr; }
+  .mktg-phone { width: clamp(100px, 35vw, 160px); order: -1; margin-bottom: -8px; }
+  .mktg-stats { grid-template-columns: 1fr 1fr; }
+  .mktg-stat:last-child { grid-column: 1 / -1; }
+}
