@@ -971,6 +971,24 @@ img.is-empty { color: transparent; }
     linear-gradient(0deg, rgba(26,21,15,0.34) 0%, transparent 18%);
 }
 
+/* pledis — 야경 골드 브랜딩: 따뜻한 어두운 스크림 + 밝은 오프화이트 */
+#intro-pledis .intro-ui {
+  --it-accent: #d4a940;
+  --it-title: #f5f0e6;
+  --it-text: #e8e0cc;
+  --it-muted: rgba(232,224,204,0.70);
+  --it-box-bg: rgba(36,26,12,0.46);
+  --it-box-border: rgba(212,169,64,0.38);
+  --it-on-accent: #1e1506;
+  --it-eq: linear-gradient(180deg, #e0c880, #d4a940);
+}
+#intro-pledis .intro-grad {
+  background:
+    linear-gradient(90deg, rgba(22,16,8,0.68) 0%, rgba(22,16,8,0.30) 30%, transparent 56%),
+    linear-gradient(180deg, rgba(22,16,8,0.40) 0%, transparent 22%),
+    linear-gradient(0deg, rgba(22,16,8,0.34) 0%, transparent 18%);
+}
+
 /* mathhub — 교육 플랫폼: 네이비 + 소프트블루 + 퍼플 액센트 */
 #intro-mathhub .intro-ui {
   --it-accent: #7fb0e8; --it-title: #eef3fb; --it-text: #d8e2f2; --it-muted: rgba(216,226,242,0.66);
