@@ -2754,7 +2754,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   flex-shrink: 0;
   width: clamp(34px, 3.534vw, 67.86px);
   height: clamp(34px, 3.534vw, 67.86px);
-  background: #fff;
+  background: #fd3588;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -2808,7 +2808,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 /* ============================================================
    SHARED — INSIGHT CARD STAR (section 02 fix)
    ============================================================ */
-.proc-kp__circle img { width: 68%; height: 68%; object-fit: contain; }
+.proc-kp__circle img { width: 55%; height: 55%; object-fit: contain; filter: brightness(0) invert(1); }
 
 /* ============================================================
    FRAME — 03 EXPERIMENT
