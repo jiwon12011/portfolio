@@ -795,6 +795,47 @@
     </div>
   </section>
 
+  <section class="project-intro deck-panel" id="intro-playlist" data-project="playlist" aria-hidden="true">
+    <video class="project-intro__video" playsinline loop muted preload="none"
+           src="img/playlist_game/playlist_game_intro.mp4"></video>
+    <div class="intro-grad" aria-hidden="true"></div>
+    <div class="intro-ui">
+      <header class="intro-top">
+        <button class="intro-brand" type="button" data-go-main aria-label="메인으로">
+          <span class="intro-brand__mark material-symbols-outlined" aria-hidden="true">tag</span> PORTFOLIO 2026
+        </button>
+        <nav class="intro-nav">
+          <a href="#" class="intro-nav__item"><span class="intro-nav__ico material-symbols-outlined" aria-hidden="true">grid_view</span><span class="intro-nav__txt"><b>PROJECTS</b><i>Selected Works</i></span></a>
+          <a href="#" class="intro-nav__item"><span class="intro-nav__ico material-symbols-outlined" aria-hidden="true">science</span><span class="intro-nav__txt"><b>LAB</b><i>AI &amp; Experiments</i></span></a>
+          <a href="#" class="intro-nav__item"><span class="intro-nav__ico material-symbols-outlined" aria-hidden="true">person</span><span class="intro-nav__txt"><b>ABOUT</b><i>Profile &amp; Resume</i></span></a>
+        </nav>
+      </header>
+      <div class="intro-info">
+        <p class="intro-info__eyebrow">PROJECT 09</p>
+        <h1 class="intro-info__title">우리 사이의 음표</h1>
+        <p class="intro-info__sub">Personal Project · Web Visual Novel</p>
+        <span class="intro-info__rule" aria-hidden="true"></span>
+        <p class="intro-info__desc">선택이 누군가의 노래가 된다.<br /><br />랜딩에서 클릭하면 바로 플레이되는<br />멀티엔딩 오토메 비주얼노벨</p>
+      </div>
+      <div class="intro-pager"><span>09 / 09</span><div class="intro-pager__bar"><i style="--p:100%"></i></div></div>
+      <aside class="intro-list">
+        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
+        <ul></ul>
+      </aside>
+      <div class="intro-hints">
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
+          <div><b>CLICK</b><p>프로젝트 상세 보기</p></div>
+        </div>
+        <span class="intro-hint__sep"></span>
+        <div class="intro-hint">
+          <svg viewBox="0 0 24 36"><rect x="5" y="2" width="14" height="22" rx="7"/><line x1="12" y1="7" x2="12" y2="11"/></svg>
+          <div><b>SCROLL</b><p>다음 프로젝트로 이동</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 재생버튼 커서 — 인트로 위에서 마우스를 따라다니며 클릭 유도(데스크탑 전용) -->
   <div id="play-cursor" aria-hidden="true">
     <span class="pc-disc"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
@@ -1909,6 +1950,57 @@
         <section class="process__sec" id="sssec-01">
           <div class="process__hero">
             <video class="process__hero-media" src="img/sangsangdoor/sangsangdoor_process.mp4"
+                   muted loop autoplay playsinline preload="metadata"></video>
+          </div>
+          <!-- TODO: 본문 카드/섹션 추가 -->
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       우리 사이의 음표 제작 과정 모달 (임시) — 디자인/본문 추후 수정
+       TODO: process__tracks 섹션 목차, 본문 섹션 추가
+  ==================================================================== -->
+  <div class="process process--playlist" id="process-playlist" data-project="playlist"
+       role="dialog" aria-modal="true" aria-hidden="true" aria-label="우리 사이의 음표 제작 과정">
+    <div class="process__scrim" data-close></div>
+    <div class="process__panel">
+      <aside class="process__nav">
+        <button class="process__back" type="button" data-close>
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>BACK TO PROJECT
+        </button>
+        <p class="process__label">PLAYLIST
+          <span class="process__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </p>
+        <ol class="process__tracks">
+          <!-- TODO: 섹션 목차 추가 -->
+          <li><a href="#pl1" data-track="pl1"><b>01</b><span><h4>개요</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pl2" data-track="pl2"><b>02</b><span><h4>컨셉 &amp; 서사</h4><i>CONCEPT</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pl3" data-track="pl3"><b>03</b><span><h4>게임 시스템</h4><i>SYSTEM</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pl4" data-track="pl4"><b>04</b><span><h4>시행착오</h4><i>PROBLEM SOLVING</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pl5" data-track="pl5"><b>05</b><span><h4>결과 &amp; 회고</h4><i>OUTCOME</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+        </ol>
+        <a class="process__cta" href="https://jiwon12011.github.io/music-note_game/" target="_blank" rel="noopener" aria-label="우리 사이의 음표 랜딩 바로가기">
+          <span>GO TO WEB</span>
+          <svg class="process__cta-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 6l6 6-6 6"/></svg>
+        </a>
+        <div class="process__now">
+          <div class="process__now-meta">
+            <span>NOW PLAYING</span>
+            <strong>우리 사이의 음표 <span class="process__eq process__eq--sm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></strong>
+          </div>
+          <div class="process__now-ctrl">
+            <button type="button" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+            <button type="button" class="is-play" aria-label="일시정지"><svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+            <button type="button" aria-label="다음"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>
+          </div>
+        </div>
+      </aside>
+      <div class="process__content">
+        <section class="process__sec" id="plsec-01">
+          <div class="process__hero">
+            <video class="process__hero-media" src="img/playlist_game/playlist_game_process.mp4"
                    muted loop autoplay playsinline preload="metadata"></video>
           </div>
           <!-- TODO: 본문 카드/섹션 추가 -->
