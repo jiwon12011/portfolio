@@ -2384,7 +2384,10 @@ html.lb-open { overflow: hidden; }
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  text-decoration: none;
+  transition: transform 0.18s ease, background 0.18s ease;
 }
+a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 
 .mktg-pi img { width: 56%; height: 56%; object-fit: contain; mix-blend-mode: multiply; }
 
