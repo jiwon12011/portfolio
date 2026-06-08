@@ -22,6 +22,7 @@
     { key: "mathhub",   num: "06", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp" },
     { key: "sangsang",  num: "07", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp" },
     { key: "loom",      num: "08", title: "LOOM",          sub: "AI App / 2026",   thumb: "img/main/main_loom.webp" },
+    { key: "playlist",  num: "09", title: "우리 사이의 음표", sub: "Visual Novel / 2025", thumb: "" },
   ];
 
   const N = PROJECTS.length;
