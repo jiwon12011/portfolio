@@ -1726,6 +1726,102 @@
   </section>
 
   <!-- ===================================================================
+       귀혼 제작 과정 모달 (임시) — 디자인/링크/트랙 추후 수정
+       TODO: process__tracks 섹션 목차, process__cta href, 본문 섹션 추가
+  ==================================================================== -->
+  <div class="process process--gwihon" id="process-gwihon" data-project="gwihon"
+       role="dialog" aria-modal="true" aria-hidden="true" aria-label="귀혼 제작 과정">
+    <div class="process__scrim" data-close></div>
+    <div class="process__panel">
+      <aside class="process__nav">
+        <button class="process__back" type="button" data-close>
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>BACK TO PROJECT
+        </button>
+        <p class="process__label">PLAYLIST
+          <span class="process__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </p>
+        <ol class="process__tracks">
+          <!-- TODO: 섹션 목차 추가 -->
+          <li><a href="#gw1" data-track="gw1"><b>01</b><span><h4>개요</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+        </ol>
+        <!-- TODO: href에 실제 링크 연결 -->
+        <a class="process__cta" href="#" target="_blank" rel="noopener" aria-label="귀혼 바로가기">
+          <span>GO TO WEB</span>
+          <svg class="process__cta-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 6l6 6-6 6"/></svg>
+        </a>
+        <div class="process__now">
+          <div class="process__now-meta">
+            <span>NOW PLAYING</span>
+            <strong>귀혼 <span class="process__eq process__eq--sm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></strong>
+          </div>
+          <div class="process__now-ctrl">
+            <button type="button" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+            <button type="button" class="is-play" aria-label="일시정지"><svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+            <button type="button" aria-label="다음"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>
+          </div>
+        </div>
+      </aside>
+      <div class="process__content">
+        <section class="process__sec" id="gwsec-01">
+          <div class="process__hero">
+            <video class="process__hero-media" src="img/hon/hon_process.mp4"
+                   muted loop autoplay playsinline preload="metadata"></video>
+          </div>
+          <!-- TODO: 본문 카드/섹션 추가 -->
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       유미의 세포들 제작 과정 모달 (임시) — 디자인/링크/트랙 추후 수정
+       TODO: process__tracks 섹션 목차, process__cta href, 본문 섹션 추가
+  ==================================================================== -->
+  <div class="process process--yumi" id="process-yumi" data-project="yumi"
+       role="dialog" aria-modal="true" aria-hidden="true" aria-label="유미의 세포들 제작 과정">
+    <div class="process__scrim" data-close></div>
+    <div class="process__panel">
+      <aside class="process__nav">
+        <button class="process__back" type="button" data-close>
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>BACK TO PROJECT
+        </button>
+        <p class="process__label">PLAYLIST
+          <span class="process__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </p>
+        <ol class="process__tracks">
+          <!-- TODO: 섹션 목차 추가 -->
+          <li><a href="#ym1" data-track="ym1"><b>01</b><span><h4>개요</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+        </ol>
+        <!-- TODO: href에 실제 링크 연결 -->
+        <a class="process__cta" href="#" target="_blank" rel="noopener" aria-label="유미의 세포들 바로가기">
+          <span>GO TO WEB</span>
+          <svg class="process__cta-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 6l6 6-6 6"/></svg>
+        </a>
+        <div class="process__now">
+          <div class="process__now-meta">
+            <span>NOW PLAYING</span>
+            <strong>유미의 세포들 <span class="process__eq process__eq--sm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></strong>
+          </div>
+          <div class="process__now-ctrl">
+            <button type="button" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+            <button type="button" class="is-play" aria-label="일시정지"><svg viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+            <button type="button" aria-label="다음"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>
+          </div>
+        </div>
+      </aside>
+      <div class="process__content">
+        <section class="process__sec" id="ymsec-01">
+          <div class="process__hero">
+            <video class="process__hero-media" src="img/yumi_cell/yumicell_process.mp4"
+                   muted loop autoplay playsinline preload="metadata"></video>
+          </div>
+          <!-- TODO: 본문 카드/섹션 추가 -->
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
        MATHHUB 제작 과정 모달 (임시) — 디자인/링크/트랙 추후 수정
        TODO: process__tracks 섹션 목차, process__cta href, 본문 섹션 추가
   ==================================================================== -->
