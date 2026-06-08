@@ -1570,6 +1570,7 @@
     <nav class="about-nav" aria-label="섹션 이동">
       <a class="about-nav__item is-active" href="#sec-resume" data-section="resume" aria-current="true"><span class="about-nav__label">이력서</span><span class="about-nav__dot" aria-hidden="true"></span></a>
       <a class="about-nav__item" href="#sec-marketing" data-section="marketing"><span class="about-nav__label">마케팅</span><span class="about-nav__dot" aria-hidden="true"></span></a>
+      <a class="about-nav__item" href="#sec-process" data-section="process"><span class="about-nav__label">시스템</span><span class="about-nav__dot" aria-hidden="true"></span></a>
       <a class="about-nav__item" href="#sec-projects" data-section="projects"><span class="about-nav__label">프로젝트</span><span class="about-nav__dot" aria-hidden="true"></span></a>
     </nav>
     <div class="about__scroll">
@@ -1693,6 +1694,132 @@
         <img class="mktg-img mktg-img--beauty" src="img/danmi/danmi_card_beauty.webp" alt="" loading="lazy">
 
       </section>
+
+      <!-- FRAME 343 — PROCESS / 02 SYSTEM -->
+      <section class="about__section about__section--proc" id="sec-process" data-section="process" tabindex="-1">
+
+        <p class="proc-kicker">
+          <span class="proc-kicker__lab">BEAUTY CONTENT LAB</span>
+          <span class="proc-kicker__sys">/ 02 SYSTEM</span>
+        </p>
+
+        <h2 class="proc-title">하나의 콘텐츠,<br>4개 채널로 확장하는 구조</h2>
+
+        <p class="proc-subtitle">기획부터 분석까지, 직접 만든 운영 방식</p>
+
+        <!-- 5-step circles -->
+        <div class="proc-circle proc-circle--1"></div>
+        <div class="proc-circle proc-circle--2"></div>
+        <div class="proc-circle proc-circle--3"></div>
+        <div class="proc-circle proc-circle--4"></div>
+        <div class="proc-circle proc-circle--5"></div>
+
+        <!-- Step icons (Figma order: 1026→1028→1029→1030→1027) -->
+        <img class="proc-si proc-si--1" src="img/danmi/proc_step_01.webp" alt="" loading="lazy">
+        <img class="proc-si proc-si--2" src="img/danmi/proc_step_03.webp" alt="" loading="lazy">
+        <img class="proc-si proc-si--3" src="img/danmi/proc_step_04.webp" alt="" loading="lazy">
+        <img class="proc-si proc-si--4" src="img/danmi/proc_step_05.webp" alt="" loading="lazy">
+        <img class="proc-si proc-si--5" src="img/danmi/proc_step_02.webp" alt="" loading="lazy">
+
+        <!-- Arrows between steps (CSS-drawn) -->
+        <div class="proc-arrow proc-arrow--1" aria-hidden="true"></div>
+        <div class="proc-arrow proc-arrow--2" aria-hidden="true"></div>
+        <div class="proc-arrow proc-arrow--3" aria-hidden="true"></div>
+        <div class="proc-arrow proc-arrow--4" aria-hidden="true"></div>
+
+        <!-- Step labels -->
+        <div class="proc-sl proc-sl--1">
+          <span class="proc-sl__num">01</span>
+          <p class="proc-sl__name">기획</p>
+          <p class="proc-sl__desc">AI 트렌드 분석</p>
+        </div>
+        <div class="proc-sl proc-sl--2">
+          <span class="proc-sl__num">02</span>
+          <p class="proc-sl__name">제작</p>
+          <p class="proc-sl__desc">카드뉴스 작성</p>
+        </div>
+        <div class="proc-sl proc-sl--3">
+          <span class="proc-sl__num">03</span>
+          <p class="proc-sl__name">편집·변환</p>
+          <p class="proc-sl__desc">채널별 포맷 최적화</p>
+        </div>
+        <div class="proc-sl proc-sl--4">
+          <span class="proc-sl__num">04</span>
+          <p class="proc-sl__name">업로드</p>
+          <p class="proc-sl__desc">4채널 동시 배포</p>
+        </div>
+        <div class="proc-sl proc-sl--5">
+          <span class="proc-sl__num">05</span>
+          <p class="proc-sl__name">분석</p>
+          <p class="proc-sl__desc">성과 측정</p>
+        </div>
+
+        <!-- Center card -->
+        <div class="proc-center-pill"></div>
+        <img class="proc-center-img" src="img/danmi/proc_card_main.webp" alt="" loading="lazy">
+
+        <!-- Platform card: Instagram -->
+        <div class="proc-card proc-card--1">
+          <img class="proc-card__badge" src="img/danmi/proc_badge_01.webp" alt="">
+          <p class="proc-card__name">Instagram</p>
+          <p class="proc-card__metric">카드뉴스 + 릴스</p>
+          <p class="proc-card__stat">팔로워 저장형 콘텐츠</p>
+          <p class="proc-card__stat-desc">재가공 없이 즉시 업로드</p>
+          <div class="proc-card__phone-bg"></div>
+          <img class="proc-card__phone proc-card__phone--insta" src="img/danmi/proc_phone_instagram.webp" alt="" loading="lazy">
+        </div>
+
+        <!-- Platform card: TikTok -->
+        <div class="proc-card proc-card--2">
+          <img class="proc-card__badge" src="img/danmi/proc_badge_02.webp" alt="">
+          <p class="proc-card__name">TikTok</p>
+          <p class="proc-card__metric">숏폼 슬라이드</p>
+          <p class="proc-card__stat">카드뉴스 → 영상화</p>
+          <p class="proc-card__stat-desc">별도 편집 없이 포맷 전환</p>
+          <div class="proc-card__phone-bg"></div>
+          <img class="proc-card__phone proc-card__phone--tiktok" src="img/danmi/proc_phone_tiktok.webp" alt="" loading="lazy">
+        </div>
+
+        <!-- Platform card: YouTube -->
+        <div class="proc-card proc-card--3">
+          <img class="proc-card__badge" src="img/danmi/proc_badge_03.webp" alt="">
+          <p class="proc-card__name">YouTube</p>
+          <p class="proc-card__metric">YouTube Shorts</p>
+          <p class="proc-card__stat">YouTube Shorts</p>
+          <p class="proc-card__stat-desc">Shorts 자동 전환 배포</p>
+          <div class="proc-card__phone-bg"></div>
+          <img class="proc-card__phone proc-card__phone--youtube" src="img/danmi/proc_phone_youtube.webp" alt="" loading="lazy">
+        </div>
+
+        <!-- Platform card: Naver Blog -->
+        <div class="proc-card proc-card--4">
+          <img class="proc-card__badge proc-card__badge--blog" src="img/danmi/proc_badge_04.webp" alt="">
+          <p class="proc-card__name proc-card__name--blog">Naver Blog</p>
+          <p class="proc-card__metric proc-card__metric--blog">AI 글쓰기 활용</p>
+          <p class="proc-card__stat proc-card__stat--blog">Gemini Gems</p>
+          <p class="proc-card__stat-desc proc-card__stat-desc--blog">카드 내용 → 블로그 본문 생성</p>
+          <img class="proc-card__screenshot" src="img/danmi/proc_blog_screenshot.webp" alt="" loading="lazy">
+        </div>
+
+        <!-- KEY POINT -->
+        <div class="proc-keypoint">
+          <div class="proc-kp__circle" aria-hidden="true">
+            <svg viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30.5 2L34.5 22.5L53 12L37.5 27.5L58.5 30.5L37.5 33.5L53 49L34.5 38.5L30.5 59L26.5 38.5L8 49L23.5 33.5L2.5 30.5L23.5 27.5L8 12L26.5 22.5Z" fill="#fd3588" opacity="0.55"/>
+            </svg>
+          </div>
+          <div class="proc-kp__body">
+            <span class="proc-kp__badge">KEY POINT</span>
+            <div class="proc-kp__text">
+              <p class="proc-kp__title">카드 1장에서 시작해, <span class="proc-kp__pink">채널별 맞춤 변환</span></p>
+              <p class="proc-kp__line2">반복 가능한 콘텐츠 파이프라인 구축</p>
+            </div>
+            <p class="proc-kp__en">One Source Content, Multi-Format Expansion, AI-assisted Workflow</p>
+          </div>
+        </div>
+
+      </section>
+
       <section class="about__section about__section--gallery" id="sec-projects" data-section="projects" tabindex="-1">
         <span class="about__eyebrow" aria-hidden="true">03 — VISUAL ARCHIVE</span>
         <div class="banner-wrap">
