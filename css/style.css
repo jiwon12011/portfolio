@@ -2369,9 +2369,6 @@ html.lb-open { overflow: hidden; }
   top: 10.37%;
   width: clamp(140px, 17.6vw, 338px);
   aspect-ratio: 338 / 423;
-  border-radius: clamp(10px, 1.3vw, 25px);
-  border: 2px solid #ffffff;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.20);
 }
 
 /* 바디루틴 카드 — Figma left=1624/1920=84.58%, top=275/1022=26.91%, w=231px */
@@ -2389,9 +2386,6 @@ html.lb-open { overflow: hidden; }
   top: 57.04%;
   width: clamp(120px, 15.1vw, 290px);
   aspect-ratio: 290 / 354;
-  border-radius: clamp(10px, 1.3vw, 25px);
-  border: 2px solid #ffffff;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.20);
 }
 
 @media (max-width: 760px) {
