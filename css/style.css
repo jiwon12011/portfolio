@@ -2386,7 +2386,7 @@ html.lb-open { overflow: hidden; }
   flex-shrink: 0;
 }
 
-.mktg-pi img { width: 56%; height: 56%; object-fit: contain; }
+.mktg-pi img { width: 56%; height: 56%; object-fit: contain; mix-blend-mode: multiply; }
 
 /* ---- 이미지 공통 ---- */
 .mktg-img {
