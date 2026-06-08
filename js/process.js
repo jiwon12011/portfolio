@@ -130,7 +130,7 @@
     return { open, close };
   }
 
-  modals.forEach((m) => { byProject[m.dataset.project] = setup(m); });
+  modals.forEach((m) => { try { byProject[m.dataset.project] = setup(m); } catch (e) { console.error("[process.js] setup failed:", m.dataset.project, e); } });
 
   /* .intro-process 버튼(있으면) → 해당 프로젝트 모달 */
   document.querySelectorAll(".intro-process").forEach((b) => {
