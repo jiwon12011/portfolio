@@ -21,8 +21,7 @@
     { key: "poze",      num: "05", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
     { key: "mathhub",   num: "06", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp",       preview: "img/mathhub/mathhub_intro.mp4" },
     { key: "sangsang",  num: "07", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp",          preview: "img/sangsangdoor/sangsangdoor_intro.mp4" },
-    { key: "loom",      num: "08", title: "LOOM",          sub: "AI App / 2026",   thumb: "img/main/main_loom.webp" },
-    { key: "playlist",  num: "09", title: "우리 사이의 음표", sub: "Visual Novel / 2025", thumb: "img/main/main_playlist_game.webp", preview: "img/playlist_game/playlist_game_intro.mp4" },
+    { key: "playlist",  num: "08", title: "우리 사이의 음표", sub: "Visual Novel / 2025", thumb: "img/main/main_playlist_game.webp", preview: "img/playlist_game/playlist_game_intro.mp4" },
   ];
 
   const N = PROJECTS.length;

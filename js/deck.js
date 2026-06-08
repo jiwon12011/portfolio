@@ -33,16 +33,17 @@
 
   function media(p, play) {
     const v = p.querySelector("video");
-    if (!v) return;
+    if (!v || !v.src) return;              // src 없는 패널 skip
     if (play) {
       if (v.videoWidth && v.videoHeight)
         v.style.objectFit = v.videoHeight > v.videoWidth ? "contain" : "cover";
+      v.muted = true;
+      if (v.readyState < 2) v.load();      // 데이터 부족 시 명시적 로드 트리거
       try { v.currentTime = 0; } catch (e) {}
-      v.muted = true;           // 인트로 영상은 무음(자동재생 안정 + 소리 없음)
-      const pr = v.play();      // loop 속성으로 무한 반복
+      const pr = v.play();
       if (pr && pr.catch) pr.catch(() => {});
     } else {
-      setTimeout(() => v.pause(), 850);   // 이탈 시 정지 → 한 번에 1개만 디코딩
+      setTimeout(() => v.pause(), 850);
     }
   }
 

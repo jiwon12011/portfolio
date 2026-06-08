@@ -995,18 +995,7 @@ img.is-empty { color: transparent; }
     linear-gradient(180deg, rgba(12,16,32,0.44) 0%, transparent 22%),
     linear-gradient(0deg, rgba(12,16,32,0.36) 0%, transparent 18%);
 }
-/* LOOM — AI 아카이브: 라벤더 퍼플 */
-#intro-loom .intro-ui {
-  --it-accent: #b6a6dc; --it-title: #f1ecf8; --it-text: #ddd3ec; --it-muted: rgba(221,211,236,0.66);
-  --it-box-bg: rgba(46,38,66,0.34); --it-box-border: rgba(182,166,220,0.42); --it-on-accent: #241d36;
-  --it-eq: linear-gradient(180deg, #d8ccf0, #b6a6dc);
-}
-#intro-loom .intro-grad {
-  background:
-    linear-gradient(90deg, rgba(26,20,40,0.66) 0%, rgba(26,20,40,0.30) 30%, transparent 56%),
-    linear-gradient(180deg, rgba(26,20,40,0.42) 0%, transparent 22%),
-    linear-gradient(0deg, rgba(26,20,40,0.34) 0%, transparent 18%);
-}
+
 #intro-playlist .intro-ui {
   --it-accent: #c8b8e8; --it-title: #f0ebfa; --it-text: #dbd2ee; --it-muted: rgba(219,210,238,0.66);
   --it-box-bg: rgba(38,28,58,0.36); --it-box-border: rgba(180,160,220,0.40); --it-on-accent: #1d1630;
