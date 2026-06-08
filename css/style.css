@@ -1007,6 +1007,16 @@ img.is-empty { color: transparent; }
     linear-gradient(180deg, rgba(26,20,40,0.42) 0%, transparent 22%),
     linear-gradient(0deg, rgba(26,20,40,0.34) 0%, transparent 18%);
 }
+#intro-playlist .intro-ui {
+  --it-accent: #c8b8e8; --it-title: #f0ebfa; --it-text: #dbd2ee; --it-muted: rgba(219,210,238,0.66);
+  --it-box-bg: rgba(38,28,58,0.36); --it-box-border: rgba(180,160,220,0.40); --it-on-accent: #1d1630;
+}
+#intro-playlist .intro-grad {
+  background:
+    linear-gradient(90deg, rgba(18,12,36,0.72) 0%, rgba(18,12,36,0.32) 30%, transparent 56%),
+    linear-gradient(180deg, rgba(18,12,36,0.50) 0%, transparent 24%),
+    linear-gradient(0deg, rgba(18,12,36,0.40) 0%, transparent 20%);
+}
 
 /* =======================================================================
    제작 과정 모달 (process) — 뮤직플레이어형
