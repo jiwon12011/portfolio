@@ -2986,13 +2986,12 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   border-radius: clamp(8px, 0.625vw, 12px);
 }
 .exp-test__visual--wide img { border-radius: clamp(8px, 0.625vw, 12px); object-fit: cover; }
-/* TEST 01: pink play circle */
+/* TEST 01: pink play circle — 이미지 하단 우측 */
 .exp-test__visual--play::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 18%;
+  right: 2%;
   width: clamp(24px, 2.292vw, 44px);
   height: clamp(24px, 2.292vw, 44px);
   background: #fd3588;
@@ -3000,13 +2999,12 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   pointer-events: none;
   z-index: 1;
 }
-/* white play triangle */
+/* white play triangle — circle 중심에 맞춤 */
 .exp-test__visual--play::after {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-30%, -50%);
+  bottom: calc(18% + clamp(10px, 0.99vw, 19px));
+  right: calc(2% + clamp(5px, 0.573vw, 11px));
   width: 0;
   height: 0;
   border-style: solid;
@@ -3014,6 +3012,26 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   border-color: transparent transparent transparent #fff;
   pointer-events: none;
   z-index: 2;
+}
+/* TEST 02: mountain icon — 이미지 하단 좌측 */
+.exp-test__visual--wide {
+  position: relative;
+}
+.exp-test__visual--wide::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: -8%;
+  width: clamp(26px, 2.5vw, 48px);
+  height: clamp(26px, 2.5vw, 48px);
+  background-color: #fd3588;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5' fill='white' stroke='none'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
 }
 /* TEST 03: neutral circle, larger icon */
 .exp-test__visual--icon {
@@ -3079,7 +3097,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   display: flex;
   align-items: center;
   gap: clamp(6px, 0.521vw, 10px);
-  color: #222;
+  color: #fd3588;
   font-size: clamp(11px, 0.938vw, 18px);
   font-weight: 700;
 }
