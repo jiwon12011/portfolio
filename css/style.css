@@ -2085,7 +2085,8 @@ html.about-open { overflow: hidden; }
 .banner-sub { margin: 10px 0 0; font-size: clamp(12px, 1vw, 15px); color: #8a8a8a; letter-spacing: 0.02em; }
 .banner-sub #banner-count { color: #1a1a1a; font-weight: 700; }
 
-.banner-grid { columns: 2; column-gap: 18px; }
+.banner-grid { columns: 3; column-gap: 18px; }
+@media (max-width: 768px) { .banner-grid { columns: 2; } }
 @media (max-width: 560px) { .banner-grid { columns: 1; } }
 .banner-item--wide { column-span: all; margin-top: 4px; }   /* 가로배너 = 풀폭으로 한 줄씩 크게 */
 
