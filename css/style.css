@@ -3035,7 +3035,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 }
 /* TEST 03: neutral circle, larger icon */
 .exp-test__visual--icon {
-  background: #eeecec;
+  background: #f2eded;
   border-radius: 50%;
   width: clamp(80px, 8.333vw, 160px);
   height: clamp(80px, 8.333vw, 160px);
@@ -3104,19 +3104,23 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 /* pink check circle */
 .exp-check-circle {
   flex-shrink: 0;
+  position: relative;
   width: clamp(20px, 1.875vw, 36px);
   height: clamp(20px, 1.875vw, 36px);
   background: #fd3588;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-.exp-check-circle img {
-  width: 58%;
-  height: 58%;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
+/* CSS-drawn white checkmark via unicode */
+.exp-check-circle::after {
+  content: '✔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: clamp(10px, 0.938vw, 18px);
+  line-height: 1;
+  font-style: normal;
 }
 .exp-test__conclusion {
   margin: 0;
