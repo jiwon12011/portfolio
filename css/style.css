@@ -2263,11 +2263,11 @@ html.about-open { overflow: hidden; }
 .acl3-platform__badge {
   display: inline-flex;
   align-items: center;
-  padding: clamp(3px, 0.521vw, 10px) clamp(6px, 0.833vw, 16px);
+  padding: clamp(2px, 0.26vw, 5px) clamp(5px, 0.573vw, 11px);
   background: rgba(150, 184, 253, 0.1);
   border: 1px solid #96b8fd;
-  border-radius: clamp(6px, 0.521vw, 10px);
-  font-size: clamp(7px, 0.833vw, 16px);
+  border-radius: clamp(5px, 0.417vw, 8px);
+  font-size: clamp(7px, 0.729vw, 14px);
   font-weight: 500;
   color: #2051e2;
   white-space: nowrap;
