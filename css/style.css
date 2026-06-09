@@ -3651,6 +3651,8 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
    AI CONTENT LAB / 02 EXPERIMENT JOURNEY
 ======================================================================= */
 .about__section--acl2 {
+  display: block;
+  position: relative;
   background: #e8edf8;
   height: max(100svh, calc(100vw * 1022 / 1920));
   padding: 0;
@@ -3676,6 +3678,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   position: absolute;
   left: 5.21%;
   top: 19.28%;
+  max-width: 33vw;
   font-size: clamp(24px, 3.333vw, 64px);
   font-weight: 700;
   line-height: 1.2;
