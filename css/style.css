@@ -3079,22 +3079,36 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   pointer-events: none;
   z-index: 1;
 }
-/* TEST 03: 타원형 AI icon — 왼쪽 45px 위치 */
+/* TEST 03: AI icon — full visual column width, pill centered */
 .exp-test__visual--icon {
-  background: #fbefef;
-  border-radius: 999px;
-  width: clamp(40px, 4.167vw, 80px);
-  height: clamp(72px, 7.5vw, 144px);
-  padding: clamp(10px, 1.042vw, 20px);
-  margin-left: clamp(22px, 2.344vw, 45px);
+  width: clamp(100px, 10.573vw, 203px);
+  align-self: stretch;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin-left: 0;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+.exp-test__visual--icon::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: clamp(56px, 5.833vw, 112px);
+  background: #fbefef;
+  border-radius: 999px;
 }
 .exp-test__visual--icon img {
+  position: relative;
+  z-index: 1;
   max-height: unset;
-  width: 100%;
+  width: clamp(32px, 3.333vw, 64px);
   height: auto;
   object-fit: contain;
 }
@@ -3632,6 +3646,204 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 }
 .acl-pi:hover { transform: scale(1.08); background: #dce8ff; }
 .acl-pi img { width: 56%; height: 56%; object-fit: contain; }
+
+/* =======================================================================
+   AI CONTENT LAB / 02 EXPERIMENT JOURNEY
+======================================================================= */
+.about__section--acl2 {
+  background: #e8edf8;
+  height: max(100svh, calc(100vw * 1022 / 1920));
+  padding: 0;
+  overflow: hidden;
+}
+.about__section--acl2 > .about__eyebrow { display: none; }
+
+.acl2-kicker {
+  margin: 0;
+  position: absolute;
+  left: 5.21%;
+  top: 11.64%;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(4px, 0.417vw, 8px);
+  line-height: 1;
+}
+.acl2-kicker__lab { color: #2152e3; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
+.acl2-kicker__sys { color: #828caa; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
+
+.acl2-title {
+  margin: 0;
+  position: absolute;
+  left: 5.21%;
+  top: 19.28%;
+  font-size: clamp(24px, 3.333vw, 64px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: #222;
+}
+.acl2-title__blue { color: #2152e3; }
+
+.acl2-desc {
+  position: absolute;
+  left: 5.21%;
+  top: 37.08%;
+  width: 33.49%;
+}
+.acl2-desc p {
+  margin: 0;
+  font-size: clamp(11px, 1.042vw, 20px);
+  color: #444;
+  line-height: 1.55;
+}
+.acl2-desc p + p { margin-top: 0.5em; }
+
+.acl2-purpose {
+  position: absolute;
+  left: 5.21%;
+  top: 52.94%;
+  width: 27.29%;
+  height: 28.57%;
+  background: rgba(253, 254, 255, 0.55);
+  border: 1px solid #96b8fd;
+  border-radius: clamp(8px, 0.729vw, 14px);
+  padding: clamp(10px, 1.25vw, 24px) clamp(14px, 1.563vw, 30px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 0.938vw, 18px);
+}
+.acl2-purpose__badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: clamp(4px, 0.469vw, 9px) clamp(8px, 0.885vw, 17px);
+  background: #f1f6fc;
+  border: 1px solid #96b8fd;
+  border-radius: 22px;
+  color: #2152e3;
+  font-size: clamp(8px, 0.729vw, 14px);
+  font-weight: 600;
+}
+.acl2-purpose__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(5px, 0.625vw, 12px);
+}
+.acl2-purpose__list li {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 0.625vw, 12px);
+  font-size: clamp(9px, 0.938vw, 18px);
+  color: #444;
+  line-height: 1.3;
+}
+.acl2-purpose__list li::before {
+  content: '';
+  display: block;
+  width: clamp(3px, 0.313vw, 6px);
+  height: clamp(3px, 0.313vw, 6px);
+  background: #2152e3;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.acl2-steps {
+  position: absolute;
+  left: 42.81%;
+  top: 19.28%;
+  width: 52.03%;
+  height: 62.23%;
+  display: flex;
+  gap: 2.083%;
+  align-items: stretch;
+}
+
+.acl2-step {
+  flex: 1;
+  background: rgba(253, 254, 255, 0.92);
+  border: 1px solid #96b8fd;
+  border-radius: clamp(12px, 1.302vw, 25px);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(12px, 1.563vw, 30px) clamp(10px, 1.25vw, 24px) clamp(10px, 1.25vw, 24px);
+  display: flex;
+  flex-direction: column;
+}
+.acl2-step__label {
+  font-size: clamp(7px, 0.833vw, 16px);
+  font-weight: 500;
+  color: #2152e3;
+  line-height: 1;
+}
+.acl2-step__num {
+  display: block;
+  font-size: clamp(18px, 2.5vw, 48px);
+  font-weight: 700;
+  color: #2152e3;
+  line-height: 1;
+  margin-top: clamp(2px, 0.208vw, 4px);
+}
+.acl2-step__title {
+  margin: clamp(6px, 0.625vw, 12px) 0 0;
+  font-size: clamp(10px, 1.042vw, 20px);
+  font-weight: 700;
+  color: #222;
+  line-height: 1.3;
+}
+.acl2-step__desc {
+  margin: clamp(4px, 0.417vw, 8px) 0 0;
+  font-size: clamp(7px, 0.729vw, 14px);
+  color: #555;
+  line-height: 1.45;
+}
+.acl2-step__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(3px, 0.26vw, 5px);
+  margin-top: clamp(5px, 0.521vw, 10px);
+}
+.acl2-step__tags span {
+  display: inline-flex;
+  align-items: center;
+  padding: clamp(2px, 0.208vw, 4px) clamp(5px, 0.417vw, 8px);
+  background: rgba(150, 184, 253, 0.1);
+  border: 1px solid #96b8fd;
+  border-radius: 5px;
+  font-size: clamp(6px, 0.573vw, 11px);
+  color: #2051e2;
+  white-space: nowrap;
+}
+.acl2-step__img {
+  width: 48%;
+  height: auto;
+  display: block;
+  margin: clamp(6px, 0.625vw, 12px) auto;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.acl2-step__insight {
+  margin-top: auto;
+  padding: clamp(7px, 0.729vw, 14px) clamp(10px, 0.938vw, 18px);
+  background: rgba(241, 246, 252, 0.85);
+  border: 1px solid #96b8fd;
+  border-radius: 10px;
+}
+.acl2-step__insight-label {
+  display: block;
+  font-size: clamp(7px, 0.729vw, 14px);
+  font-weight: 600;
+  color: #2152e3;
+  margin-bottom: clamp(3px, 0.26vw, 5px);
+}
+.acl2-step__insight p {
+  margin: 0;
+  font-size: clamp(7px, 0.729vw, 14px);
+  color: #444;
+  line-height: 1.4;
+}
 
 /* =======================================================================
    BEAUTY CONTENT LAB — Section Animations
