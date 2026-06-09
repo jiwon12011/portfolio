@@ -18,7 +18,7 @@
 | MathHub | `#process-mathhub` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
 | 상상의 문 | `#process-sangsang` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
 | 우리 사이의 음표 | `#process-playlist` | ⏳ 셸만 있음 — 본문 섹션 미추가 |
-| 플레디스 | — | ❌ 패널 자체 없음 — 추가 필요하면 jaringobi 구조 참고 |
+| 플레디스 | `#process-pledis` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 (영상: pledis_process.mp4) |
 
 ### 콘텐츠 추가할 때 할 일 (⏳ 프로젝트)
 1. `process__tracks` `<ol>` 안에 `<li>` nav 항목 추가
