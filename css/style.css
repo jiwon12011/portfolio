@@ -1085,8 +1085,6 @@ html.process-open { overflow: hidden; }
   display: flex; flex-direction: column;
   padding: clamp(18px,1.5vw,29px);
   border-radius: 22px;
-  min-height: 0;
-  overflow-y: auto;
   background: linear-gradient(160deg, rgba(245,248,243,0.52), rgba(225,231,222,0.34));
   border: 1px solid rgba(255,255,255,0.46);
 }
