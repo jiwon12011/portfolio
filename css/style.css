@@ -3705,10 +3705,10 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   background: rgba(253, 254, 255, 0.55);
   border: 1px solid #96b8fd;
   border-radius: clamp(8px, 0.729vw, 14px);
-  padding: clamp(10px, 1.25vw, 24px) clamp(14px, 1.563vw, 30px);
+  padding: clamp(16px, 2.083vw, 40px) clamp(18px, 2.083vw, 40px);
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 0.938vw, 18px);
+  gap: clamp(12px, 1.563vw, 30px);
 }
 .acl2-purpose__badge {
   display: inline-flex;
@@ -3728,7 +3728,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: clamp(5px, 0.625vw, 12px);
+  gap: clamp(10px, 1.25vw, 24px);
 }
 .acl2-purpose__list li {
   display: flex;
