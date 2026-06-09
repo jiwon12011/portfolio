@@ -3815,15 +3815,16 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   white-space: nowrap;
 }
 .acl2-step__img {
-  width: 42%;
-  height: auto;
+  width: clamp(57px, 7.083vw, 136px);
+  height: clamp(83px, 10.365vw, 199px);
   display: block;
-  margin: clamp(6px, 0.625vw, 12px) auto;
+  object-fit: cover;
   border-radius: 6px;
   flex-shrink: 0;
+  margin: auto auto 0;
 }
 .acl2-step__insight {
-  margin-top: auto;
+  margin-top: 0;
   padding: clamp(7px, 0.729vw, 14px) clamp(10px, 0.938vw, 18px);
   background: rgba(241, 246, 252, 0.85);
   border: 1px solid #96b8fd;
