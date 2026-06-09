@@ -3816,16 +3816,16 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 }
 .acl2-step__img {
   width: 100%;
-  flex: 1;
-  min-height: 0;
+  height: clamp(120px, 14.063vw, 270px);
+  flex-shrink: 0;
   display: block;
   object-fit: cover;
-  object-position: top center;
+  object-position: center;
   border-radius: 8px;
-  margin-top: clamp(6px, 0.625vw, 12px);
+  margin-top: auto;
 }
 .acl2-step__insight {
-  margin-top: 0;
+  margin-top: clamp(4px, 0.417vw, 8px);
   padding: clamp(7px, 0.729vw, 14px) clamp(10px, 0.938vw, 18px);
   background: rgba(241, 246, 252, 0.85);
   border: 1px solid #96b8fd;
