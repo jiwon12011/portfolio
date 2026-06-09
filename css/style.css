@@ -3499,12 +3499,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 
 /* Background image */
 .acl-bg {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  object-fit: cover;
+  display: none;
 }
 
 /* Phone mockup — right half */
