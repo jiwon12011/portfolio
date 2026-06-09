@@ -26,6 +26,10 @@
 3. `process__cta` `href`를 실제 배포 URL로 교체
 4. nav 항목이 7개 이상이면 1440px에서 overflow 발생 — 6개 이하로 유지
 
+## process.js 주의 사항
+- `setup()` — 페이지 로드 시 모든 모달에 즉시 실행. 이벤트 바인딩/초기 상태만. **네트워크·리소스 로딩 코드 절대 금지.**
+- `open()` — 모달이 실제 열릴 때 실행. 이미지 eager 전환, 영상 재생 등 여기에.
+
 ## process.js 스크롤 수정 사항 (2025-06)
 - nav 클릭 시 목표 위치 계산: `getBoundingClientRect` → `offsetTop` 순회로 교체
   - 이유: 패널 오픈 `scale` 애니메이션 중 viewport px ≠ CSS px 불일치 방지
