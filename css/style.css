@@ -3815,13 +3815,14 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   white-space: nowrap;
 }
 .acl2-step__img {
-  width: clamp(57px, 7.083vw, 136px);
-  height: clamp(83px, 10.365vw, 199px);
+  width: 100%;
+  flex: 1;
+  min-height: 0;
   display: block;
   object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-  margin: auto auto 0;
+  object-position: top center;
+  border-radius: 8px;
+  margin-top: clamp(6px, 0.625vw, 12px);
 }
 .acl2-step__insight {
   margin-top: 0;
