@@ -3499,8 +3499,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   left: 50%;
   top: 6.46%;
   width: 41.46%;
-  object-fit: contain;
-  aspect-ratio: 3184 / 3504;
+  height: auto;
 }
 
 /* Kicker */
