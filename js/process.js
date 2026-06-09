@@ -26,7 +26,7 @@
     const heroVid = modal.querySelector(".process__hero-media");
 
     /* 이미지 디코딩을 메인 스레드 밖에서 → 스크롤 중 디코딩 블로킹/freeze 완화 */
-    modal.querySelectorAll("img").forEach((i) => { i.decoding = "async"; });
+    modal.querySelectorAll("img").forEach((i) => { i.decoding = "async"; i.loading = "eager"; });
 
     const setActive = (id) =>
       tracks.forEach((li) =>
@@ -89,7 +89,9 @@
         e.preventDefault();
         const sec = document.getElementById(a.dataset.track);
         if (!sec) return;
-        const top = sec.getBoundingClientRect().top - content.getBoundingClientRect().top + content.scrollTop - 6;
+        let offset = 0, el = sec;
+        while (el && el !== content) { offset += el.offsetTop; el = el.offsetParent; }
+        const top = offset - 6;
         /* GSAP 으로 scrollTop 직접 트윈 — ScrollTrigger 가 있는 커스텀 스크롤러에선
            네이티브 scrollTo({smooth}) 가 중간에 끊겨, 매 프레임 scrollTop 을 직접 보간. */
         if (window.gsap) {
