@@ -3690,7 +3690,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 }
 .acl2-desc p {
   margin: 0;
-  font-size: clamp(11px, 1.042vw, 20px);
+  font-size: clamp(12px, 1.25vw, 24px);
   color: #444;
   line-height: 1.55;
 }
@@ -3719,7 +3719,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   border: 1px solid #96b8fd;
   border-radius: 22px;
   color: #2152e3;
-  font-size: clamp(8px, 0.729vw, 14px);
+  font-size: clamp(8px, 0.833vw, 16px);
   font-weight: 600;
 }
 .acl2-purpose__list {
@@ -3734,7 +3734,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   display: flex;
   align-items: center;
   gap: clamp(6px, 0.625vw, 12px);
-  font-size: clamp(9px, 0.938vw, 18px);
+  font-size: clamp(10px, 1.042vw, 20px);
   color: #444;
   line-height: 1.3;
 }
@@ -3771,7 +3771,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   flex-direction: column;
 }
 .acl2-step__label {
-  font-size: clamp(7px, 0.833vw, 16px);
+  font-size: clamp(10px, 1.042vw, 20px);
   font-weight: 500;
   color: #2152e3;
   line-height: 1;
@@ -3786,7 +3786,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 }
 .acl2-step__title {
   margin: clamp(6px, 0.625vw, 12px) 0 0;
-  font-size: clamp(10px, 1.042vw, 20px);
+  font-size: clamp(12px, 1.25vw, 24px);
   font-weight: 700;
   color: #222;
   line-height: 1.3;
@@ -3810,12 +3810,12 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   background: rgba(150, 184, 253, 0.1);
   border: 1px solid #96b8fd;
   border-radius: 5px;
-  font-size: clamp(6px, 0.573vw, 11px);
+  font-size: clamp(6px, 0.625vw, 12px);
   color: #2051e2;
   white-space: nowrap;
 }
 .acl2-step__img {
-  width: 48%;
+  width: 42%;
   height: auto;
   display: block;
   margin: clamp(6px, 0.625vw, 12px) auto;
@@ -3831,14 +3831,14 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 }
 .acl2-step__insight-label {
   display: block;
-  font-size: clamp(7px, 0.729vw, 14px);
+  font-size: clamp(8px, 0.833vw, 16px);
   font-weight: 600;
   color: #2152e3;
   margin-bottom: clamp(3px, 0.26vw, 5px);
 }
 .acl2-step__insight p {
   margin: 0;
-  font-size: clamp(7px, 0.729vw, 14px);
+  font-size: clamp(8px, 0.833vw, 16px);
   color: #444;
   line-height: 1.4;
 }
