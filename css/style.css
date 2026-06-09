@@ -2209,36 +2209,32 @@ html.about-open { overflow: hidden; }
   flex-shrink: 0;
 }
 
-/* ── Right column: platforms + summary ── */
-.acl3-right {
-  position: absolute;
-  left: 41.93%;
-  top: 11.25%;
-  width: 52.86%;
-  height: 77.5%;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(8px, 0.938vw, 18px);
-}
-
-.acl3-platforms {
-  display: flex;
-  gap: clamp(8px, 1.615vw, 31px);
-  flex: 1;
-  min-height: 0;
-}
-
-/* ── Each platform card ── */
+/* ── Platform cards (피그마 수치 기반 절대위치) ── */
+/* Instagram: left 805/1920=41.93%, top 115/1022=11.25%, 492×609px */
+/* TikTok:    left 1328/1920=69.17%, top 119/1022=11.64%, 492×605px */
 .acl3-platform {
-  flex: 1;
+  position: absolute;
   background: rgba(253, 254, 255, 0.92);
   border: 1px solid #96b8fd;
   border-radius: clamp(12px, 1.302vw, 25px);
-  padding: clamp(14px, 1.875vw, 36px) clamp(12px, 1.458vw, 28px) clamp(12px, 1.458vw, 28px);
+  width: 25.625%;
+  padding: clamp(14px, 1.771vw, 34px) clamp(12px, 1.615vw, 31px) clamp(10px, 1.25vw, 24px);
   display: flex;
   flex-direction: column;
-  gap: clamp(5px, 0.521vw, 10px);
+  gap: clamp(4px, 0.677vw, 13px);
   overflow: hidden;
+}
+
+.acl3-platform--insta {
+  left: 41.93%;
+  top: 11.25%;
+  height: 59.59%;
+}
+
+.acl3-platform--tiktok {
+  left: 69.17%;
+  top: 11.64%;
+  height: 59.2%;
 }
 
 .acl3-platform__header {
@@ -2249,7 +2245,7 @@ html.about-open { overflow: hidden; }
 .acl3-platform__icon {
   width: clamp(22px, 2.76vw, 53px);
   height: clamp(22px, 2.76vw, 53px);
-  border-radius: 8px;
+  border-radius: clamp(6px, 0.521vw, 10px);
   flex-shrink: 0;
   object-fit: contain;
 }
@@ -2267,10 +2263,10 @@ html.about-open { overflow: hidden; }
 .acl3-platform__badge {
   display: inline-flex;
   align-items: center;
-  padding: clamp(3px, 0.313vw, 6px) clamp(6px, 0.625vw, 12px);
+  padding: clamp(3px, 0.521vw, 10px) clamp(6px, 0.833vw, 16px);
   background: rgba(150, 184, 253, 0.1);
   border: 1px solid #96b8fd;
-  border-radius: 8px;
+  border-radius: clamp(6px, 0.521vw, 10px);
   font-size: clamp(7px, 0.833vw, 16px);
   font-weight: 500;
   color: #2051e2;
@@ -2302,21 +2298,23 @@ html.about-open { overflow: hidden; }
   color: #2051e2;
 }
 
+/* 썸네일: 피그마 기준 137px 고정 높이, 33px 간격, 좌우 19px 추가 여백 */
 .acl3-platform__thumbs {
   display: flex;
-  gap: clamp(4px, 0.417vw, 8px);
-  height: clamp(90px, 10.417vw, 200px);
+  gap: clamp(4px, 1.719vw, 33px);
+  height: clamp(60px, 7.135vw, 137px);
   flex-shrink: 0;
+  margin: clamp(8px, 1.615vw, 31px) clamp(4px, 0.99vw, 19px) 0;
 }
 .acl3-platform__thumbs img {
   flex: 1;
   min-width: 0;
   height: 100%;
   object-fit: cover;
-  border-radius: clamp(4px, 0.417vw, 8px);
+  border-radius: clamp(4px, 0.521vw, 10px);
 }
 
-/* ── Per-platform stats (inside card bottom) ── */
+/* ── Stats box ── */
 .acl3-platform__stats {
   display: flex;
   align-items: center;
@@ -2325,7 +2323,7 @@ html.about-open { overflow: hidden; }
   border: 1px solid #96b8fd;
   border-radius: clamp(10px, 0.938vw, 18px);
   padding: clamp(8px, 0.833vw, 16px) clamp(6px, 0.625vw, 12px);
-  margin-top: 0;
+  margin-top: clamp(8px, 1.823vw, 35px);
   flex-shrink: 0;
 }
 .acl3-pstat {
@@ -2352,16 +2350,20 @@ html.about-open { overflow: hidden; }
   flex-shrink: 0;
 }
 
-/* ── Summary bar ── */
+/* ── Summary bar: 피그마 left 805, top 754, 1015×149px ── */
 .acl3-summary {
+  position: absolute;
+  left: 41.93%;
+  top: 73.78%;
+  width: 52.86%;
+  height: 14.58%;
   background: rgba(253, 254, 255, 0.92);
   border: 1px solid #96b8fd;
   border-radius: clamp(12px, 1.302vw, 25px);
-  padding: clamp(10px, 1.302vw, 25px) clamp(14px, 1.563vw, 30px);
+  padding: 0 clamp(14px, 1.563vw, 30px);
   display: flex;
   align-items: center;
   gap: clamp(16px, 2.083vw, 40px);
-  flex-shrink: 0;
 }
 .acl3-summary__label {
   font-size: clamp(12px, 1.25vw, 24px);
