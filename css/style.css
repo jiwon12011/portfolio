@@ -2098,7 +2098,7 @@ html.about-open { overflow: hidden; }
 
 /* ── VISUAL ARCHIVE 배너 갤러리(프로젝트 섹션) ── */
 .about__section--gallery { justify-content: flex-start; padding: clamp(78px, 12vh, 140px) 0 clamp(60px, 10vh, 110px); }
-.banner-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 clamp(28px, 4vw, 56px); }
+.banner-wrap { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 clamp(24px, 3vw, 48px); }
 .banner-head { margin-bottom: clamp(22px, 3vh, 38px); }
 .banner-sub { margin: 10px 0 0; font-size: clamp(12px, 1vw, 15px); color: #8a8a8a; letter-spacing: 0.02em; }
 .banner-sub #banner-count { color: #1a1a1a; font-weight: 700; }
@@ -2174,18 +2174,18 @@ html.lb-open { overflow: hidden; }
 .about__back:hover { background: #fff; transform: translateX(-2px); box-shadow: 0 6px 18px -8px rgba(0,0,0,0.2); }
 
 .about__inner { display: grid; grid-template-columns: clamp(238px, 20vw, 300px) 1fr; gap: clamp(34px, 4vw, 72px);
-  width: 100%; max-width: 1180px; margin: 0 auto; padding: clamp(18px, 3vh, 38px) clamp(28px, 4vw, 56px); align-items: start; }
+  width: 100%; max-width: 1400px; margin: 0 auto; padding: clamp(18px, 3vh, 38px) clamp(24px, 3vw, 48px); align-items: start; }
 /* 우측 콘텐츠: 위아래로 펼쳐 lead 는 Profile 시작점에, 그리드는 INSTA 끝선에 맞춤 */
 .about__main { align-self: stretch; display: flex; flex-direction: column; }
 
 /* 좌측 프로필 */
-.about__h { margin: 0 0 clamp(12px, 1.8vh, 20px); font-size: clamp(27px, 2.6vw, 42px); font-weight: 700; letter-spacing: -0.01em; }
+.about__h { margin: 0 0 clamp(12px, 1.8vh, 20px); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(40,40,40,0.38); }
 .about__photo { display: block; width: 100%; height: auto; max-height: 47vh; aspect-ratio: 720 / 959; object-fit: cover; object-position: center top;
   border-radius: 4px; background: #f0f0f0; }
 .about__name { margin: clamp(12px, 1.8vh, 20px) 0 5px; font-size: clamp(22px, 2vw, 28px); font-weight: 700; }
 .about__role { margin: 0 0 2px; font-size: clamp(13px, 1.05vw, 16px); color: #2a2a2a; }
 .about__rule { display: block; height: 1px; background: #d5d5d5; margin: clamp(12px, 1.8vh, 20px) 0; }
-.about__meta { margin: 0; display: grid; gap: clamp(5px, 0.8vh, 8px); }
+.about__meta { margin: clamp(16px, 2.8vh, 36px) 0 0; display: grid; gap: clamp(5px, 0.8vh, 8px); }
 .about__metarow { display: grid; grid-template-columns: 54px 1fr; font-size: 13px; }
 .about__metarow dt { font-weight: 700; letter-spacing: 0.03em; }
 .about__metarow dd { margin: 0; color: #444; }
@@ -2196,7 +2196,7 @@ html.lb-open { overflow: hidden; }
 .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vh, 48px) clamp(30px, 3.5vw, 62px); align-items: start;
   margin-top: auto; }   /* 남는 세로 공간을 lead 와 그리드 사이로 흡수 → 그리드 바닥이 INSTA 끝선에 */
 .about__title { margin: 0 0 clamp(10px, 1.4vh, 15px); padding-bottom: clamp(7px, 1vh, 11px); border-bottom: 1px solid #d5d5d5;
-  font-size: clamp(16px, 1.3vw, 19px); font-weight: 700; letter-spacing: 0.02em; }
+  font-size: clamp(13px, 1vw, 15px); font-weight: 700; letter-spacing: 0.06em; }
 
 .about__edu { display: grid; gap: clamp(10px, 1.5vh, 15px); }
 .about__edu p { margin: 0; font-size: clamp(13px, 1.05vw, 16px); line-height: 1.5; color: #2a2a2a; }
@@ -2208,15 +2208,18 @@ html.lb-open { overflow: hidden; }
 
 .about__skillgroup { margin-bottom: clamp(9px, 1.5vh, 16px); }
 .about__skillgroup:last-child { margin-bottom: 0; }
-.about__sub { margin: 0 0 clamp(6px, 1vh, 9px); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: #59a2ee; }
+.about__sub { margin: 0 0 clamp(6px, 1vh, 9px); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+.about__sub--design { color: #e05899; }
+.about__sub--dev    { color: #59a2ee; }
+.about__sub--ai     { color: #9b6dc8; }
 .about__pills { display: flex; flex-wrap: wrap; gap: 7px; }
 .about__pill { display: inline-flex; align-items: center; padding: clamp(5px, 0.7vh, 7px) 14px; border-radius: 999px;
   font-size: clamp(12px, 1vw, 14px); font-weight: 500; color: #3a3a3a; }
-.about__pill--pink   { background: #ffeaf7; }
-.about__pill--blue   { background: #eef2ff; }
-.about__pill--purple { background: #f5eaff; }
+.about__pill--pink   { background: #ffeaf7; border: 1px solid #f5c8e8; }
+.about__pill--blue   { background: #eef2ff; border: 1px solid #c7d6fa; }
+.about__pill--purple { background: #f5eaff; border: 1px solid #d9c3f5; }
 
-.about__strength { display: grid; gap: clamp(11px, 1.7vh, 17px); }
+.about__strength { display: grid; gap: clamp(14px, 2.2vh, 24px); }
 .about__str h5 { margin: 0 0 3px; font-size: clamp(14px, 1.1vw, 16px); font-weight: 600; }
 .about__str p { margin: 0; font-size: clamp(11px, 0.95vw, 13px); color: #797979; line-height: 1.45; }
 
@@ -2272,15 +2275,17 @@ html.lb-open { overflow: hidden; }
 /* ---- 텍스트 (Figma 1920×1022 기준 %) ---- */
 .mktg-kicker {
   margin: 0;
-  font-size: clamp(13px, 1.25vw, 24px);
-  font-weight: 500;
   position: absolute;
   left: 5.26%;
   top: 13.8%;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(4px, 0.417vw, 8px);
+  line-height: 1;
 }
-.mktg-kicker__lab { color: #fd3588; }
-.mktg-kicker__slash { color: #fd3588; font-size: clamp(15px, 1.46vw, 28px); }
-.mktg-kicker__num { color: #987281; }
+.mktg-kicker__lab   { color: #fd3588; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
+.mktg-kicker__slash { color: #987281; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
+.mktg-kicker__num   { color: #987281; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
 
 .mktg-title {
   margin: 0;
@@ -2475,6 +2480,8 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
    Base: 1920×1022. All left/top as % of section dimensions.
    ============================================================ */
 
+.bcl-sections { background: #fbefef; }
+
 .about__section--proc {
   background: #fbefef;
   height: max(100svh, calc(100vw * 1022 / 1920));
@@ -2495,7 +2502,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 }
 .proc-kicker__lab {
   color: #fd3588;
-  font-size: clamp(14px, 1.458vw, 28px);
+  font-size: clamp(12px, 1.25vw, 24px);
   font-weight: 500;
 }
 .proc-kicker__sys {
@@ -2886,7 +2893,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   gap: clamp(4px, 0.417vw, 8px);
   line-height: 1;
 }
-.exp-kicker__lab { color: #fd3588; font-size: clamp(14px, 1.458vw, 28px); font-weight: 500; }
+.exp-kicker__lab { color: #fd3588; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
 .exp-kicker__sys { color: #987281; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
 
 /* Title */
@@ -3462,6 +3469,170 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   text-align: center;
   line-height: 1.5;
 }
+
+/* =======================================================================
+   AI CONTENT LAB — 01 OVERVIEW
+   1920×1022 Figma 기준 % 좌표
+======================================================================= */
+
+.about__section--acl {
+  background: #e8edf8;
+  height: max(100svh, calc(100vw * 1022 / 1920));
+  padding: 0;
+  overflow: hidden;
+}
+.about__section--acl > .about__eyebrow { display: none; }
+
+/* Background image */
+.acl-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+}
+
+/* Phone mockup — right half */
+.acl-phones {
+  position: absolute;
+  left: 50%;
+  top: 6.46%;
+  width: 41.46%;
+  object-fit: contain;
+  aspect-ratio: 3184 / 3504;
+}
+
+/* Kicker */
+.acl-kicker {
+  margin: 0;
+  position: absolute;
+  left: 5.21%;
+  top: 11.64%;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(4px, 0.417vw, 8px);
+  line-height: 1;
+}
+.acl-kicker__lab { color: #2152e3; font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
+.acl-kicker__sys { color: #828caa;  font-size: clamp(12px, 1.25vw, 24px); font-weight: 500; }
+
+/* Title */
+.acl-title {
+  margin: 0;
+  position: absolute;
+  left: 5.21%;
+  top: 19.28%;
+  font-size: clamp(30px, 3.333vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: #222;
+}
+.acl-title__ai { color: #2152e3; }
+
+/* Subtitle */
+.acl-sub {
+  margin: 0;
+  position: absolute;
+  left: 5.21%;
+  top: 29.65%;
+  font-size: clamp(16px, 2.083vw, 40px);
+  font-weight: 500;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* Description */
+.acl-desc {
+  position: absolute;
+  left: 5.21%;
+  top: 41.98%;
+  width: 29.95%;
+}
+.acl-desc p {
+  margin: 0;
+  font-size: clamp(12px, 1.25vw, 24px);
+  font-weight: 500;
+  color: #444;
+  line-height: 1.55;
+}
+.acl-desc p + p { margin-top: 0.6%; }
+
+/* Tags */
+.acl-tags {
+  position: absolute;
+  left: 5.21%;
+  top: 51.86%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(6px, 0.625vw, 12px);
+}
+.acl-tags span {
+  display: inline-flex;
+  align-items: center;
+  padding: clamp(5px, 0.52vw, 10px) clamp(8px, 0.833vw, 16px);
+  background: rgba(150, 184, 253, 0.12);
+  border: 1px solid #96b8fd;
+  border-radius: 10px;
+  font-size: clamp(10px, 1.042vw, 20px);
+  font-weight: 400;
+  color: #2051e2;
+}
+
+/* CTA button */
+.acl-cta {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 0.833vw, 16px);
+  position: absolute;
+  left: 5.26%;
+  top: 68.59%;
+  width: 18.23%;
+  height: 7.93%;
+  background: rgba(150, 184, 253, 0.12);
+  border: 1px solid #96b8fd;
+  border-radius: 10px;
+  padding: 0 clamp(10px, 1.25vw, 24px);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.acl-cta:hover { background: rgba(150, 184, 253, 0.25); }
+.acl-cta__icon {
+  width: clamp(22px, 2.448vw, 47px);
+  height: clamp(22px, 2.448vw, 47px);
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+.acl-cta__text {
+  font-size: clamp(11px, 1.25vw, 24px);
+  font-weight: 500;
+  color: #444;
+}
+.acl-cta__arrow { margin-left: auto; color: #444; font-size: clamp(11px, 1.25vw, 24px); }
+
+/* Platform icons */
+.acl-platform-icons {
+  position: absolute;
+  left: 5.26%;
+  top: 79.45%;
+  display: flex;
+  gap: clamp(8px, 0.938vw, 18px);
+}
+.acl-pi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(44px, 3.646vw, 70px);
+  height: clamp(44px, 3.646vw, 70px);
+  background: #f4f7ff;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.acl-pi:hover { transform: scale(1.08); background: #dce8ff; }
+.acl-pi img { width: 56%; height: 56%; object-fit: contain; }
 
 /* =======================================================================
    BEAUTY CONTENT LAB — Section Animations
