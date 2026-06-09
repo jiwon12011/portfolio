@@ -26,7 +26,7 @@
     const heroVid = modal.querySelector(".process__hero-media");
 
     /* 이미지 디코딩을 메인 스레드 밖에서 → 스크롤 중 디코딩 블로킹/freeze 완화 */
-    modal.querySelectorAll("img").forEach((i) => { i.decoding = "async"; i.loading = "eager"; });
+    modal.querySelectorAll("img").forEach((i) => { i.decoding = "async"; });
 
     const setActive = (id) =>
       tracks.forEach((li) =>
@@ -50,6 +50,7 @@
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
       document.documentElement.classList.add("process-open");
+      modal.querySelectorAll("img[loading='lazy']").forEach((i) => { i.loading = "eager"; });
       content.scrollTop = 0;                                 /* 재오픈은 항상 상단부터 */
       requestAnimationFrame(() => { content.scrollTop = 0; updateSpy(); });  /* 렌더 후 한 번 더 확실히 */
       if (heroVid) { heroVid.muted = true; const p = heroVid.play(); if (p && p.catch) p.catch(() => {}); }
