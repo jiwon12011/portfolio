@@ -2243,13 +2243,11 @@ html.about-open { overflow: hidden; }
   gap: clamp(6px, 0.625vw, 12px);
 }
 .acl3-platform__icon {
-  width: clamp(30px, 2.76vw, 53px);
-  height: clamp(30px, 2.76vw, 53px);
-  border-radius: 50%;
+  width: clamp(22px, 2.76vw, 53px);
+  height: clamp(22px, 2.76vw, 53px);
+  border-radius: clamp(6px, 0.521vw, 10px);
   flex-shrink: 0;
   object-fit: contain;
-  background: #fff;
-  padding: clamp(5px, 0.573vw, 11px);
 }
 .acl3-platform__name {
   font-size: clamp(11px, 1.25vw, 24px);
