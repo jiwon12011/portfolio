@@ -93,9 +93,14 @@
         let offset = 0, el = sec;
         while (el && el !== content) { offset += el.offsetTop; el = el.offsetParent; }
         const top = offset - 6;
-        /* GSAP 으로 scrollTop 직접 트윈 — ScrollTrigger 가 있는 커스텀 스크롤러에선
-           네이티브 scrollTo({smooth}) 가 중간에 끊겨, 매 프레임 scrollTop 을 직접 보간. */
-        if (window.gsap) {
+        /* Lenis(부드러운 스크롤)가 이 모달에 붙어 있으면 lenis.scrollTo 로 — 직접
+           scrollTop 트윈은 Lenis 와 충돌(되돌아감)하므로 우선 사용한다. */
+        const lenis = window.__processLenis && window.__processLenis[modal.dataset.project];
+        if (lenis) {
+          lenis.scrollTo(top, { duration: 0.7 });
+        } else if (window.gsap) {
+          /* GSAP 으로 scrollTop 직접 트윈 — ScrollTrigger 커스텀 스크롤러에선
+             네이티브 scrollTo({smooth}) 가 끊겨, 매 프레임 scrollTop 보간. */
           window.gsap.to(content, { scrollTop: top, duration: 0.5, ease: "power2.out", overwrite: "auto" });
         } else {
           content.scrollTo({ top, behavior: "smooth" });
