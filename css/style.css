@@ -2256,6 +2256,50 @@ html.process-open { overflow: hidden; }
 .ym-r5__rdesc { position: absolute; left: 1.319cqw; top: 4.7cqw; margin: 0; color: #444;
   font-size: 1.111cqw; font-weight: 400; line-height: 1.45; }
 
+/* ── SECTION 6 · PROJECT INSIGHTS (디자인 1440×973 → cqw=px/14.4) ── */
+.ym-r6 { aspect-ratio: 1440 / 973; background: #fff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.ym-r6__num { position: absolute; left: 6.944cqw; top: 1.319cqw; display: grid; place-items: center;
+  width: 3.056cqw; height: 3.056cqw; border: 1px solid #ff6b9d; border-radius: 0.694cqw;
+  color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r6__eyebrow { position: absolute; left: 10.972cqw; top: 2.014cqw; color: #ff6b9d;
+  font-size: 1.389cqw; font-weight: 600; letter-spacing: .02em; }
+.ym-r6__title { position: absolute; left: 7.083cqw; top: 5.556cqw; margin: 0; white-space: nowrap;
+  font-size: 3.611cqw; font-weight: 600; color: #181a3b; line-height: 1.12; }
+.ym-r6__title b { color: #ff6b9d; font-weight: 600; }
+.ym-r6__lead { position: absolute; left: 7.986cqw; top: 10.972cqw; margin: 0; white-space: nowrap;
+  font-size: 1.111cqw; font-weight: 500; color: #444; line-height: 1.4; }
+/* 인사이트 카드 */
+.ym-r6__card { position: absolute; top: 17.5cqw; width: 20cqw; border-radius: 1.389cqw;
+  background: var(--bg); border: 1px solid var(--ln); }
+.ym-r6__card--1 { left: 6.944cqw;  height: 22.222cqw; --bg:#fffcfd; --ln:#fddeeb; --ac:#ff6b9d; --ib:#fee7ee; --dot:#ff96b9; }
+.ym-r6__card--2 { left: 28.958cqw; height: 22.222cqw; --bg:#fbf7fd; --ln:#ebe6fa; --ac:#775bcc; --ib:#ebe6fa; --dot:#7b60d7; }
+.ym-r6__card--3 { left: 50.972cqw; height: 23.264cqw; --bg:#f6fafa; --ln:#cceae7; --ac:#43b49b; --ib:#e1f2f0; --dot:#1ea48d; }
+.ym-r6__card--4 { left: 72.986cqw; height: 23.264cqw; --bg:#fdf9f4; --ln:#fae9da; --ac:#fe8e01; --ib:#feecdc; --dot:#fe8e01; }
+.ym-r6__ic { position: absolute; left: 1.389cqw; top: 1.389cqw; display: grid; place-items: center;
+  width: 4.236cqw; height: 4.236cqw; border-radius: 50%; background: var(--ib); }
+.ym-r6__ic img { width: 2.5cqw; height: 2.5cqw; object-fit: contain; display: block; }
+.ym-r6__cat { position: absolute; left: 1.389cqw; top: 7.2cqw; color: var(--ac); font-size: 1.389cqw; font-weight: 600; }
+.ym-r6__line { position: absolute; left: 1.111cqw; top: 10.069cqw; width: 17.5cqw; height: 0; border-top: 1px solid var(--ln); }
+.ym-r6__list { position: absolute; left: 2.083cqw; top: 11.806cqw; margin: 0; padding: 0; list-style: none;
+  color: #444; font-size: 1.25cqw; font-weight: 400; }
+.ym-r6__list li { position: relative; padding-left: 1.1cqw; margin-bottom: 1.65cqw; line-height: 1.2; }
+.ym-r6__list li::before { content: ""; position: absolute; left: 0; top: 0.5cqw; width: 0.42cqw; height: 0.42cqw;
+  border-radius: 50%; background: var(--dot); }
+/* 하단 인용구 카드 */
+.ym-r6__quote { position: absolute; left: 6.944cqw; top: 42.361cqw; width: 86.111cqw; height: 19.444cqw;
+  border-radius: 1.736cqw; background: linear-gradient(135deg, #fdeef4 0%, #f9e7f1 60%, #f3e9fb 100%); }
+.ym-r6__qmark { position: absolute; color: #ff9bc2; font-size: 4cqw; font-weight: 700; line-height: 1;
+  font-family: Georgia, "Times New Roman", serif; }
+.ym-r6__qmark--o { left: 2.4cqw; top: 2.6cqw; }
+.ym-r6__qmark--c { right: 2.4cqw; bottom: 0.6cqw; }
+.ym-r6__qtext { position: absolute; left: 50%; transform: translateX(-50%); top: 4.931cqw; margin: 0;
+  text-align: center; white-space: nowrap; font-size: 2.222cqw; font-weight: 500; color: #222; line-height: 1.4; }
+.ym-r6__qtext .ym-r6__pink { color: #ff6b9d; font-weight: 500; }
+.ym-r6__qtext .ym-r6__purple { color: #7455d2; font-weight: 600; }
+.ym-r6__qsub { position: absolute; left: 50%; transform: translateX(-50%); top: 12.222cqw; margin: 0;
+  text-align: center; white-space: nowrap; font-size: 1.389cqw; font-weight: 400; color: #666; line-height: 1.4; }
+
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
   padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
