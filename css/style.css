@@ -1566,6 +1566,53 @@ html.process-open { overflow: hidden; }
 .gw-bg__goal p { margin: 0; color: #faf1ec; font-size: 1.528cqw; font-weight: 700; line-height: 1.4; }
 .gw-bg__goal b { color: #dab773; font-weight: 700; }
 
+/* ── SECTION 2 · GAME RESEARCH (밝은 섹션, 디자인 1440×1261 → cqw=px/14.4) ── */
+.gw-r2 { aspect-ratio: 1440 / 1261; background: #ebe3d6;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+/* 라벨 */
+.gw-r2__label { position: absolute; left: 8.333cqw; top: 8.333cqw;
+  display: flex; align-items: center; gap: 2.083cqw; }
+.gw-r2__num { display: grid; place-items: center; width: 4.514cqw; height: 3.194cqw;
+  border-radius: 0.625cqw; background: #e8ba4d; color: #16130f; font-weight: 700; font-size: 1.667cqw; }
+.gw-r2__cat { color: #14120f; font-size: 1.111cqw; font-weight: 400; letter-spacing: .02em; }
+/* 헤딩 */
+.gw-r2__title { position: absolute; left: 8.333cqw; top: 13.611cqw; margin: 0; width: 44.167cqw;
+  font-size: 3.472cqw; font-weight: 700; line-height: 1.25; white-space: nowrap; }
+.gw-r2__title span { color: #141210; }
+.gw-r2__title b { color: #261c10; font-weight: 700; }
+/* 서브카피 */
+.gw-r2__desc { position: absolute; left: 8.333cqw; top: 18.819cqw; width: 77.292cqw;
+  font-size: 1.667cqw; line-height: 1.5; color: #141210; }
+.gw-r2__desc p { margin: 0; font-weight: 400; }
+
+/* 중앙 메달리온 (중심 = 50%, top 761px) */
+.gw-r2__center { position: absolute; left: 50%; top: 52.847cqw; width: 0; height: 0; }
+.gw-r2__center > * { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.gw-r2__orbit { width: 54.792cqw; height: 54.792cqw; border-radius: 50%;
+  border: 1px solid rgba(232,186,77,0.32); }
+.gw-r2__ring { border-radius: 50%; border: 1px solid #e8ba4d; }
+.gw-r2__ring--out { width: 40.903cqw; height: 40.903cqw; border-width: 2px; }
+.gw-r2__ring--mid { width: 35.972cqw; height: 35.972cqw; }
+.gw-r2__disc { width: 29.306cqw; height: 29.306cqw; border-radius: 50%;
+  background: #261c10; border: 1px solid #e8ba4d; }
+.gw-r2__logo { width: 19.097cqw; height: auto; }
+
+/* 4 원형 이미지 (229×229, 골드링은 이미지에 포함) */
+.gw-r2__circ { position: absolute; width: 15.903cqw; height: 15.903cqw; display: block; }
+.gw-r2__circ--tl { left: 19.236cqw; top: 29.722cqw; }
+.gw-r2__circ--tr { left: 64.861cqw; top: 29.722cqw; }
+.gw-r2__circ--bl { left: 19.236cqw; top: 60.139cqw; }
+.gw-r2__circ--br { left: 64.861cqw; top: 60.139cqw; }
+
+/* 4 라벨 */
+.gw-r2__cap { position: absolute; }
+.gw-r2__cap h4 { margin: 0; color: #0e0a07; font-size: 1.389cqw; font-weight: 700; }
+.gw-r2__cap p { margin: 0.347cqw 0 0; color: #0e0a07; font-size: 1.25cqw; font-weight: 400; line-height: 1.4; }
+.gw-r2__cap--tl { left: 6.25cqw; top: 34.514cqw; }
+.gw-r2__cap--tr { left: 83.542cqw; top: 34.514cqw; }
+.gw-r2__cap--bl { left: 6.25cqw; top: 66.319cqw; }
+.gw-r2__cap--br { left: 83.542cqw; top: 66.319cqw; }
+
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
 .project-intro.is-clickable .intro-list,
