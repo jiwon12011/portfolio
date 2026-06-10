@@ -1979,6 +1979,13 @@ html.process-open { overflow: hidden; }
 /* 노션 원 — 유미 테마 핑크로 */
 .process--yumi .pcard__notion { background: #f3a9ca; }
 
+/* ── 유미 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
+.process__making--yumi { background: #eaf4ff; box-shadow: 0 24px 60px -32px rgba(110,135,180,0.42); }
+.ym-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf4ff; }
+/* SECTION · 히어로 (디자인 1440×896) — 풀커버 키 비주얼 */
+.ym-hero { aspect-ratio: 1440 / 896; }
+.ym-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
   padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
