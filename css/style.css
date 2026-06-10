@@ -2148,6 +2148,62 @@ html.process-open { overflow: hidden; }
 .ym-r3__menu--narrow .ym-r3__mdesc { left: 6.875cqw; }
 .ym-r3__menu--narrow .ym-r3__mcha { left: 15.3cqw; }
 
+/* ── SECTION 4 · INTERACTION DESIGN (디자인 1440×1570 → cqw=px/14.4) ── */
+.ym-r4 { aspect-ratio: 1440 / 1570; background: #fff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.ym-r4__num { position: absolute; left: 7.014cqw; top: 5.764cqw; display: grid; place-items: center;
+  width: 3.056cqw; height: 3.056cqw; border: 1px solid #ff6b9d; border-radius: 0.694cqw;
+  color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r4__eyebrow { position: absolute; left: 11.042cqw; top: 6.458cqw; color: #ff6b9d;
+  font-size: 1.389cqw; font-weight: 600; letter-spacing: .02em; }
+.ym-r4__title { position: absolute; left: 7.153cqw; top: 10cqw; margin: 0; white-space: nowrap;
+  font-size: 3.611cqw; font-weight: 600; color: #181a3b; line-height: 1.12; }
+.ym-r4__title b { color: #ff6b9d; font-weight: 600; }
+.ym-r4__lead { position: absolute; left: 8.056cqw; top: 15.417cqw; margin: 0; white-space: nowrap;
+  font-size: 1.111cqw; font-weight: 500; color: #444; line-height: 1.4; }
+/* 카드 */
+.ym-r4__card { position: absolute; left: 7.014cqw; width: 85.972cqw;
+  background: #fffcfd; border: 1px solid #fddeeb; border-radius: 1.389cqw; }
+.ym-r4__card--1 { top: 21.944cqw; height: 28.264cqw; }
+.ym-r4__card--2 { top: 54.167cqw; height: 24.375cqw; }
+.ym-r4__card--3 { top: 82.014cqw; height: 24.375cqw; }
+/* 카드 공통 라벨 */
+.ym-r4__badge { position: absolute; display: grid; place-items: center; width: 2.986cqw; height: 2.986cqw;
+  border-radius: 50%; background: #ff6b9d; color: #fff; font-size: 1.389cqw; font-weight: 600; }
+.ym-r4__clabel { position: absolute; color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r4__cdesc { position: absolute; margin: 0; color: #444; font-size: 1.111cqw; font-weight: 400; line-height: 1.4; }
+/* 레이어 범례 */
+.ym-r4__legend { position: absolute; left: 13.611cqw; top: 34.306cqw; display: flex; flex-direction: column; }
+.ym-r4__lrow { display: flex; align-items: baseline; gap: 0.9cqw; }
+.ym-r4__lrow b { font-size: 1.111cqw; font-weight: 700; }
+.ym-r4__lrow span { font-size: 0.972cqw; color: #222; }
+.ym-r4__larrow { color: #ff6b9d; font-size: 1.1cqw; margin: 0.35cqw 0 0.35cqw 1.2cqw; line-height: 1; }
+/* HERO 이미지 + 레이어 핀 */
+.ym-r4__hero { position: absolute; left: 44.028cqw; top: 24.722cqw; width: 45.356cqw; height: 22.708cqw;
+  object-fit: cover; border-radius: 1.389cqw; display: block; }
+.ym-r4__pill { position: absolute; z-index: 2; padding: 0.3cqw 0.85cqw; border-radius: 1cqw;
+  color: #fff; font-size: 0.95cqw; font-weight: 600; white-space: nowrap;
+  box-shadow: 0 4px 10px -4px rgba(0,0,0,0.3); }
+.ym-r4__pill::after { content: ""; position: absolute; left: 100%; top: 50%; width: 3.2cqw; height: 0;
+  border-top: 1.5px solid rgba(255,255,255,0.85); }
+.ym-r4__pill--1 { left: 42.6cqw; top: 27.36cqw; background: #528fce; }
+.ym-r4__pill--2 { left: 42.6cqw; top: 36.39cqw; background: #ff6b9d; }
+.ym-r4__pill--3 { left: 42.6cqw; top: 42.64cqw; background: #9678e1; }
+/* 카드2 불릿 */
+.ym-r4__bullets { position: absolute; left: 13.889cqw; top: 66.528cqw; margin: 0; padding-left: 1.2cqw;
+  color: #7236c1; font-size: 1.389cqw; font-weight: 600; line-height: 1.7; }
+/* 카드2 모션 이미지 */
+.ym-r4__mo { position: absolute; top: 60.625cqw; height: 14.444cqw; object-fit: cover;
+  border: 1px solid #d6d6d6; border-radius: 1.389cqw; display: block; }
+.ym-r4__mo--1 { left: 37.153cqw; width: 24.028cqw; }
+.ym-r4__mo--2 { left: 64.444cqw; width: 25.069cqw; }
+.ym-r4__ff { position: absolute; left: 61.4cqw; top: 66.806cqw; width: 2.083cqw; height: 2.083cqw;
+  display: grid; place-items: center; z-index: 2; }
+.ym-r4__ff svg { width: 100%; height: 100%; fill: #ff6b9d; }
+/* 카드3 커서 이미지 */
+.ym-r4__cursor { position: absolute; left: 36.111cqw; top: 85.278cqw; width: 53.403cqw; height: 17.778cqw;
+  object-fit: cover; border-radius: 1.389cqw; display: block; }
+
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
   padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
