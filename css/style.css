@@ -1723,11 +1723,14 @@ html.process-open { overflow: hidden; }
 .gw-r5__desc { position: absolute; left: 8.333cqw; top: 22.986cqw; width: 77.292cqw;
   font-size: 1.667cqw; line-height: 1.5; color: #bbb0a5; }
 .gw-r5__desc p { margin: 0; font-weight: 400; }
-/* 타임라인 라인 + 노드 */
-.gw-r5__line { position: absolute; left: 54.86cqw; top: 37.8cqw; width: 0; height: 105.8cqw;
-  border-left: 1px solid rgba(232,186,77,0.22); }
-.gw-r5__node { position: absolute; left: 54.86cqw; width: 0.83cqw; height: 0.83cqw; border-radius: 50%;
-  transform: translate(-50%, -50%); background: #e8ba4d; box-shadow: 0 0 0.9cqw rgba(232,186,77,0.65); }
+/* 노드 닷 + 가로 커넥터 — 이미지 우측 끝(54.86cqw)에 얹혀 텍스트 쪽으로 선이 뻗음 */
+.gw-r5__node { position: absolute; left: 54.86cqw; transform: translateY(-50%); z-index: 2;
+  display: flex; align-items: center; pointer-events: none; }
+.gw-r5__node::before { content: ""; flex: none; margin-left: -0.45cqw;
+  width: 0.9cqw; height: 0.9cqw; border-radius: 50%; background: #e8ba4d;
+  box-shadow: 0 0 0 0.3cqw rgba(232,186,77,0.18), 0 0 1cqw rgba(232,186,77,0.55); }
+.gw-r5__node::after { content: ""; width: 5.6cqw; height: 0;
+  border-top: 1px solid rgba(232,186,77,0.55); }
 .gw-r5__node--1 { top: 38.1cqw; }
 .gw-r5__node--2 { top: 64.7cqw; }
 .gw-r5__node--3 { top: 91.1cqw; }
