@@ -1986,6 +1986,63 @@ html.process-open { overflow: hidden; }
 .ym-hero { aspect-ratio: 1440 / 896; }
 .ym-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
+/* ── SECTION 1 · PROJECT OVERVIEW (디자인 1440×1295 → cqw=px/14.4) ── */
+.ym-r1 { aspect-ratio: 1440 / 1295; background: #fff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+/* 헤더 */
+.ym-r1__num { position: absolute; left: 6.944cqw; top: 6.944cqw; display: grid; place-items: center;
+  width: 3.056cqw; height: 3.056cqw; border: 1px solid #ff6b9d; border-radius: 0.694cqw;
+  color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r1__eyebrow { position: absolute; left: 10.972cqw; top: 7.847cqw; color: #ff6b9d;
+  font-size: 1.389cqw; font-weight: 600; letter-spacing: .02em; }
+.ym-r1__title { position: absolute; left: 7.083cqw; top: 11.181cqw; margin: 0; white-space: nowrap;
+  font-size: 3.611cqw; font-weight: 600; color: #181a3b; line-height: 1.12; }
+.ym-r1__title b { color: #ff6b9d; font-weight: 700; }
+.ym-r1__lead { position: absolute; left: 7.986cqw; top: 16.597cqw; margin: 0; white-space: nowrap;
+  font-size: 1.111cqw; font-weight: 500; color: #444; line-height: 1.4; }
+/* 카드 공통 */
+.ym-r1__card { position: absolute; }
+.ym-r1__cardimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  border-radius: 1.389cqw; display: block; }
+.ym-r1__badge { position: absolute; display: grid; place-items: center; width: 2.778cqw; height: 2.778cqw;
+  background: #fff; border-radius: 1.389cqw; color: var(--ac); font-size: 1.111cqw; font-weight: 700;
+  box-shadow: 0 4px 10px -4px rgba(60,40,80,0.25); }
+.ym-r1__cat { position: absolute; color: var(--ac); font-size: 1.389cqw; font-weight: 600; }
+.ym-r1__ch { position: absolute; margin: 0; color: #181a3b; font-size: 2.222cqw; font-weight: 600; line-height: 1.2; white-space: nowrap; }
+.ym-r1__ch b { color: var(--ac); font-weight: 700; }
+.ym-r1__cline { position: absolute; width: 2.847cqw; height: 0; border-top: 1px solid var(--ac); }
+.ym-r1__cdesc { position: absolute; margin: 0; color: #444; font-size: 1.111cqw; font-weight: 400; line-height: 1.4; white-space: nowrap; }
+/* 카드 위치/색 */
+.ym-r1__card--c1   { --ac: #ff6b9d; left: 5.625cqw;  top: 23.125cqw; width: 21.736cqw; height: 40.903cqw; }
+.ym-r1__card--c2   { --ac: #49346f; left: 72.639cqw; top: 23.125cqw; width: 21.736cqw; height: 40.903cqw; }
+.ym-r1__card--c3   { --ac: #fea527; left: 5.764cqw;  top: 65.347cqw; width: 50.903cqw; height: 17.639cqw; }
+.ym-r1__card--c4   { --ac: #117978; left: 57.986cqw; top: 65.347cqw; width: 36.389cqw; height: 17.639cqw; }
+.ym-r1__card--main { left: 28.75cqw; top: 23.125cqw; width: 42.569cqw; height: 40.903cqw; }
+/* 세로 카드(c1,c2) 내부 요소 (카드-상대 cqw) */
+.ym-r1__card--c1 .ym-r1__badge, .ym-r1__card--c2 .ym-r1__badge { left: 1.25cqw; top: 2.361cqw; }
+.ym-r1__card--c1 .ym-r1__cat,   .ym-r1__card--c2 .ym-r1__cat   { left: 4.722cqw; top: 2.917cqw; }
+.ym-r1__card--c1 .ym-r1__ch,    .ym-r1__card--c2 .ym-r1__ch    { left: 1.875cqw; top: 6.389cqw; }
+.ym-r1__card--c1 .ym-r1__cline, .ym-r1__card--c2 .ym-r1__cline { left: 1.875cqw; top: 13.194cqw; }
+.ym-r1__card--c1 .ym-r1__cdesc, .ym-r1__card--c2 .ym-r1__cdesc { left: 1.875cqw; top: 14.583cqw; }
+/* 가로 카드(c3,c4) 내부 요소 */
+.ym-r1__card--c3 .ym-r1__badge { left: 1.111cqw; top: 2.361cqw; }
+.ym-r1__card--c3 .ym-r1__cat   { left: 4.583cqw; top: 2.917cqw; }
+.ym-r1__card--c3 .ym-r1__ch    { left: 1.736cqw; top: 6.111cqw; }
+.ym-r1__card--c3 .ym-r1__cdesc { left: 1.736cqw; top: 12.361cqw; }
+.ym-r1__card--c4 .ym-r1__badge { left: 1.25cqw; top: 2.361cqw; }
+.ym-r1__card--c4 .ym-r1__cat   { left: 4.722cqw; top: 2.917cqw; }
+.ym-r1__card--c4 .ym-r1__ch    { left: 1.875cqw; top: 6.111cqw; }
+.ym-r1__card--c4 .ym-r1__cdesc { left: 1.875cqw; top: 12.361cqw; }
+/* 메인 카드 텍스트 (중앙 정렬) */
+.ym-r1__card--main > :not(.ym-r1__cardimg) { position: absolute; left: 50%; transform: translateX(-50%);
+  text-align: center; white-space: nowrap; margin: 0; }
+.ym-r1__mlabel { top: 2.083cqw; color: #f16590; font-size: 1.111cqw; font-weight: 500; }
+.ym-r1__mtitle { top: 4.097cqw; color: #181a3b; font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.ym-r1__mtitle b { color: #ff6b9d; font-weight: 700; }
+.ym-r1__m1 { top: 16.875cqw; color: #181a3b; font-size: 1.111cqw; font-weight: 500; line-height: 1.4; }
+.ym-r1__m2 { top: 19.861cqw; color: #f16590; font-size: 1.806cqw; font-weight: 700; }
+.ym-r1__m3 { top: 22.292cqw; color: #181a3b; font-size: 1.111cqw; font-weight: 500; }
+
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
   padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
