@@ -2056,6 +2056,47 @@ html.process-open { overflow: hidden; }
   font-family: 'GangwonEducationModuche', "Pretendard Variable", Pretendard, sans-serif; }
 .ym-r1__m3 { top: 22.292cqw; color: #181a3b; font-size: 1.111cqw; font-weight: 500; }
 
+/* ── SECTION 2 · VISUAL CONCEPT (디자인 1440×983 → cqw=px/14.4) ── */
+.ym-r2 { aspect-ratio: 1440 / 983; background: #fffdf6;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+/* 헤더 */
+.ym-r2__num { position: absolute; left: 6.944cqw; top: 3.472cqw; display: grid; place-items: center;
+  width: 3.056cqw; height: 3.056cqw; border: 1px solid #ff6b9d; border-radius: 0.694cqw;
+  color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r2__eyebrow { position: absolute; left: 10.972cqw; top: 4.236cqw; color: #ff6b9d;
+  font-size: 1.389cqw; font-weight: 600; letter-spacing: .02em; }
+.ym-r2__title { position: absolute; left: 7.083cqw; top: 7.708cqw; margin: 0; white-space: nowrap;
+  font-size: 3.611cqw; font-weight: 600; color: #181a3b; line-height: 1.12; }
+.ym-r2__title b { color: #ff6b9d; font-weight: 700; }
+.ym-r2__lead { position: absolute; left: 7.986cqw; top: 13.125cqw; margin: 0; white-space: nowrap;
+  font-size: 1.111cqw; font-weight: 500; color: #444; line-height: 1.4; }
+/* 컬러 팔레트 윈도우 */
+.ym-r2__palette { position: absolute; left: 8.333cqw; top: 22.917cqw; width: 38.333cqw; height: 27.083cqw;
+  background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 2.778cqw;
+  box-shadow: 0.55cqw 0.7cqw 1.5cqw -0.35cqw rgba(60,50,90,0.18); }
+.ym-r2__dots { position: absolute; left: 2.222cqw; top: 1.528cqw; display: flex; gap: 0.556cqw; }
+.ym-r2__dots i { width: 1.389cqw; height: 1.389cqw; border-radius: 50%; background: #d9d9d9; }
+.ym-r2__grid { position: absolute; left: 2.222cqw; top: 5.556cqw; display: grid;
+  grid-template-columns: repeat(4, 7.361cqw); column-gap: 1.389cqw; row-gap: 2.15cqw; }
+.ym-r2__chip { display: flex; flex-direction: column; align-items: center; }
+.ym-r2__sw { width: 7.361cqw; height: 7.361cqw; border-radius: 1.389cqw; background: var(--c);
+  align-self: stretch; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04); }
+.ym-r2__hex { margin-top: 0.6cqw; font-family: 'GangwonEducationModuche', Pretendard, sans-serif;
+  font-weight: 700; font-size: 1.111cqw; color: #242454; }
+/* 우측 감정 씬 */
+.ym-r2__scene { position: absolute; left: 59.236cqw; top: 13.125cqw; width: 32.431cqw; height: 37.569cqw;
+  object-fit: cover; border-radius: 1.4cqw; display: block;
+  box-shadow: 0 1.4cqw 3cqw -1.2cqw rgba(120,90,160,0.3); }
+/* 하단 캐릭터 6 */
+.ym-r2__cha { position: absolute; top: 53.472cqw; width: 10.625cqw; height: 10.625cqw;
+  object-fit: contain; display: block; }
+.ym-r2__cha--1 { left: 8.333cqw; }
+.ym-r2__cha--2 { left: 22.847cqw; }
+.ym-r2__cha--3 { left: 37.361cqw; }
+.ym-r2__cha--4 { left: 51.875cqw; }
+.ym-r2__cha--5 { left: 66.389cqw; }
+.ym-r2__cha--6 { left: 80.903cqw; }
+
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
   padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
