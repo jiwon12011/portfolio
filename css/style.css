@@ -1956,6 +1956,8 @@ html.process-open { overflow: hidden; }
   border-color: rgba(243,170,205,0.55); }
 .process--yumi .pcard h3 { color: #3e3357; }
 .process--yumi .pcard p { color: #6b6184; }
+/* 유미 목업(웹/관리자) — 텍스트와 겹치지 않게 조금 작게 */
+.process--yumi .pcard__shot--bleed { width: 76%; max-height: clamp(104px, 13vh, 140px); }
 .process--yumi .pcard--info dt { color: #9d8fba; }
 .process--yumi .pcard--info dd { color: #463c60; }
 .process--yumi .pcard--info dd i { color: #9d8fba; }
@@ -2055,6 +2057,8 @@ html.process-open { overflow: hidden; }
 .ym-r1__m1 { top: 16.875cqw; color: #181a3b; font-size: 1.111cqw; font-weight: 500; line-height: 1.4; }
 .ym-r1__m2 { top: 19.861cqw; color: #f16590; font-size: 1.944cqw; font-weight: 700;
   font-family: 'GangwonEducationModuche', "Pretendard Variable", Pretendard, sans-serif; }
+/* 손글씨 폰트 측면 여백 보정 — 시각 중앙 맞춤 */
+.ym-r1__card--main > .ym-r1__m2 { transform: translateX(calc(-50% + 0.9cqw)); }
 .ym-r1__m3 { top: 22.292cqw; color: #181a3b; font-size: 1.111cqw; font-weight: 500; }
 
 /* ── SECTION 2 · VISUAL CONCEPT (디자인 1440×983 → cqw=px/14.4) ── */
@@ -2192,15 +2196,15 @@ html.process-open { overflow: hidden; }
   transform: translateY(-50%); border-top: 1.5px solid var(--ln); }
 .ym-r4__pill::before { content: ""; position: absolute; top: 50%; width: 0.6cqw; height: 0.6cqw;
   border-radius: 50%; background: var(--ln); transform: translate(-50%, -50%); }
-.ym-r4__pill--1 { left: 30.5cqw; top: 27.36cqw; background: #528fce; --ln: #528fce; }
-.ym-r4__pill--1::after  { width: 13cqw; }
-.ym-r4__pill--1::before { left: calc(100% + 13cqw); }
-.ym-r4__pill--2 { left: 30.5cqw; top: 36.39cqw; background: #ff6b9d; --ln: #ff6b9d; }
-.ym-r4__pill--2::after  { width: 20cqw; }
-.ym-r4__pill--2::before { left: calc(100% + 20cqw); }
-.ym-r4__pill--3 { left: 30.5cqw; top: 42.64cqw; background: #9678e1; --ln: #9678e1; }
-.ym-r4__pill--3::after  { width: 19cqw; }
-.ym-r4__pill--3::before { left: calc(100% + 19cqw); }
+.ym-r4__pill--1 { left: 36.5cqw; top: 27.36cqw; background: #528fce; --ln: #528fce; }
+.ym-r4__pill--1::after  { width: 7cqw; }
+.ym-r4__pill--1::before { left: calc(100% + 7cqw); }
+.ym-r4__pill--2 { left: 36.5cqw; top: 36.39cqw; background: #ff6b9d; --ln: #ff6b9d; }
+.ym-r4__pill--2::after  { width: 14cqw; }
+.ym-r4__pill--2::before { left: calc(100% + 14cqw); }
+.ym-r4__pill--3 { left: 36.5cqw; top: 42.64cqw; background: #9678e1; --ln: #9678e1; }
+.ym-r4__pill--3::after  { width: 11cqw; }
+.ym-r4__pill--3::before { left: calc(100% + 11cqw); }
 /* 카드2 불릿 */
 .ym-r4__bullets { position: absolute; left: 13.889cqw; top: 66.528cqw; margin: 0; padding-left: 1.2cqw;
   color: #7236c1; font-size: 1.389cqw; font-weight: 600; line-height: 1.7; }
@@ -2288,13 +2292,13 @@ html.process-open { overflow: hidden; }
 .ym-r6__list li::before { content: ""; position: absolute; left: 0; top: 0.5cqw; width: 0.42cqw; height: 0.42cqw;
   border-radius: 50%; background: var(--dot); }
 /* 하단 인용구 카드 */
-.ym-r6__quote { position: absolute; left: 50%; transform: translateX(-50%); top: 42.361cqw;
-  width: 72cqw; height: 19.444cqw;
+.ym-r6__quote { position: absolute; left: 6.944cqw; top: 42.361cqw;
+  width: 86.111cqw; height: 19.444cqw;
   border-radius: 1.736cqw; background: linear-gradient(135deg, #fdeef4 0%, #f9e7f1 60%, #f3e9fb 100%); }
 .ym-r6__qmark { position: absolute; color: #ff9bc2; font-size: 4cqw; font-weight: 700; line-height: 1;
   font-family: Georgia, "Times New Roman", serif; }
-.ym-r6__qmark--o { left: 2.4cqw; top: 2.6cqw; }
-.ym-r6__qmark--c { right: 2.4cqw; bottom: 0.6cqw; }
+.ym-r6__qmark--o { left: 11cqw; top: 2.6cqw; }
+.ym-r6__qmark--c { right: 11cqw; bottom: 0.6cqw; }
 .ym-r6__qtext { position: absolute; left: 50%; transform: translateX(-50%); top: 4.931cqw; margin: 0;
   text-align: center; white-space: nowrap; font-size: 2.222cqw; font-weight: 500; color: #222; line-height: 1.4; }
 .ym-r6__qtext .ym-r6__pink { color: #ff6b9d; font-weight: 500; }
