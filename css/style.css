@@ -1655,8 +1655,8 @@ html.process-open { overflow: hidden; }
 .gw-r3__list li { position: relative; padding-left: 1.04cqw; margin-bottom: 0.42cqw;
   color: #988f86; font-size: 1.25cqw; font-weight: 400; line-height: 1.45; }
 .gw-r3__list li::before { content: "•"; position: absolute; left: 0; color: #6f655a; }
-/* 결론 박스 위치 */
-.gw-r3__goal { position: absolute; left: 8.264cqw; top: 92.708cqw; width: 83.472cqw; height: 9.236cqw; }
+/* 결론 박스 위치 (불릿 리스트와 겹치지 않게 충분히 아래로) */
+.gw-r3__goal { position: absolute; left: 8.264cqw; top: 97cqw; width: 83.472cqw; height: 9.236cqw; }
 .gw-r3__goal b { color: #e8ba4d; }
 
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
