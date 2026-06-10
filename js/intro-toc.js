@@ -32,6 +32,8 @@
 
   const itemHTML = (p, slot, active) =>
     '<li class="intro-list__item' + (active ? " is-active" : "") + '" data-go="' + p.key + '" data-slot="' + slot + '"' +
+      ' role="button" tabindex="0" aria-label="' + esc(p.title) + ' 프로젝트로 이동"' +
+      (active ? ' aria-current="true"' : "") +
       (p.preview ? ' data-preview="' + p.preview + '"' : "") + ">" +
       '<img src="' + p.thumb + '" alt="" loading="lazy" />' +
       "<div><span>" + esc(p.num) + "</span><h4>" + esc(p.title) + "</h4><p>" + esc(p.sub) + "</p></div>" +

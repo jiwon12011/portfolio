@@ -61,8 +61,13 @@
       setOpen(pinned || nav.matches(":hover"));
     });
 
+    /* 닫기 직전 포커스가 cluster 내부면 pearl 로 회수(inert 적용 시 포커스 소실 방지) */
+    const reclaimFocus = () => {
+      if (cluster.contains(document.activeElement)) pearl.focus();
+    };
+
     return {
-      nav, pearl, setOpen,
+      nav, pearl, setOpen, reclaimFocus,
       get pinned() { return pinned; },
       unpin() { pinned = false; },
     };
@@ -71,13 +76,13 @@
   /* Esc / 바깥 클릭 → 핀 해제 + (마우스 떠나 있으면) 닫기 */
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
-    entries.forEach((x) => { x.unpin(); x.setOpen(false); });
+    entries.forEach((x) => { x.unpin(); x.reclaimFocus(); x.setOpen(false); });
   });
   document.addEventListener("click", (e) => {
     entries.forEach((x) => {
       if (x.nav.contains(e.target)) return;
       x.unpin();
-      if (!x.nav.matches(":hover")) x.setOpen(false);
+      if (!x.nav.matches(":hover")) { x.reclaimFocus(); x.setOpen(false); }
     });
   });
 

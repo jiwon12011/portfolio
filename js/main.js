@@ -40,10 +40,8 @@
     });
   });
 
-  /* ---- 플레이스홀더 링크(아직 목적지 없음) 점프 방지 ---- */
-  document.querySelectorAll('.card__hit, .card__more').forEach((el) => {
-    el.addEventListener("click", (e) => { e.preventDefault(); /* TODO: → 프로젝트 인트로 */ });
-  });
+  /* .card__hit / .card__more 는 이제 <span> (장식) — 실제 이동은 부모 .card-arm 이
+     처리(about.js/deck.js). 죽은 <a href="#"> 제거됨 → 별도 클릭 가드 불필요. */
 
   /* ---- 플레이/일시정지 토글 (자린고비·POZE) ---- */
   document.querySelectorAll(".player__play").forEach((btn) => {

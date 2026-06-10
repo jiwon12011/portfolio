@@ -153,19 +153,22 @@
      focusGlow  : 0~1 → 포커스 카드 drop-shadow 블룸 강도(③).
      rotY       : 포커스 카드 입체 기울임.
      extraBlur  : 비포커스 dim 경로 피사계심도(③). */
-  function applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, rotY, focusGlow, extraBlur) {
-    /* ① 인트로 리빌 효과 계산 */
-    /* introScale: 0.9→1. overshoot/감속 이징은 placeArm 의 introEase 에서 introAlpha 에 이미 반영됨
-       (reduceMotion 시 easeOutCubic, 그 외 easeOutBack). 여기선 선형 매핑만. */
+  function applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, rotY, focusGlow, extraBlur, rawT) {
+    /* ① 인트로 리빌 효과 계산
+       introAlpha = easeOutBack(overshoot 의도) → scale 에만 사용(착지 통통).
+       rawZT      = easeOutCubic(선형 rawT) → Z·Y 에 사용. easeOutBack 을 Z 에 쓰면
+                    0 을 지나 양수로 튀어(카드 돌출 깜빡임) → overshoot 없는 cubic 으로 차단. */
+    const rawZT      = easeOutCubic(rawT === undefined ? introAlpha : rawT);
+    /* introScale: 0.9→1 (easeOutBack 의도된 overshoot 유지) */
     const introEasedScale = lerp(0.9, 1, introAlpha);
-    /* introY: -28→0, easeOutCubic 적용(introAlpha 는 이미 eased 값으로 들어옴 — 아래 placeArm 에서 처리) */
-    const introY     = reduceMotion ? 0 : lerp(-28, 0, introAlpha);
+    /* introY: -28→0, overshoot 없는 easeOutCubic */
+    const introY     = reduceMotion ? 0 : lerp(-28, 0, rawZT);
     /* introBlur: 데스크톱 4px→0, 모바일·저사양 0 */
     const iBlur      = introBlurEnabled ? lerp(4, 0, introAlpha) : 0;
     /* introAlpha 앞부분 빠르게 — min(ia*1.6, 1) */
     const introOpa   = Math.min(introAlpha * 1.6, 1);
-    /* translateZ: -320→0 (overshoot 없음 — depth 연출용) */
-    const introZ     = reduceMotion ? 0 : lerp(-320, 0, introAlpha);
+    /* translateZ: -320→0, overshoot 없는 easeOutCubic(양수 튐 방지) */
+    const introZ     = reduceMotion ? 0 : lerp(-320, 0, rawZT);
 
     const finalScale = scale * introEasedScale;
     const tilt       = rotY ? ` rotateY(${rotY.toFixed(2)}deg)` : "";
@@ -199,8 +202,8 @@
   }
 
   /* dim 경로용 얇은 래퍼(가독성) — ③ extraBlur(피사계심도) 추가 */
-  function scaleDimAndApply(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, dimBlur) {
-    applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, 0, 0, dimBlur);
+  function scaleDimAndApply(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, dimBlur, rawT) {
+    applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, 0, 0, dimBlur, rawT);
   }
 
   /* ── placeArm: 한 카드 배치 ─────────────────────────────────────
@@ -213,7 +216,8 @@
   const DIM_SCALE   = 0.82;   // 다른 카드 dim 시 축소(원근 분리↑ — 주변이 더 비킴)
   const DIM_BLUR    = 1.8;    // ③ 피사계심도: dim 카드 추가 blur 최대값
 
-  function placeArm(arm, i, introAlpha) {
+  function placeArm(arm, i, introAlpha, rawT) {
+    if (rawT === undefined) rawT = introAlpha;   // 정적 호출(reduceMotion) 시 1
     const c = CENTERS[i];
     if (!c) return;
     const θ = theta0[i] + phase;
@@ -245,7 +249,7 @@
     if (isGhost) {
       scale   *= GHOST_SCALE;
       opacity *= GHOST_OPACITY;
-      applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha);
+      applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, 0, 0, 0, rawT);
       return;
     }
 
@@ -255,7 +259,7 @@
       opacity *= lerp(1, DIM_OPACITY, dimT);
       const bright  = lerp(1, DIM_BRIGHT, dimT);
       const dimBlur = lerp(0, DIM_BLUR, dimT);   // 피사계심도: 포커스 진행도에 비례
-      scaleDimAndApply(arm, x, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi, introAlpha, dimBlur);
+      scaleDimAndApply(arm, x, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi, introAlpha, dimBlur, rawT);
       return;
     }
 
@@ -266,7 +270,7 @@
     /* ③ 포커스 카드 블룸: fa 기반 focusGlow */
     const focusGlow = isFocused ? fa : 0;
 
-    applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, rotY, focusGlow);
+    applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, rotY, focusGlow, 0, rawT);
   }
 
   /* ── 호버/포커스 바인딩 → freeze + 정면화 ───────────────────────── */
@@ -428,7 +432,10 @@
   let last = null, rafId = null, tShow = 0;
 
   function tick(ts) {
-    if (document.documentElement.classList.contains("process-open")) {
+    /* 제작과정/About 오버레이가 열려 있으면 orbit 연산·렌더 스킵(가려진 채 CPU·GPU 낭비 방지).
+       rAF 는 유지해 닫힐 때 즉시 재개, dt 점프 방지 위해 last 갱신 */
+    const root = document.documentElement;
+    if (root.classList.contains("process-open") || root.classList.contains("about-open")) {
       last = ts;
       rafId = requestAnimationFrame(tick);
       return;
@@ -467,7 +474,8 @@
     const introEase = reduceMotion ? easeOutCubic : easeOutBack;
     arms.forEach((a, i) => {
       const t = clamp((tShow - i * INTRO_STAGGER) / INTRO_DUR, 0, 1);
-      placeArm(a, i, introEase(t));
+      /* introAlpha = easeOutBack(스케일 overshoot 의도) / rawT = 선형(Z·Y overshoot 방지) */
+      placeArm(a, i, introEase(t), t);
     });
 
     /* ① 캐릭터 빛과 함께 떠오름: tShow < 1.4 → brightness(0.55→1.0) + translateY(18→0)

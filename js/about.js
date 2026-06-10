@@ -79,13 +79,13 @@
     setTimeout(() => { if (!done) { about.removeEventListener("animationend", onEnd); finishClose(); } }, 420);
   };
 
-  /* 진주 네비 3항목 → 해당 섹션으로 오픈 (4개 인트로 공통) */
-  const ANCHOR = { PROJECTS: "projects", LAB: "marketing", ABOUT: "resume" };
-  document.querySelectorAll(".intro-nav__item").forEach((a) => {
-    const b = a.querySelector("b");
-    const key = b && b.textContent.trim();
-    if (key && ANCHOR[key]) {
-      a.addEventListener("click", (e) => { e.preventDefault(); open(ANCHOR[key]); });
+  /* 진주 네비 3항목 → 해당 섹션으로 오픈 (8개 인트로 공통)
+     카피(PROJECTS/LAB/ABOUT)가 아닌 data-nav 로 매칭 → 텍스트 바꿔도 안 깨짐 */
+  const ANCHOR = { projects: "projects", lab: "marketing", about: "resume" };
+  document.querySelectorAll(".intro-nav__item[data-nav]").forEach((a) => {
+    const anchor = ANCHOR[a.dataset.nav];
+    if (anchor) {
+      a.addEventListener("click", (e) => { e.preventDefault(); open(anchor); });
     }
   });
 
