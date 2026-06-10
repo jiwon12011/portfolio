@@ -1503,8 +1503,8 @@ html.process-open { overflow: hidden; }
   white-space: nowrap; text-align: center; font-size: 1.667cqw; line-height: 1; }
 .gw-bg__lead span { color: #faf1ec; font-weight: 400; }
 .gw-bg__lead b { color: #e8ba4d; font-weight: 700; }
-.gw-bg__lead--1 { top: 10.417cqw; }
-.gw-bg__lead--2 { top: 14.514cqw; }
+.gw-bg__lead--1 { top: 12.92cqw; }
+.gw-bg__lead--2 { top: 17.01cqw; }
 
 /* 라벨 (01 · BACKGROUND) */
 .gw-bg__label { position: absolute; left: 8.333cqw; top: 35.278cqw;
