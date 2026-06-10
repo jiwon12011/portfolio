@@ -13,8 +13,8 @@
 |---------|--------|------|
 | 자린고비 | `#process` | ✅ 완성 (6개 nav: sec1~sec8~sec14 제외) |
 | POZE | `#process-poze` | ✅ 완성 (5개 nav: pz1~pz-s10) |
-| 귀혼 | `#process-gwihon` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
-| 유미의 세포들 | `#process-yumi` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
+| 귀혼 | `#process-gwihon` | ✅ 완성 (7개 nav: gw1~gw7, making-gwihon.js, smooth-process 적용) |
+| 유미의 세포들 | `#process-yumi` | ✅ 완성 (making-yumi.js, smooth-process 적용) |
 | MathHub | `#process-mathhub` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
 | 상상의 문 | `#process-sangsang` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
 | 우리 사이의 음표 | `#process-playlist` | ⏳ 셸만 있음 — 본문 섹션 미추가 |
