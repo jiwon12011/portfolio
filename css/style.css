@@ -87,7 +87,13 @@ body {
   object-fit: cover;
   object-position: center;
 }
+/* ② 패럴럭스 디오라마: orbit.js 가 translate+scale(1.04) 적용 → GPU 레이어 예약.
+   hover:none(모바일·터치) 환경에서는 orbit.js 가 transform 을 건드리지 않으므로
+   will-change 를 데스크톱(hover+fine)에만 부여해 모바일 상시 레이어 점유를 막는다. */
 .scene__photo { z-index: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .scene__photo { will-change: transform; }
+}
 
 /* 캐릭터: 배경과 같은 캔버스의 투명 PNG. orbit 의 중심축이자
    z:10 기준 레이어 — 뒤(z<10) 카드는 가려지고 앞(z>10) 카드는 덮는다. */
@@ -107,6 +113,41 @@ body {
     linear-gradient(180deg, #9fb4c8 0%, #c3c8c9 46%, #e7d4bf 100%);
 }
 .scene__photo:not([style*="display: none"]) ~ .scene__sky { opacity: 0; }
+
+/* ④ 갓레이(God ray) — CSS gradient 오버레이.
+   orbit.js 가 SVG feGaussianBlur 를 이미 stdDeviation 합 12.5로 사용 중 → 추가 금지.
+   대신 position:absolute + radial/linear-gradient + mix-blend-mode:screen 로 대체.
+   인물 머리 위(50% 기준)에서 앰버 방사광이 퍼져나오는 느낌.
+   정적 요소 + 아주 느린 opacity 호흡(@keyframes)만 — GPU 레이어 없음(상시 비용 없음).
+   prefers-reduced-motion: 호흡 애니메이션 제거, 정적 표시 허용(색이라 문제 없음). */
+.hero-godray {
+  position: absolute;
+  /* 인물 머리 위쪽 중앙(x≈50%, y=-10%)에서 아래로 퍼짐 */
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 6; /* orbit-ring-svg(4), particles(5) 위, 카드(20) 아래 */
+  background:
+    /* 앰버 방사광 기둥: CX/1466≈50%, 상단 0% 에서 시작해 55% 지점까지 */
+    radial-gradient(ellipse 55% 72% at 50% -2%,
+      rgba(255,200,100,0.13) 0%,
+      rgba(255,180, 80,0.07) 35%,
+      transparent 65%),
+    /* 좌우로 퍼지는 넓은 앰버 헤이즈 */
+    radial-gradient(ellipse 90% 45% at 50% 8%,
+      rgba(255,210,130,0.06) 0%,
+      transparent 55%);
+  mix-blend-mode: screen;
+  animation: godray-breathe 6s ease-in-out infinite;
+}
+@keyframes godray-breathe {
+  0%,100% { opacity: 0.75; }
+  50%      { opacity: 1.0;  }
+}
+/* prefers-reduced-motion: 호흡 제거, 정적 표시 유지(시각적 색이므로 허용) */
+@media (prefers-reduced-motion: reduce) {
+  .hero-godray { animation: none; opacity: 0.88; }
+}
 
 /* ----------------------------------------------- ORBIT STAGE (디자인 캔버스) */
 .orbit-stage {
@@ -207,9 +248,10 @@ body {
     inset 0 1px 2px rgba(255,255,255,0.72),
     inset 0 -1px 1px rgba(20,40,80,0.07);
   padding: 14px;
-  transform: translateZ(0);
+  /* translateZ(0) 제거: card-arm 이 이미 GPU 레이어를 올림 → .card 이중 승격은 메모리 낭비.
+     orbit.js ③ 포커스 블룸은 filter:drop-shadow 로 card-arm 에서 처리(transform scale 따라감). */
   transition: transform .45s cubic-bezier(.2,.7,.2,1),
-              box-shadow .45s cubic-bezier(.2,.7,.2,1);
+              box-shadow .28s cubic-bezier(.2,.7,.2,1); /* 글로우·scale 성장 동기화(~0.17s 반감기) */
 }
 
 /* 가장자리 빛 라인 — gradient border (mask-composite 링) */
@@ -440,8 +482,8 @@ img.is-empty { color: transparent; }
 .card--about .card__meta { margin-bottom: 6px; }
 .card__lead {
   margin: 12px 0 14px;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 600;
   line-height: 1.38;
   letter-spacing: -0.005em;
   color: var(--ink-strong);
@@ -1206,6 +1248,35 @@ html.process-open { overflow: hidden; }
 .process__content::-webkit-scrollbar { width: 8px; }
 .process__content::-webkit-scrollbar-thumb { background: rgba(90,104,76,0.28); border-radius: 4px; }
 
+/* ===== 제작과정 본문 미완성 패널 "준비중" 안내 카드 =====
+   라이트 글래스 카드라 패널 배경색과 무관하게 가독성 확보 */
+.process__soon {
+  margin: clamp(22px, 3vw, 48px) clamp(16px, 3vw, 44px) clamp(44px, 5vw, 80px);
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(8px, 1vw, 14px); text-align: center;
+  padding: clamp(48px, 6.5vw, 104px) clamp(24px, 4vw, 64px);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 30px 70px -40px rgba(20, 34, 18, 0.4);
+}
+.process__soon-eq { display: inline-flex; align-items: flex-end; gap: 4px; height: 26px; margin-bottom: 4px; }
+.process__soon-eq i { width: 4px; border-radius: 2px; background: linear-gradient(180deg, #a9bd95, #6f8a5a);
+  animation: soonEq 1.05s ease-in-out infinite; }
+.process__soon-eq i:nth-child(1) { animation-delay: 0s; }
+.process__soon-eq i:nth-child(2) { animation-delay: .18s; }
+.process__soon-eq i:nth-child(3) { animation-delay: .36s; }
+.process__soon-eq i:nth-child(4) { animation-delay: .12s; }
+.process__soon-eq i:nth-child(5) { animation-delay: .30s; }
+@keyframes soonEq { 0%, 100% { height: 9px; } 50% { height: 26px; } }
+.process__soon-tag { margin: 0; font-size: clamp(11px, 0.9vw, 13px); font-weight: 800;
+  letter-spacing: 0.18em; color: #7f9462; }
+.process__soon h3 { margin: 0; font-size: clamp(20px, 2vw, 30px); font-weight: 800;
+  letter-spacing: -0.01em; color: #2b3327; }
+.process__soon p { margin: 0; font-size: clamp(13px, 1.05vw, 15.5px); line-height: 1.65; color: #5c6657; }
+@media (prefers-reduced-motion: reduce) { .process__soon-eq i { animation: none; height: 18px; } }
+
 /* ===== 오버스크롤 종료 안내 칩 (process-exit.js 가 동적 생성) =====
    바닥 근접 시 떠오르고, 더 내릴수록 --p(0~1)로 게이지가 차오름 → 임계 도달 시 닫힘 */
 .process__exit {                               /* 본문 끝 + 여백 뒤, 흐름 안에 중앙 배치 */
@@ -1619,7 +1690,7 @@ html.process-open { overflow: hidden; }
 .gw-r2__ring--out { width: 40.903cqw; height: 40.903cqw; border-width: 2px; }
 .gw-r2__ring--mid { width: 35.972cqw; height: 35.972cqw; }
 .gw-r2__disc { width: 29.306cqw; height: 29.306cqw; border-radius: 50%;
-  background: #fbf5ea; border: 1px solid #e8ba4d;
+  background: #1a1410; border: 1px solid #e8ba4d;
   box-shadow: 0 1.2cqw 3cqw -1.4cqw rgba(120,90,40,0.28); }
 .gw-r2__logo { width: 19.097cqw; height: auto; }
 
@@ -2637,14 +2708,17 @@ html.process-open { overflow: hidden; }
   --mk-sub:     #586251;   /* 서브 카피(타이틀 아래 상세) — 가독 위해 진하게 */
 }
 .mk-sec { --pad: clamp(28px, 3.6vw, 56px); background: #fff; border-radius: 0;
-  padding: clamp(44px, 5vw, 84px) var(--pad); }
-.mk-eyebrow { margin: 0 0 22px; font-size: 14px; font-weight: 800;
+  padding: clamp(48px, 5.5vw, 96px) var(--pad); }
+/* 흐름형 텍스트 섹션만 컨테이너화 → 아래 mk-* 텍스트가 cqw 로 비례 스케일(유미식).
+   통이미지(sec7·8·11~13)·보드 오버레이(sec9·10·자체 container)·크레딧(sec14)은 제외 = 원래대로. */
+#sec1, #sec2, #sec3, #sec4, #sec5, #sec6 { container-type: inline-size; }
+.mk-eyebrow { margin: 0 0 2.5cqw; font-size: 1.1cqw; font-weight: 800;
   letter-spacing: 0.08em; color: var(--mk-green); }
-.mk-title { margin: 0; font-size: clamp(30px, 3.4vw, 50px); font-weight: 800;
-  line-height: 1.4; color: var(--mk-ink); letter-spacing: -0.012em; }
+.mk-title { margin: 0; font-size: 4.0cqw; font-weight: 800;
+  line-height: 1.3; color: var(--mk-ink); letter-spacing: -0.012em; }
 .mk-title em { font-style: normal; color: var(--mk-green-d); font-size: 1.18em; font-weight: 800; }
-.mk-sub { margin: 26px 0 0; font-size: clamp(13.5px, 1.05vw, 15.5px);
-  line-height: 1.78; color: var(--mk-sub); }
+.mk-sub { margin: 2.5cqw 0 0; font-size: 1.7cqw;
+  line-height: 1.65; color: var(--mk-sub); }
 
 /* ── SECTION 1 ── */
 .s1-intro { display: flex; align-items: center; justify-content: center;
@@ -2664,13 +2738,13 @@ html.process-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .mk-rise { will-change: auto; } }
 
 /* ── SECTION 2 (DESK RESEARCH) ── */
-.mk-rule { display: block; width: clamp(170px, 20vw, 280px); height: 2px;
-  background: #e4e8e0; border-radius: 2px; margin: 28px 0; }
+.mk-rule { display: block; width: 21.8cqw; height: 2px;
+  background: #e4e8e0; border-radius: 2px; margin: 3.1cqw 0; }
 .mk-title em.mk-keep { font-size: 1em; }   /* 작심삼일 = 크기 유지, 색만 강조 */
 
 .s2-top { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(20px, 3vw, 48px); }
 .s2-text { min-width: 0; }
-.s2-text .mk-sub { margin-top: 22px; }
+.s2-text .mk-sub { margin-top: 2.5cqw; }
 .s2-note { width: clamp(208px, 25vw, 330px); height: auto; flex: none; margin-top: clamp(16px, 2.5vw, 40px);
   filter: drop-shadow(0 14px 24px rgba(20,34,18,0.16)); }
 
@@ -2853,26 +2927,28 @@ html.process-open { overflow: hidden; }
 }
 
 /* ── SECTION 6 (VISUAL CONCEPT) ── */
-.s6-grid { display: grid; grid-template-columns: 0.92fr 1.18fr; gap: clamp(16px, 1.6vw, 26px);
-  margin-top: clamp(28px, 3.5vw, 50px); align-items: start; }
-.s6-right { display: grid; gap: clamp(16px, 1.6vw, 26px); }
+.s6-grid { display: grid; grid-template-columns: 0.68fr 1.5fr; gap: clamp(16px, 1.6vw, 26px);
+  margin-top: clamp(28px, 3.5vw, 50px); align-items: stretch; }
+.s6-right { display: grid; gap: clamp(16px, 1.6vw, 26px); height: 100%; }
+.s6-obj { display: flex; flex-direction: column; }   /* 물고기 박스를 카드 바닥으로(margin-top:auto) 밀어 우측과 높이 정렬 */
 .s6-card { background: #f6f9f2; border: 1px solid #e8ede1; border-radius: 20px; padding: clamp(20px, 1.8vw, 30px); }
 .s6-label { margin: 0 0 14px; font-size: 12px; font-weight: 800; letter-spacing: 0.06em; color: var(--mk-green); }
-.s6-ctitle { margin: 0 0 12px; font-size: clamp(15px, 1.2vw, 18px); font-weight: 800; color: var(--mk-ink); }
+.s6-ctitle { margin: 0 0 12px; font-size: clamp(15px, 1.2vw, 18px); font-weight: 800; color: var(--mk-ink); line-height: 1.3; }
 .s6-desc { margin: 0 0 10px; font-size: clamp(12px, 0.95vw, 13.5px); line-height: 1.6; color: #6b7563; }
 
-.s6-objs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; max-width: 268px; }
+.s6-objs { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25cqw; margin-top: auto; max-width: 21cqw; }
 .s6-objs figure { margin: 0; text-align: center; }
 /* color/mono 박스를 CSS로 통일 — 물고기 이미지(투명)만 안에 contain */
-.s6-objbox { display: grid; place-items: center; aspect-ratio: 1 / 1; padding: 16%;
+.s6-objbox { display: grid; place-items: center; aspect-ratio: 1 / 1; padding: 3%;
   border-radius: 20px; box-shadow: 0 8px 16px rgba(20,34,18,0.12); }
 .s6-objbox img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .s6-objbox--color { background: #abbca2; }
 .s6-objbox--mono  { background: #ffffff; border: 1px solid #e2e7dd; }
 .s6-objs figcaption { margin-top: 10px; font-size: 12px; color: #8b9580; }
 
-.s6-typo__row { display: grid; grid-template-columns: auto 1fr; gap: clamp(16px, 2vw, 34px); align-items: center; }
-.s6-typo__samples { display: grid; gap: 12px; }
+/* 폰트 샘플 ↔ 설명을 2행으로 짝지어 행 정렬(각 샘플이 해당 설명과 세로 중앙 맞춤) */
+.s6-typo__row { display: grid; grid-template-columns: auto 1fr;
+  column-gap: clamp(16px, 2vw, 34px); row-gap: clamp(18px, 2vw, 30px); align-items: center; }
 .s6-typo__a, .s6-typo__b { font-family: 'GangwonEducationModuche', "Pretendard Variable", Pretendard, sans-serif;
   font-size: clamp(22px, 2.2vw, 32px); color: var(--mk-ink); letter-spacing: 0; }
 .s6-typo__a { font-weight: 700; }

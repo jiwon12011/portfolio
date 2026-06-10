@@ -8,11 +8,25 @@
    · 인터랙션:
        - 호버/포커스 카드 → 전체 회전 freeze + 그 카드를 정면(z=1)으로 끌어옴
        - 마우스 좌우 위치 → 회전 속도 steering(바이어스)
+       - 마우스 위치 → 다층 패럴럭스 (tiltX/tiltY 기반, tShow>1.8 이후)
        - 카드별 위상차 sin 으로 ±4px bobbing 부유
    · 깊이 리듬: 앞 크고 또렷(blur 금지), 뒤 작고 흐림(약한 blur 선택).
    · 빛 궤도: 여러 높이의 납작한 타원 링(배럴 케이지) + canvas 파티클.
+   · 파티클: 블루 링 파티클 + 앰버 반딧불(ember). glow 스프라이트 캐싱으로 GC 절감.
    · perf: backdrop-filter 없음, 단일 rAF, transform/opacity/filter 만.
-======================================================================= */
+
+   ── 시그니처 모션 4종 ────────────────────────────────────────────────
+   ① 시네마틱 인트로 리빌: translateZ(-320→0) + introBlur(데스크톱 4px→0) +
+      introY(-28→0 easeOutCubic) + introScale easeOutBack(c=1.4)
+      캐릭터: tShow<1.4 → brightness(0.55→1.0)+translateY(18→0)
+   ② 다층 패럴럭스 디오라마: tShow>1.8 + 비모바일 + 비reduceMotion
+      photo(역방향±8px/절반Y) + character(정방향±18px/0.4Y), 1/scale 보정
+   ③ 포커스 카드 블룸 + 피사계심도:
+      포커스 카드 filter:drop-shadow 2겹 글로우(~22px)
+      비포커스 dim 경로 dimBlur(0→1.8px) 추가
+   ④ 갓레이+앰버 반딧불: CSS 오버레이(별도 .hero-godray 요소) +
+      canvas ember 파티클(sin 깜빡임, 앰버색, glow 스프라이트 캐싱)
+   ====================================================================== */
 (() => {
   const CX  = 733;     // 중심 X (디자인 px, 1466 캔버스 기준)
   const RX  = 525;     // 수평 반경 (세로축 회전 반지름)
@@ -67,14 +81,23 @@
   const lerp  = (a, b, t) => a + (b - a) * t;
   const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
   const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+  /* easeOutBack — 카드 착지 overshoot(진폭 계수 c=1.4, 보수적)
+     reduceMotion 시에는 easeOutCubic 으로 대체 */
+  const easeOutBack  = (t) => { const c = 1.4; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
   const PHI = (1 + Math.sqrt(5)) / 2;     // bobbing 위상 분산(뭉침 방지)
+
+  /* ── prefers-reduced-motion / 모바일 감지 ────────────────────────── */
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isMobile     = matchMedia("(max-width:768px)").matches;
+  const _lowEnd      = (navigator.hardwareConcurrency || 8) <= 4;
 
   /* ── 인터랙션 상태 ───────────────────────────────────────────────
      phase     : 누적 회전각(라디안). dt 기반으로만 증가.
      speedMul  : 0(정지)~1(정속). speedTarget 으로 부드럽게 수렴(freeze).
      steer     : 마우스 좌우 바이어스(-1..1) → 회전 속도 가감.
      focusIdx  : 현재 정면화할 카드 index(-1 없음).
-     focusAmt[]: 카드별 정면화 진행도(0→1) lerp 상태. */
+     focusAmt[]: 카드별 정면화 진행도(0→1) lerp 상태.
+     tiltX/Y   : 마우스 기반 패럴럭스 틸트(-1..1), tiltXSmooth/Y lerp 추종. */
   let phase = 0;
   let bobT = 0;           // 부유(bobbing) 전용 시간 — freeze 시 느려지되 멈추진 않음
   let speedMul = 1;
@@ -84,6 +107,10 @@
   let focusIdx = -1;
   let pendingLeave = 0;   // A→B 전환 글리치 방지용 rAF id
   const focusAmt = CENTERS.map(() => 0);
+
+  /* ② 패럴럭스: 마우스 틸트 상태 */
+  let tiltX = 0, tiltY = 0;           // 목표(-1..1)
+  let tiltXSmooth = 0, tiltYSmooth = 0; // lerp 추종값
 
   /* depth(z) → 기본 시각 매핑 (focus 영향 전).
      앞(z=+1) 크고 또렷, 뒤(z=-1) 작고 흐림 — 깊이 리듬 강화. */
@@ -101,128 +128,184 @@
   const arms = [...document.querySelectorAll(".card-arm")];
   if (arms.length === 0) return;
   arms.forEach((a) => {
-    a.style.willChange = "transform, opacity";  // filter 는 뒤 카드에만 가끔 → 상시 승격 X
+    /* ③ 포커스 글로우: filter 는 포커스/dim 시에만 — 상시 will-change:filter 금지.
+       .card 의 translateZ(0)는 style.css 에서 제거됨 → 이중 레이어 승격 없음. */
+    a.style.willChange = "transform, opacity";
     a.style.left = "0px";
     a.style.top = "0px";
   });
-  const charEl = document.querySelector(".scene__character");
+  const charEl   = document.querySelector(".scene__character");
+  const photoEl  = document.querySelector(".scene__photo");
   if (charEl) charEl.style.zIndex = CHARACTER_Z;
-  const stage = document.querySelector(".orbit-stage");
+  const stage    = document.querySelector(".orbit-stage");
 
-  /* 한 카드 배치
-     · 회전 위치(rotX/rotZ)와 정면 위치(z=1, x=CX) 사이를 focusAmt 로 블렌드.
-     · 비포커스 카드는 다른 카드가 포커스됐을 때 dim(어둡게+뒤로). */
+  /* ── 스케일 값 읽기: orbit-stage 의 CSS var(--scale) → 패럴럭스 이동량 보정 */
+  function getStageScale() {
+    const s = parseFloat(getComputedStyle(stage).getPropertyValue("--scale")) || 1;
+    return s > 0 ? s : 1;
+  }
+
+  /* ① 인트로: 카드별 introBlur 적용 여부 — 데스크톱만, 최대 4px */
+  const introBlurEnabled = !isMobile && !_lowEnd && !reduceMotion;
+
+  /* ── applyArm: transform/opacity/filter 인라인 적용 (공통) ──────── */
+  /* introAlpha : 0(숨김)~1(완전 등장).
+     focusGlow  : 0~1 → 포커스 카드 drop-shadow 블룸 강도(③).
+     rotY       : 포커스 카드 입체 기울임.
+     extraBlur  : 비포커스 dim 경로 피사계심도(③). */
+  function applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, rotY, focusGlow, extraBlur) {
+    /* ① 인트로 리빌 효과 계산 */
+    /* introScale: 0.9→1. overshoot/감속 이징은 placeArm 의 introEase 에서 introAlpha 에 이미 반영됨
+       (reduceMotion 시 easeOutCubic, 그 외 easeOutBack). 여기선 선형 매핑만. */
+    const introEasedScale = lerp(0.9, 1, introAlpha);
+    /* introY: -28→0, easeOutCubic 적용(introAlpha 는 이미 eased 값으로 들어옴 — 아래 placeArm 에서 처리) */
+    const introY     = reduceMotion ? 0 : lerp(-28, 0, introAlpha);
+    /* introBlur: 데스크톱 4px→0, 모바일·저사양 0 */
+    const iBlur      = introBlurEnabled ? lerp(4, 0, introAlpha) : 0;
+    /* introAlpha 앞부분 빠르게 — min(ia*1.6, 1) */
+    const introOpa   = Math.min(introAlpha * 1.6, 1);
+    /* translateZ: -320→0 (overshoot 없음 — depth 연출용) */
+    const introZ     = reduceMotion ? 0 : lerp(-320, 0, introAlpha);
+
+    const finalScale = scale * introEasedScale;
+    const tilt       = rotY ? ` rotateY(${rotY.toFixed(2)}deg)` : "";
+
+    arm.style.transform =
+      `translate(${x.toFixed(1)}px, ${(y + introY).toFixed(1)}px) translate(-50%, -50%) translateZ(${introZ.toFixed(1)}px) scale(${finalScale.toFixed(4)})${tilt}`;
+    arm.style.opacity = (opacity * introOpa).toFixed(4);
+    arm.style.zIndex = zi;
+
+    /* filter 조합: blur(깊이) + brightness(dim) + introBlur + dimBlur(피사계심도) + focusGlow(블룸) */
+    const f = [];
+    const totalBlur = blur + iBlur + (extraBlur || 0);
+    if (totalBlur > 0.05) f.push(`blur(${totalBlur.toFixed(2)}px)`);
+    if (bright < 0.999) f.push(`brightness(${bright.toFixed(3)})`);
+
+    /* ③ 포커스 카드 블룸: drop-shadow 2겹 (파란/흰, 최대 ~22px)
+       transform:scale 에 따라가므로 box-shadow 대신 filter:drop-shadow 사용 */
+    if (focusGlow && focusGlow > 0.02) {
+      const g = focusGlow;
+      /* glow1: 흰 코어 글로우(작고 선명) — 은은하게 */
+      const r1 = (6  * g).toFixed(1);
+      const a1 = (0.42 * g).toFixed(3);
+      /* glow2: 파란 헤일로(넓고 부드럽) — 은은하게 */
+      const r2 = (16 * g).toFixed(1);
+      const a2 = (0.26 * g).toFixed(3);
+      f.push(`drop-shadow(0 0 ${r1}px rgba(230,245,255,${a1}))`);
+      f.push(`drop-shadow(0 4px ${r2}px rgba(100,170,255,${a2}))`);
+    }
+
+    arm.style.filter = f.length ? f.join(" ") : "none";
+  }
+
+  /* dim 경로용 얇은 래퍼(가독성) — ③ extraBlur(피사계심도) 추가 */
+  function scaleDimAndApply(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, dimBlur) {
+    applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, 0, 0, dimBlur);
+  }
+
+  /* ── placeArm: 한 카드 배치 ─────────────────────────────────────
+     회전 위치(rotX/rotZ)와 정면 위치(z=1, x=CX) 사이를 focusAmt 로 블렌드.
+     비포커스 카드는 다른 카드가 포커스됐을 때 dim(어둡게+뒤로). */
   const FRONT_SCALE = 1.2;    // 정면화 카드 최대 스케일(과하지 않게)
   const FRONT_Z     = 30;     // 정면화 카드 zIndex
   const DIM_OPACITY = 0.42;   // 다른 카드 dim 시 곱
   const DIM_BRIGHT  = 0.78;   // 다른 카드 dim 밝기
   const DIM_SCALE   = 0.82;   // 다른 카드 dim 시 축소(원근 분리↑ — 주변이 더 비킴)
-  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const DIM_BLUR    = 1.8;    // ③ 피사계심도: dim 카드 추가 blur 최대값
 
   function placeArm(arm, i, introAlpha) {
     const c = CENTERS[i];
-    if (!c) return;                        // 카드 수 > CENTERS 길이일 때 조용히 무시(런타임 에러 방지)
+    if (!c) return;
     const θ = theta0[i] + phase;
     const s = Math.sin(θ);
     const z = Math.cos(θ);                 // depth: 앞(+1) ~ 뒤(-1)
     const rotX = CX + RX * s;
     const base = depthVis(z);
 
-    /* 고스트 카드: 정면화 없이 뒤쪽 distant 가중치만 적용.
-       focusAmt 는 항상 0 이므로 fa=0 → base 값 그대로 + ghost 보정. */
+    /* 고스트 카드: 정면화 없이 뒤쪽 distant 가중치만 적용 */
     const isGhost = i >= GHOST_START;
 
-    const fa = isGhost ? 0 : easeOutCubic(focusAmt[i]);  // 고스트는 정면화 없음
+    const fa = isGhost ? 0 : easeOutCubic(focusAmt[i]);
     const someFocused = focusIdx !== -1;
     const isFocused   = !isGhost && focusIdx === i;
 
-    /* 넓은 화면에서 카드를 중앙(733, 423.5)으로 살짝 모으기(gather).
-       main.js 가 window.__cardGather 를 설정(1440 이하=1, 1920≈0.92). */
+    /* 넓은 화면에서 카드를 중앙(733, 423.5)으로 살짝 모으기(gather) */
     const G = window.__cardGather || 1;
-    /* 정면화: 위치는 그대로 두고 '제자리에서' 커지게만 한다.
-       (중앙으로 이동시키면 커서가 카드를 들락거려 호버 on/off 가 떨림→지진) */
     const x = 733 + (rotX - 733) * G;
     let   scale   = lerp(base.scale,   FRONT_SCALE, fa);
     let   opacity = lerp(base.opacity, 1.0,         fa);
-    let   blur    = base.blur * (1 - fa);  // 정면화될수록 blur 제거
+    let   blur    = base.blur * (1 - fa);
     let   zi      = isFocused ? FRONT_Z : base.zi;
 
-    const bobAmp = 2 + 2 * ((z + 1) / 2);  // 깊이 비례: 뒤(z=-1) ±2px ~ 앞(z=+1) ±4px (원근 일치)
-    const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp; // bobbing(황금비 분산)
+    const bobAmp = 2 + 2 * ((z + 1) / 2);
+    const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
     const y = 423.5 + (yRaw - 423.5) * G;
 
-    /* 고스트: 일반 뒤 카드보다 한 톤 더 distant — 추가 scale/opacity 감소 */
+    /* 고스트 배치 */
     if (isGhost) {
       scale   *= GHOST_SCALE;
       opacity *= GHOST_OPACITY;
-      // 고스트는 항상 인물 뒤(z<0 구간)이므로 dim 처리 없이 바로 배치
       applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha);
       return;
     }
 
-    /* 다른 카드가 포커스됐고 나는 아니면 dim(어둡게+뒤로) */
+    /* ③ dim 경로: 피사계심도 dimBlur 추가 */
     if (someFocused && !isFocused) {
-      const dimT = easeOutCubic(focusAmt[focusIdx]); // 포커스 카드 진행도만큼 dim
+      const dimT = easeOutCubic(focusAmt[focusIdx]);
       opacity *= lerp(1, DIM_OPACITY, dimT);
-      const bright = lerp(1, DIM_BRIGHT, dimT);
-      scaleDimAndApply(arm, x, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi, introAlpha);
+      const bright  = lerp(1, DIM_BRIGHT, dimT);
+      const dimBlur = lerp(0, DIM_BLUR, dimT);   // 피사계심도: 포커스 진행도에 비례
+      scaleDimAndApply(arm, x, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi, introAlpha, dimBlur);
       return;
     }
 
-    const tiltY = (isFocused && !reduceMotion) ? z * -3.5 * fa : 0;  // 깊이(z) 기반 미세 기울임(은은하게)
-    applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, tiltY);
+    /* fa > 0.92 구간에서 tilt 점감 → 안착 시 잔떨림 제거 */
+    const tiltFade = fa < 0.92 ? fa : lerp(fa, 0, (fa - 0.92) / 0.08);
+    const rotY = (isFocused && !reduceMotion) ? z * -3.5 * tiltFade : 0;
+
+    /* ③ 포커스 카드 블룸: fa 기반 focusGlow */
+    const focusGlow = isFocused ? fa : 0;
+
+    applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, rotY, focusGlow);
   }
 
-  /* transform/opacity/filter 인라인 적용 (공통) */
-  function applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, rotY) {
-    const introScale = lerp(0.9, 1, introAlpha);  // 진입 시 살짝 작게 시작 → 떠오르듯
-    const tilt = rotY ? ` rotateY(${rotY.toFixed(2)}deg)` : "";  // 포커스 카드 입체 기울임
-    arm.style.transform =
-      `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${(scale * introScale).toFixed(4)})${tilt}`;
-    arm.style.opacity = (opacity * introAlpha).toFixed(4);
-    arm.style.zIndex = zi;
-    const f = [];
-    if (blur   > 0.05) f.push(`blur(${blur.toFixed(2)}px)`);
-    if (bright < 0.999) f.push(`brightness(${bright.toFixed(3)})`);
-    arm.style.filter = f.length ? f.join(" ") : "none";
-  }
-  /* dim 경로용 얇은 래퍼(가독성) */
-  function scaleDimAndApply(arm, x, y, scale, opacity, blur, bright, zi, introAlpha) {
-    applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha);
-  }
-
-  /* ── 호버/포커스 바인딩 → freeze + 정면화.
-     고스트 카드(인덱스 9~)는 pointer-events:none + 바인딩 skip. ── */
+  /* ── 호버/포커스 바인딩 → freeze + 정면화 ───────────────────────── */
   arms.forEach((arm, i) => {
-    if (i >= GHOST_START) return;  // 고스트 카드: 바인딩 없음
+    if (i >= GHOST_START) return;
     const enter = () => {
-      cancelAnimationFrame(pendingLeave);     // 다른 카드의 leave 대기 취소(A→B 글리치 차단)
+      cancelAnimationFrame(pendingLeave);
       focusIdx = i; speedTarget = 0;
     };
     const leave = (e) => {
-      // focusout: 포커스가 같은 arm 내부 요소로 이동하면 무시(focus-within)
       if (e && e.type === "focusout" && arm.contains(e.relatedTarget)) return;
       if (focusIdx !== i) return;
-      // 1프레임 대기: 곧바로 다른 카드 enter 가 붙으면 취소되어 깜빡임 없음
       pendingLeave = requestAnimationFrame(() => {
         if (focusIdx === i) { focusIdx = -1; speedTarget = 1; }
       });
     };
     arm.addEventListener("mouseenter", enter);
     arm.addEventListener("mouseleave", leave);
-    arm.addEventListener("focusin", enter);   // 내부 button/a 포커스 → 정면화
+    arm.addEventListener("focusin", enter);
     arm.addEventListener("focusout", leave);
   });
 
-  /* ── 마우스 steering: 화면 중앙 기준 mouseX(-0.5..0.5) → 속도 바이어스 ── */
+  /* ── 마우스 steering + ② 패럴럭스 tilt 수집 ─────────────────────
+     tiltX/tiltY: -1..1 정규화. 패럴럭스는 비모바일·비reduceMotion 만 사용.
+     gyro는 추가하지 않음(접근성·멀미 우려). */
   window.addEventListener("pointermove", (e) => {
     steer = clamp((e.clientX / window.innerWidth - 0.5) * 2, -1, 1);
+    if (!isMobile && !reduceMotion) {
+      tiltX = clamp((e.clientX / window.innerWidth  - 0.5) * 2, -1, 1);
+      tiltY = clamp((e.clientY / window.innerHeight - 0.5) * 2, -1, 1);
+    }
   }, { passive: true });
-  window.addEventListener("pointerleave", () => { steer = 0; }, { passive: true });
+  window.addEventListener("pointerleave", () => {
+    steer = 0; tiltX = 0; tiltY = 0;
+  }, { passive: true });
 
   /* ── 빛 궤도 SVG: 여러 높이의 납작한 타원 링(배럴 케이지) ───────── */
   const svgNS = "http://www.w3.org/2000/svg";
-  const RY = 80;                            // 링 납작함(원근)
+  const RY = 80;
   const svg = document.createElementNS(svgNS, "svg");
   svg.setAttribute("class", "orbit-ring-svg");
   svg.setAttribute("aria-hidden", "true");
@@ -234,6 +317,7 @@
     (cy) => `<ellipse cx="${CX}" cy="${cy}" rx="${RX}" ry="${RY}" fill="none"
       stroke="url(#orbitGrad)" stroke-width="1.4" filter="url(#orbit-glow)"/>`
   ).join("");
+  /* SVG feGaussianBlur: 현재 stdDeviation 합 12.5(3.5+9) — 한계 근접이므로 추가 금지 */
   svg.innerHTML = `
     <defs>
       <filter id="orbit-glow" x="-20%" y="-160%" width="140%" height="420%" color-interpolation-filters="sRGB">
@@ -251,7 +335,9 @@
   `;
   stage.insertBefore(svg, stage.firstChild);
 
-  /* ── 파티클 canvas (링 따라 흐르는 빛) ──────────────────────────── */
+  /* ── 파티클 canvas (링 따라 흐르는 빛 + 앰버 반딧불) ─────────────
+     ④ glow 스프라이트 캐싱: createRadialGradient 를 매 프레임 생성(GC 끊김) →
+        OffscreenCanvas(또는 일반 Canvas)에 미리 렌더링 후 drawImage 로 재사용. */
   const canvas = document.createElement("canvas");
   canvas.className = "orbit-particles";
   canvas.setAttribute("aria-hidden", "true");
@@ -269,65 +355,170 @@
     cH = r.height || 847;
     canvas.width = cW;
     canvas.height = cH;
+    /* 리사이즈 시 glow 스프라이트 재생성 */
+    buildGlowSprites();
   }
 
-  const _lowEnd = (navigator.hardwareConcurrency || 8) <= 4;   // 저사양/태블릿 보호
-  const MAX_P = matchMedia("(max-width:768px)").matches ? 0 : (_lowEnd ? 16 : 30);
-  const parts = Array.from({ length: MAX_P }, (_, i) => ({
-    ring: i % RING_YS.length,
-    phase: Math.PI * 2 * (i / MAX_P),
+  /* ── glow 스프라이트 캐싱 ─────────────────────────────────────────
+     블루 파티클용(GLOW_BLUE)과 앰버 반딧불용(GLOW_AMBER) 각 1개씩 미리 렌더링.
+     크기는 파티클 최대 반경 × 2 (넉넉하게).
+     drawImage 로 재사용 → createRadialGradient GC 제거. */
+  const SPRITE_SIZE = 48; // 오프스크린 스프라이트 크기(픽셀)
+  let glowBlueSprite  = null;
+  let glowAmberSprite = null;
+
+  function makeGlowSprite(r, g, b) {
+    /* 일반 canvas 로 오프스크린 렌더링(OffscreenCanvas 지원 여부 무관) */
+    const oc = document.createElement("canvas");
+    oc.width = oc.height = SPRITE_SIZE;
+    const oc2 = oc.getContext("2d");
+    const half = SPRITE_SIZE / 2;
+    const grad = oc2.createRadialGradient(half, half, 0, half, half, half);
+    grad.addColorStop(0,   `rgba(${r},${g},${b},0.85)`);
+    grad.addColorStop(0.3, `rgba(${r},${g},${b},0.40)`);
+    grad.addColorStop(1,   `rgba(${r},${g},${b},0)`);
+    oc2.fillStyle = grad;
+    oc2.beginPath();
+    oc2.arc(half, half, half, 0, Math.PI * 2);
+    oc2.fill();
+    return oc;
+  }
+
+  function buildGlowSprites() {
+    glowBlueSprite  = makeGlowSprite(127, 174, 229); // 블루 파티클 glow
+    glowAmberSprite = makeGlowSprite(255, 180,  80); // 앰버 반딧불 glow
+  }
+  buildGlowSprites();
+
+  /* ── 파티클 풀 생성 ─────────────────────────────────────────────
+     ④ perf: 캐싱 후 데스크톱 MAX_P 30→60, 저사양 16→24, 모바일 0.
+        앰버 ember 타입 추가: 링 궤도 무시, 자유 부유 + opacity sin 깜빡임.
+        블루/앰버 1:1 혼합(앰버가 노을과 호응). */
+  const MAX_P = isMobile ? 0 : (_lowEnd ? 24 : 60);
+  const BLUE_COUNT  = Math.floor(MAX_P * 0.55); // 블루 파티클 (링 궤도)
+  const EMBER_COUNT = MAX_P - BLUE_COUNT;        // 앰버 반딧불 (자유 부유)
+
+  /* 블루 링 파티클 */
+  const parts = Array.from({ length: BLUE_COUNT }, (_, i) => ({
+    type:  "blue",
+    ring:  i % RING_YS.length,
+    phase: Math.PI * 2 * (i / BLUE_COUNT),
     speed: 0.005 + Math.random() * 0.006,
-    size: 0.9 + Math.random() * 1.6,
+    size:  0.9 + Math.random() * 1.6,
     alpha: 0.45 + Math.random() * 0.5,
+  }));
+
+  /* ④ 앰버 반딧불: 1466×847 캔버스 내 자유 위치 + 부유 벡터 */
+  const emberRange = { x0: 400, x1: 1060, y0: 80, y1: 760 }; // 인물 주변 범위
+  const embers = Array.from({ length: EMBER_COUNT }, (_, i) => ({
+    type:   "ember",
+    x:      emberRange.x0 + Math.random() * (emberRange.x1 - emberRange.x0),
+    y:      emberRange.y0 + Math.random() * (emberRange.y1 - emberRange.y0),
+    vx:     (Math.random() - 0.5) * 0.5, // 느린 드리프트
+    vy:     -0.15 - Math.random() * 0.25, // 위로 천천히 떠오름
+    size:   0.7 + Math.random() * 1.2,
+    /* sin 깜빡임: 각자 다른 주파수/위상 */
+    sinFreq:  0.6 + Math.random() * 0.8,
+    sinPhase: Math.PI * 2 * (i / EMBER_COUNT),
+    alpha:    0.30 + Math.random() * 0.45,
   }));
 
   /* ── rAF (dt 기반 누적) ────────────────────────────────────────
      last : 직전 프레임 ts. tShow : 누적 표시 시간(intro/파티클용). */
   let last = null, rafId = null, tShow = 0;
+
   function tick(ts) {
     if (document.documentElement.classList.contains("process-open")) {
-      last = ts;                            // 모달 열림 중엔 갱신 생략(GPU 절약), dt 베이스만 리셋
+      last = ts;
       rafId = requestAnimationFrame(tick);
       return;
     }
     if (last === null) last = ts;
     let dt = (ts - last) / 1000;
     last = ts;
-    if (dt > 0.1) dt = 0.1;                 // 탭 복귀 등 폭주 방지(추가 안전망)
+    if (dt > 0.1) dt = 0.1;
     tShow += dt;
-    bobT  += dt * lerp(0.2, 1.0, speedMul); // 부유: freeze 시 느려지되 멈추진 않음
+    bobT  += dt * lerp(0.2, 1.0, speedMul);
 
-    /* 속도 수렴(freeze/resume) + steering 평활화(느리게 → 잔떨림 흡수) */
+    /* 속도 수렴 + steering 평활화 */
     speedMul    += (speedTarget - speedMul) * Math.min(dt * 6, 1);
     steerSmooth += (steer - steerSmooth)    * Math.min(dt * 2.2, 1);
 
-    /* 바운디드 스윙: 한 바퀴 안 돌고 ±일정 각도 안에서만 흔들린다 →
-       중간이 비지 않고, 마우스로 밀 수 있어 '내가 제어'하는 느낌.
-       freeze(speedMul→0) 시 현재 위치 고정. */
-    // 두 고조파를 겹쳐 단조로운 좌우왕복 느낌 제거
-    const idle = 0.20 * Math.sin(tShow * 0.28) + 0.045 * Math.sin(tShow * 0.17 + 1.1);
-    const phaseTarget = idle + steerSmooth * 0.42;      // + 마우스로 밀기(차분하게)
+    /* ② 패럴럭스: tiltXSmooth/Y lerp(dt*1.8) 추종 */
+    tiltXSmooth += (tiltX - tiltXSmooth) * Math.min(dt * 1.8, 1);
+    tiltYSmooth += (tiltY - tiltYSmooth) * Math.min(dt * 1.8, 1);
+
+    /* 바운디드 스윙 + steering */
+    const idle = 0.18 * Math.sin(tShow * 0.28)
+               + 0.055 * Math.sin(tShow * 0.17 + 1.1)
+               + 0.028 * Math.sin(tShow * 0.11 + 2.7);
+    const phaseTarget = idle + steerSmooth * 0.42;
     phase += (phaseTarget - phase) * Math.min(dt * 3.5, 1) * speedMul;
 
-    /* 카드별 정면화 진행도 lerp(부드러운 전이) */
+    /* 카드별 정면화 진행도 lerp */
     arms.forEach((_, i) => {
       const target = i === focusIdx ? 1 : 0;
-      focusAmt[i] += (target - focusAmt[i]) * Math.min(dt * 4, 1);  // CSS hover(.45s)와 속도 맞춤(튐 방지)
+      focusAmt[i] += (target - focusAmt[i]) * Math.min(dt * 4, 1);
     });
 
-    /* 인트로: 카드마다 시작 시간을 어긋나게(stagger) + ease → 시네마틱 진입 */
-    const INTRO_STAGGER = 0.06, INTRO_DUR = 0.55;
+    /* ① 인트로: INTRO_STAGGER 0.09(스펙에 맞게), INTRO_DUR 0.65s
+       카드 착지 ~1.3s 기준 — 파티클 점화(PARTICLE_FADE_START)를 그 뒤로 지연. */
+    const INTRO_STAGGER = 0.09, INTRO_DUR = 0.65;
+    const introEase = reduceMotion ? easeOutCubic : easeOutBack;
     arms.forEach((a, i) => {
       const t = clamp((tShow - i * INTRO_STAGGER) / INTRO_DUR, 0, 1);
-      placeArm(a, i, easeOutCubic(t));
+      placeArm(a, i, introEase(t));
     });
 
-    /* 파티클 */
+    /* ① 캐릭터 빛과 함께 떠오름: tShow < 1.4 → brightness(0.55→1.0) + translateY(18→0)
+       tShow > 1.8 이후 charEl transform 소유권을 ② 패럴럭스로 넘김 */
+    if (charEl) {
+      if (tShow < 1.8) {
+        /* 인트로 구간: 0~1.4 s 동안 brightness·translateY, 1.4~1.8 은 유지 */
+        const charT  = clamp(tShow / 1.4, 0, 1);
+        const charP  = easeOutCubic(charT);
+        const bright = lerp(0.55, 1.0, charP);
+        const cY     = reduceMotion ? 0 : lerp(18, 0, charP);
+        charEl.style.filter    = `brightness(${bright.toFixed(3)})`;
+        charEl.style.transform = `translateY(${cY.toFixed(2)}px)`;
+      } else {
+        /* ② 패럴럭스 구간: 소유권 이전. 비모바일·비reduceMotion 만 적용 */
+        /* 인트로 filter 리셋 */
+        charEl.style.filter = "";
+        if (!reduceMotion && !isMobile) {
+          const sc    = getStageScale();
+          /* 캐릭터: 마우스 정방향(±18px), Y는 절반(0.4). 1/scale 보정 */
+          const cParX = (tiltXSmooth * 18) / sc;
+          const cParY = (tiltYSmooth *  7) / sc;  // 18 * 0.4 ≈ 7
+          charEl.style.transform = `translate(${cParX.toFixed(2)}px, ${cParY.toFixed(2)}px)`;
+        } else {
+          charEl.style.transform = "";
+        }
+      }
+    }
+
+    /* ② 패럴럭스: photoEl(배경) — tShow>1.8, 비모바일, 비reduceMotion
+       역방향(±8px), Y는 절반. orbit-stage 가 scale 중이므로 1/scale 보정 */
+    if (photoEl && tShow > 1.8 && !reduceMotion && !isMobile) {
+      const sc    = getStageScale();
+      const pParX = (-tiltXSmooth * 8) / sc;
+      const pParY = (-tiltYSmooth * 4) / sc;  // 8 * 0.5 = 4
+      photoEl.style.transform = `scale(1.04) translate(${pParX.toFixed(2)}px, ${pParY.toFixed(2)}px)`;
+    }
+
+    /* 파티클 렌더링 */
     resizeCanvas();
     ctx.clearRect(0, 0, cW, cH);
     const sx = cW / 1466, sy = cH / 847;
-    const introGlobal = Math.min(tShow / 0.7, 1);
-    const pSpeed = lerp(0.75, 1.0, speedMul); // freeze 시 완전 정지 대신 75% 유지(ambient)
+
+    /* ① 파티클 점화: 카드 착지(마지막 카드 ~0.09*11+0.65≈1.64s)보다 늦게 시작.
+       PARTICLE_FADE_START 을 ~1.3s 로 높여 카드 뒤에서 기다렸다 점화 */
+    const PARTICLE_FADE_START = 1.30;
+    const PARTICLE_FADE_DUR   = 0.60;
+    const introGlobal = Math.min(Math.max(tShow - PARTICLE_FADE_START, 0) / PARTICLE_FADE_DUR, 1);
+    const pSpeed = lerp(0.75, 1.0, speedMul);
+
+    /* ── 블루 링 파티클 (glow 스프라이트 drawImage) ── */
     parts.forEach((p) => {
       p.phase += p.speed * pSpeed;
       const cyR = RING_YS[p.ring];
@@ -335,22 +526,64 @@
       const y = (cyR + RY * Math.cos(p.phase)) * sy;
       const z = Math.cos(p.phase);
       const br = 0.4 + (z + 1) / 2 * 0.6;
-      const r = p.size * (0.7 + (z + 1) / 2 * 0.6) * introGlobal;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, r * 4);
-      g.addColorStop(0, `rgba(210,235,255,${(p.alpha * br * 0.7).toFixed(3)})`);
-      g.addColorStop(1, "rgba(127,174,229,0)");
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(x, y, r * 4, 0, 7); ctx.fill();
-      ctx.fillStyle = `rgba(242,249,255,${(p.alpha * br).toFixed(3)})`;
-      ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+      const r  = p.size * (0.7 + (z + 1) / 2 * 0.6) * introGlobal;
+
+      if (r < 0.1 || !glowBlueSprite) return;
+
+      /* glow 헤일로: 스프라이트 drawImage (GC-free) */
+      const haloR = r * 4;
+      ctx.globalAlpha = p.alpha * br * 0.7 * introGlobal;
+      ctx.drawImage(glowBlueSprite, x - haloR, y - haloR, haloR * 2, haloR * 2);
+
+      /* 코어 점 */
+      ctx.globalAlpha = p.alpha * br * introGlobal;
+      ctx.fillStyle = `rgba(242,249,255,1)`;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
     });
+
+    /* ── ④ 앰버 반딧불 (ember) — 자유 부유 + sin 깜빡임 ── */
+    /* ember x/y 는 design-px 좌표(1466×847 기준). 렌더 시 sx/sy 로 canvas-px 변환.
+       경계 비교도 design-px 단위로 통일. reduceMotion 시 깜빡임 약하게, 모바일 0 */
+    embers.forEach((e) => {
+      /* 위치 업데이트 — design-px 단위 */
+      e.x += e.vx;
+      e.y += e.vy;
+      if (e.x < emberRange.x0 || e.x > emberRange.x1) e.vx *= -1;
+      /* y 경계에서 리셋: 위로 떠오르다 상단 넘으면 하단에서 재시작 */
+      if (e.y < emberRange.y0) {
+        e.y = emberRange.y1;
+        e.x = emberRange.x0 + Math.random() * (emberRange.x1 - emberRange.x0);
+      }
+
+      /* sin 깜빡임: reduceMotion 시 진폭 0.2배 */
+      const sinAmp   = reduceMotion ? 0.15 : 0.55;
+      const flicker  = 1 - sinAmp + sinAmp * Math.sin(tShow * e.sinFreq * 3.14 + e.sinPhase);
+      const finalAlpha = e.alpha * flicker * introGlobal;
+      if (finalAlpha < 0.02 || !glowAmberSprite) return;
+
+      /* canvas-px 변환 */
+      const ex = e.x * sx, ey = e.y * sy;
+      const r = e.size * introGlobal;
+      const haloR = r * 5;
+
+      /* 앰버 glow 헤일로 */
+      ctx.globalAlpha = finalAlpha * 0.6;
+      ctx.drawImage(glowAmberSprite, ex - haloR, ey - haloR, haloR * 2, haloR * 2);
+
+      /* 앰버 코어 */
+      ctx.globalAlpha = finalAlpha;
+      ctx.fillStyle = `rgba(255,210,120,1)`;
+      ctx.beginPath(); ctx.arc(ex, ey, r, 0, Math.PI * 2); ctx.fill();
+    });
+
+    ctx.globalAlpha = 1; // 리셋
 
     rafId = requestAnimationFrame(tick);
   }
 
   function startRAF() {
     if (rafId) return;
-    last = null;                            // 첫 dt 폭주 방지
+    last = null;
     rafId = requestAnimationFrame(tick);
   }
   function stopRAF() {
@@ -359,11 +592,11 @@
 
   /* ── 시작 / reduced-motion ──────────────────────────────────── */
   document.documentElement.classList.add("orbit-active");
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    // 정적 = 이미지#4 배치. 회전은 없지만 호버 정면화는 살짝 살린다.
+  if (reduceMotion) {
+    /* 정적 배치. 호버 정면화는 살짝 살림. 인트로 blur/Y/Z 없음(reduceMotion=true → applyArm 내 처리). */
     arms.forEach((a, i) => placeArm(a, i, 1));
     arms.forEach((arm, i) => {
-      if (i >= GHOST_START) return;  // 고스트: 바인딩 없음
+      if (i >= GHOST_START) return;
       arm.addEventListener("mouseenter", () => { focusAmt[i] = 1; focusIdx = i; redrawStatic(); });
       arm.addEventListener("mouseleave", () => { focusAmt[i] = 0; if (focusIdx === i) focusIdx = -1; redrawStatic(); });
       arm.addEventListener("focusin",  () => { focusAmt[i] = 1; focusIdx = i; redrawStatic(); });
@@ -378,10 +611,9 @@
 
   resizeCanvas();
   window.addEventListener("resize", () => { canvasDirty = true; }, { passive: true });
-  arms.forEach((a, i) => placeArm(a, i, 0)); // 즉시 초기 배치(코너 플래시 방지)
+  arms.forEach((a, i) => placeArm(a, i, 0));
   startRAF();
 
-  /* 탭 숨김 시 rAF 정지, 복귀 시 last 리셋 후 재시작(첫 dt 폭주 방지) */
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stopRAF();
     else startRAF();

@@ -51,6 +51,12 @@
            fetchpriority="high" decoding="async" onerror="this.style.display='none'" />
       <img class="scene__character" src="img/main/main_cha.webp" alt="" aria-hidden="true" decoding="async" />
 
+      <!-- ④ 갓레이: CSS gradient 오버레이 — SVG feGaussianBlur 추가 금지(한계 근접)
+           인물 머리 위(CX≈733, 상단)에서 퍼지는 앰버 빛기둥/방사광.
+           mix-blend-mode:screen + 낮은 알파 → 배경 노출에 부드럽게 올라탐.
+           정적(또는 아주 느린 호흡)이라 perf 비용 최소. -->
+      <div class="hero-godray" aria-hidden="true"></div>
+
       <!-- 1. VISUAL ARCHIVE — 링크 카드 -->
       <div class="card-arm" data-card="visual-archive"
            data-angle="-144" data-radius="498" data-orbit-speed="1"
@@ -877,7 +883,7 @@
               <div class="s1-text">
                 <p class="mk-eyebrow mk-rise">OVERVIEW</p>
                 <h2 class="mk-title mk-rise"><em>돈</em>은 모아야 하는데<br />절약은 왜 이렇게 재미없을까?</h2>
-                <p class="mk-sub mk-rise">작심삼일 가계부,<br />광고만 보게 되는 앱테크,<br />결국 오래 남는 건 없었습니다.</p>
+                <p class="mk-sub mk-rise">작심삼일 가계부, 광고만 보게 되는 앱테크,<br />결국 오래 남는 건 없었습니다.</p>
               </div>
             </div>
             <div class="s1-panel">
@@ -952,7 +958,7 @@
             <!-- PROJECT GOAL -->
             <div class="s3-goal">
               <p class="mk-eyebrow mk-rise">PROJECT GOAL</p>
-              <h2 class="mk-title mk-rise"><em class="mk-keep">자린고비의 목표</em>를 설정했어요</h2>
+              <h2 class="mk-title mk-rise">절약을 계속하게 만드는<br /><em class="mk-keep">자린고비의 목표</em>를 세웠어요</h2>
               <span class="mk-rule mk-rise" aria-hidden="true"></span>
               <p class="mk-sub mk-rise">자린고비는 단순한 가계부 앱이 아니라<br />절약 행동을 게임처럼 지속할 수 있도록 설계한 챌린지형 캐릭터 성장 서비스입니다.</p>
 
@@ -991,7 +997,7 @@
             <!-- PERSONA -->
             <div class="s3-persona">
               <p class="mk-eyebrow mk-rise">PERSONA</p>
-              <h2 class="mk-title mk-rise"><em class="mk-keep">돈아끼고 싶은 유저</em>는 진짜 이렇게 생각해요</h2>
+              <h2 class="mk-title mk-rise"><em class="mk-keep">돈 아끼고 싶은 사람들</em>의<br />진짜 마음을 들여다봤어요</h2>
               <span class="mk-rule mk-rise" aria-hidden="true"></span>
               <p class="mk-sub mk-rise">기존 절약 서비스와 사용자 소비 패턴을 분석하며<br />핵심 타겟의 특징과 니즈를 정리했습니다.</p>
 
@@ -1054,7 +1060,7 @@
           <!-- SECTION 4 · FLOW CHART -->
           <section class="mk-sec" id="sec4">
             <p class="mk-eyebrow mk-rise">FLOW CHART</p>
-            <h2 class="mk-title mk-rise">자린고비 <em class="mk-keep">핵심 경험 흐름</em></h2>
+            <h2 class="mk-title mk-rise">작은 실천이 보상으로 이어지는<br /><em class="mk-keep">핵심 경험 흐름</em>을 설계했어요</h2>
             <span class="mk-rule mk-rise" aria-hidden="true"></span>
             <p class="mk-sub mk-rise">사용자가 챌린지를 선택하고 절약을 실천하면,<br />인증과 보상을 통해 캐릭터가 성장하고 다음 챌린지로 이어지는 선순환 구조입니다.</p>
 
@@ -1094,7 +1100,7 @@
             <div class="s5-top">
               <div class="s5-intro">
                 <p class="mk-eyebrow mk-rise">DEVELOPMENT ISSUE</p>
-                <h2 class="mk-title mk-rise"><em class="mk-keep">문제 해결</em> 및 개선 과정</h2>
+                <h2 class="mk-title mk-rise">서비스가 실제로 작동하도록<br />흐름을 <em class="mk-keep">안정화</em>했어요</h2>
                 <p class="mk-sub mk-rise">실제 서비스 구현 과정에서 발생한 이슈를 분석하고<br />구조 개선 및 사용자 경험 최적화를 진행했습니다.</p>
               </div>
               <img class="s5-hero mk-rise" src="img/jaringobi/process/section5_img1.webp" alt="" loading="lazy" />
@@ -1150,8 +1156,8 @@
                 <p class="s6-desc">전래동화 ‘자린고비’ 속 천장에 매달린<br />조기 이야기에서 영감을 받아<br />브랜드 오브젝트를 제작했습니다.</p>
                 <p class="s6-desc">작은 절약을 유쾌하게 이어가는<br />서비스의 정체성을 담고 있습니다.</p>
                 <div class="s6-objs">
-                  <figure><span class="s6-objbox s6-objbox--color"><img src="img/jaringobi/process/s6_fish.webp" alt="" loading="lazy" /></span><figcaption>color</figcaption></figure>
-                  <figure><span class="s6-objbox s6-objbox--mono"><img src="img/jaringobi/process/s6_fish.webp" alt="" loading="lazy" /></span><figcaption>mono</figcaption></figure>
+                  <figure><span class="s6-objbox s6-objbox--color"><img src="img/jaringobi/process/s6_fish.webp" alt="브랜드 오브젝트 컬러 버전" loading="lazy" /></span></figure>
+                  <figure><span class="s6-objbox s6-objbox--mono"><img src="img/jaringobi/process/s6_fish.webp" alt="브랜드 오브젝트 모노 버전" loading="lazy" /></span></figure>
                 </div>
               </article>
 
@@ -1159,11 +1165,10 @@
                 <article class="s6-card s6-typo mk-rise">
                   <p class="s6-label">TYPO</p>
                   <div class="s6-typo__row">
-                    <div class="s6-typo__samples">
-                      <span class="s6-typo__a">GangwonEduAll</span>
-                      <span class="s6-typo__b">GangwonEduAll</span>
-                    </div>
-                    <p class="s6-typo__desc">손글씨 느낌의 둥근 서체를 사용해<br />생활형 절약 서비스의 친근한 분위기를 표현했습니다.<br /><br />타이틀과 주요 인터랙션 영역에 활용하여<br />자린고비만의 유쾌한 브랜드 감성을 강조했습니다.</p>
+                    <span class="s6-typo__a">GangwonEduAll</span>
+                    <p class="s6-typo__desc">손글씨 느낌의 둥근 서체를 사용해<br />생활형 절약 서비스의 친근한 분위기를 표현했습니다.</p>
+                    <span class="s6-typo__b">GangwonEduAll</span>
+                    <p class="s6-typo__desc">타이틀과 주요 인터랙션 영역에 활용하여<br />자린고비만의 유쾌한 브랜드 감성을 강조했습니다.</p>
                   </div>
                 </article>
                 <article class="s6-card s6-color mk-rise">
@@ -2454,7 +2459,7 @@
               <span class="gw-r2__ring gw-r2__ring--out"></span>
               <span class="gw-r2__ring gw-r2__ring--mid"></span>
               <span class="gw-r2__disc"></span>
-              <img class="gw-r2__logo" src="img/hon/process/s2_logo.webp" alt="귀혼" />
+              <img class="gw-r2__logo" src="img/hon/process/s2_logo.webp?v=2" alt="귀혼" />
             </div>
 
             <!-- 4 원형 이미지 -->
@@ -3255,7 +3260,12 @@
             <video class="process__hero-media" src="img/mathhub/mathhub_process.mp4"
                    muted loop autoplay playsinline preload="metadata"></video>
           </div>
-          <!-- TODO: 본문 카드/섹션 추가 -->
+          <div class="process__soon">
+            <span class="process__soon-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <p class="process__soon-tag">COMING SOON</p>
+            <h3>제작 과정을 준비 중입니다</h3>
+            <p>이 프로젝트의 메이킹 스토리는 곧 공개됩니다.</p>
+          </div>
         </section>
       </div>
     </div>
@@ -3303,7 +3313,12 @@
             <video class="process__hero-media" src="img/sangsangdoor/sangsangdoor_process.mp4"
                    muted loop autoplay playsinline preload="metadata"></video>
           </div>
-          <!-- TODO: 본문 카드/섹션 추가 -->
+          <div class="process__soon">
+            <span class="process__soon-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <p class="process__soon-tag">COMING SOON</p>
+            <h3>제작 과정을 준비 중입니다</h3>
+            <p>이 프로젝트의 메이킹 스토리는 곧 공개됩니다.</p>
+          </div>
         </section>
       </div>
     </div>
@@ -3354,7 +3369,12 @@
             <video class="process__hero-media" src="img/pledis/pledis_process.mp4"
                    muted loop autoplay playsinline preload="metadata"></video>
           </div>
-          <!-- TODO: 본문 카드/섹션 추가 -->
+          <div class="process__soon">
+            <span class="process__soon-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <p class="process__soon-tag">COMING SOON</p>
+            <h3>제작 과정을 준비 중입니다</h3>
+            <p>이 프로젝트의 메이킹 스토리는 곧 공개됩니다.</p>
+          </div>
         </section>
       </div>
     </div>
@@ -3403,7 +3423,12 @@
             <video class="process__hero-media" src="img/playlist_game/playlist_game_process.mp4"
                    muted loop autoplay playsinline preload="metadata"></video>
           </div>
-          <!-- TODO: 본문 카드/섹션 추가 -->
+          <div class="process__soon">
+            <span class="process__soon-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            <p class="process__soon-tag">COMING SOON</p>
+            <h3>제작 과정을 준비 중입니다</h3>
+            <p>이 프로젝트의 메이킹 스토리는 곧 공개됩니다.</p>
+          </div>
         </section>
       </div>
     </div>
