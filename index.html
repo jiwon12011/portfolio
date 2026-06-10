@@ -2833,21 +2833,10 @@
       </aside>
       <div class="process__content">
         <section class="process__sec" id="ymsec-01">
-          <!-- 감정 날씨 히어로 (글래스) -->
-          <div class="process__hero ym-weather">
-            <div class="ym-weather__left">
-              <p class="ym-weather__eyebrow">오늘의 감정 체크! ♥</p>
-              <h2 class="ym-weather__title">오늘의<br><b>감정</b> 날씨</h2>
-              <p class="ym-weather__sub">유미의 하루는 다양한 감정으로<br>채워집니다.</p>
-              <p class="ym-weather__foot">지금, 당신의 감정은 어떤가요?</p>
-            </div>
-            <div class="ym-weather__cards">
-              <article class="ym-emo ym-emo--love"><span class="ym-emo__ic">🩷</span><div class="ym-emo__tx"><h4>LOVE</h4><p>설렘 가득한 하루</p></div><span class="ym-emo__pct">♥ 92%</span></article>
-              <article class="ym-emo ym-emo--passion"><span class="ym-emo__ic">🔥</span><div class="ym-emo__tx"><h4>PASSION</h4><p>열정이 타오르는 중</p></div><span class="ym-emo__pct">♥ 88%</span></article>
-              <article class="ym-emo ym-emo--anxiety"><span class="ym-emo__ic">💧</span><div class="ym-emo__tx"><h4>ANXIETY</h4><p>적당히 파이팅 중</p></div><span class="ym-emo__pct">♥ 72%</span></article>
-              <article class="ym-emo ym-emo--courage"><span class="ym-emo__ic">💪</span><div class="ym-emo__tx"><h4>COURAGE</h4><p>용기를 내보는 순간</p></div><span class="ym-emo__pct">♥ 76%</span></article>
-              <article class="ym-emo ym-emo--logic"><span class="ym-emo__ic">🧠</span><div class="ym-emo__tx"><h4>LOGIC</h4><p>차분히 생각 정리</p></div><span class="ym-emo__pct">♥ 85%</span></article>
-            </div>
+          <!-- 히어로: safe 영상(상하 안전구역 확보 → 중앙 정렬) -->
+          <div class="process__hero">
+            <video class="process__hero-media" src="img/yumi_cell/yumicell_process_safe.mp4"
+                   muted loop autoplay playsinline preload="metadata"></video>
           </div>
 
           <!-- 하단 4 카드 -->
@@ -2859,33 +2848,46 @@
                 <dt>Role</dt><dd>Planning, Design</dd>
               </dl>
               <p class="pcard__tool-label">Tool</p>
-              <div class="pcard__tools">
-                <img src="img/hon/process/tool_figma.webp" alt="Figma" />
-                <img src="img/hon/process/tool_photoshop.webp" alt="Photoshop" />
-                <img src="img/hon/process/tool_gsap.webp" alt="GSAP" />
-                <img src="img/jaringobi/process/CLAUDE.webp" alt="Claude" />
+              <div class="pcard__tools pcard__tools--yumi">
+                <img src="img/yumi_cell/tool_figma.webp" alt="Figma" />
+                <img src="img/yumi_cell/tool_openai.webp" alt="ChatGPT" />
+                <img src="img/yumi_cell/tool_claude.webp" alt="Claude" />
+                <img src="img/yumi_cell/tool_codex.webp" alt="Codex" />
+                <img src="img/yumi_cell/tool_fi.webp" alt="Firebase" />
               </div>
             </article>
 
-            <article class="pcard pcard--note ym-card--visual">
-              <span class="ptag">VISUAL CONCEPT</span>
-              <h3>감정을 색으로</h3>
-              <p>감정을 색과 움직임으로 전달하는 비주얼 컨셉</p>
-              <span class="ym-card__emoji" aria-hidden="true">🎨</span>
+            <!-- TODO: href에 실제 링크 연결 -->
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="유미의 세포들 웹사이트 바로가기"></a>
+              <span class="ptag">GO TO WEB</span>
+              <h3>웹사이트 바로가기</h3>
+              <p>유미의 모든 순간 — 감정 웹 경험</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/yumi_cell/ym_web.webp" alt="유미의 세포들 웹사이트" />
             </article>
 
-            <article class="pcard pcard--note ym-card--inter">
-              <span class="ptag">INTERACTION</span>
-              <h3>스크롤로 체험</h3>
-              <p>Layer Parallax · GSAP · ScrollTrigger 인터랙션 구현</p>
-              <span class="ym-card__emoji" aria-hidden="true">🪄</span>
+            <!-- TODO: href에 실제 관리자 링크 연결 -->
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="유미의 세포들 관리자 페이지"></a>
+              <span class="ptag">ADMIN SYSTEM</span>
+              <h3>관리자 페이지</h3>
+              <p>콘텐츠·통계를 관리하는 운영 시스템</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/yumi_cell/ym_admin.webp" alt="유미의 세포들 관리자 대시보드" />
             </article>
 
-            <article class="pcard pcard--note ym-card--process">
-              <span class="ptag">DESIGN PROCESS</span>
+            <!-- TODO: href에 실제 Notion 링크 연결 -->
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="유미의 세포들 작업 기록 (Notion)"></a>
+              <span class="ptag">PROCESS</span>
               <h3>작업 기록 정리</h3>
-              <p>기획부터 구현까지 과정의 프로젝트 기록</p>
-              <span class="ym-card__emoji" aria-hidden="true">📝</span>
+              <p>기획부터 구현까지의 기록</p>
+              <div class="pcard__shotwrap">
+                <span class="pcard__notion" aria-hidden="true"><img src="img/jaringobi/notion_icon.png" alt="" /></span>
+                <img class="pcard__shot" src="img/yumi_cell/ym_notion.webp" alt="Notion 작업 기록" />
+              </div>
             </article>
           </div>
         </section>

@@ -1951,6 +1951,13 @@ html.process-open { overflow: hidden; }
   background: rgba(255,255,255,0.5); border-color: rgba(220,180,210,0.5); color: #8a5a78; }
 .process--yumi .pcard:hover .pcard__go { background: rgba(240,150,190,0.5); color: #fff; }
 .process--yumi .ptag { background: rgba(255,221,236,0.92); color: #c43d7e; }
+/* 히어로 safe 영상 — 상하 안전구역 확보됨 → 정중앙 정렬 */
+.process--yumi .process__hero-media { object-position: center center; }
+/* 툴 아이콘 — 자체 라운드 앱 아이콘이라 흰 배경/패딩 제거하고 깔끔하게 */
+.process--yumi .pcard__tools--yumi { gap: 8px; }
+.process--yumi .pcard__tools--yumi img { width: 34px; height: 34px; border-radius: 9px;
+  background: none; padding: 0; object-fit: contain;
+  box-shadow: 0 3px 9px -2px rgba(90,60,110,0.28); }
 
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
