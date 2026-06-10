@@ -1958,10 +1958,24 @@ html.process-open { overflow: hidden; }
 .process--yumi .pcard__tools--yumi img { width: 34px; height: 34px; border-radius: 9px;
   background: none; padding: 0; object-fit: contain;
   box-shadow: 0 3px 9px -2px rgba(90,60,110,0.28); }
-/* 카드 코너 이모지 스티커(작게, 잘 어울리게) */
-.process--yumi .ym-sticker { position: absolute; right: 11px; bottom: 11px; z-index: 4;
-  font-size: clamp(19px,1.6vw,27px); line-height: 1; pointer-events: none;
+/* 타이틀 오른쪽 이모지 스티커 + 후버 또잉 */
+.process--yumi .ym-titlerow { display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin: 11px 0 0; }
+.process--yumi .ym-titlerow h3 { margin: 0; }
+.process--yumi .ym-sticker { flex: none; font-size: clamp(20px,1.65vw,28px); line-height: 1;
+  pointer-events: none; transform-origin: 50% 80%;
   filter: drop-shadow(0 4px 9px rgba(150,110,170,0.4)); }
+.process--yumi .pcard:hover .ym-sticker { animation: ymBoing 0.55s cubic-bezier(.28,1.4,.5,1) both; }
+@keyframes ymBoing {
+  0%   { transform: scale(1) rotate(0); }
+  28%  { transform: scale(1.28) rotate(-9deg); }
+  52%  { transform: scale(0.9) rotate(6deg); }
+  74%  { transform: scale(1.1) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .process--yumi .pcard:hover .ym-sticker { animation: none; }
+}
 /* 노션 원 — 유미 테마 핑크로 */
 .process--yumi .pcard__notion { background: #f3a9ca; }
 
