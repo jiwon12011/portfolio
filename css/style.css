@@ -1240,7 +1240,7 @@ html.process-open { overflow: hidden; }
   .process__exit-arrow svg { animation: none; }
 }
 /* 01 섹션이 첫 화면 높이를 꽉 채움(다음 섹션이 안 비치게): 히어로=남는 공간, 카드=고정 */
-#psec-01, #pzsec-01, #gwsec-01 { height: 100%; flex: none; display: flex; flex-direction: column; }
+#psec-01, #pzsec-01, #gwsec-01, #ymsec-01 { height: 100%; flex: none; display: flex; flex-direction: column; }
 
 .process__hero { flex: 1 1 auto; min-height: 0; border-radius: 22px; overflow: hidden;
   background: #d3ddd0; box-shadow: 0 18px 40px -22px rgba(20,34,18,0.5); }
@@ -1888,6 +1888,113 @@ html.process-open { overflow: hidden; }
 /* ── SECTION 9 · OUTRO (풀블리드 마무리 이미지, 16:9) ── */
 .gw-r9 { aspect-ratio: 16 / 9; background: #14110d; }
 .gw-r9__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ===================================================================
+   유미의 세포들 모달 — 파스텔 글래스(라벤더/핑크), 감정 날씨 오버뷰
+   레퍼런스의 쨍한 색 대신 반투명 유리 느낌으로.
+==================================================================== */
+.process--yumi .process__panel {
+  background: linear-gradient(158deg, rgba(233,224,247,0.5), rgba(247,228,240,0.4));
+  border-color: rgba(255,255,255,0.55);
+}
+.process--yumi .process__nav {
+  background: linear-gradient(160deg, rgba(240,233,250,0.58), rgba(248,235,243,0.44));
+  border-color: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.process--yumi .process__hero { background: #e9d9f0; }
+.process--yumi .process__back { color: #5a4f73; }
+.process--yumi .process__back:hover { color: #2f2747; }
+.process--yumi .process__label { color: #927fae; }
+.process--yumi .process__eq i { background: linear-gradient(180deg, #f8b6d6, #ef8fc0); }
+.process--yumi .process__tracks b { color: #a895c2; }
+.process--yumi .process__tracks h4 { color: #4a4163; }
+.process--yumi .process__tracks i { color: #9d8fba; }
+.process--yumi .process__tplay { fill: #c3aede; }
+.process--yumi .process__tracks a:hover {
+  background: rgba(245,210,228,0.4); border-color: rgba(240,170,200,0.4); }
+/* active = 핑크 유리 패널 + 코랄 글자 */
+.process--yumi .process__tracks .is-active a {
+  background: linear-gradient(150deg, rgba(255,225,236,0.92), rgba(252,210,226,0.86));
+  border-color: rgba(255,255,255,0.7);
+  box-shadow: 0 12px 26px -14px rgba(180,90,140,0.5), inset 0 1px 1px rgba(255,255,255,0.8);
+}
+.process--yumi .process__tracks .is-active b { color: #e7568f; }
+.process--yumi .process__tracks .is-active h4 { color: #3e3357; }
+.process--yumi .process__tracks .is-active i { color: rgba(62,51,87,0.6); }
+.process--yumi .process__tracks .is-active .process__tplay { fill: #e7568f; }
+.process--yumi .process__cta {
+  color: #e7568f; background: rgba(255,255,255,0.35); border-color: rgba(240,150,190,0.55); }
+.process--yumi .process__cta:hover {
+  background: rgba(248,182,214,0.35); border-color: rgba(240,150,190,0.9); }
+.process--yumi .process__now {
+  background: linear-gradient(160deg, rgba(245,235,250,0.62), rgba(250,236,244,0.48));
+  border-color: rgba(255,255,255,0.6); }
+.process--yumi .process__now-art { object-fit: cover; }
+.process--yumi .process__now-meta span { color: #9d8fba; }
+.process--yumi .process__now-meta strong { color: #4a4163; }
+.process--yumi .process__now-ctrl button { color: #8a7ba6; }
+.process--yumi .process__now-ctrl button:hover { color: #e7568f; }
+.process--yumi .pcard {
+  background: linear-gradient(160deg, rgba(255,255,255,0.6), rgba(248,240,250,0.42));
+  border-color: rgba(255,255,255,0.7); }
+.process--yumi .pcard:hover {
+  background: linear-gradient(160deg, rgba(255,238,246,0.72), rgba(245,222,240,0.56));
+  border-color: rgba(243,170,205,0.55); }
+.process--yumi .pcard h3 { color: #3e3357; }
+.process--yumi .pcard p { color: #6b6184; }
+.process--yumi .pcard--info dt { color: #9d8fba; }
+.process--yumi .pcard--info dd { color: #463c60; }
+.process--yumi .pcard--info dd i { color: #9d8fba; }
+.process--yumi .pcard__tool-label { color: #9d8fba; }
+.process--yumi .pcard__go {
+  background: rgba(255,255,255,0.5); border-color: rgba(220,180,210,0.5); color: #8a5a78; }
+.process--yumi .pcard:hover .pcard__go { background: rgba(240,150,190,0.5); color: #fff; }
+.process--yumi .ptag { background: rgba(255,221,236,0.92); color: #c43d7e; }
+
+/* ── 감정 날씨 히어로 (글래스) ── */
+.ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
+  padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
+  background: linear-gradient(165deg, #cfe2ff 0%, #e6d6f2 46%, #ffd7e6 100%); }
+.ym-weather::before { content: ""; position: absolute; right: -8%; top: -30%;
+  width: 55%; height: 90%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%); }
+.ym-weather__left { position: relative; flex: 0 0 36%; display: flex; flex-direction: column;
+  justify-content: center; min-width: 0; }
+.ym-weather__eyebrow { margin: 0; color: #ec76b0; font-size: clamp(11px,0.85vw,13px); font-weight: 700; }
+.ym-weather__title { margin: 0.35em 0 0.5em; font-size: clamp(26px,2.7vw,44px); font-weight: 800;
+  line-height: 1.14; color: #3a3354; }
+.ym-weather__title b { color: #ef74a8; }
+.ym-weather__sub { margin: 0; color: #6b6184; font-size: clamp(12px,0.95vw,14.5px); line-height: 1.6; }
+.ym-weather__foot { margin: clamp(14px,1.4vw,26px) 0 0; color: #a07fc0;
+  font-size: clamp(11px,0.85vw,13px); font-weight: 600; }
+.ym-weather__cards { position: relative; flex: 1; display: grid;
+  grid-template-columns: repeat(6, 1fr); gap: clamp(7px,0.7vw,12px); align-content: center; }
+.ym-emo { display: flex; flex-direction: column; gap: 5px; padding: clamp(9px,0.85vw,15px);
+  border-radius: 15px; background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px);
+  border: 1px solid rgba(255,255,255,0.7);
+  box-shadow: 0 12px 26px -16px rgba(120,90,160,0.45), inset 0 1px 1px rgba(255,255,255,0.7); }
+.ym-emo--love    { grid-column: 1 / 3; }
+.ym-emo--passion { grid-column: 3 / 5; }
+.ym-emo--anxiety { grid-column: 5 / 7; }
+.ym-emo--courage { grid-column: 1 / 4; }
+.ym-emo--logic   { grid-column: 4 / 7; }
+.ym-emo__ic { font-size: clamp(18px,1.5vw,25px); line-height: 1; }
+.ym-emo__tx h4 { margin: 0; font-size: clamp(11px,0.85vw,13px); font-weight: 800; letter-spacing: 0.04em; color: #3e3357; }
+.ym-emo__tx p { margin: 1px 0 0; font-size: clamp(9.5px,0.72vw,11px); color: #7a6f93; line-height: 1.3; }
+.ym-emo__pct { margin-top: auto; font-size: clamp(11px,0.85vw,13px); font-weight: 800; }
+.ym-emo--love .ym-emo__pct    { color: #ef74a8; }
+.ym-emo--passion .ym-emo__pct { color: #f59055; }
+.ym-emo--anxiety .ym-emo__pct { color: #6aa9e0; }
+.ym-emo--courage .ym-emo__pct { color: #62c08a; }
+.ym-emo--logic .ym-emo__pct   { color: #8e7fe0; }
+
+/* ── 하단 노트형 카드(이미지 없이 태그+제목+설명+이모지) ── */
+.process--yumi .pcard--note { overflow: hidden; }
+.process--yumi .ym-card__emoji { margin-top: auto; align-self: flex-end;
+  font-size: clamp(30px,3vw,52px); line-height: 1; opacity: 0.9;
+  filter: drop-shadow(0 6px 12px rgba(150,110,170,0.3)); }
 
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
