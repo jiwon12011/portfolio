@@ -16,7 +16,7 @@
 (() => {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const SELECTORS = ["#process", "#process-poze", "#process-gwihon"];
+  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi"];
   const EASE = 0.14;            // 0~1, 클수록 더 즉각적(작을수록 더 미끄럽게)
 
   window.__processLenis = window.__processLenis || {};

@@ -1201,7 +1201,8 @@ html.process-open { overflow: hidden; }
    스무딩해 이중 처리로 엄청 느려진다(ID 셀렉터로 .process__content 의 smooth 를 덮어씀). */
 #process .process__content,
 #process-poze .process__content,
-#process-gwihon .process__content { scroll-behavior: auto; }
+#process-gwihon .process__content,
+#process-yumi .process__content { scroll-behavior: auto; }
 .process__content::-webkit-scrollbar { width: 8px; }
 .process__content::-webkit-scrollbar-thumb { background: rgba(90,104,76,0.28); border-radius: 4px; }
 
