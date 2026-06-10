@@ -1958,6 +1958,12 @@ html.process-open { overflow: hidden; }
 .process--yumi .pcard__tools--yumi img { width: 34px; height: 34px; border-radius: 9px;
   background: none; padding: 0; object-fit: contain;
   box-shadow: 0 3px 9px -2px rgba(90,60,110,0.28); }
+/* 카드 코너 이모지 스티커(작게, 잘 어울리게) */
+.process--yumi .ym-sticker { position: absolute; right: 11px; bottom: 11px; z-index: 4;
+  font-size: clamp(19px,1.6vw,27px); line-height: 1; pointer-events: none;
+  filter: drop-shadow(0 4px 9px rgba(150,110,170,0.4)); }
+/* 노션 원 — 유미 테마 핑크로 */
+.process--yumi .pcard__notion { background: #f3a9ca; }
 
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
