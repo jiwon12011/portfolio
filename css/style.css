@@ -1179,9 +1179,11 @@ html.process-open { overflow: hidden; }
   padding-right: 6px; scroll-behavior: smooth; }
   /* scroll-behavior:smooth = 네비 클릭 scrollTo 부드러운 이동.
      휠 스크롤엔 영향 없고(scrollTo/앵커만), 섹션8은 네이티브 sticky라 pin 충돌도 없음. */
-/* 귀혼 모달은 부드러운 스크롤을 JS(smooth-gwihon)로 직접 처리하므로 네이티브
-   smooth 를 꺼야 한다. 안 끄면 매 프레임 scrollTop 설정을 브라우저가 또 스무딩해
-   이중 처리로 엄청 느려진다(ID 셀렉터로 .process__content 의 smooth 를 덮어씀). */
+/* 자린고비·POZE·귀혼 모달은 부드러운 스크롤을 JS(smooth-process)로 직접 처리하므로
+   네이티브 smooth 를 꺼야 한다. 안 끄면 매 프레임 scrollTop 설정을 브라우저가 또
+   스무딩해 이중 처리로 엄청 느려진다(ID 셀렉터로 .process__content 의 smooth 를 덮어씀). */
+#process .process__content,
+#process-poze .process__content,
 #process-gwihon .process__content { scroll-behavior: auto; }
 .process__content::-webkit-scrollbar { width: 8px; }
 .process__content::-webkit-scrollbar-thumb { background: rgba(90,104,76,0.28); border-radius: 4px; }
