@@ -1229,7 +1229,7 @@ html.process-open { overflow: hidden; }
   .process__exit-arrow svg { animation: none; }
 }
 /* 01 섹션이 첫 화면 높이를 꽉 채움(다음 섹션이 안 비치게): 히어로=남는 공간, 카드=고정 */
-#psec-01, #pzsec-01 { height: 100%; flex: none; display: flex; flex-direction: column; }
+#psec-01, #pzsec-01, #gwsec-01 { height: 100%; flex: none; display: flex; flex-direction: column; }
 
 .process__hero { flex: 1 1 auto; min-height: 0; border-radius: 22px; overflow: hidden;
   background: #d3ddd0; box-shadow: 0 18px 40px -22px rgba(20,34,18,0.5); }
@@ -1475,19 +1475,16 @@ html.process-open { overflow: hidden; }
 /* 노션 배지 — 앰버 */
 .process--gwihon .pcard__notion { background: #e6b46a; }
 
-/* GO TO WEB 카드 — 앰버 하이라이트(채워진 골드) */
-.process--gwihon .pcard--feature {
-  background: linear-gradient(158deg, rgba(226,176,98,0.94), rgba(200,142,66,0.88));
-  border-color: rgba(255,232,190,0.5); }
+/* GO TO WEB 카드 — 평소엔 다른 카드와 같은 글래스, 호버 시에만 앰버 글래스(투명도 유지) */
 .process--gwihon .pcard--feature:hover {
-  background: linear-gradient(158deg, rgba(234,186,108,0.97), rgba(208,150,72,0.93));
-  border-color: rgba(255,240,205,0.7); }
-.process--gwihon .pcard--feature h3 { color: #3a2a12; }
-.process--gwihon .pcard--feature p { color: #6a4f24; }
-.process--gwihon .pcard--feature .ptag { background: rgba(58,42,18,0.9); color: #f3d9a0; }
-.process--gwihon .pcard--feature .pcard__go {
-  background: rgba(58,42,18,0.22); border-color: rgba(58,42,18,0.4); color: #4a3414; }
-.process--gwihon .pcard--feature:hover .pcard__go { background: rgba(58,42,18,0.55); color: #fff; }
+  background: linear-gradient(158deg, rgba(232,180,100,0.42), rgba(202,144,68,0.28));
+  border-color: rgba(255,226,176,0.55);
+  box-shadow: 0 20px 40px -22px rgba(60,36,10,0.5), 0 0 18px rgba(232,170,90,0.22), inset 0 1px 1px rgba(255,255,255,0.5); }
+.process--gwihon .pcard--feature:hover h3 { color: #fff6e8; }
+.process--gwihon .pcard--feature:hover p { color: #f1ddc1; }
+.process--gwihon .pcard--feature:hover .ptag { background: rgba(46,32,14,0.7); color: #f7e2ab; }
+.process--gwihon .pcard--feature:hover .pcard__go {
+  background: rgba(46,32,14,0.42); border-color: rgba(255,226,176,0.5); color: #fff; }
 
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
