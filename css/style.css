@@ -1803,6 +1803,58 @@ html.process-open { overflow: hidden; }
 .gw-r6__rdesc { position: absolute; left: 53.403cqw; top: 1.736cqw; width: 33.611cqw; margin: 0;
   color: #988f86; font-size: 1.389cqw; font-weight: 400; line-height: 1.5; }
 
+/* ── SECTION 7 · DEVELOPMENT (다크, 문제→해결 5행, 디자인 1440×1328 → cqw=px/14.4) ── */
+.gw-r7 { aspect-ratio: 1440 / 1328; background: #0e0a07;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+/* 라벨 */
+.gw-r7__label { position: absolute; left: 8.333cqw; top: 8.333cqw;
+  display: flex; align-items: center; gap: 2.083cqw; }
+.gw-r7__num { display: grid; place-items: center; width: 4.514cqw; height: 3.194cqw;
+  border-radius: 0.625cqw; background: #e8ba4d; color: #16130f; font-weight: 700; font-size: 1.667cqw; }
+.gw-r7__cat { color: #faf1ec; font-size: 1.111cqw; font-weight: 400; letter-spacing: .02em; }
+/* 헤딩 */
+.gw-r7__title { position: absolute; left: 8.403cqw; top: 13.611cqw; margin: 0; width: 50cqw;
+  font-size: 3.472cqw; font-weight: 700; line-height: 1.28; white-space: nowrap; }
+.gw-r7__title-1, .gw-r7__title-2 { display: block; color: #f4eddf; }
+.gw-r7__title-2 b { color: #e8ba4d; font-weight: 700; }
+/* 서브카피 */
+.gw-r7__desc { position: absolute; left: 8.403cqw; top: 22.986cqw; width: 77.292cqw;
+  font-size: 1.667cqw; line-height: 1.5; color: #bbb0a5; }
+.gw-r7__desc p { margin: 0; font-weight: 400; }
+/* 문제→해결 행 */
+.gw-r7__row { position: absolute; left: 0; width: 100%; height: 9.514cqw; }
+.gw-r7__row--1 { top: 31.042cqw; }
+.gw-r7__row--2 { top: 41.597cqw; }
+.gw-r7__row--3 { top: 52.153cqw; }
+.gw-r7__row--4 { top: 62.708cqw; }
+.gw-r7__row--5 { top: 73.264cqw; }
+/* 문제 카드 (좌) */
+.gw-r7__prob { position: absolute; left: 8.403cqw; top: 0; width: 36.25cqw; height: 9.514cqw;
+  background: #1a130d; border: 1px solid #423b2b; border-radius: 0.694cqw; }
+.gw-r7__pno { position: absolute; left: 1.181cqw; top: 1.597cqw; display: grid; place-items: center;
+  width: 2.917cqw; height: 2.917cqw; border-radius: 50%; color: #16130f; font-weight: 700; font-size: 1.25cqw; }
+.gw-r7__pno--1 { background: #e9bb4c; }
+.gw-r7__pno--2 { background: #fd9b42; }
+.gw-r7__pno--3 { background: #c79cff; }
+.gw-r7__pno--4 { background: #37dccc; }
+.gw-r7__pno--5 { background: #6affa1; }
+.gw-r7__ptitle { position: absolute; left: 5.347cqw; top: 2.153cqw; margin: 0;
+  color: #faf1ec; font-size: 1.528cqw; font-weight: 700; white-space: nowrap; }
+.gw-r7__pdesc { position: absolute; left: 5.347cqw; top: 4.792cqw; margin: 0;
+  color: #988f86; font-size: 1.111cqw; font-weight: 400; line-height: 1.4; }
+/* 화살표 */
+.gw-r7__arrow { position: absolute; left: 48.819cqw; top: 4.757cqw; transform: translateY(-50%);
+  width: 2.5cqw; display: block; }
+.gw-r7__arrow svg { width: 100%; height: auto; fill: none; stroke: rgba(250,241,236,0.55);
+  stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+/* 해결 카드 (우) */
+.gw-r7__sol { position: absolute; left: 55.208cqw; top: 0.139cqw; width: 36.528cqw; height: 9.375cqw;
+  background: #150f0a; border: 1px solid rgba(232,186,77,0.28); border-radius: 0.694cqw; }
+.gw-r7__slabel { position: absolute; left: 2.083cqw; top: 2.083cqw;
+  color: #e8ba4d; font-size: 1.528cqw; font-weight: 700; }
+.gw-r7__sdesc { position: absolute; left: 2.083cqw; top: 4.8cqw; width: 33cqw; margin: 0;
+  color: rgba(250,241,236,0.8); font-size: 1.111cqw; font-weight: 400; line-height: 1.4; }
+
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
 .project-intro.is-clickable .intro-list,

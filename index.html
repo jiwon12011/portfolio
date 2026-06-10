@@ -2278,6 +2278,7 @@
           <li><a href="#gw4" data-track="gw4"><b>04</b><span><h4>디자인 가이드</h4><i>VISUAL DIRECTION</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
           <li><a href="#gw5" data-track="gw5"><b>05</b><span><h4>웹 구성</h4><i>SECTION DESIGN</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
           <li><a href="#gw6" data-track="gw6"><b>06</b><span><h4>기능 구조</h4><i>INTERACTION DESIGN</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#gw7" data-track="gw7"><b>07</b><span><h4>개발</h4><i>DEVELOPMENT</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
         </ol>
         <!-- TODO: href에 실제 링크 연결 -->
         <a class="process__cta" href="#" target="_blank" rel="noopener" aria-label="귀혼 바로가기">
@@ -2671,6 +2672,84 @@
               <div class="gw-r6__rhead"><span class="gw-r6__rlabel">INTERACTION 05</span><span class="gw-r6__rtitle">OST Player</span></div>
               <span class="gw-r6__vline" aria-hidden="true"></span>
               <p class="gw-r6__rdesc">LP 플레이어를 통해 귀혼의 음악을 감상하고,<br>게임의 분위기와 감성을 오롯이 느낄 수 있다.</p>
+            </div>
+          </section>
+
+          <!-- SECTION 7 · DEVELOPMENT · 기능 구조 — 디자인 1440×1328 (다크, 문제→해결 5행) -->
+          <section class="gw-sec gw-r7" id="gw7">
+            <!-- 라벨 -->
+            <div class="gw-r7__label">
+              <span class="gw-r7__num">07</span>
+              <span class="gw-r7__cat">DEVELOPMENT · 기능 구조</span>
+            </div>
+            <!-- 헤딩 -->
+            <h3 class="gw-r7__title"><span class="gw-r7__title-1">보이는 것보다,</span><span class="gw-r7__title-2"><b>보이지 않는 부분</b>을 다듬다</span></h3>
+            <!-- 서브카피 -->
+            <div class="gw-r7__desc">
+              <p>다양한 인터랙션과 애니메이션을 구현하는 과정에서 예상하지 못한 충돌과 이슈가 발생했다.</p>
+              <p>사용자가 의도한 경험을 안정적으로 느낄 수 있도록 구현과 개선을 반복했다.</p>
+            </div>
+
+            <!-- 문제 → 해결 5행 -->
+            <div class="gw-r7__row gw-r7__row--1">
+              <div class="gw-r7__prob">
+                <span class="gw-r7__pno gw-r7__pno--1">01</span>
+                <h4 class="gw-r7__ptitle">GSAP × CSS Transform</h4>
+                <p class="gw-r7__pdesc">직업 전환 시 캐릭터 위치가<br>순간적으로 이동하는 문제가 발생했다.</p>
+              </div>
+              <span class="gw-r7__arrow" aria-hidden="true"><svg viewBox="0 0 40 12"><path d="M0 6h36M30 1l6 5-6 5"/></svg></span>
+              <div class="gw-r7__sol">
+                <span class="gw-r7__slabel">해결</span>
+                <p class="gw-r7__sdesc">애니메이션 종료 후 transform 값을<br>초기화하는 방식으로 수정해 안정적인 전환이 가능하도록 개선했다.</p>
+              </div>
+            </div>
+            <div class="gw-r7__row gw-r7__row--2">
+              <div class="gw-r7__prob">
+                <span class="gw-r7__pno gw-r7__pno--2">02</span>
+                <h4 class="gw-r7__ptitle">Lazy Image Timing</h4>
+                <p class="gw-r7__pdesc">이미지보다 애니메이션이 먼저 실행되어<br>콘텐츠가 자연스럽게 보이지 않았다.</p>
+              </div>
+              <span class="gw-r7__arrow" aria-hidden="true"><svg viewBox="0 0 40 12"><path d="M0 6h36M30 1l6 5-6 5"/></svg></span>
+              <div class="gw-r7__sol">
+                <span class="gw-r7__slabel">해결</span>
+                <p class="gw-r7__sdesc">이미지 로드 완료 이후<br>타임라인이 실행되도록 변경했다.</p>
+              </div>
+            </div>
+            <div class="gw-r7__row gw-r7__row--3">
+              <div class="gw-r7__prob">
+                <span class="gw-r7__pno gw-r7__pno--3">03</span>
+                <h4 class="gw-r7__ptitle">Responsive Layout</h4>
+                <p class="gw-r7__pdesc">절대 위치 요소와 vh 단위 사용으로<br>모바일 환경에서 레이아웃이 깨졌다.</p>
+              </div>
+              <span class="gw-r7__arrow" aria-hidden="true"><svg viewBox="0 0 40 12"><path d="M0 6h36M30 1l6 5-6 5"/></svg></span>
+              <div class="gw-r7__sol">
+                <span class="gw-r7__slabel">해결</span>
+                <p class="gw-r7__sdesc">해상도별 미디어쿼리와 위치값을 재조정해<br>모든 디바이스에서 안정적으로 보이도록 개선했다.</p>
+              </div>
+            </div>
+            <div class="gw-r7__row gw-r7__row--4">
+              <div class="gw-r7__prob">
+                <span class="gw-r7__pno gw-r7__pno--4">04</span>
+                <h4 class="gw-r7__ptitle">Particle Management</h4>
+                <p class="gw-r7__pdesc">섹션 이동 시 파티클 타이머가 누적되어<br>불필요한 리소스가 증가했다.</p>
+              </div>
+              <span class="gw-r7__arrow" aria-hidden="true"><svg viewBox="0 0 40 12"><path d="M0 6h36M30 1l6 5-6 5"/></svg></span>
+              <div class="gw-r7__sol">
+                <span class="gw-r7__slabel">해결</span>
+                <p class="gw-r7__sdesc">언마운트 시 interval과 observer를 정리하여<br>메모리 누수와 성능 저하를 방지했다.</p>
+              </div>
+            </div>
+            <div class="gw-r7__row gw-r7__row--5">
+              <div class="gw-r7__prob">
+                <span class="gw-r7__pno gw-r7__pno--5">05</span>
+                <h4 class="gw-r7__ptitle">OST Audio Control</h4>
+                <p class="gw-r7__pdesc">다른 섹션으로 이동한 이후에도<br>음악이 계속 재생되는 문제가 발생했다.</p>
+              </div>
+              <span class="gw-r7__arrow" aria-hidden="true"><svg viewBox="0 0 40 12"><path d="M0 6h36M30 1l6 5-6 5"/></svg></span>
+              <div class="gw-r7__sol">
+                <span class="gw-r7__slabel">해결</span>
+                <p class="gw-r7__sdesc">IntersectionObserver를 활용해<br>섹션 이탈 시 자동으로 정지되도록 구현했다.</p>
+              </div>
             </div>
           </section>
 
