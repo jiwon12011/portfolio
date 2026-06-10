@@ -1855,6 +1855,28 @@ html.process-open { overflow: hidden; }
 .gw-r7__sdesc { position: absolute; left: 2.083cqw; top: 4.8cqw; width: 33cqw; margin: 0;
   color: rgba(250,241,236,0.8); font-size: 1.111cqw; font-weight: 400; line-height: 1.4; }
 
+/* ── SECTION 8 · TOOLS / ROLE / TIME (밝은 섹션, 디자인 1440×549 → cqw=px/14.4) ── */
+.gw-r8 { aspect-ratio: 1440 / 549; background: #ebe3d6;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.gw-r8__col { position: absolute; top: 8.333cqw; display: flex; flex-direction: column; align-items: center; }
+.gw-r8__col--tools { left: 11.667cqw; width: 18.819cqw; gap: 4.167cqw; }
+.gw-r8__col--role  { left: 40.486cqw; width: 19.097cqw; gap: 3.194cqw; }
+.gw-r8__col--time  { left: 74.028cqw; width: 8.889cqw; gap: 6.806cqw; }
+.gw-r8__head { display: flex; flex-direction: column; align-items: center; gap: 0.972cqw; }
+.gw-r8__star { width: 2.708cqw; height: 2.708cqw; }
+.gw-r8__star svg { width: 100%; height: 100%; fill: #141210; }
+.gw-r8__htitle { color: #000; font-size: 1.667cqw; font-weight: 700; }
+.gw-r8__grid { display: grid; grid-template-columns: repeat(3, 5.347cqw); gap: 1.389cqw; }
+.gw-r8__grid img { width: 5.347cqw; height: 5.347cqw; border-radius: 1.181cqw; object-fit: cover; display: block; }
+.gw-r8__role { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column;
+  gap: 1.042cqw; align-items: center; }
+.gw-r8__role li { color: #555; font-size: 1.667cqw; font-weight: 500; }
+.gw-r8__time { margin: 0; color: #555; font-size: 1.667cqw; font-weight: 500; text-align: center; line-height: 1.5; }
+
+/* ── SECTION 9 · OUTRO (풀블리드 마무리 이미지, 16:9) ── */
+.gw-r9 { aspect-ratio: 16 / 9; background: #14110d; }
+.gw-r9__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
 .project-intro.is-clickable .intro-list,
