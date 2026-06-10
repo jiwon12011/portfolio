@@ -1703,6 +1703,60 @@ html.process-open { overflow: hidden; }
 .gw-r4__mood--3 { left: 37.847cqw; top: 54.306cqw; }
 .gw-r4__mood--4 { left: 66.042cqw; top: 54.306cqw; }
 
+/* ── SECTION 5 · SECTION DESIGN (다크 5행 타임라인, 디자인 1440×2502 → cqw=px/14.4) ── */
+.gw-r5 { aspect-ratio: 1440 / 2502; background: #0f141c;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.gw-r5__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.gw-r5 > :not(.gw-r5__bg) { z-index: 1; }
+/* 라벨 */
+.gw-r5__label { position: absolute; left: 8.333cqw; top: 8.333cqw;
+  display: flex; align-items: center; gap: 2.083cqw; }
+.gw-r5__num { display: grid; place-items: center; width: 4.514cqw; height: 3.194cqw;
+  border-radius: 0.625cqw; background: #e8ba4d; color: #16130f; font-weight: 700; font-size: 1.667cqw; }
+.gw-r5__cat { color: #faf1ec; font-size: 1.111cqw; font-weight: 400; letter-spacing: .02em; }
+/* 헤딩 */
+.gw-r5__title { position: absolute; left: 8.333cqw; top: 13.611cqw; margin: 0; width: 50cqw;
+  font-size: 3.472cqw; font-weight: 700; line-height: 1.28; white-space: nowrap; }
+.gw-r5__title-1, .gw-r5__title-2 { display: block; color: #f4eddf; }
+.gw-r5__title-2 b { color: #e8ba4d; font-weight: 700; }
+/* 서브카피 */
+.gw-r5__desc { position: absolute; left: 8.333cqw; top: 22.986cqw; width: 77.292cqw;
+  font-size: 1.667cqw; line-height: 1.5; color: #bbb0a5; }
+.gw-r5__desc p { margin: 0; font-weight: 400; }
+/* 타임라인 라인 + 노드 */
+.gw-r5__line { position: absolute; left: 54.86cqw; top: 37.8cqw; width: 0; height: 105.8cqw;
+  border-left: 1px solid rgba(232,186,77,0.22); }
+.gw-r5__node { position: absolute; left: 54.86cqw; width: 0.83cqw; height: 0.83cqw; border-radius: 50%;
+  transform: translate(-50%, -50%); background: #e8ba4d; box-shadow: 0 0 0.9cqw rgba(232,186,77,0.65); }
+.gw-r5__node--1 { top: 38.1cqw; }
+.gw-r5__node--2 { top: 64.7cqw; }
+.gw-r5__node--3 { top: 91.1cqw; }
+.gw-r5__node--4 { top: 117.4cqw; }
+.gw-r5__node--5 { top: 143.9cqw; }
+/* 5개 스크린샷 */
+.gw-r5__shot { position: absolute; left: 8.333cqw; width: 46.6cqw; height: 24.3cqw;
+  object-fit: cover; border-radius: 0.6cqw; border: 1px solid rgba(232,186,77,0.14);
+  box-shadow: 0 1.2cqw 2.8cqw -1.4cqw rgba(0,0,0,0.6); display: block; }
+.gw-r5__shot--1 { top: 35.347cqw; }
+.gw-r5__shot--2 { top: 61.736cqw; }
+.gw-r5__shot--3 { top: 88.125cqw; }
+.gw-r5__shot--4 { top: 114.444cqw; }
+.gw-r5__shot--5 { top: 140.972cqw; }
+/* 5개 텍스트 블록 */
+.gw-r5__tx { position: absolute; left: 62.153cqw; width: 33.5cqw;
+  display: flex; flex-direction: column; gap: 2.431cqw; }
+.gw-r5__txhead { display: flex; flex-direction: column; }
+.gw-r5__txlabel { color: #ebe3d6; font-size: 1.389cqw; font-weight: 700; }
+.gw-r5__txname { color: #ebe3d6; font-size: 1.389cqw; font-weight: 400; }
+.gw-r5__txbody { display: flex; flex-direction: column; gap: 0.694cqw; }
+.gw-r5__txbody p { margin: 0; color: #988f86; font-size: 1.25cqw; font-weight: 400; line-height: 1.5; }
+.gw-r5__txbody b { color: #dbc38a; font-weight: 400; }
+.gw-r5__tx--1 { top: 37.222cqw; }
+.gw-r5__tx--2 { top: 63.819cqw; }
+.gw-r5__tx--3 { top: 90.208cqw; }
+.gw-r5__tx--4 { top: 116.528cqw; }
+.gw-r5__tx--5 { top: 143.056cqw; }
+
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
 .project-intro.is-clickable .intro-list,
