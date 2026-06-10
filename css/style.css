@@ -2216,6 +2216,46 @@ html.process-open { overflow: hidden; }
 .ym-r4__cursor { position: absolute; left: 36.111cqw; top: 85.278cqw; width: 53.403cqw; height: 17.778cqw;
   object-fit: cover; border-radius: 1.389cqw; display: block; }
 
+/* ── SECTION 5 · TROUBLE SHOOTING (디자인 1440×932 → cqw=px/14.4) ── */
+.ym-r5 { aspect-ratio: 1440 / 932; background: #fff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.ym-r5__num { position: absolute; left: 7.014cqw; top: 4.306cqw; display: grid; place-items: center;
+  width: 3.056cqw; height: 3.056cqw; border: 1px solid #ff6b9d; border-radius: 0.694cqw;
+  color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r5__eyebrow { position: absolute; left: 11.042cqw; top: 5cqw; color: #ff6b9d;
+  font-size: 1.389cqw; font-weight: 600; letter-spacing: .02em; }
+.ym-r5__title { position: absolute; left: 7.153cqw; top: 8.542cqw; margin: 0; white-space: nowrap;
+  font-size: 3.611cqw; font-weight: 600; color: #181a3b; line-height: 1.12; }
+.ym-r5__title b { color: #ff6b9d; font-weight: 600; }
+.ym-r5__lead { position: absolute; left: 8.056cqw; top: 13.958cqw; margin: 0; white-space: nowrap;
+  font-size: 1.111cqw; font-weight: 500; color: #444; line-height: 1.4; }
+/* 문제 카드 */
+.ym-r5__q { position: absolute; width: 41.944cqw; height: 18.264cqw; }
+.ym-r5__q--1 { left: 7.014cqw;  top: 20.486cqw; }
+.ym-r5__q--2 { left: 51.042cqw; top: 20.486cqw; }
+.ym-r5__q--3 { left: 7.014cqw;  top: 40.833cqw; }
+.ym-r5__q--4 { left: 51.042cqw; top: 40.833cqw; }
+.ym-r5__qno { position: absolute; left: 1.389cqw; top: 1.389cqw; display: grid; place-items: center;
+  width: 2.986cqw; height: 2.986cqw; border-radius: 50%; background: #ff6b9d; color: #fff;
+  font-size: 1.389cqw; font-weight: 600; }
+.ym-r5__qtitle { position: absolute; left: 5.417cqw; top: 2.083cqw; color: #333;
+  font-size: 1.389cqw; font-weight: 600; white-space: nowrap; }
+/* 해결 / 결과 박스 */
+.ym-r5__solve, .ym-r5__result { position: absolute; top: 5.764cqw; width: 18.264cqw; height: 10.278cqw;
+  border-radius: 1.389cqw; }
+.ym-r5__solve { left: 2.083cqw; background: #f9f6fd; border: 1px solid #d6ccf4; --ln: #d6ccf4; }
+.ym-r5__result { left: 21.597cqw; background: #f5fbfa; border: 1px solid #b0e0d8; --ln: #b0e0d8; }
+.ym-r5__solve::before, .ym-r5__result::before { content: ""; position: absolute; left: 1.319cqw; top: 3.472cqw;
+  width: 15.625cqw; height: 0; border-top: 1px solid var(--ln); }
+.ym-r5__slabel { position: absolute; left: 1.597cqw; top: 1.319cqw; color: #7c5fca; font-size: 1.389cqw; font-weight: 400; }
+.ym-r5__rlabel { position: absolute; left: 1.597cqw; top: 1.319cqw; color: #0d9c7b; font-size: 1.389cqw; font-weight: 400; }
+.ym-r5__list { position: absolute; left: 2.4cqw; top: 4.5cqw; margin: 0; padding: 0; list-style: none;
+  color: #444; font-size: 1.111cqw; font-weight: 400; line-height: 1.35; }
+.ym-r5__list li { position: relative; padding-left: 1cqw; margin-bottom: 0.7cqw; }
+.ym-r5__list li::before { content: "•"; position: absolute; left: 0; color: #444; }
+.ym-r5__rdesc { position: absolute; left: 1.319cqw; top: 4.7cqw; margin: 0; color: #444;
+  font-size: 1.111cqw; font-weight: 400; line-height: 1.45; }
+
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
   padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
