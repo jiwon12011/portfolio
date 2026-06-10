@@ -1760,6 +1760,49 @@ html.process-open { overflow: hidden; }
 .gw-r5__tx--4 { top: 116.528cqw; }
 .gw-r5__tx--5 { top: 143.056cqw; }
 
+/* ── SECTION 6 · INTERACTION DESIGN (다크 5행 리스트, 디자인 1440×1328 → cqw=px/14.4) ── */
+.gw-r6 { aspect-ratio: 1440 / 1328; background: #0e0a07;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+/* 라벨 */
+.gw-r6__label { position: absolute; left: 8.264cqw; top: 8.333cqw;
+  display: flex; align-items: center; gap: 2.083cqw; }
+.gw-r6__num { display: grid; place-items: center; width: 4.514cqw; height: 3.194cqw;
+  border-radius: 0.625cqw; background: #e8ba4d; color: #16130f; font-weight: 700; font-size: 1.667cqw; }
+.gw-r6__cat { color: #faf1ec; font-size: 1.111cqw; font-weight: 400; letter-spacing: .02em; }
+/* 헤딩 */
+.gw-r6__title { position: absolute; left: 8.333cqw; top: 13.611cqw; margin: 0; width: 50cqw;
+  font-size: 3.472cqw; font-weight: 700; line-height: 1.28; white-space: nowrap; }
+.gw-r6__title-1, .gw-r6__title-2 { display: block; color: #f4eddf; }
+.gw-r6__title-2 b { color: #e8ba4d; font-weight: 700; }
+/* 서브카피 */
+.gw-r6__desc { position: absolute; left: 8.333cqw; top: 22.986cqw; width: 77.292cqw;
+  font-size: 1.667cqw; line-height: 1.5; color: #bbb0a5; }
+.gw-r6__desc p { margin: 0; font-weight: 400; }
+/* 인터랙션 행 */
+.gw-r6__row { position: absolute; left: 0; width: 100%; height: 6.806cqw; }
+.gw-r6__row--1 { top: 33.403cqw; }
+.gw-r6__row--2 { top: 43.819cqw; }
+.gw-r6__row--3 { top: 54.236cqw; }
+.gw-r6__row--4 { top: 64.653cqw; }
+.gw-r6__row--5 { top: 75.069cqw; }
+/* 행 위 가로 구분선 */
+.gw-r6__row::before { content: ""; position: absolute; left: 8.6cqw; top: -1.806cqw;
+  width: 83.403cqw; height: 0; border-top: 1px solid #2b1f16; }
+/* 아이콘 */
+.gw-r6__icon { position: absolute; left: 10.556cqw; top: 0; width: 6.944cqw; height: 6.806cqw;
+  object-fit: contain; display: block; }
+/* 라벨 + 타이틀 */
+.gw-r6__rhead { position: absolute; left: 19.861cqw; top: 0.9cqw;
+  display: flex; flex-direction: column; gap: 0.347cqw; }
+.gw-r6__rlabel { color: #e8ba4d; font-size: 1.389cqw; font-weight: 400; letter-spacing: .02em; }
+.gw-r6__rtitle { color: #ebe3d6; font-size: 2.5cqw; font-weight: 500; line-height: 1; }
+/* 세로 구분선 */
+.gw-r6__vline { position: absolute; left: 50%; top: 0.07cqw; height: 6.736cqw; width: 0;
+  border-left: 1px solid #2b1f16; }
+/* 설명 */
+.gw-r6__rdesc { position: absolute; left: 53.403cqw; top: 1.736cqw; width: 33.611cqw; margin: 0;
+  color: #988f86; font-size: 1.389cqw; font-weight: 400; line-height: 1.5; }
+
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
 .project-intro.is-clickable .intro-list,
