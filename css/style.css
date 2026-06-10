@@ -2636,7 +2636,8 @@ html.process-open { overflow: hidden; }
   --mk-ink:     #2b3327;   /* 타이틀 */
   --mk-sub:     #586251;   /* 서브 카피(타이틀 아래 상세) — 가독 위해 진하게 */
 }
-.mk-sec { --pad: clamp(28px, 3.6vw, 56px); background: #fff; border-radius: 0; padding: var(--pad); }
+.mk-sec { --pad: clamp(28px, 3.6vw, 56px); background: #fff; border-radius: 0;
+  padding: clamp(44px, 5vw, 84px) var(--pad); }
 .mk-eyebrow { margin: 0 0 22px; font-size: 14px; font-weight: 800;
   letter-spacing: 0.08em; color: var(--mk-green); }
 .mk-title { margin: 0; font-size: clamp(30px, 3.4vw, 50px); font-weight: 800;
@@ -2860,18 +2861,22 @@ html.process-open { overflow: hidden; }
 .s6-ctitle { margin: 0 0 12px; font-size: clamp(15px, 1.2vw, 18px); font-weight: 800; color: var(--mk-ink); }
 .s6-desc { margin: 0 0 10px; font-size: clamp(12px, 0.95vw, 13.5px); line-height: 1.6; color: #6b7563; }
 
-.s6-objs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; max-width: 252px; }
+.s6-objs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; max-width: 268px; }
 .s6-objs figure { margin: 0; text-align: center; }
-/* 오브젝트 이미지 자체가 박스(세이지/화이트) → 별도 박스 안 씌움 */
-.s6-objbox { display: block; }
-.s6-objbox img { width: 100%; height: auto; display: block; border-radius: 18px;
-  filter: drop-shadow(0 8px 16px rgba(20,34,18,0.13)); }
-.s6-objs figcaption { margin-top: 8px; font-size: 12px; color: #8b9580; }
+/* color/mono 박스를 CSS로 통일 — 물고기 이미지(투명)만 안에 contain */
+.s6-objbox { display: grid; place-items: center; aspect-ratio: 1 / 1; padding: 16%;
+  border-radius: 20px; box-shadow: 0 8px 16px rgba(20,34,18,0.12); }
+.s6-objbox img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.s6-objbox--color { background: #abbca2; }
+.s6-objbox--mono  { background: #ffffff; border: 1px solid #e2e7dd; }
+.s6-objs figcaption { margin-top: 10px; font-size: 12px; color: #8b9580; }
 
 .s6-typo__row { display: grid; grid-template-columns: auto 1fr; gap: clamp(16px, 2vw, 34px); align-items: center; }
 .s6-typo__samples { display: grid; gap: 12px; }
-.s6-typo__a, .s6-typo__b { font-size: clamp(19px, 1.9vw, 27px); font-weight: 600; color: var(--mk-ink); letter-spacing: -0.01em; }
-.s6-typo__b { color: #aeb8a4; }
+.s6-typo__a, .s6-typo__b { font-family: 'GangwonEducationModuche', "Pretendard Variable", Pretendard, sans-serif;
+  font-size: clamp(22px, 2.2vw, 32px); color: var(--mk-ink); letter-spacing: 0; }
+.s6-typo__a { font-weight: 700; }
+.s6-typo__b { font-weight: 300; color: #aeb8a4; }
 .s6-typo__desc { margin: 0; font-size: clamp(11.5px, 0.92vw, 13px); line-height: 1.6; color: #6b7563; }
 
 .s6-swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
