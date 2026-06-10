@@ -2097,6 +2097,57 @@ html.process-open { overflow: hidden; }
 .ym-r2__cha--5 { left: 66.389cqw; }
 .ym-r2__cha--6 { left: 80.903cqw; }
 
+/* ── SECTION 3 · STRUCTURE & FLOW (디자인 1440×1229 → cqw=px/14.4) ── */
+.ym-r3 { aspect-ratio: 1440 / 1229; background: #fff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+/* 헤더 */
+.ym-r3__num { position: absolute; left: 6.875cqw; top: 6.944cqw; display: grid; place-items: center;
+  width: 3.056cqw; height: 3.056cqw; border: 1px solid #ff6b9d; border-radius: 0.694cqw;
+  color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r3__eyebrow { position: absolute; left: 10.903cqw; top: 7.639cqw; color: #ff6b9d;
+  font-size: 1.389cqw; font-weight: 600; letter-spacing: .02em; }
+.ym-r3__title { position: absolute; left: 7.014cqw; top: 11.181cqw; margin: 0; white-space: nowrap;
+  font-size: 3.611cqw; font-weight: 600; color: #181a3b; line-height: 1.12; }
+.ym-r3__title b { color: #ff6b9d; font-weight: 700; }
+.ym-r3__lead { position: absolute; left: 7.917cqw; top: 16.597cqw; margin: 0; white-space: nowrap;
+  font-size: 1.111cqw; font-weight: 500; color: #444; line-height: 1.4; }
+/* 좌측 설계 포인트 카드 */
+.ym-r3__points { position: absolute; left: 6.875cqw; top: 23.125cqw; width: 37.917cqw; height: 28.264cqw;
+  background: #fef7fb; border: 1px solid #fddeeb; border-radius: 1.389cqw; }
+.ym-r3__ptitle { position: absolute; left: 2.083cqw; top: 2.083cqw; color: #ff6b9d; font-size: 1.389cqw; font-weight: 600; }
+.ym-r3__pno { position: absolute; left: 2.083cqw; display: grid; place-items: center;
+  width: 2.986cqw; height: 2.986cqw; border-radius: 50%; background: #fddeeb; color: #222; font-size: 1.389cqw; font-weight: 600; }
+.ym-r3__ph { position: absolute; left: 5.903cqw; margin: 0; color: #222; font-size: 1.389cqw; font-weight: 600; white-space: nowrap; }
+.ym-r3__pd { position: absolute; left: 5.903cqw; margin: 0; color: #444; font-size: 1.042cqw; font-weight: 400; line-height: 1.45; white-space: nowrap; }
+.ym-r3__pno--1 { top: 5.347cqw; }  .ym-r3__ph--1 { top: 6.042cqw; }  .ym-r3__pd--1 { top: 8.403cqw; }
+.ym-r3__pno--2 { top: 12.292cqw; } .ym-r3__ph--2 { top: 12.986cqw; } .ym-r3__pd--2 { top: 15.347cqw; }
+.ym-r3__pno--3 { top: 19.236cqw; } .ym-r3__ph--3 { top: 19.931cqw; } .ym-r3__pd--3 { top: 22.292cqw; }
+/* 유미 그룹 이미지 */
+.ym-r3__group { position: absolute; left: 4.861cqw; top: 51.389cqw; width: 41.181cqw; height: 29.306cqw;
+  object-fit: contain; display: block; }
+/* 우측 메뉴 카드 */
+.ym-r3__menu { position: absolute; left: 48.264cqw; width: 46.806cqw; height: 9.722cqw;
+  background: var(--bg); border: 1px solid var(--bd); border-radius: 1.389cqw; }
+.ym-r3__menu--home    { top: 23.125cqw; --bg:#fff1f7; --bd:#fddeeb; --ac:#ea416d; }
+.ym-r3__menu--char    { top: 34.583cqw; --bg:#f8f0fb; --bd:#fadefd; --ac:#6835ac; }
+.ym-r3__menu--season  { top: 46.042cqw; --bg:#f0f3fc; --bd:#dedefd; --ac:#355fac; }
+.ym-r3__menu--webtoon { top: 57.5cqw;   --bg:#f0f3fc; --bd:#dedefd; --ac:#355fac; }
+.ym-r3__micon { position: absolute; left: 2.43cqw; top: 50%; transform: translateY(-50%);
+  width: 6cqw; height: auto; object-fit: contain; }
+.ym-r3__mlabel { position: absolute; left: 11.25cqw; top: 2.778cqw; color: var(--ac);
+  font-size: 1.389cqw; font-weight: 600; letter-spacing: .01em; white-space: nowrap; }
+.ym-r3__mdesc { position: absolute; left: 11.25cqw; top: 5.625cqw; margin: 0; color: #222;
+  font-size: 1.111cqw; font-weight: 400; white-space: nowrap; }
+.ym-r3__mcha { position: absolute; left: 39.375cqw; top: 0.4cqw; width: 5.625cqw; height: auto; object-fit: contain; }
+/* 좁은 카드 (NEWS / GALLERY) */
+.ym-r3__menu--narrow { width: 22.569cqw; top: 68.958cqw; }
+.ym-r3__menu--news    { left: 48.264cqw; --bg:#fff9f1; --bd:#fdeede; --ac:#fa7009; }
+.ym-r3__menu--gallery { left: 72.5cqw;   --bg:#f3f9f9; --bd:#defde9; --ac:#019487; }
+.ym-r3__menu--narrow .ym-r3__micon { left: 1.667cqw; width: 4.5cqw; }
+.ym-r3__menu--narrow .ym-r3__mlabel { left: 6.875cqw; }
+.ym-r3__menu--narrow .ym-r3__mdesc { left: 6.875cqw; }
+.ym-r3__menu--narrow .ym-r3__mcha { left: 15.3cqw; }
+
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);
   padding: clamp(18px,1.9vw,34px); align-items: stretch; overflow: hidden;
