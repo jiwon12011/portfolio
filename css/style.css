@@ -1659,6 +1659,50 @@ html.process-open { overflow: hidden; }
 .gw-r3__goal { position: absolute; left: 8.264cqw; top: 97cqw; width: 83.472cqw; height: 9.236cqw; }
 .gw-r3__goal b { color: #e8ba4d; }
 
+/* ── SECTION 4 · VISUAL DIRECTION (다크, 디자인 1440×1156 → cqw=px/14.4) ── */
+.gw-r4 { aspect-ratio: 1440 / 1156; background: #172022;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+/* 라벨 */
+.gw-r4__label { position: absolute; left: 8.333cqw; top: 8.333cqw;
+  display: flex; align-items: center; gap: 2.083cqw; }
+.gw-r4__num { display: grid; place-items: center; width: 4.514cqw; height: 3.194cqw;
+  border-radius: 0.625cqw; background: #e8ba4d; color: #16130f; font-weight: 700; font-size: 1.667cqw; }
+.gw-r4__cat { color: #faf1ec; font-size: 1.111cqw; font-weight: 400; letter-spacing: .02em; }
+/* 헤딩 */
+.gw-r4__title { position: absolute; left: 8.333cqw; top: 13.611cqw; margin: 0; width: 50cqw;
+  font-size: 3.472cqw; font-weight: 700; line-height: 1.28; white-space: nowrap; }
+.gw-r4__title-1, .gw-r4__title-2 { display: block; color: #f4eddf; }
+.gw-r4__title-1 b { color: #e8ba4d; font-weight: 700; }
+/* 서브카피 */
+.gw-r4__desc { position: absolute; left: 8.333cqw; top: 22.986cqw; width: 77.292cqw;
+  font-size: 1.667cqw; line-height: 1.5; color: #bbb0a5; }
+.gw-r4__desc p { margin: 0; font-weight: 400; }
+
+/* 컬러 스와치 (겹쳐 쌓임, 디자인 365×200) */
+.gw-r4__sw { position: absolute; left: 8.472cqw; width: 25.347cqw; height: 13.889cqw;
+  border-radius: 1.389cqw 1.389cqw 0 0; }
+.gw-r4__sw--main { top: 34.931cqw; background: #f6d199; }
+.gw-r4__sw--text { top: 46.458cqw; background: #211308; }
+.gw-r4__sw--point { top: 57.778cqw; background: #ac2b17; }
+/* 컬러 라벨 (스와치 위, 항상 보이게) */
+.gw-r4__col { position: absolute; left: 9.514cqw; display: flex; flex-direction: column; gap: 0.347cqw; }
+.gw-r4__colname { font-size: 1.25cqw; font-weight: 500; }
+.gw-r4__colhex { font-size: 1.111cqw; font-weight: 400; }
+.gw-r4__col--main { top: 35.972cqw; }
+.gw-r4__col--main .gw-r4__colname, .gw-r4__col--main .gw-r4__colhex { color: #211308; }
+.gw-r4__col--text { top: 47.5cqw; }
+.gw-r4__col--point { top: 58.819cqw; }
+.gw-r4__col--text .gw-r4__colname, .gw-r4__col--text .gw-r4__colhex,
+.gw-r4__col--point .gw-r4__colname, .gw-r4__col--point .gw-r4__colhex { color: #f6d199; }
+
+/* 무드 이미지 2×2 (디자인 ~377×251) */
+.gw-r4__mood { position: absolute; width: 26.181cqw; height: 17.43cqw; object-fit: cover;
+  border-radius: 0.7cqw; display: block; box-shadow: 0 1cqw 2.4cqw -1.2cqw rgba(0,0,0,0.55); }
+.gw-r4__mood--1 { left: 37.847cqw; top: 34.861cqw; }
+.gw-r4__mood--2 { left: 66.042cqw; top: 34.861cqw; }
+.gw-r4__mood--3 { left: 37.847cqw; top: 54.306cqw; }
+.gw-r4__mood--4 { left: 66.042cqw; top: 54.306cqw; }
+
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
 .project-intro.is-clickable .intro-list,
