@@ -6,6 +6,18 @@
    각 .card-arm 에 --x/--y(현재 정적 좌표), data-angle/radius(궤도 예약)
 ======================================================================= */
 
+/* 강원교육모두체 — 유미 등 손글씨 느낌 강조용 */
+@font-face {
+  font-family: 'GangwonEducationModuche';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFLightA.woff') format('woff');
+  font-weight: 300; font-display: swap;
+}
+@font-face {
+  font-family: 'GangwonEducationModuche';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+  font-weight: 700; font-display: swap;
+}
+
 :root {
   /* 텍스트: 전부 흰색. 위계는 폰트 굵기(weight)로만 표현 */
   --ink:        #ffffff;
@@ -2040,7 +2052,8 @@ html.process-open { overflow: hidden; }
 .ym-r1__mtitle { top: 4.097cqw; color: #181a3b; font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
 .ym-r1__mtitle b { color: #ff6b9d; font-weight: 700; }
 .ym-r1__m1 { top: 16.875cqw; color: #181a3b; font-size: 1.111cqw; font-weight: 500; line-height: 1.4; }
-.ym-r1__m2 { top: 19.861cqw; color: #f16590; font-size: 1.806cqw; font-weight: 700; }
+.ym-r1__m2 { top: 19.861cqw; color: #f16590; font-size: 1.944cqw; font-weight: 700;
+  font-family: 'GangwonEducationModuche', "Pretendard Variable", Pretendard, sans-serif; }
 .ym-r1__m3 { top: 22.292cqw; color: #181a3b; font-size: 1.111cqw; font-weight: 500; }
 
 /* ── 감정 날씨 히어로 (글래스) ── */
