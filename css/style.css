@@ -1113,7 +1113,12 @@ html.process-open { overflow: hidden; }
 
 /* 트랙 리스트 */
 .process__tracks { list-style: none; margin: 0; padding: 0; flex: 1;
-  display: flex; flex-direction: column; gap: 5px; }
+  display: flex; flex-direction: column; gap: 5px;
+  /* 짧은 뷰포트에서 트랙이 많을 때(예: 7개) 하단 NOW PLAYING 이 잘리지 않도록
+     트랙 리스트만 필요 시 스크롤 — 충분한 높이에선 스크롤바 안 보임(시각 변화 0) */
+  min-height: 0; overflow-y: auto; scrollbar-width: thin; }
+.process__tracks::-webkit-scrollbar { width: 6px; }
+.process__tracks::-webkit-scrollbar-thumb { background: rgba(120,135,100,0.32); border-radius: 3px; }
 .process__tracks a { display: grid; grid-template-columns: 32px 1fr auto;
   align-items: center; gap: 8px; padding: 12px 14px; border-radius: 13px;
   text-decoration: none; border: 1px solid transparent;
