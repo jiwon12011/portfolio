@@ -2272,8 +2272,11 @@
           <span class="process__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
         </p>
         <ol class="process__tracks">
-          <!-- TODO: 섹션 목차 추가 -->
-          <li><a href="#gw1" data-track="gw1"><b>01</b><span><h4>개요</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#gw1" data-track="gw1"><b>01</b><span><h4>문제정의</h4><i>BACK GROUND</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#gw2" data-track="gw2"><b>02</b><span><h4>방향탐색</h4><i>EXPERIMENT</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#gw3" data-track="gw3"><b>03</b><span><h4>비주얼 무드</h4><i>VISUAL DIRECTION</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#gw4" data-track="gw4"><b>04</b><span><h4>장면구성</h4><i>SCENE DESIGN</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#gw5" data-track="gw5"><b>05</b><span><h4>기능 구조</h4><i>SYSTEM STRUCTURE</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
         </ol>
         <!-- TODO: href에 실제 링크 연결 -->
         <a class="process__cta" href="#" target="_blank" rel="noopener" aria-label="귀혼 바로가기">
@@ -2281,9 +2284,10 @@
           <svg class="process__cta-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M12 6l6 6-6 6"/></svg>
         </a>
         <div class="process__now">
+          <img class="process__now-art" src="img/hon/soulsaver_logo.webp" alt="" />
           <div class="process__now-meta">
             <span>NOW PLAYING</span>
-            <strong>귀혼 <span class="process__eq process__eq--sm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></strong>
+            <strong>Soul Saver <span class="process__eq process__eq--sm" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></strong>
           </div>
           <div class="process__now-ctrl">
             <button type="button" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
@@ -2298,7 +2302,54 @@
             <video class="process__hero-media" src="img/hon/hon_process.mp4"
                    muted loop autoplay playsinline preload="metadata"></video>
           </div>
-          <!-- TODO: 본문 카드/섹션 추가 -->
+          <div class="process__cards">
+            <article class="pcard pcard--info">
+              <h3>Personal Project</h3>
+              <dl>
+                <dt>Period</dt><dd>2weeks <i>(26.05)</i></dd>
+                <dt>Contribution</dt><dd>100% <i>(기획, 디자인, 개발)</i></dd>
+              </dl>
+              <p class="pcard__tool-label">Tool</p>
+              <div class="pcard__tools">
+                <img src="img/jaringobi/process/FIGMA.webp" alt="Figma" />
+                <img src="img/jaringobi/process/PHOTOSHOP.webp" alt="Photoshop" />
+                <img src="img/jaringobi/process/CLAUDE.webp" alt="Claude" />
+              </div>
+            </article>
+
+            <!-- TODO: href에 실제 링크 연결 -->
+            <article class="pcard pcard--shot pcard--feature">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="귀혼 웹사이트 바로가기"></a>
+              <span class="ptag">GO TO WEB</span>
+              <h3>웹사이트 바로가기</h3>
+              <p>Immersive Game Showcase</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/hon/hon_web_mokup.webp" alt="귀혼M 웹사이트 목업" />
+            </article>
+
+            <!-- TODO: href에 실제 링크 연결 -->
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="귀혼 이전 시안 보기"></a>
+              <span class="ptag">DESIGN TRIAL</span>
+              <h3>이전 시안 보기</h3>
+              <p>Trial Version Before Refinement</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/hon/hon_trial_mokup.webp" alt="귀혼 이전 시안 목업" />
+            </article>
+
+            <!-- TODO: href에 실제 Notion 링크 연결 -->
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="귀혼 작업 기록 (Notion)"></a>
+              <span class="ptag">PROCESS</span>
+              <h3>작업 기록 정리</h3>
+              <p>기획부터 구현까지의 기록</p>
+              <div class="pcard__shotwrap">
+                <span class="pcard__notion" aria-hidden="true"><img src="img/jaringobi/notion_icon.png" alt="" /></span>
+                <img class="pcard__shot" src="img/hon/hon_process_notion.webp" alt="Notion 작업 기록" />
+              </div>
+            </article>
+          </div>
         </section>
       </div>
     </div>
