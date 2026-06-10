@@ -1595,7 +1595,8 @@ html.process-open { overflow: hidden; }
 .gw-r2__ring--out { width: 40.903cqw; height: 40.903cqw; border-width: 2px; }
 .gw-r2__ring--mid { width: 35.972cqw; height: 35.972cqw; }
 .gw-r2__disc { width: 29.306cqw; height: 29.306cqw; border-radius: 50%;
-  background: #261c10; border: 1px solid #e8ba4d; }
+  background: #fbf5ea; border: 1px solid #e8ba4d;
+  box-shadow: 0 1.2cqw 3cqw -1.4cqw rgba(120,90,40,0.28); }
 .gw-r2__logo { width: 19.097cqw; height: auto; }
 
 /* 4 원형 이미지 (229×229, 골드링은 이미지에 포함) */
