@@ -21,8 +21,8 @@
 
   window.__processLenis = window.__processLenis || {};
 
-  const setup = (modal) => {
-    const scroller = modal.querySelector(".process__content");
+  const setup = (modal, scrollerSel = ".process__content", ease = EASE, mult = 1) => {
+    const scroller = modal.querySelector(scrollerSel);
     if (!scroller) return;
 
     let target = scroller.scrollTop;
@@ -41,7 +41,7 @@
         if (Math.abs(scroller.scrollTop - current) > 1) current = target = scroller.scrollTop;
         return;
       }
-      current += diff * EASE;
+      current += diff * ease;
       scroller.scrollTop = current;   // scroll 이벤트 발생 → ScrollTrigger 등 자동 갱신
     };
     if (window.gsap && window.gsap.ticker) {
@@ -63,7 +63,7 @@
       let d = e.deltaY;
       if (e.deltaMode === 1) d *= 16;              // 라인 단위
       else if (e.deltaMode === 2) d *= scroller.clientHeight; // 페이지 단위
-      target = clamp(target + d);
+      target = clamp(target + d * mult);
     }, { passive: false });
 
     /* 트랙 클릭/리셋용 — process.js 가 호출 */
@@ -72,6 +72,7 @@
       if (opt && opt.immediate) { current = target; scroller.scrollTop = target; }
     };
     if (modal.dataset.project) window.__processLenis[modal.dataset.project] = { scrollTo };
+    else if (modal.id === "about") window.__aboutLenis = { scrollTo };
 
     /* 모달 열림/닫힘 동기화 */
     const sync = () => {
@@ -90,4 +91,10 @@
     const modal = document.querySelector(sel);
     if (modal) setup(modal);
   });
+
+  /* ABOUT/LAB/PROJECTS 풀페이지(#about, 스크롤러 .about__scroll)도 동일 방식 적용.
+     섹션 점프(about.js)는 gsap 으로 scrollTop 보간 → 휠 lerp 는 유휴 동기화로 공존. */
+  /* About 은 페이지가 길고 트랙패드 관성에 확 쏠려 → 감도(mult)↓ + 더 미끄럽게(ease↓) */
+  const aboutModal = document.querySelector("#about");
+  if (aboutModal) setup(aboutModal, ".about__scroll", 0.09, 0.5);
 })();
