@@ -3113,6 +3113,7 @@ html.process-open { overflow: hidden; }
   background: #fff; color: #1a1a1a;
   font-family: "Pretendard", "Pretendard-Regular", system-ui, -apple-system, sans-serif; }
 .about.is-open { display: block; animation: aboutIn .5s cubic-bezier(.22,1,.36,1) both; }
+.about.is-morphing { animation: none; }   /* 카드 위치에서 clip-path 펼침 중엔 aboutIn 슬라이드 끔 */
 .about.is-closing { animation: aboutOut .32s ease both; }
 @keyframes aboutIn { from { opacity:0; transform: translateY(18px); } to { opacity:1; transform:none; } }
 @keyframes aboutOut { to { opacity:0; transform: translateY(12px); } }

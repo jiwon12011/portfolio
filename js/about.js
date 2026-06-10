@@ -51,11 +51,33 @@
   navItems.forEach((n) =>
     n.addEventListener("click", (e) => { e.preventDefault(); jumpTo(n.dataset.section); }));
 
-  const open = (anchor) => {
+  /* 카드 클릭 시: 그 카드 위치에서 풀스크린으로 clip-path 모핑(프로젝트 카드와 동일 연출).
+     originRect 없으면(진주 네비·CTA 등) 기존 aboutIn 슬라이드 폴백. */
+  const morphOpen = (rect) => {
+    if (!rect || reduce() || window.innerWidth <= 768) return false;
+    const t = Math.round(rect.top), r = Math.round(innerWidth - rect.right),
+          b = Math.round(innerHeight - rect.bottom), l = Math.round(rect.left);
+    if (t < -200 || l < -200 || r < -200 || b < -200) return false;
+    if (rect.width < 20 || rect.height < 20) return false;
+    about.classList.add("is-morphing");                 // CSS 에서 aboutIn animation 끔
+    about.style.transition = "none";
+    about.style.clipPath = `inset(${t}px ${r}px ${b}px ${l}px round 20px)`;
+    void about.offsetWidth;                             // reflow
+    about.style.transition = "clip-path .6s cubic-bezier(.7,0,.2,1)";
+    about.style.clipPath = "inset(0 0 0 0 round 0px)";
+    setTimeout(() => {
+      about.style.transition = ""; about.style.clipPath = "";
+      about.classList.remove("is-morphing");
+    }, 640);
+    return true;
+  };
+
+  const open = (anchor, originRect) => {
     about.classList.remove("is-closing");
     about.classList.add("is-open");
     about.setAttribute("aria-hidden", "false");
     document.documentElement.classList.add("about-open");
+    morphOpen(originRect);                                       /* 카드 위치에서 펼침(가능 시) */
     const id = anchor || "resume";
     requestAnimationFrame(() => { jumpTo(id, true); spy(); });   /* 오픈은 해당 섹션으로 즉시 */
     setTimeout(() => { jumpTo(id, true); spy(); }, 300);         /* 이미지·갤러리 레이아웃 정착 후 보정 */
@@ -95,10 +117,10 @@
     arm.setAttribute("role", "button");
     arm.setAttribute("tabindex", "0");
     arm.setAttribute("aria-label", (arm.dataset.card === "skills" ? "Skills" : "About") + " — 이력서 보기");
-    const go = (e) => { if (e.target.closest("button")) return; e.preventDefault(); open("resume"); };
+    const go = (e) => { if (e.target.closest("button")) return; e.preventDefault(); open("resume", arm.getBoundingClientRect()); };
     arm.addEventListener("click", go);
     arm.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("resume"); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open("resume", arm.getBoundingClientRect()); }
     });
   });
 
@@ -114,9 +136,9 @@
       arm.setAttribute("role", "button");
       arm.setAttribute("tabindex", "0");
       arm.setAttribute("aria-label", label + " 보기");
-      const go = (e) => { if (e && e.target.closest("button")) return; if (e) e.preventDefault(); open(anchor); };
+      const go = (e) => { if (e && e.target.closest("button")) return; if (e) e.preventDefault(); open(anchor, arm.getBoundingClientRect()); };
       arm.addEventListener("click", go);
-      arm.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(anchor); } });
+      arm.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(anchor, arm.getBoundingClientRect()); } });
     });
   });
 
