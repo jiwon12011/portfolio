@@ -1554,17 +1554,18 @@ html.process-open { overflow: hidden; }
 .gw-pcard__pill svg { flex: none; width: 0.9cqw; height: auto; fill: none; stroke: #e8ba4d;
   stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* 목표 요약 박스 — 따뜻한 브라운 그라데이션 + 아웃라인 별 */
-.gw-bg__goal { position: absolute; left: 8.333cqw; top: 100.833cqw; width: 83.472cqw; height: 9.236cqw;
-  background: linear-gradient(100deg, #322713 0%, #251c10 52%, #1c150c 100%);
+/* 공통 목표/요약 박스 — 따뜻한 브라운 그라데이션 + 아웃라인 별 */
+.gw-goal { background: linear-gradient(100deg, #322713 0%, #251c10 52%, #1c150c 100%);
   border: 1px solid #4a3f2b; border-radius: 0.694cqw;
   display: flex; align-items: center; gap: 2.431cqw; padding: 0 3.056cqw; }
-.gw-bg__goal-ic { flex: none; display: grid; place-items: center; width: 3.3cqw; height: 3.3cqw;
+.gw-goal__ic { flex: none; display: grid; place-items: center; width: 3.3cqw; height: 3.3cqw;
   border-radius: 0.6cqw; background: rgba(70,56,32,0.32); border: 1px solid #4a3f2b; }
-.gw-bg__goal-ic svg { width: 58%; height: 58%; fill: none; stroke: #d9c08a;
+.gw-goal__ic svg { width: 58%; height: 58%; fill: none; stroke: #d9c08a;
   stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
-.gw-bg__goal p { margin: 0; color: #faf1ec; font-size: 1.528cqw; font-weight: 700; line-height: 1.4; }
-.gw-bg__goal b { color: #dab773; font-weight: 700; }
+.gw-goal p { margin: 0; color: #faf1ec; font-size: 1.528cqw; font-weight: 700; line-height: 1.4; }
+.gw-goal b { color: #dab773; font-weight: 700; }
+/* 섹션1 목표 박스 위치 */
+.gw-bg__goal { position: absolute; left: 8.333cqw; top: 100.833cqw; width: 83.472cqw; height: 9.236cqw; }
 
 /* ── SECTION 2 · GAME RESEARCH (밝은 섹션, 디자인 1440×1261 → cqw=px/14.4) ── */
 .gw-r2 { aspect-ratio: 1440 / 1261; background: #ebe3d6;
@@ -1612,6 +1613,51 @@ html.process-open { overflow: hidden; }
 .gw-r2__cap--tr { left: 83.542cqw; top: 34.514cqw; }
 .gw-r2__cap--bl { left: 6.25cqw; top: 66.319cqw; }
 .gw-r2__cap--br { left: 83.542cqw; top: 66.319cqw; }
+
+/* ── SECTION 3 · EXPERIMENT (다크 + 시안 목업, 디자인 1440×1588 → cqw=px/14.4) ── */
+.gw-r3 { aspect-ratio: 1440 / 1588; background: #16130f;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.gw-r3__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.gw-r3__scrim { position: absolute; inset: 0; background: rgba(0,0,0,0.3); z-index: 0; }
+.gw-r3 > :not(.gw-r3__bg):not(.gw-r3__scrim) { z-index: 1; }
+/* 라벨 */
+.gw-r3__label { position: absolute; left: 8.333cqw; top: 8.333cqw;
+  display: flex; align-items: center; gap: 2.083cqw; }
+.gw-r3__num { display: grid; place-items: center; width: 4.514cqw; height: 3.194cqw;
+  border-radius: 0.625cqw; background: #e8ba4d; color: #16130f; font-weight: 700; font-size: 1.667cqw; }
+.gw-r3__cat { color: #faf1ec; font-size: 1.111cqw; font-weight: 400; letter-spacing: .02em; }
+/* 헤딩 */
+.gw-r3__title { position: absolute; left: 8.333cqw; top: 13.611cqw; margin: 0; width: 50cqw;
+  font-size: 3.472cqw; font-weight: 700; line-height: 1.28; white-space: nowrap; }
+.gw-r3__title-1, .gw-r3__title-2 { display: block; color: #f4eddf; }
+.gw-r3__title-1 b { color: #e8ba4d; font-weight: 700; }
+/* 서브카피 */
+.gw-r3__desc { position: absolute; left: 8.333cqw; top: 22.986cqw; width: 77.292cqw;
+  font-size: 1.667cqw; line-height: 1.5; color: #bbb0a5; }
+.gw-r3__desc p { margin: 0; font-weight: 400; }
+/* 3 시안 목업 */
+.gw-r3__shot { position: absolute; top: 33.889cqw; width: 23.819cqw; height: 46.458cqw;
+  object-fit: cover; object-position: top center; border-radius: 0.5cqw;
+  border: 1px solid rgba(232,186,77,0.16); display: block; box-shadow: 0 1.4cqw 3cqw -1.4cqw rgba(0,0,0,0.6); }
+.gw-r3__shot--1 { left: 8.333cqw; }
+.gw-r3__shot--2 { left: 38.194cqw; }
+.gw-r3__shot--3 { left: 68.056cqw; }
+/* 3 시안 설명 */
+.gw-r3__exp { position: absolute; top: 82.43cqw; width: 24.583cqw; }
+.gw-r3__exp--1 { left: 7.639cqw; }
+.gw-r3__exp--2 { left: 38.194cqw; }
+.gw-r3__exp--3 { left: 68.056cqw; }
+.gw-r3__exphead { display: flex; align-items: center; gap: 0.694cqw; margin-bottom: 1.528cqw; }
+.gw-r3__expbadge { display: grid; place-items: center; width: 6.181cqw; height: 2.292cqw;
+  border-radius: 0.625cqw; background: #e8ba4d; color: #16130f; font-weight: 700; font-size: 1.25cqw; }
+.gw-r3__exptitle { color: #faf1ec; font-size: 1.25cqw; font-weight: 500; }
+.gw-r3__list { margin: 0; padding: 0; list-style: none; }
+.gw-r3__list li { position: relative; padding-left: 1.04cqw; margin-bottom: 0.42cqw;
+  color: #988f86; font-size: 1.25cqw; font-weight: 400; line-height: 1.45; }
+.gw-r3__list li::before { content: "•"; position: absolute; left: 0; color: #6f655a; }
+/* 결론 박스 위치 */
+.gw-r3__goal { position: absolute; left: 8.264cqw; top: 92.708cqw; width: 83.472cqw; height: 9.236cqw; }
+.gw-r3__goal b { color: #e8ba4d; }
 
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
