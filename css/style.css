@@ -2245,6 +2245,68 @@ html.process-open { overflow: hidden; }
   color: #666; line-height: 1.5;
 }
 
+/* ── SECTION 2 · REDESIGN DIRECTION (1440×1171, cqw = px/14.4) ── */
+.pd-r2 { aspect-ratio: 1440 / 1171; background: #fcfafa;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.pd-r2__num {
+  position: absolute; left: 6.944cqw; top: 2.917cqw;
+  font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
+  background: linear-gradient(180deg, #ffdfd2 0%, #fff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.pd-r2__eyebrow {
+  position: absolute; left: 19.236cqw; top: 9.375cqw;
+  font-size: clamp(10px, 1.667cqw, 24px); font-weight: 500;
+  letter-spacing: 0.1em; color: #ff8456;
+}
+.pd-r2__h1 {
+  position: absolute; left: 6.944cqw; top: 14.931cqw;
+  margin: 0; font-size: clamp(16px, 3.472cqw, 50px);
+  font-weight: 600; color: #222; white-space: nowrap;
+}
+.pd-r2__h2 {
+  position: absolute; left: 6.944cqw; top: 20.139cqw;
+  margin: 0; font-size: clamp(16px, 3.472cqw, 50px);
+  font-weight: 600; color: #222; white-space: nowrap;
+}
+.pd-r2__hl { color: #ff4600; }
+.pd-r2__lead1 {
+  position: absolute; left: 43.75cqw; top: 17.778cqw;
+  margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
+  font-weight: 400; color: #666; line-height: 1.55;
+}
+.pd-r2__lead2 {
+  position: absolute; left: 43.75cqw; top: 21.667cqw;
+  margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
+  font-weight: 400; color: #666; line-height: 1.75;
+}
+.pd-r2__card {
+  position: absolute; left: 7.5cqw;
+  width: 33.542cqw; height: 10.625cqw;
+  background: #fff; border-radius: 0.694cqw; border: 1px solid #eaeaea;
+  display: flex; align-items: center; padding: 0 1.667cqw; gap: 1.25cqw;
+}
+.pd-r2__card--1 { top: 28.472cqw; }
+.pd-r2__card--2 { top: 41.181cqw; }
+.pd-r2__card--3 { top: 53.889cqw; }
+.pd-r2__card--4 { top: 66.597cqw; }
+.pd-r2__icon { flex-shrink: 0; object-fit: contain; width: 5.417cqw; height: auto; }
+.pd-r2__icon--2 { width: 7.431cqw; }
+.pd-r2__icon--3 { width: 5.556cqw; }
+.pd-r2__icon--4 { width: 5.417cqw; }
+.pd-r2__ctext { display: flex; flex-direction: column; gap: 0.417cqw; }
+.pd-r2__ctext strong {
+  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #ff4600;
+}
+.pd-r2__ctext p {
+  margin: 0; font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400;
+  color: #444; line-height: 1.5;
+}
+.pd-r2__diagram {
+  position: absolute; left: 45.903cqw; top: 30.764cqw;
+  width: 49.816cqw; height: auto; display: block;
+}
+
 /* ── 유미 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--yumi { background: #eaf4ff; box-shadow: 0 24px 60px -32px rgba(110,135,180,0.42); }
 .ym-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf4ff; }
