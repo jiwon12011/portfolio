@@ -1564,6 +1564,19 @@ html.process-open { overflow: hidden; }
 .process--pledis .pcard:hover .pcard__go { background: rgba(214,90,61,0.5); color: #fff; }
 /* ptag = 플레디스 브랜드 오렌지 + 흰 글자 */
 .process--pledis .ptag { background: #d65a3d; color: #fff; }
+/* 히어로 바이닐은 가운데 정렬(상단 크롭 방지) */
+.process--pledis .process__hero-media { object-position: center center; }
+/* 웹·어드민 목업: 소스가 프레임을 꽉 채워 기본 86%면 과하게 큼 → 축소 + 하단 여백 */
+.process--pledis .pcard__shot--bleed {
+  width: 62%; max-height: clamp(92px, 11.5vh, 126px);
+  margin: auto auto clamp(8px,1vh,14px); border-radius: 12px; }
+/* PROCESS 노션 — 브랜드 오렌지 반투명 배경판 위에 얹고 살짝 축소 */
+.process--pledis .pcard__shotwrap {
+  background: rgba(214,90,61,0.22); border-radius: 14px 14px 0 0;
+  padding: clamp(10px,0.9vw,15px) clamp(10px,0.9vw,15px) 0; }
+.process--pledis .pcard__shotwrap .pcard__shot {
+  max-height: clamp(118px, 15vh, 150px); border-radius: 9px 9px 0 0; }
+.process--pledis .pcard__notion { background: #d6a08f; }
 
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
