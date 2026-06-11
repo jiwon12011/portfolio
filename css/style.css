@@ -1564,11 +1564,14 @@ html.process-open { overflow: hidden; }
 .process--pledis .pcard:hover .pcard__go { background: rgba(214,90,61,0.5); color: #fff; }
 /* ptag = 플레디스 브랜드 오렌지 + 흰 글자 */
 .process--pledis .ptag { background: #d65a3d; color: #fff; }
-/* 히어로 바이닐은 가운데 정렬(턴테이블 잘림 최소화) */
-.process--pledis .process__hero-media { object-position: center center; }
+/* 히어로 영상: 본 영상은 턴테이블 둘레에 네이비 여백이 있어 16:9 박스에선 작게 보임
+   → 살짝 확대해 다른 패널처럼 꽉 차게(여백 크롭) */
+.process--pledis .process__hero-media { object-position: center center; transform: scale(1.16); }
 /* 목업: 소스가 프레임을 꽉 채워 기본 86%면 커 보임 → 폭만 좁히고
    하단 플러시(카드 바닥에 붙임)는 다른 패널과 동일하게 유지 */
 .process--pledis .pcard__shot--bleed { width: 66%; }
+/* PROCESS 노션 N 배지 원형 배경 = 브랜드 오렌지 */
+.process--pledis .pcard__notion { background: #d65a3d; }
 
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
