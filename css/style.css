@@ -1326,7 +1326,7 @@ html.process-open { overflow: hidden; }
   .process__exit-arrow svg { animation: none; }
 }
 /* 01 섹션이 첫 화면 높이를 꽉 채움(다음 섹션이 안 비치게): 히어로=남는 공간, 카드=고정 */
-#psec-01, #pzsec-01, #gwsec-01, #ymsec-01 { height: 100%; flex: none; display: flex; flex-direction: column; }
+#psec-01, #pzsec-01, #gwsec-01, #ymsec-01, #pd1 { height: 100%; flex: none; display: flex; flex-direction: column; }
 
 .process__hero { flex: 1 1 auto; min-height: 0; border-radius: 22px; overflow: hidden;
   background: #d3ddd0; box-shadow: 0 18px 40px -22px rgba(20,34,18,0.5); }
@@ -2134,6 +2134,116 @@ html.process-open { overflow: hidden; }
 }
 /* 노션 원 — 유미 테마 핑크로 */
 .process--yumi .pcard__notion { background: #f3a9ca; }
+
+/* ── 플레디스 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
+.process__making--pledis { background: #0f1320; box-shadow: 0 24px 60px -32px rgba(30,40,80,0.5); }
+.pd-sec { position: relative; container-type: inline-size; overflow: hidden; background: #0f1320; }
+/* SECTION · 히어로 — 이미지 자체 비율로 자연스럽게 */
+.pd-hero__img { display: block; width: 100%; height: auto; }
+
+/* ── SECTION 1 · WHY REDESIGN (1440×1263, cqw = px/14.4) ── */
+.pd-r1 { aspect-ratio: 1440 / 1263; background: #fcfafa;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.pd-r1__num {
+  position: absolute; left: 6.944cqw; top: 6.875cqw;
+  font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
+  background: linear-gradient(180deg, #ffdfd2 0%, #fff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.pd-r1__eyebrow {
+  position: absolute; left: 17.986cqw; top: 13.333cqw;
+  font-size: clamp(10px, 1.667cqw, 24px); font-weight: 500;
+  letter-spacing: 0.1em; color: #ff8456;
+}
+.pd-r1__h1 {
+  position: absolute; left: 6.944cqw; top: 18.889cqw;
+  margin: 0; font-size: clamp(16px, 3.472cqw, 50px);
+  font-weight: 600; color: #222; white-space: nowrap;
+}
+.pd-r1__h2 {
+  position: absolute; left: 6.944cqw; top: 24.097cqw;
+  margin: 0; font-size: clamp(16px, 3.472cqw, 50px);
+  font-weight: 600; color: #222; white-space: nowrap;
+}
+.pd-r1__hl { color: #ff4600; }
+.pd-r1__lead1 {
+  position: absolute; left: 44.653cqw; top: 21.736cqw;
+  margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
+  font-weight: 400; color: #666; line-height: 1.55;
+}
+.pd-r1__lead2 {
+  position: absolute; left: 44.653cqw; top: 26.736cqw;
+  margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
+  font-weight: 400; color: #666; line-height: 1.75;
+}
+.pd-r1__before {
+  position: absolute; left: 8.611cqw; top: 31.736cqw;
+  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #444;
+}
+.pd-r1__before-sub {
+  position: absolute; left: 12.986cqw; top: 31.806cqw;
+  font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400; color: #666;
+}
+/* 스크린샷 4장 */
+.pd-r1__ss {
+  position: absolute; top: 34.375cqw;
+  height: 31.042cqw; object-fit: cover; border-radius: 0.278cqw;
+}
+.pd-r1__ss--1 { left: 8.611cqw; width: 18.611cqw; }
+.pd-r1__ss--2 { left: 31.806cqw; width: 17.222cqw; }
+.pd-r1__ss--3 { left: 53.542cqw; width: 15.208cqw; }
+.pd-r1__ss--4 { left: 73.264cqw; width: 18.125cqw; }
+/* 스크린샷 하단 레이블 (중앙 정렬) */
+.pd-r1__nav {
+  position: absolute; top: 66.806cqw;
+  transform: translateX(-50%);
+  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500;
+  color: #444; text-align: center; line-height: 1.2;
+}
+.pd-r1__nav small {
+  display: block; margin-top: 0.556cqw;
+  font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400;
+  color: #666; line-height: 1.5;
+}
+.pd-r1__nav--1 { left: 17.917cqw; }
+.pd-r1__nav--2 { left: 40.417cqw; }
+.pd-r1__nav--3 { left: 61.146cqw; }
+.pd-r1__nav--4 { left: 82.326cqw; }
+/* 문제점 */
+.pd-r1__prob-lbl {
+  position: absolute; left: 8.611cqw; top: 75.347cqw;
+  margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
+  font-weight: 500; color: #ff4600; line-height: 1.5;
+}
+.pd-r1__prob-line {
+  position: absolute; left: 8.611cqw; top: 78.681cqw;
+  width: 2.222cqw; border-top: 1px solid #ff4600; display: block;
+}
+/* 문제 카드 3장 */
+.pd-r1__card {
+  position: absolute; top: 75.347cqw;
+  width: 22.083cqw; min-height: 8.333cqw; height: auto;
+  background: #fff; border-radius: 0.694cqw; border: 1px solid #eaeaea;
+  display: flex; align-items: center; padding: 0 1.5cqw; gap: 1.111cqw;
+}
+.pd-r1__card--1 { left: 20.069cqw; }
+.pd-r1__card--2 { left: 44.722cqw; }
+.pd-r1__card--3 { left: 69.375cqw; }
+.pd-r1__dot {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 4.097cqw; height: 4.097cqw;
+  background: #ff8456; border-radius: 50%;
+}
+.pd-r1__dot img { width: 2.431cqw; height: 2.431cqw; object-fit: contain; }
+.pd-r1__ctext { display: flex; flex-direction: column; gap: 0.417cqw; }
+.pd-r1__ctext strong {
+  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #222;
+}
+.pd-r1__ctext p {
+  margin: 0; font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400;
+  color: #666; line-height: 1.5;
+}
 
 /* ── 유미 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--yumi { background: #eaf4ff; box-shadow: 0 24px 60px -32px rgba(110,135,180,0.42); }
