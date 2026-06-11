@@ -137,7 +137,7 @@
     });
   }
 
-  function slide(to, dir) {
+  function slide(to, dir, opts = {}) {
     if (lock || to === idx || to < 0 || to >= N) return;
     lock = true; setTimeout(() => { lock = false; }, COOLDOWN);
     /* 트랙패드 관성 가드: 전환 동안 들어오는 잔여 휠 무시(휠 핸들러가 이 값을 읽음) */
@@ -175,7 +175,7 @@
     idx = to;
     /* 전환 완료 시 새 활성 패널로 포커스 이동(키보드 사용자 맥락 유지).
        메인(0)으로 복귀 시엔 과하므로 생략. focus 는 reflow/스크롤 영향 없게 preventScroll */
-    if (to !== 0) {
+    if (to !== 0 && opts.focus) {
       setTimeout(() => {
         if (idx !== to) return;                 // 그 사이 또 전환됐으면 취소
         const target = inc.querySelector(".intro-brand") || inc;
@@ -185,8 +185,8 @@
     }
     preloadNeighbors();           // 다음 슬라이드 대비 옆 영상 버퍼
   }
-  const go   = (dir) => { if (N >= 2) slide((idx + dir + N) % N, dir); };  // 루프
-  const goTo = (t)   => { if (t !== idx) slide(t, t > idx ? 1 : -1); };    // 점프
+  const go   = (dir, opts) => { if (N >= 2) slide((idx + dir + N) % N, dir, opts); };  // 루프
+  const goTo = (t, opts)   => { if (t !== idx) slide(t, t > idx ? 1 : -1, opts); };    // 점프
 
   /* 제작과정·About 오버레이가 열려 있으면 뒤 배경(프로젝트 전환)은 잠금 */
   const locked = () => document.documentElement.classList.contains("process-open")
@@ -195,7 +195,7 @@
   /* 휠 — 한 제스처 = 한 칸 (쿨다운). About 닫힌 직후 가드 동안은 잔여 스크롤 무시 */
   window.addEventListener("wheel", (e) => {
     if (lock || locked() || performance.now() < (window.__deckGuardUntil || 0)) return;
-    if (e.deltaY > 8) go(1); else if (e.deltaY < -8) go(-1);
+    if (e.deltaY > 8) go(1, { focus: false }); else if (e.deltaY < -8) go(-1, { focus: false });
   }, { passive: true });
 
   /* 키보드 — 세로(↑↓)·가로(←→) 모두. 텍스트 입력 중에는 무시 */
@@ -203,9 +203,9 @@
     if (locked()) return;
     const t = e.target;
     if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
-    if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === "ArrowRight") go(1);
-    else if (e.key === "ArrowUp" || e.key === "PageUp" || e.key === "ArrowLeft") go(-1);
-    else if (e.key === "Escape" && idx !== 0) goTo(0);
+    if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === "ArrowRight") go(1, { focus: true });
+    else if (e.key === "ArrowUp" || e.key === "PageUp" || e.key === "ArrowLeft") go(-1, { focus: true });
+    else if (e.key === "Escape" && idx !== 0) goTo(0, { focus: true });
   });
 
   /* 카드 클릭 → 해당 프로젝트 패널 */
