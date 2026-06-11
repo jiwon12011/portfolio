@@ -81,6 +81,9 @@
     if (play) {
       clearTimeout(v._pauseT);               // 나갔다 다시 들어올 때 예약 pause 취소(경합 제거)
       v.muted = true;
+      /* 재생 대상은 항상 preload=auto 로 올린다. 안 그러면 직후 preloadNeighbors() 가
+         이 영상(preload="none")을 다시 load() → 막 시작한 play() 를 AbortError 로 끊는다. */
+      v.preload = "auto";
       const start = () => {
         if (v.videoWidth && v.videoHeight)
           v.style.objectFit = v.videoHeight > v.videoWidth ? "contain" : "cover";
@@ -89,8 +92,7 @@
         if (pr && pr.catch) pr.catch(() => {});
       };
       if (v.readyState >= 2) start();         // 이미 재생 가능 → 즉시
-      else {                                   // preload="none" 등 데이터 없음 → 로드 후 canplay 에 재생
-        if (v.preload === "none") v.preload = "auto";
+      else {                                   // 데이터 없음 → 로드 후 canplay 에 재생
         v.load();
         v.addEventListener("canplay", start, { once: true });
       }
