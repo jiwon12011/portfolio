@@ -1506,6 +1506,66 @@ html.process-open { overflow: hidden; }
 .process--poze .ptag { background: rgba(230,221,210,0.92); color: #5c4a45; }
 
 /* ===================================================================
+   플레디스(PLEDIS ARCHIVE) 모달 — 딥 네이비 슬레이트 + 피치/크림 + 브랜드 오렌지 태그 (#4)
+   자린고비의 세이지 그린을 #process-pledis 한정으로 재테마.
+==================================================================== */
+.process--pledis .process__panel {
+  background: linear-gradient(158deg, rgba(52,60,88,0.55), rgba(36,42,64,0.42));
+  border-color: rgba(225,231,247,0.16);
+}
+.process--pledis .process__nav {
+  background: linear-gradient(160deg, rgba(48,56,82,0.52), rgba(34,40,60,0.38));
+  border-color: rgba(225,231,247,0.15);
+}
+.process--pledis .process__hero { background: #1b2038; }
+.process--pledis .process__back { color: #dde2f2; }
+.process--pledis .process__back:hover { color: #fff; }
+.process--pledis .process__label { color: #9aa3c4; }
+.process--pledis .process__eq i { background: linear-gradient(180deg, #f1d9bd, #e3b58a); } /* 피치 */
+.process--pledis .process__tracks b { color: #9aa1c0; }
+.process--pledis .process__tracks h4 { color: #e4e7f3; }
+.process--pledis .process__tracks i { color: #8a91b2; }
+.process--pledis .process__tplay { fill: #b6bcd6; }
+.process--pledis .process__tracks a:hover {
+  background: rgba(220,224,240,0.10); border-color: rgba(224,214,200,0.22); }
+/* active = 밝은 피치/크림 패널 + 어두운 네이비 글자 */
+.process--pledis .process__tracks .is-active a {
+  background: linear-gradient(155deg, rgba(238,222,202,0.96), rgba(226,206,182,0.95));
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: 0 13px 28px -14px rgba(12,16,34,0.6), inset 0 1px 1px rgba(255,255,255,0.7);
+}
+.process--pledis .process__tracks .is-active b { color: #b15c34; }
+.process--pledis .process__tracks .is-active h4 { color: #2c2640; }
+.process--pledis .process__tracks .is-active i { color: rgba(44,38,64,0.62); }
+.process--pledis .process__tracks .is-active .process__tplay { fill: #b15c34; }
+/* NOW PLAYING */
+.process--pledis .process__now {
+  background: linear-gradient(160deg, rgba(48,56,82,0.58), rgba(34,40,60,0.44));
+  border-color: rgba(225,231,247,0.15); }
+.process--pledis .process__now-meta span { color: #8a91b2; }
+.process--pledis .process__now-meta strong { color: #e8ebf5; }
+.process--pledis .process__now-ctrl button { color: #c2c8de; }
+.process--pledis .process__now-ctrl button:hover { color: #fff; }
+/* 카드 */
+.process--pledis .pcard {
+  background: linear-gradient(160deg, rgba(54,62,90,0.52), rgba(40,46,68,0.40));
+  border-color: rgba(225,231,247,0.15); }
+.process--pledis .pcard:hover {
+  background: linear-gradient(160deg, rgba(66,75,106,0.58), rgba(48,55,80,0.46));
+  border-color: rgba(231,150,110,0.42); }
+.process--pledis .pcard h3 { color: #eaedf6; }
+.process--pledis .pcard p { color: #aab0cc; }
+.process--pledis .pcard--info dt { color: #9aa1c0; }
+.process--pledis .pcard--info dd { color: #e4e7f3; }
+.process--pledis .pcard--info dd i { color: #8a91b2; }
+.process--pledis .pcard__tool-label { color: #9aa1c0; }
+.process--pledis .pcard__go {
+  background: rgba(255,255,255,0.10); border-color: rgba(225,231,247,0.32); color: #dde2f2; }
+.process--pledis .pcard:hover .pcard__go { background: rgba(214,90,61,0.5); color: #fff; }
+/* ptag = 플레디스 브랜드 오렌지 + 흰 글자 */
+.process--pledis .ptag { background: #d65a3d; color: #fff; }
+
+/* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
 ==================================================================== */
