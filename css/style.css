@@ -2303,8 +2303,91 @@ html.process-open { overflow: hidden; }
   color: #444; line-height: 1.5;
 }
 .pd-r2__diagram {
-  position: absolute; left: 45.903cqw; top: 30.764cqw;
-  width: 49.816cqw; height: auto; display: block;
+  position: absolute; left: 45.278cqw; top: 28.194cqw;
+  width: 50.278cqw; height: auto; display: block;
+}
+
+/* ── SECTION 3 · MAIN EXPERIENCE (1440×1781, cqw = px/14.4) ── */
+.pd-r3 {
+  aspect-ratio: 1440 / 1781; background: #fcfafa;
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+}
+.pd-r3__num {
+  position: absolute; left: 7.5cqw; top: 3.889cqw;
+  font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
+  background: linear-gradient(180deg, #ffdfd2 0%, #fff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  -webkit-text-stroke: 1px rgba(255,70,0,0.12);
+}
+.pd-r3__eyebrow {
+  position: absolute; left: 20cqw; top: 10.347cqw;
+  font-size: clamp(10px, 1.667cqw, 24px); font-weight: 500;
+  letter-spacing: 0.1em; color: #ff8456;
+}
+.pd-r3__h1,
+.pd-r3__h2 {
+  position: absolute; left: 6.944cqw; margin: 0;
+  font-size: clamp(16px, 3.472cqw, 50px); font-weight: 600;
+  color: #222; line-height: 1.24; white-space: nowrap;
+}
+.pd-r3__h1 { top: 15.903cqw; }
+.pd-r3__h2 { top: 21.111cqw; }
+.pd-r3__h1 span { color: #ff4600; }
+.pd-r3__lead1,
+.pd-r3__lead2 {
+  position: absolute; left: 43.75cqw; margin: 0;
+  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 400;
+  color: #666; line-height: 1.65;
+}
+.pd-r3__lead1 { top: 18.75cqw; }
+.pd-r3__lead2 { top: 22.639cqw; }
+.pd-r3__screen {
+  position: absolute; left: 7.5cqw; width: 38.049cqw;
+  object-fit: cover; display: block;
+}
+.pd-r3__screen--hero {
+  top: 28.75cqw; height: 18.054cqw;
+  object-position: top center;
+}
+.pd-r3__screen--flow {
+  top: 46.804cqw; height: 72.988cqw;
+  object-position: bottom center;
+}
+.pd-r3__flow {
+  position: absolute; inset: 0; margin: 0; padding: 0; list-style: none;
+}
+.pd-r3__item {
+  position: absolute; left: 58.333cqw; width: 34.5cqw; min-height: 8cqw;
+}
+.pd-r3__item--1 { top: 33.125cqw; }
+.pd-r3__item--2 { top: 50.625cqw; }
+.pd-r3__item--3 { top: 72.292cqw; }
+.pd-r3__item--4 { top: 93.056cqw; }
+.pd-r3__item--5 { top: 110.139cqw; }
+.pd-r3__line {
+  position: absolute; left: -12.778cqw; top: 1.389cqw;
+  width: 9.861cqw; border-top: 1px solid #ffdfd2;
+}
+.pd-r3__badge {
+  position: absolute; left: -2.778cqw; top: 0;
+  display: grid; place-items: center;
+  width: 2.778cqw; height: 2.778cqw; border-radius: 50%;
+  background: #ff4600; color: #fff;
+  font-size: clamp(7px, 1.111cqw, 16px); font-weight: 500;
+}
+.pd-r3__item strong {
+  display: block; margin: 0 0 1.25cqw;
+  font-size: clamp(9px, 1.389cqw, 20px); font-weight: 500;
+  color: #ff4600; line-height: 1;
+}
+.pd-r3__item em {
+  display: block; margin: 0 0 0.694cqw;
+  font-style: normal; font-size: clamp(8px, 1.111cqw, 16px);
+  font-weight: 500; color: #444; line-height: 1.45;
+}
+.pd-r3__item p {
+  margin: 0; font-size: clamp(7px, 0.972cqw, 14px);
+  font-weight: 400; color: #666; line-height: 1.55;
 }
 
 /* ── 유미 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
