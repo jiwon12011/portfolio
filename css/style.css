@@ -2393,7 +2393,7 @@ html.process-open { overflow: hidden; }
 .pd-hero { background: #14182b; }
 .pd-hero__img { display: block; width: 100%; height: auto; }
 .pd-hero__copy {
-  position: absolute; left: 15.8cqw; top: 22.7cqw;
+  position: absolute; left: 9.2cqw; top: 13.4cqw;
   color: #fff; font-family: "Pretendard Variable", Pretendard, sans-serif;
   text-shadow: 0 0.14cqw 0.55cqw rgba(10,18,42,0.45);
 }
@@ -2591,6 +2591,8 @@ html.process-open { overflow: hidden; }
 }
 .pd-r3::before,
 .pd-r3::after { display: none; }
+.pd-r7::before,
+.pd-r7::after { display: none; }
 .pd-r3__num {
   position: absolute; left: 7.5cqw; top: 3.889cqw;
   font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
