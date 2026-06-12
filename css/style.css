@@ -847,6 +847,79 @@ img.is-empty { color: transparent; }
 @media (prefers-reduced-motion: reduce) { .intro-list__eq i { animation: none; height: 60%; } }
 .intro-list__item:hover { background: color-mix(in srgb, var(--it-title) 6%, transparent); transform: translateX(-3px); }
 .intro-list__item.is-active { background: var(--glass); border-color: var(--it-box-border); }
+/* ── 패널 진입 시 목차 릴(슬롯머신) 스핀 연출 ──
+   모든 카드가 동일한 introReel 키프레임으로 세로 왕복 2패스 후 댐핑 착지.
+   :nth-child 스태거(0.04s)로 카드들이 차례로 안착하며 릴 질감을 만든다.
+   패널 슬라이드(.8s)와 동시에 시작, 0.55~0.65s 내 모든 카드 착지.
+   진폭은 라벨(.intro-list__label) 침범 없는 ±32px 이내로 제한. */
+
+/* 릴 스핀 키프레임: 위 → 아래 → 위 → 과슈트 → 착지.
+   opacity 는 건드리지 않는다 — 각 카드는 [data-slot] 거리 위계(가운데 밝고 옆 흐림) 밝기를
+   처음부터 끝까지 유지하고, 세로 transform(릴 왕복)만 탄다. (opacity 를 1 로 올리면
+   옆 카드가 밝아졌다 어두워지는 깜빡임이 생기므로 금지.) */
+/* 튕김(두웅두웅) 제거 — 위에서 부드럽게 한 번 미끄러져 안착(오버슈트 없음). */
+@keyframes introReel {
+  0%   { transform: translateY(-22px); }
+  100% { transform: translateY(0);     }
+}
+
+/* 모든 카드에 릴 애니메이션 적용 — is-active 패널 기준.
+   fill: backwards — 딜레이 중엔 0%(숨김) 유지, 끝나면 base 로 복귀해 [data-slot] 거리 위계(가운데 밝고
+   옆은 흐림) opacity 를 되살린다. both 로 하면 opacity 1 이 고정돼 위계가 깨지므로 금지.
+   duration 을 .9s 로 늦춰(예전 .62s) "휘익" 릴 속도를 덜 급하게. */
+.project-intro.is-active .intro-list__item {
+  animation: introReel .9s cubic-bezier(.22, 1, .36, 1) backwards;
+}
+
+/* :nth-child 스태거 — 위→아래 순으로 0.06s씩 차례 착지(예전 .04s → 더 느긋하게) */
+.project-intro.is-active .intro-list__item:nth-child(1) { animation-delay: .06s; }
+.project-intro.is-active .intro-list__item:nth-child(2) { animation-delay: .12s; }
+.project-intro.is-active .intro-list__item:nth-child(3) { animation-delay: .18s; }
+.project-intro.is-active .intro-list__item:nth-child(4) { animation-delay: .24s; }
+.project-intro.is-active .intro-list__item:nth-child(5) { animation-delay: .30s; }
+.project-intro.is-active .intro-list__item:nth-child(6) { animation-delay: .36s; }
+.project-intro.is-active .intro-list__item:nth-child(7) { animation-delay: .42s; }
+/* 가운데(현재) 카드가 롤 중일 땐 릴 바운스 제외 — "두웅"에 묻히지 않고 이전→현재 슬롯 롤만 또렷이 보이게.
+   롤 안 하는 경우(메인 진입·먼 점프)엔 옆칸처럼 릴 바운스 유지. */
+.project-intro.is-active .intro-list__item[data-slot="0"].is-rolling { animation: none; }
+
+/* ── 가운데(현재) 카드 슬롯 롤: 이전 프로젝트 → 현재 프로젝트 ──
+   deck.js 가 진입 시 가운데 카드에 이전 프로젝트 내용을 .intro-roll__out 레이어로 얹고
+   .is-rolling 을 건다. 콘텐츠 영역(이미지+텍스트 박스)만 세로로 굴려, 이전(out)이 빠지고
+   현재(base)가 자리잡는 슬롯머신 착지 느낌. 방향(dir)은 --roll-dir(1=다음/-1=이전)로 받음.
+   transform-only(합성) + overflow:hidden 로 콘텐츠만 클립, eq/preview/위계는 안 건드림. */
+.intro-list__item.is-rolling { overflow: hidden; }
+.intro-list__item .intro-roll__out {
+  position: absolute; inset: 0; display: grid; grid-template-columns: 56px 1fr; gap: 13px;
+  align-items: center; padding: 10px 30px 10px 10px; pointer-events: none;
+}
+.intro-list__item .intro-roll__out img { width: 56px; height: 48px; object-fit: cover; border-radius: 9px; }
+.intro-list__item .intro-roll__out span { font-size: 11px; color: var(--muted); }
+.intro-list__item .intro-roll__out h4 { margin: 2px 0; font-size: 14px; font-weight: 700; color: var(--it-title); }
+.intro-list__item .intro-roll__out p { margin: 0; font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
+
+/* 이전 내용(out)·현재 내용(base)을 같은 거리만큼 굴림. dir>0(다음): 이전이 위로 빠지고 현재가 아래서 올라옴 */
+@keyframes introRollOut { from { transform: translateY(0); } to { transform: translateY(calc(var(--roll-dir, 1) * -118%)); } }
+@keyframes introRollIn  { from { transform: translateY(calc(var(--roll-dir, 1) * 118%)); } to { transform: translateY(0); } }
+/* delay .4s = 이전(out)을 .4초 멈춰 보여준 뒤 굴림(both 로 딜레이 중 translateY 0 유지 → 이전이 또렷이 보임).
+   duration .7s 로 천천히 → "3 보였다가 → 4로 굴러 멈춤"이 눈에 들어오게. */
+.intro-list__item.is-rolling .intro-roll__out {
+  animation: introRollOut .9s cubic-bezier(.22, 1, .36, 1) .7s both;
+}
+/* base(현재 내용)는 딜레이 중 118%(화면 밖, 숨김) 유지(backwards) → 이전이 빠지며 현재가 올라와 안착. */
+.intro-list__item.is-rolling > img,
+.intro-list__item.is-rolling > div {
+  animation: introRollIn .9s cubic-bezier(.22, 1, .36, 1) .7s backwards;
+}
+
+/* prefers-reduced-motion: 연출 생략, 즉시 표시(롤·out 레이어 모두 무력화) */
+@media (prefers-reduced-motion: reduce) {
+  .project-intro.is-active .intro-list__item { animation: none; opacity: 1; transform: none; }
+  .intro-list__item.is-rolling > img,
+  .intro-list__item.is-rolling > div,
+  .intro-list__item.is-rolling .intro-roll__out { animation: none; }
+  .intro-list__item .intro-roll__out { display: none; }
+}
 .intro-list__item img { width: 56px; height: 48px; object-fit: cover; border-radius: 9px; }
 .intro-list__item span { font-size: 11px; color: var(--muted); }
 .intro-list__item h4 { margin: 2px 0; font-size: 14px; font-weight: 700; color: var(--it-title); }

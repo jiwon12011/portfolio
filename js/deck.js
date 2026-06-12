@@ -107,7 +107,49 @@
      패널마다 자기 프로젝트를 하이라이트하므로 패널이 늘어나도 자동으로 맞는다. */
   const projPanels = panels.filter((p) => p.dataset.project && p.dataset.project !== "main");
   const pad2 = (v) => String(v).padStart(2, "0");
-  function syncIntro(p) {
+  const REELOK = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 가운데(현재) 카드 슬롯 롤: 들어오는 패널의 가운데 카드에 "이전 프로젝트" 내용을
+     임시 out 레이어로 얹어, 이전→현재로 굴러 멈추는 슬롯머신 착지를 만든다.
+     · 이전 내용 출처: 들어오는 패널의 목차 안에 이미 존재하는 prev li(중복 데이터 X).
+       예) 유미(04) 패널 목차 = [02,03,04,05,06] → 03(pledis) li 의 내용을 복제.
+     · prev 카드가 그 패널 5칸 창에 없으면(먼 점프) 롤 생략 → 평상시 현재 표시.
+     · CSS 가 transform-only 로 굴리고, 끝나면 out 레이어 제거·is-rolling 해제(수렴). */
+  function rollCenter(p, prevKey, dir) {
+    const center = p.querySelector('.intro-list__item[data-slot="0"]')
+      || p.querySelector(".intro-list__item.is-active");
+    if (!center) return;
+    /* 직전 롤이 진행 중이면 즉시 리셋(빠른 연속 전환 가드) */
+    if (center._rollCleanup) center._rollCleanup();
+    if (!REELOK || !prevKey) return;
+    const src = p.querySelector(`.intro-list__item[data-go="${prevKey}"]`);
+    if (!src || src === center) return;       // prev 가 창 밖이거나 자기 자신 → 롤 생략
+
+    /* prev 카드의 콘텐츠(이미지+텍스트 div)만 복제해 out 레이어 구성 — eq/preview 는 제외 */
+    const out = document.createElement("div");
+    out.className = "intro-roll__out";
+    out.setAttribute("aria-hidden", "true");
+    src.querySelectorAll(":scope > img, :scope > div").forEach((n) => out.appendChild(n.cloneNode(true)));
+    if (!out.childNodes.length) return;
+
+    center.style.setProperty("--roll-dir", dir < 0 ? -1 : 1);
+    center.appendChild(out);
+    center.classList.add("is-rolling");
+
+    let done = false;
+    const cleanup = () => {
+      if (done) return; done = true;
+      clearTimeout(t);
+      center.classList.remove("is-rolling");
+      center.style.removeProperty("--roll-dir");
+      if (out.parentNode) out.remove();
+      center._rollCleanup = null;
+    };
+    const t = setTimeout(cleanup, 1800);      // 롤 hold .7s + 애니 .9s = 1.6s + 여유
+    center._rollCleanup = cleanup;
+  }
+
+  function syncIntro(p, prevKey, dir) {
     if (!p || !p.dataset.project || p.dataset.project === "main") return;
     const proj = p.dataset.project;
     p.querySelectorAll(".intro-list__item").forEach((it) => {
@@ -120,8 +162,10 @@
     if (pg && n > 0) pg.textContent = `${pad2(n)} / ${pad2(tot)}`;
     const bar = p.querySelector(".intro-pager__bar i");
     if (bar && tot) bar.style.setProperty("--p", (n / tot) * 100 + "%");
+    /* 이전 프로젝트가 있고(메인 진입·동일 아님) 들어오는 패널일 때만 가운데 카드 롤 */
+    if (prevKey && prevKey !== "main" && prevKey !== proj) rollCenter(p, prevKey, dir);
   }
-  projPanels.forEach(syncIntro);   // 초기 1회
+  projPanels.forEach((p) => syncIntro(p));   // 초기 1회(롤 없음)
 
   /* 현재+다음+이전 패널 영상만 미리 버퍼(멀리 있는 건 안 받음 → 초기 가볍게) */
   function preloadNeighbors() {
@@ -171,7 +215,9 @@
     inc.removeAttribute("inert");
     setTimeout(() => { if (idx !== panels.indexOf(out)) out.setAttribute("inert", ""); }, 850);
     media(out, false); media(inc, true);
-    syncIntro(inc);
+    /* idx 는 아직 나가는(이전) 패널 → 이전 프로젝트 key 로 가운데 카드 슬롯 롤 트리거.
+       메인("main")·동일 프로젝트면 syncIntro 내부에서 롤 생략. */
+    syncIntro(inc, panels[idx].dataset.project, dir);
     root.classList.toggle("off-main", to !== 0);
     idx = to;
     /* 전환 완료 시 새 활성 패널로 포커스 이동(키보드 사용자 맥락 유지).
