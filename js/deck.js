@@ -107,65 +107,26 @@
      패널마다 자기 프로젝트를 하이라이트하므로 패널이 늘어나도 자동으로 맞는다. */
   const projPanels = panels.filter((p) => p.dataset.project && p.dataset.project !== "main");
   const pad2 = (v) => String(v).padStart(2, "0");
-  const REELOK = !matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* 가운데(현재) 카드 슬롯 롤: 들어오는 패널의 가운데 카드에 "이전 프로젝트" 내용을
-     임시 out 레이어로 얹어, 이전→현재로 굴러 멈추는 슬롯머신 착지를 만든다.
-     · 이전 내용 출처: 들어오는 패널의 목차 안에 이미 존재하는 prev li(중복 데이터 X).
-       예) 유미(04) 패널 목차 = [02,03,04,05,06] → 03(pledis) li 의 내용을 복제.
-     · prev 카드가 그 패널 5칸 창에 없으면(먼 점프) 롤 생략 → 평상시 현재 표시.
-     · CSS 가 transform-only 로 굴리고, 끝나면 out 레이어 제거·is-rolling 해제(수렴). */
-  function rollCenter(p, prevKey, dir) {
-    const center = p.querySelector('.intro-list__item[data-slot="0"]')
-      || p.querySelector(".intro-list__item.is-active");
-    if (!center) return;
-    /* 직전 롤이 진행 중이면 즉시 리셋(빠른 연속 전환 가드) */
-    if (center._rollCleanup) center._rollCleanup();
-    if (!REELOK || !prevKey) return;
-    const src = p.querySelector(`.intro-list__item[data-go="${prevKey}"]`);
-    if (!src || src === center) return;       // prev 가 창 밖이거나 자기 자신 → 롤 생략
-
-    /* prev 카드의 콘텐츠(이미지+텍스트 div)만 복제해 out 레이어 구성 — eq/preview 는 제외 */
-    const out = document.createElement("div");
-    out.className = "intro-roll__out";
-    out.setAttribute("aria-hidden", "true");
-    src.querySelectorAll(":scope > img, :scope > div").forEach((n) => out.appendChild(n.cloneNode(true)));
-    if (!out.childNodes.length) return;
-
-    center.style.setProperty("--roll-dir", dir < 0 ? -1 : 1);
-    center.appendChild(out);
-    center.classList.add("is-rolling");
-
-    let done = false;
-    const cleanup = () => {
-      if (done) return; done = true;
-      clearTimeout(t);
-      center.classList.remove("is-rolling");
-      center.style.removeProperty("--roll-dir");
-      if (out.parentNode) out.remove();
-      center._rollCleanup = null;
-    };
-    const t = setTimeout(cleanup, 1600);      // 롤 hold .5s + 애니 .9s = 1.4s + 여유
-    center._rollCleanup = cleanup;
-  }
-
-  function syncIntro(p, prevKey, dir) {
-    if (!p || !p.dataset.project || p.dataset.project === "main") return;
-    const proj = p.dataset.project;
-    p.querySelectorAll(".intro-list__item").forEach((it) => {
-      const on = it.dataset.go === proj;
-      it.classList.toggle("is-active", on);
-      if (on) it.setAttribute("aria-current", "true"); else it.removeAttribute("aria-current");
-    });
+  /* 패널 자체 pager(좌하단 "NN / MM" + 진행 바) 갱신 — 패널마다 자기 것을 들고 있음 */
+  function updatePager(p) {
     const n = projPanels.indexOf(p) + 1, tot = projPanels.length;
     const pg = p.querySelector(".intro-pager span");
     if (pg && n > 0) pg.textContent = `${pad2(n)} / ${pad2(tot)}`;
     const bar = p.querySelector(".intro-pager__bar i");
     if (bar && tot) bar.style.setProperty("--p", (n / tot) * 100 + "%");
-    /* 이전 프로젝트가 있고(메인 진입·동일 아님) 들어오는 패널일 때만 가운데 카드 롤 */
-    if (prevKey && prevKey !== "main" && prevKey !== proj) rollCenter(p, prevKey, dir);
   }
-  projPanels.forEach((p) => syncIntro(p));   // 초기 1회(롤 없음)
+
+  /* dir: +1(다음)/-1(이전)/0(점프). 라이브 목차(intro-toc.js)를 현재 패널로 굴림 + pager 동기화.
+     패널 내부 목차는 제거됐으므로 is-active/aria-current 조작은 setCurrent(피커 휠)가 전담한다. */
+  function syncIntro(p, dir = 0) {
+    if (!p || !p.dataset.project || p.dataset.project === "main") return;
+    /* 패널 인덱스(projPanels 순서 = PROJECTS 순서)를 그대로 전달 → 트랙이 그 칸으로 굴러 안착. */
+    window.__introToc && window.__introToc.setCurrent(projPanels.indexOf(p), dir);
+    updatePager(p);
+  }
+  /* 초기 1회: 각 패널 pager 채움. 라이브 목차는 첫 진입(slide)에서 setCurrent 로 그림(메인=숨김). */
+  projPanels.forEach(updatePager);
 
   /* 현재+다음+이전 패널 영상만 미리 버퍼(멀리 있는 건 안 받음 → 초기 가볍게) */
   function preloadNeighbors() {
@@ -215,9 +176,10 @@
     inc.removeAttribute("inert");
     setTimeout(() => { if (idx !== panels.indexOf(out)) out.setAttribute("inert", ""); }, 850);
     media(out, false); media(inc, true);
-    /* idx 는 아직 나가는(이전) 패널 → 이전 프로젝트 key 로 가운데 카드 슬롯 롤 트리거.
-       메인("main")·동일 프로젝트면 syncIntro 내부에서 롤 생략. */
-    syncIntro(inc, panels[idx].dataset.project, dir);
+    /* TOC 방향: 인접 한 칸(루프 포함)이면 슬라이드 dir(±1) → 한 행 롤,
+       여러 칸 점프면 0 → setCurrent 가 순환 최단거리로 다단 롤. 메인 진입/이탈은 setCurrent 내부 처리. */
+    const adjacent = to === (idx + 1) % N || to === (idx - 1 + N) % N;
+    syncIntro(inc, adjacent ? dir : 0);
     root.classList.toggle("off-main", to !== 0);
     idx = to;
     /* 전환 완료 시 새 활성 패널로 포커스 이동(키보드 사용자 맥락 유지).
@@ -278,17 +240,21 @@
     });
   });
 
-  /* 인트로 오버레이: 우측 프로젝트 리스트 → 해당 패널, 브랜드 로고 → 메인 */
-  document.querySelectorAll("[data-go]").forEach((el) => {
-    const goEl = () => {
-      const t = panels.findIndex((p) => p.dataset.project === el.dataset.go);
-      if (t >= 0) goTo(t);
-    };
-    el.addEventListener("click", goEl);
-    /* role=button 목차 항목 키보드 활성화(Enter/Space) */
-    el.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); goEl(); }
-    });
+  /* 인트로 라이브 목차 → 해당 패널. 라이브 트랙은 setCurrent 가 매 전환마다 innerHTML 을
+     재생성하므로 항목마다 리스너를 달면 교체 때 날아간다 → document 위임 1회로 고정. */
+  const goByEl = (el) => {
+    const t = panels.findIndex((p) => p.dataset.project === el.dataset.go);
+    if (t >= 0) goTo(t);
+  };
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest && e.target.closest("[data-go]");
+    if (el) goByEl(el);
+  });
+  /* role=button 목차 항목 키보드 활성화(Enter/Space) */
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const el = e.target.closest && e.target.closest("[data-go]");
+    if (el) { e.preventDefault(); goByEl(el); }
   });
   document.querySelectorAll("[data-go-main]").forEach((el) =>
     el.addEventListener("click", () => goTo(0)));

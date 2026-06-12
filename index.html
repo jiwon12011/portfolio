@@ -369,12 +369,6 @@
       <!-- 하단 좌측: 페이지네이션 -->
       <div class="intro-pager"><span>01 / 05</span><div class="intro-pager__bar"><i style="--p:20%"></i></div></div>
 
-      <!-- 우측: 프로젝트 리스트 -->
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
-
       <!-- 하단 우측: 인터랙션 안내 -->
       <div class="intro-hints">
         <div class="intro-hint">
@@ -445,10 +439,6 @@
 
       <div class="intro-pager"><span>02 / 05</span><div class="intro-pager__bar"><i style="--p:40%"></i></div></div>
 
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
 
       <div class="intro-hints">
         <div class="intro-hint">
@@ -488,10 +478,6 @@
         <p class="intro-info__desc">아이돌의 세계를 한 장면으로.<br /><br />플레디스 엔터테인먼트의 아티스트를<br />담아낸 브랜드 비주얼 프로젝트</p>
       </div>
       <div class="intro-pager"><span>03 / 10</span><div class="intro-pager__bar"><i style="--p:30%"></i></div></div>
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
       <div class="intro-hints">
         <div class="intro-hint">
           <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
@@ -555,10 +541,6 @@
 
       <div class="intro-pager"><span>04 / 05</span><div class="intro-pager__bar"><i style="--p:80%"></i></div></div>
 
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
 
       <div class="intro-hints">
         <div class="intro-hint">
@@ -622,10 +604,6 @@
 
       <div class="intro-pager"><span>05 / 05</span><div class="intro-pager__bar"><i style="--p:100%"></i></div></div>
 
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
 
       <div class="intro-hints">
         <div class="intro-hint">
@@ -664,10 +642,6 @@
         <p class="intro-info__desc">저장소가 아니라, 학습 진입로.<br /><br />탐색 → 선택 → 학습이 끊기지 않는<br />글로벌 수학 기출 학습 플랫폼</p>
       </div>
       <div class="intro-pager"><span>06 / 09</span><div class="intro-pager__bar"><i style="--p:66%"></i></div></div>
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
       <div class="intro-hints">
         <div class="intro-hint">
           <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
@@ -704,10 +678,6 @@
         <p class="intro-info__desc">문 너머, 또 다른 세계.<br /><br />방탈출의 몰입을 그대로 옮긴<br />시네마틱 브랜드 웹 경험</p>
       </div>
       <div class="intro-pager"><span>07 / 09</span><div class="intro-pager__bar"><i style="--p:77%"></i></div></div>
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
       <div class="intro-hints">
         <div class="intro-hint">
           <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
@@ -745,10 +715,6 @@
         <p class="intro-info__desc">선택이 누군가의 노래가 된다.<br /><br />랜딩에서 클릭하면 바로 플레이되는<br />멀티엔딩 오토메 비주얼노벨</p>
       </div>
       <div class="intro-pager"><span>09 / 09</span><div class="intro-pager__bar"><i style="--p:100%"></i></div></div>
-      <aside class="intro-list">
-        <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
-        <ul></ul>
-      </aside>
       <div class="intro-hints">
         <div class="intro-hint">
           <svg viewBox="0 0 24 24"><path d="M9 3v9l2.5-2 1.8 4 2-1-1.8-3.8L17 8 9 3z"/></svg>
@@ -762,6 +728,19 @@
       </div>
     </div>
   </section>
+
+  <!-- ===== 라이브 PROJECTS 목차 — 패널 바깥에 1개 고정(피커 휠).
+       전체 링을 한 줄짜리 트랙에 렌더하고, 현재 프로젝트가 가운데 선택 프레임에
+       오도록 트랙을 translateY. deck.js 가 setCurrent(idx,dir) 로 굴림.
+       (가로=패널 슬라이드 / 세로=목차 트랙 — 직교 분리). intro-toc.js -->
+  <aside class="intro-list intro-list--live" aria-label="프로젝트 목록">
+    <p class="intro-list__label">PROJECTS<span class="intro-list__line" aria-hidden="true"></span></p>
+    <div class="intro-list__viewport">
+      <ul class="intro-list__track"></ul>
+      <!-- 선택 프레임: 가운데 고정 오버레이(Stage2 에서 글래스/기울임/블러). -->
+      <div class="intro-list__frame" aria-hidden="true"></div>
+    </div>
+  </aside>
 
   <!-- 재생버튼 커서 — 인트로 위에서 마우스를 따라다니며 클릭 유도(데스크탑 전용) -->
   <div id="play-cursor" aria-hidden="true">

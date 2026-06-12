@@ -828,14 +828,87 @@ img.is-empty { color: transparent; }
 .intro-pager__bar i { position:absolute; left:0; top:50%; transform:translateY(-50%); width: var(--p,20%); height:1px; background:var(--it-accent); }
 .intro-pager__bar i::after { content:""; position:absolute; right:-3px; top:50%; transform:translateY(-50%); width:6px; height:6px; border-radius:50%; background:var(--it-accent); box-shadow:0 0 8px color-mix(in srgb, var(--it-accent) 82%, transparent); }
 
-/* 우측 프로젝트 리스트 — 헤더 아래부터, 하단 힌트와 안 겹치게 컴팩트 */
-.intro-list { position: absolute; right: var(--pad); top: clamp(140px, 19vh, 212px); width: clamp(252px, 22.92vw, 440px); }
+/* ───────────────────────────────────────────────────────────────────────
+   PROJECTS 목차 — 라이브 단일 "피커 휠"
+   · .intro-list--live : 패널 바깥 고정 1개. 좌표·테마 변수 자체 보유(아래 테마 블록이
+     [data-project] 로 덮어씀). html.off-main 일 때만 표시.
+   · .intro-list__viewport : 가운데 ±HALF 칸만 보이는 클립 창(나머지 트랙 행은 잘림).
+   · .intro-list__track : 전체 링(N칸)을 한 줄로 든 ul. translateY 로 굴림(--row 단위).
+   · .intro-list__frame : 가운데 고정 선택 프레임(Stage1 기본 박스, Stage2 글래스/기울임).
+   ─ 가로(패널 슬라이드)는 .deck-panel translateX, 세로(목차)는 트랙 translateY — 직교 분리.
+─────────────────────────────────────────────────────────────────────── */
+
+/* 인패널 잔재였던 .intro-list 절대배치는 라이브 셸이 대체 — 호환 위해 라벨/항목 룰은 공유. */
 .intro-list__label { display:flex; align-items:center; gap:12px; margin: 0 0 12px; font-size: 12px; letter-spacing: 0.16em; color: var(--muted); font-weight: 700; }
 .intro-list__line { flex:1; height:1px; background: var(--it-box-border); }
-.intro-list ul { list-style:none; margin:0; padding:0; display:grid; gap:8px; }
-.intro-list__item { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 13px; align-items: center; min-height: 56px; padding: 10px 30px 10px 10px; border-radius: 13px; border: 1px solid transparent; cursor: pointer; transition: background .25s, border-color .25s, transform .2s; }
 
-/* 뮤직플레이어 느낌 — 활성 프로젝트에 작은 이퀄라이저 포인트 */
+/* ── 라이브 셸: deck 위 고정 + 자체 테마/좌표 변수 ── */
+.intro-list--live {
+  /* z 60: 인트로 패널(50) 위, play-cursor(89/90)·process(100)·about(120) 아래 */
+  position: fixed; z-index: 60;
+  right: var(--pad); top: clamp(140px, 19vh, 212px); width: clamp(252px, 22.92vw, 440px);
+  --pad: clamp(28px, 3.4vw, 65px);
+  --it-accent: #1b2944; --it-title: #1b2944; --it-text: rgba(27,41,68,0.72);
+  --it-muted: rgba(27,41,68,0.56); --it-box-bg: rgba(255,255,255,0.16); --it-box-border: rgba(27,41,68,0.1);
+  --glass: var(--it-box-bg); --muted: var(--it-muted);
+  color: var(--it-text); font-family: Pretendard, sans-serif;
+  /* 메인에선 숨김 → off-main(프로젝트 패널)일 때만 표시. opacity 로 부드럽게. */
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .4s ease, visibility 0s linear .4s;
+}
+html.off-main .intro-list--live {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transition: opacity .4s ease;
+}
+
+/* ── viewport: 가운데 ±HALF 칸만 노출(나머지 트랙 행은 위아래로 클립) ──
+   높이 = (가운데 + 위아래 HALF) 칸 = (2*HALF+1)행 + HALF*2 gap.
+   --row(JS 실측: 칸높이+gap), --frame-h(가운데 칸 높이) 로 구성. mask 로 위아래 가장자리 페이드.
+   Stage2: perspective 1200px — 자식 item 들의 rotateX 가 입체 휠로 보임.
+   overflow:hidden 은 perspective 컨텍스트와 독립이므로 그대로 유지. */
+.intro-list__viewport {
+  position: relative;
+  height: calc(5 * var(--row, 64px) - 8px);   /* 5칸(가운데+±2) − 마지막 gap 보정 */
+  overflow: hidden;
+  /* perspective 는 데스크톱(≥1440px)에서만 — 모바일은 rotateX 없으니 3D 컨텍스트 불필요(레이어 절약) */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+}
+
+/* ── track: 전체 링 한 줄. 가운데 칸(off 0 = 중앙 child)이 viewport 중앙에 오도록 위로 당겨 시작 ──
+   translateY 0 = 현재가 가운데. JS 가 굴릴 때만 translateY 를 음수(다음)/양수(이전)로.
+   margin-top = (HALF − RING_HALF) 칸 = (2 − ceil(8/2)) = −2칸. (N 변동 시 이 값만 맞추면 됨)
+   Stage2: 트랙 translateY 채널은 JS 전담. item rotateX 는 viewport perspective(1200px) 를
+   직접 참조 — flat 컨텍스트로 충분(preserve-3d 불필요, overflow:hidden 과 충돌 회피). */
+.intro-list__track {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 8px;
+  transform: translateY(0);
+  margin-top: calc(-2 * var(--row, 64px));
+  /* will-change 는 상시 두지 않음 — JS 가 롤 시작 시 켜고 settle 후 'auto' 로 해제(정지 중 VRAM 절약) */
+}
+
+/* ── item: 거리별 rotateX/scale/blur 입체감 ──
+   translateY 는 트랙 translateY 로만 처리하므로 item transform 에는 절대 포함 안 함.
+   transform-origin: center center(기본) — 각 칸의 중심을 기준으로 기울임/스케일.
+   transition 은 트랙 굴림(JS 세팅 .42~.90s)과 같은 이징으로 맞춰 카드들이
+   굴러가는 동안 기울기·크기가 자연스럽게 흐르게(슬롯 갱신 시 즉각 전환 시작). */
+.intro-list__item {
+  position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 13px;
+  align-items: center; min-height: 56px; padding: 10px 30px 10px 10px;
+  border-radius: 13px; border: 1px solid transparent; cursor: pointer;
+  /* Stage2: transform/opacity 전환(rotateX·scale·opacity). 트랙 굴림과 동기 리듬. */
+  transition: background .25s, border-color .25s,
+              transform .55s cubic-bezier(.22,1,.36,1),
+              opacity   .55s cubic-bezier(.22,1,.36,1);
+  transform-origin: center center;
+}
+.intro-list__item img { width: 56px; height: 48px; object-fit: cover; border-radius: 9px; transition: transform .28s cubic-bezier(.34,1.5,.64,1); }
+.intro-list__item span { font-size: 11px; color: var(--muted); }
+.intro-list__item h4 { margin: 2px 0; font-size: 14px; font-weight: 700; color: var(--it-title); }
+.intro-list__item p { margin: 0; font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
+
+/* 뮤직플레이어 느낌 — 활성(가운데) 항목에 작은 이퀄라이저 포인트 */
 .intro-list__eq { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); display: none; align-items: flex-end; gap: 2px; height: 15px; }
 .intro-list__item.is-active .intro-list__eq { display: flex; }
 .intro-list__eq i { width: 2px; height: 40%; border-radius: 1px; background: var(--it-eq, linear-gradient(180deg, #E2EFFF, #7FAEE5)); transform-origin: bottom; animation: introEq 1s ease-in-out infinite; }
@@ -845,105 +918,147 @@ img.is-empty { color: transparent; }
 .intro-list__eq i:nth-child(4) { animation-delay: -.7s; }
 @keyframes introEq { 0%,100% { height: 28%; } 50% { height: 100%; } }
 @media (prefers-reduced-motion: reduce) { .intro-list__eq i { animation: none; height: 60%; } }
-.intro-list__item:hover { background: color-mix(in srgb, var(--it-title) 6%, transparent); transform: translateX(-3px); }
-.intro-list__item.is-active { background: var(--glass); border-color: var(--it-box-border); }
-/* ── 패널 진입 시 목차 릴(슬롯머신) 스핀 연출 ──
-   모든 카드가 동일한 introReel 키프레임으로 세로 왕복 2패스 후 댐핑 착지.
-   :nth-child 스태거(0.04s)로 카드들이 차례로 안착하며 릴 질감을 만든다.
-   패널 슬라이드(.8s)와 동시에 시작, 0.55~0.65s 내 모든 카드 착지.
-   진폭은 라벨(.intro-list__label) 침범 없는 ±32px 이내로 제한. */
 
-/* 릴 스핀 키프레임: 위 → 아래 → 위 → 과슈트 → 착지.
-   opacity 는 건드리지 않는다 — 각 카드는 [data-slot] 거리 위계(가운데 밝고 옆 흐림) 밝기를
-   처음부터 끝까지 유지하고, 세로 transform(릴 왕복)만 탄다. (opacity 를 1 로 올리면
-   옆 카드가 밝아졌다 어두워지는 깜빡임이 생기므로 금지.) */
-/* 튕김(두웅두웅) 제거 — 위에서 부드럽게 한 번 미끄러져 안착(오버슈트 없음). */
-@keyframes introReel {
-  0%   { transform: translateY(-22px); }
-  100% { transform: translateY(0);     }
+/* ── 거리별 위계: 가운데(slot 0) 또렷, 멀수록 흐림.
+   Stage2: opacity 에 rotateX(휠 기울임) + scale(원근 크기) 추가.
+   — slot 부호 규칙: 양수(아래 칸) → 화면 아래쪽으로 기울어지므로 rotateX 양수(아랫면 앞으로).
+                    음수(위 칸) → 화면 위쪽으로 기울어지므로 rotateX 음수.
+   — translateY 는 트랙이 담당. item transform 에는 rotateX·scale 만 기재. ── */
+/* 기본(모든 뷰포트): scale + opacity 만 — 합성 친화적, 3D 레이어 승격 없음.
+   rotateX(휠 기울임)·perspective 는 데스크톱(≥1440px)에서만 추가(perf: 모바일 레이어 폭발 방지). */
+.intro-list__item { opacity: .22; transform: scale(.80); } /* 기본(먼 칸·런웨이) */
+.intro-list__item[data-slot="-2"] { opacity: .36; transform: scale(.88); }
+.intro-list__item[data-slot="2"]  { opacity: .36; transform: scale(.88); }
+.intro-list__item[data-slot="-1"] { opacity: .64; transform: scale(.94); }
+.intro-list__item[data-slot="1"]  { opacity: .64; transform: scale(.94); }
+/* 가운데 — 완전히 정면. 안착 시 미세 glow. */
+.intro-list__item[data-slot="0"] {
+  opacity: 1;
+  transform: scale(1);
+  /* 안착 강조: 가운데 카드에 은은한 발광(줄어들고 사라지는 한 번 반짝) */
+  animation: pickerSettle .45s cubic-bezier(.22,1,.36,1) both;
 }
-
-/* 모든 카드에 릴 애니메이션 적용 — is-active 패널 기준.
-   fill: backwards — 딜레이 중엔 0%(숨김) 유지, 끝나면 base 로 복귀해 [data-slot] 거리 위계(가운데 밝고
-   옆은 흐림) opacity 를 되살린다. both 로 하면 opacity 1 이 고정돼 위계가 깨지므로 금지.
-   duration 을 .9s 로 늦춰(예전 .62s) "휘익" 릴 속도를 덜 급하게. */
-.project-intro.is-active .intro-list__item {
-  animation: introReel .9s cubic-bezier(.22, 1, .36, 1) backwards;
-}
-
-/* :nth-child 스태거 — 위→아래 순으로 0.06s씩 차례 착지(예전 .04s → 더 느긋하게) */
-.project-intro.is-active .intro-list__item:nth-child(1) { animation-delay: .06s; }
-.project-intro.is-active .intro-list__item:nth-child(2) { animation-delay: .12s; }
-.project-intro.is-active .intro-list__item:nth-child(3) { animation-delay: .18s; }
-.project-intro.is-active .intro-list__item:nth-child(4) { animation-delay: .24s; }
-.project-intro.is-active .intro-list__item:nth-child(5) { animation-delay: .30s; }
-.project-intro.is-active .intro-list__item:nth-child(6) { animation-delay: .36s; }
-.project-intro.is-active .intro-list__item:nth-child(7) { animation-delay: .42s; }
-/* 가운데(현재) 카드가 롤 중일 땐 릴 바운스 제외 — "두웅"에 묻히지 않고 이전→현재 슬롯 롤만 또렷이 보이게.
-   롤 안 하는 경우(메인 진입·먼 점프)엔 옆칸처럼 릴 바운스 유지. */
-.project-intro.is-active .intro-list__item[data-slot="0"].is-rolling { animation: none; }
-
-/* ── 가운데(현재) 카드 슬롯 롤: 이전 프로젝트 → 현재 프로젝트 ──
-   deck.js 가 진입 시 가운데 카드에 이전 프로젝트 내용을 .intro-roll__out 레이어로 얹고
-   .is-rolling 을 건다. 콘텐츠 영역(이미지+텍스트 박스)만 세로로 굴려, 이전(out)이 빠지고
-   현재(base)가 자리잡는 슬롯머신 착지 느낌. 방향(dir)은 --roll-dir(1=다음/-1=이전)로 받음.
-   transform-only(합성) + overflow:hidden 로 콘텐츠만 클립, eq/preview/위계는 안 건드림. */
-.intro-list__item.is-rolling { overflow: hidden; }
-.intro-list__item .intro-roll__out {
-  position: absolute; inset: 0; display: grid; grid-template-columns: 56px 1fr; gap: 13px;
-  align-items: center; padding: 10px 30px 10px 10px; pointer-events: none;
-}
-.intro-list__item .intro-roll__out img { width: 56px; height: 48px; object-fit: cover; border-radius: 9px; }
-.intro-list__item .intro-roll__out span { font-size: 11px; color: var(--muted); }
-.intro-list__item .intro-roll__out h4 { margin: 2px 0; font-size: 14px; font-weight: 700; color: var(--it-title); }
-.intro-list__item .intro-roll__out p { margin: 0; font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
-
-/* 이전 내용(out)·현재 내용(base)을 같은 거리만큼 굴림. dir>0(다음): 이전이 위로 빠지고 현재가 아래서 올라옴 */
-@keyframes introRollOut { from { transform: translateY(0); } to { transform: translateY(calc(var(--roll-dir, 1) * -118%)); } }
-@keyframes introRollIn  { from { transform: translateY(calc(var(--roll-dir, 1) * 118%)); } to { transform: translateY(0); } }
-/* delay .4s = 이전(out)을 .4초 멈춰 보여준 뒤 굴림(both 로 딜레이 중 translateY 0 유지 → 이전이 또렷이 보임).
-   duration .7s 로 천천히 → "3 보였다가 → 4로 굴러 멈춤"이 눈에 들어오게. */
-.intro-list__item.is-rolling .intro-roll__out {
-  animation: introRollOut .9s cubic-bezier(.22, 1, .36, 1) .5s both;
-}
-/* base(현재 내용)는 딜레이 중 118%(화면 밖, 숨김) 유지(backwards) → 이전이 빠지며 현재가 올라와 안착. */
-.intro-list__item.is-rolling > img,
-.intro-list__item.is-rolling > div {
-  animation: introRollIn .9s cubic-bezier(.22, 1, .36, 1) .5s backwards;
-}
-
-/* prefers-reduced-motion: 연출 생략, 즉시 표시(롤·out 레이어 모두 무력화) */
-@media (prefers-reduced-motion: reduce) {
-  .project-intro.is-active .intro-list__item { animation: none; opacity: 1; transform: none; }
-  .intro-list__item.is-rolling > img,
-  .intro-list__item.is-rolling > div,
-  .intro-list__item.is-rolling .intro-roll__out { animation: none; }
-  .intro-list__item .intro-roll__out { display: none; }
-}
-.intro-list__item img { width: 56px; height: 48px; object-fit: cover; border-radius: 9px; }
-.intro-list__item span { font-size: 11px; color: var(--muted); }
-.intro-list__item h4 { margin: 2px 0; font-size: 14px; font-weight: 700; color: var(--it-title); }
-.intro-list__item p { margin: 0; font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
-
-/* ── 순환 목차: 거리별 위계(가운데=현재 또렷·글래스, 멀수록 흐리게) ── */
-.intro-list__item[data-slot] { transition: background .25s, border-color .25s, transform .2s, opacity .3s; }
-.intro-list__item[data-slot="1"],
-.intro-list__item[data-slot="-1"] { opacity: .64; }
-.intro-list__item[data-slot="2"],
-.intro-list__item[data-slot="-2"] { opacity: .36; }
-.intro-list__item:hover { opacity: 1; }                 /* 호버 시 또렷(미리보기 강조) */
-/* 썸네일 호버 — 살짝 확대 */
-.intro-list__item img { transition: transform .28s cubic-bezier(.34,1.5,.64,1); }
+/* 가운데는 클릭/호버해도 또렷, 옆칸은 호버 시 강조 */
+.intro-list__item:hover { opacity: 1; transform: scale(1); }
 .intro-list__item:hover img { transform: scale(1.08); }
+
+/* ── 안착 강조 키프레임 — 가운데 카드가 들어오는 순간 미세 발광 후 소멸(0.45s) ── */
+@keyframes pickerSettle {
+  0%   { box-shadow: 0 0 0   0   rgba(255,255,255,0); }
+  30%  { box-shadow: 0 0 14px 4px rgba(200,220,255,.35), 0 0 28px 8px rgba(160,195,255,.18); }
+  100% { box-shadow: 0 0 0   0   rgba(255,255,255,0); }
+}
+
+/* eq 밝아짐 — 안착 순간 brightness 살짝 올림 */
+.intro-list__item[data-slot="0"] .intro-list__eq {
+  animation: pickerSettle .45s cubic-bezier(.22,1,.36,1) both,
+             introEq 1s ease-in-out infinite;
+  filter: brightness(1.3);
+}
+/* introEq 와 충돌 방지: eq i 는 기존 introEq 그대로 */
+.intro-list__item[data-slot="0"] .intro-list__eq i { animation: introEq 1s ease-in-out infinite; filter: none; }
+
+/* ── 데스크톱(1440px+)에서만 휠 입체감(rotateX·perspective)과 깊이 blur 추가(성능 비용) ──
+   모바일/태블릿은 scale + opacity 위계만으로 거리감(3D 레이어 승격·blur 없음 → 저사양 60fps). */
+@media (min-width: 1440px) {
+  .intro-list__viewport { perspective: 1200px; perspective-origin: 50% 50%; }
+  /* 휠 기울임: 위 칸(음수 slot)은 윗면, 아래 칸은 아랫면이 앞으로. scale 과 함께. */
+  .intro-list__item[data-slot="-2"] { transform: rotateX(-16deg) scale(.88); filter: blur(2px); }
+  .intro-list__item[data-slot="2"]  { transform: rotateX( 16deg) scale(.88); filter: blur(2px); }
+  .intro-list__item[data-slot="-1"] { transform: rotateX( -8deg) scale(.94); filter: blur(.6px); }
+  .intro-list__item[data-slot="1"]  { transform: rotateX(  8deg) scale(.94); filter: blur(.6px); }
+  .intro-list__item[data-slot="0"]  { transform: rotateX(0deg) scale(1); filter: none; }
+  /* 호버 시 또렷 + blur 해제 */
+  .intro-list__item:hover { transform: rotateX(0deg) scale(1); filter: none; }
+}
+
+/* ── 선택 프레임: 가운데 칸 위 고정 오버레이 — Stage2 독립 글래스 셀렉터 ──
+   viewport 중앙 한 칸 높이를 덮는다. 트랙 translateY 와 완전히 독립(transform 없음).
+   backdrop-blur 1개만(성능 절약). z-index 0: 트랙 항목 텍스트는 위(z:1)에서 읽힘. */
+.intro-list__frame {
+  position: absolute; left: 0; right: 0;
+  top: 50%; height: var(--frame-h, 56px);
+  transform: translateY(-50%);
+  border-radius: 13px;
+  /* Stage2 글래스 */
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.2px solid rgba(255,255,255,.2);
+  box-shadow:
+    inset 0  1px 2px rgba(255,255,255,.30),
+    inset 0 -1px 1px rgba(0,0,0,.10);
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;   /* 오로라 그라데이션 ::before 가 radius 에서 잘리도록 */
+}
+
+/* 오로라 상단 림: 은은한 색조 하이라이트(opacity ~0.4) */
+.intro-list__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* 상단 좌→우 무지갯빛 림. 옅게 올려 글래스 질감 강화. */
+  background: linear-gradient(
+    95deg,
+    rgba(180,210,255,.38) 0%,
+    rgba(200,170,255,.28) 35%,
+    rgba(170,235,220,.22) 68%,
+    rgba(255,255,255,.12) 100%
+  );
+  -webkit-mask-image: linear-gradient(180deg, #fff 0%, transparent 55%);
+          mask-image: linear-gradient(180deg, #fff 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* 프레임 안착 반짝: 트랙 굴림이 끝날 때 림이 순간 밝아짐(is-rolling 해제 시 자연스럽게) */
+.intro-list--live:not(.is-rolling) .intro-list__frame {
+  animation: frameRimFlash .35s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes frameRimFlash {
+  0%   { box-shadow: inset 0 1px 2px rgba(255,255,255,.30), inset 0 -1px 1px rgba(0,0,0,.10); }
+  40%  { box-shadow: inset 0 1px 6px rgba(255,255,255,.55), inset 0 -1px 2px rgba(0,0,0,.08),
+                     0 0 18px 4px rgba(200,220,255,.22); }
+  100% { box-shadow: inset 0 1px 2px rgba(255,255,255,.30), inset 0 -1px 1px rgba(0,0,0,.10); }
+}
+
+.intro-list__viewport .intro-list__track { position: relative; z-index: 1; }
+
+/* 가운데 칸 높이 기본값(JS measureRow 가 정밀 px 세팅 전 폴백) */
+.intro-list--live { --frame-h: 56px; }
+
 /* 호버 영상 미리보기 — 공유 video 1개를 썸네일 위로 띄워 재생(intro-toc-preview.js).
-   썸네일 img 와 동일한 scale(1.08)·origin 으로 확대해 어긋남 없음 + 살짝 scale-in */
+   .intro-list--live(fixed) 자식, 좌표는 JS 가 getBoundingClientRect 로 세팅. */
 .intro-list__preview { position: absolute; z-index: 2; border-radius: 9px; object-fit: cover;
   opacity: 0; pointer-events: none; box-shadow: 0 6px 16px -8px rgba(0,0,0,.5);
   transform: scale(.96); transform-origin: center center;
   transition: opacity .22s ease, transform .28s cubic-bezier(.34,1.5,.64,1); }
 .intro-list__preview.is-on { opacity: 1; transform: scale(1.08); }
+
+/* ── prefers-reduced-motion: rotateX·scale·blur 제거, 위치+opacity 만, 전환 즉시 ── */
 @media (prefers-reduced-motion: reduce) {
+  .intro-list--live { transition: visibility 0s; }
+  html.off-main .intro-list--live { transition: none; }
+  .intro-list__track { will-change: auto; }
+  .intro-list__viewport { perspective: none; }
+  /* 모든 슬롯: rotateX·scale 없이 opacity 만 */
+  .intro-list__item,
+  .intro-list__item[data-slot="-2"],
+  .intro-list__item[data-slot="2"],
+  .intro-list__item[data-slot="-1"],
+  .intro-list__item[data-slot="1"],
+  .intro-list__item[data-slot="0"] { transform: none; }
+  .intro-list__item[data-slot="0"] { animation: none; }
+  .intro-list__item { transition: opacity .15s linear; }
+  /* 데스크톱 blur 도 끔 */
+  .intro-list__item[data-slot="-2"],
+  .intro-list__item[data-slot="2"],
+  .intro-list__item[data-slot="-1"],
+  .intro-list__item[data-slot="1"] { filter: none; }
   .intro-list__item img, .intro-list__item:hover img { transition: none; transform: none; }
+  .intro-list__frame { backdrop-filter: none; -webkit-backdrop-filter: none; animation: none; }
+  .intro-list__item[data-slot="0"] .intro-list__eq { animation: introEq 1s ease-in-out infinite; filter: none; }
 }
 
 /* 스크롤 힌트(중앙 하단) */
@@ -995,14 +1110,13 @@ img.is-empty { color: transparent; }
 
 /* ── 인트로 글래스 톤 통일 — 메인 히어로 글래스 언어를 다크 컨텍스트로 적응
    (프로스티드 블루그레이 + rim light 그라데이션 보더 + 외곽/inset 글로우) ── */
-/* position:relative 는 in-flow 패널에만 (hints 는 이미 absolute → 건드리면 튐) */
+/* position:relative 는 in-flow 패널에만 (hints 는 이미 absolute → 건드리면 튐).
+   선택 프레임(.intro-list__frame)이 가운데 칸 글래스를 전담 — 항목 자체엔 글래스 안 입힘. */
+.intro-process,
+.intro-index { position: relative; }
 .intro-process,
 .intro-index,
-.intro-list__item.is-active { position: relative; }
-.intro-process,
-.intro-index,
-.intro-hints,
-.intro-list__item.is-active {
+.intro-hints {
   /* 밝고 투명한 글래스 — 영상이 비치도록 옅게.
      흰색 광택 레이어는 글래스 질감용으로 옅게 유지, 톤은 --it-box-bg 로 입힘 */
   background:
@@ -1014,10 +1128,10 @@ img.is-empty { color: transparent; }
     inset 0 1px 2px rgba(255,255,255,0.45),
     inset 0 -1px 1px rgba(20,30,50,0.05);
 }
+/* 공유 rim light ::before — frame 은 Stage2 블록에서 독립 오로라로 전담 */
 .intro-process::before,
 .intro-index::before,
-.intro-hints::before,
-.intro-list__item.is-active::before {
+.intro-hints::before {
   content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.2px;
   /* rim light: 상단 흰 하이라이트 → 하단은 테마 보더색으로 자연스럽게 */
   background: linear-gradient(155deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 34%, var(--it-box-border) 100%);
@@ -1039,7 +1153,8 @@ img.is-empty { color: transparent; }
    (셀렉터를 #intro-XXX 로 한정 → 메인/제작과정 모달엔 영향 없음)
 =================================================================== */
 /* jaringobi — 밝은 노을: 따뜻 갈색 글자 + 크림 글래스 + 오렌지 액센트 */
-#intro-jaringobi .intro-ui {
+#intro-jaringobi .intro-ui,
+.intro-list--live[data-project="jaringobi"] {
   --it-accent: #ff9a44;
   --it-title: #2d2416;
   --it-text: #3d3226;
@@ -1058,7 +1173,8 @@ img.is-empty { color: transparent; }
 /* gwihon — 황금노을·옥색숲: 갈색 글자 + 황금 액센트, 글래스 약간 더 투명 */
 /* gwihon — 영상이 밝은 황금↔어두운 밤으로 크게 변동 → 밝은 글자 + 골드 액센트.
    좌측·상단 어두운 워밍 스크림으로 밝은 프레임에서도 밝은 글자가 읽히게. */
-#intro-gwihon .intro-ui {
+#intro-gwihon .intro-ui,
+.intro-list--live[data-project="gwihon"] {
   --it-accent: #e8c074;
   --it-title: #f7f0e2;
   --it-text: #eadfca;
@@ -1076,7 +1192,8 @@ img.is-empty { color: transparent; }
 }
 
 /* yumi — 어두운 코지 침실: 밝은 오프화이트 글자 + 더스티핑크 액센트, 글래스 가장 투명 */
-#intro-yumi .intro-ui {
+#intro-yumi .intro-ui,
+.intro-list--live[data-project="yumi"] {
   --it-accent: #e6a9c4;
   --it-title: #f5f2ef;
   --it-text: #e8e5e0;
@@ -1097,7 +1214,8 @@ img.is-empty { color: transparent; }
 
 /* poze — 영상이 어두운 모카 에디토리얼(밝기 변동) → 밝은 오프화이트 글자 +
    세지그린(초록 사과) 액센트 + 어두운 모카 스크림으로 가독성 확보. */
-#intro-poze .intro-ui {
+#intro-poze .intro-ui,
+.intro-list--live[data-project="poze"] {
   --it-accent: #bcce96;
   --it-title: #f3efe6;
   --it-text: #e6e0d3;
@@ -1115,7 +1233,8 @@ img.is-empty { color: transparent; }
 }
 
 /* pledis — 야경 골드 브랜딩: 따뜻한 어두운 스크림 + 밝은 오프화이트 */
-#intro-pledis .intro-ui {
+#intro-pledis .intro-ui,
+.intro-list--live[data-project="pledis"] {
   --it-accent: #d4a940;
   --it-title: #f5f0e6;
   --it-text: #e8e0cc;
@@ -1133,7 +1252,8 @@ img.is-empty { color: transparent; }
 }
 
 /* mathhub — 교육 플랫폼: 네이비 + 소프트블루 + 퍼플 액센트 */
-#intro-mathhub .intro-ui {
+#intro-mathhub .intro-ui,
+.intro-list--live[data-project="mathhub"] {
   --it-accent: #7fb0e8; --it-title: #eef3fb; --it-text: #d8e2f2; --it-muted: rgba(216,226,242,0.66);
   --it-box-bg: rgba(28,40,68,0.34); --it-box-border: rgba(127,176,232,0.42); --it-on-accent: #16233e;
   --it-eq: linear-gradient(180deg, #cfe0f7, #7fb0e8);
@@ -1145,7 +1265,8 @@ img.is-empty { color: transparent; }
     linear-gradient(0deg, rgba(16,24,44,0.34) 0%, transparent 18%);
 }
 /* 상상의 문 — 방탈출: navy + gold */
-#intro-sangsang .intro-ui {
+#intro-sangsang .intro-ui,
+.intro-list--live[data-project="sangsang"] {
   --it-accent: #e0c179; --it-title: #f3eede; --it-text: #e4dcc6; --it-muted: rgba(228,220,198,0.68);
   --it-box-bg: rgba(20,26,44,0.36); --it-box-border: rgba(224,193,121,0.40); --it-on-accent: #1a2138;
   --it-eq: linear-gradient(180deg, #f0dca6, #e0c179);
@@ -1157,7 +1278,8 @@ img.is-empty { color: transparent; }
     linear-gradient(0deg, rgba(12,16,32,0.36) 0%, transparent 18%);
 }
 
-#intro-playlist .intro-ui {
+#intro-playlist .intro-ui,
+.intro-list--live[data-project="playlist"] {
   --it-accent: #c8b8e8; --it-title: #f0ebfa; --it-text: #dbd2ee; --it-muted: rgba(219,210,238,0.66);
   --it-box-bg: rgba(38,28,58,0.36); --it-box-border: rgba(180,160,220,0.40); --it-on-accent: #1d1630;
 }
@@ -3416,6 +3538,9 @@ html.process-open { overflow: hidden; }
 
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
+/* 라이브 목차는 패널 바깥 고정 — 배경 영역은 기본 커서, 항목만 pointer(커스텀 커서 대상 아님) */
+.intro-list--live { cursor: default; }
+.intro-list--live .intro-list__item { cursor: pointer; }
 .project-intro.is-clickable .intro-list,
 .project-intro.is-clickable .intro-nav,
 .project-intro.is-clickable .intro-brand { cursor: default; }
