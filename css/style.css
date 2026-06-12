@@ -60,10 +60,19 @@ body {
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
                system-ui, "Segoe UI", Roboto, sans-serif;
   color: var(--ink);
-  background: #c9d3da;
+  background: #000;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+html:not(.deck-ready) body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: #000;
+  pointer-events: none;
 }
 
 /* ---------------------------------------------------------------- SCENE */
@@ -583,7 +592,8 @@ img.is-empty { color: transparent; }
 }
 /* 메인 패널(히어로)도 덱의 일부 — z 동등하게 */
 .scene.deck-panel  { z-index: 50; }
-.project-intro     { z-index: 50; background: #0a0d12; overflow: hidden; }
+.project-intro     { z-index: 50; background: #0a0d12; overflow: hidden; transform: translateX(100%); }
+.project-intro.is-active { transform: translateX(0); }
 
 .project-intro__video {
   position: absolute; inset: 0;
@@ -2144,17 +2154,275 @@ html.process-open { overflow: hidden; }
 /* ── 플레디스 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--pledis { background: #0f1320; box-shadow: 0 24px 60px -32px rgba(30,40,80,0.5); }
 .pd-sec { position: relative; container-type: inline-size; overflow: hidden; background: #0f1320; }
+.pd-r1::before,
+.pd-r2::before,
+.pd-r3::before,
+.pd-r4::before,
+.pd-r5::before,
+.pd-r6::before,
+.pd-r7::before,
+.pd-r1::after,
+.pd-r2::after,
+.pd-r3::after,
+.pd-r4::after,
+.pd-r5::after,
+.pd-r6::after,
+.pd-r7::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+.pd-r1::before,
+.pd-r2::before,
+.pd-r3::before,
+.pd-r4::before,
+.pd-r5::before,
+.pd-r6::before,
+.pd-r7::before {
+  border: 1px solid rgba(255,70,0,0.16);
+  border-radius: 50%;
+  opacity: .78;
+}
+.pd-r1::after,
+.pd-r2::after,
+.pd-r3::after,
+.pd-r4::after,
+.pd-r5::after,
+.pd-r6::after,
+.pd-r7::after {
+  opacity: .72;
+  background-repeat: no-repeat;
+}
+.pd-r1::before {
+  right: 6.4cqw; top: 16.2cqw; width: 31.8cqw; height: 13.7cqw;
+  transform: rotate(-12deg);
+  box-shadow: -8.5cqw 2.9cqw 0 -0.08cqw rgba(255,70,0,0.13);
+}
+.pd-r1::after {
+  right: 10.8cqw; top: 13.6cqw; width: 27cqw; height: 18cqw;
+  background-image:
+    radial-gradient(circle, rgba(255,70,0,.72) 0 .17cqw, transparent .19cqw),
+    radial-gradient(circle, rgba(255,70,0,.45) 0 .11cqw, transparent .13cqw),
+    linear-gradient(90deg, transparent 48%, rgba(255,70,0,.32) 49% 51%, transparent 52%),
+    linear-gradient(0deg, transparent 48%, rgba(255,70,0,.32) 49% 51%, transparent 52%);
+  background-size: .42cqw .42cqw, .3cqw .3cqw, 1.2cqw 1.2cqw, 1.2cqw 1.2cqw;
+  background-position: 73% 35%, 35% 70%, 12% 18%, 12% 18%;
+}
+.pd-r2::before {
+  right: -3.2cqw; top: 13.2cqw; width: 42cqw; height: 18.5cqw;
+  transform: rotate(8deg);
+  box-shadow: -11cqw -1.2cqw 0 -0.1cqw rgba(255,70,0,0.11);
+}
+.pd-r2::after {
+  right: 4.9cqw; top: 11.4cqw; width: 30cqw; height: 18cqw;
+  background-image:
+    radial-gradient(circle, rgba(255,70,0,.64) 0 .18cqw, transparent .2cqw),
+    radial-gradient(circle, rgba(255,70,0,.45) 0 .12cqw, transparent .14cqw),
+    radial-gradient(circle, rgba(255,70,0,.35) 0 .09cqw, transparent .11cqw),
+    linear-gradient(45deg, transparent 48%, rgba(255,70,0,.28) 49% 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(255,70,0,.28) 49% 51%, transparent 52%);
+  background-size: .46cqw .46cqw, .34cqw .34cqw, .26cqw .26cqw, 1.1cqw 1.1cqw, 1.1cqw 1.1cqw;
+  background-position: 60% 52%, 22% 28%, 90% 24%, 40% 70%, 40% 70%;
+}
+.pd-r3::before {
+  right: -6.5cqw; top: 8.6cqw; width: 45cqw; height: 21cqw;
+  transform: rotate(-18deg);
+  box-shadow: -13cqw 4.8cqw 0 -0.12cqw rgba(255,70,0,0.11);
+}
+.pd-r3::after {
+  right: 4.7cqw; top: 7.5cqw; width: 31cqw; height: 21cqw;
+  background-image:
+    radial-gradient(circle, rgba(255,70,0,.7) 0 .16cqw, transparent .18cqw),
+    radial-gradient(circle, rgba(255,70,0,.36) 0 .11cqw, transparent .13cqw),
+    linear-gradient(90deg, transparent 48%, rgba(255,70,0,.26) 49% 51%, transparent 52%),
+    linear-gradient(0deg, transparent 48%, rgba(255,70,0,.26) 49% 51%, transparent 52%);
+  background-size: .42cqw .42cqw, .28cqw .28cqw, 1cqw 1cqw, 1cqw 1cqw;
+  background-position: 48% 36%, 18% 60%, 82% 72%, 82% 72%;
+}
+.pd-r4::before {
+  right: 1.7cqw; top: 10.2cqw; width: 37cqw; height: 16cqw;
+  transform: rotate(15deg);
+  box-shadow: -9cqw 5.6cqw 0 -0.1cqw rgba(255,70,0,0.1);
+}
+.pd-r4::after {
+  right: 8cqw; top: 9.4cqw; width: 29cqw; height: 18cqw;
+  background-image:
+    radial-gradient(circle, rgba(255,70,0,.68) 0 .17cqw, transparent .19cqw),
+    radial-gradient(circle, rgba(255,70,0,.44) 0 .1cqw, transparent .12cqw),
+    linear-gradient(45deg, transparent 48%, rgba(255,70,0,.28) 49% 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(255,70,0,.28) 49% 51%, transparent 52%);
+  background-size: .44cqw .44cqw, .3cqw .3cqw, 1.4cqw 1.4cqw, 1.4cqw 1.4cqw;
+  background-position: 38% 45%, 80% 34%, 16% 72%, 16% 72%;
+}
+.pd-r5::before {
+  right: -1.5cqw; top: 10.7cqw; width: 41cqw; height: 17.5cqw;
+  transform: rotate(-9deg);
+  box-shadow: -10.8cqw -2.7cqw 0 -0.12cqw rgba(255,70,0,0.11);
+}
+.pd-r5::after {
+  right: 6.5cqw; top: 8.4cqw; width: 31cqw; height: 20cqw;
+  background-image:
+    radial-gradient(circle, rgba(255,70,0,.76) 0 .18cqw, transparent .2cqw),
+    radial-gradient(circle, rgba(255,70,0,.46) 0 .1cqw, transparent .12cqw),
+    linear-gradient(90deg, transparent 48%, rgba(255,70,0,.25) 49% 51%, transparent 52%),
+    linear-gradient(0deg, transparent 48%, rgba(255,70,0,.25) 49% 51%, transparent 52%);
+  background-size: .48cqw .48cqw, .28cqw .28cqw, 1.18cqw 1.18cqw, 1.18cqw 1.18cqw;
+  background-position: 58% 40%, 28% 66%, 86% 22%, 86% 22%;
+}
+.pd-r6::before {
+  right: 5.2cqw; top: 10cqw; width: 34cqw; height: 13.5cqw;
+  transform: rotate(-14deg);
+  border-color: rgba(255,70,0,0.13);
+  box-shadow: -8cqw 3.3cqw 0 -0.1cqw rgba(255,70,0,0.09);
+}
+.pd-r6::after {
+  right: 10cqw; top: 9.2cqw; width: 27cqw; height: 16cqw;
+  background-image:
+    radial-gradient(circle, rgba(255,70,0,.5) 0 .14cqw, transparent .16cqw),
+    radial-gradient(circle, rgba(255,255,255,.7) 0 .1cqw, transparent .12cqw),
+    linear-gradient(45deg, transparent 48%, rgba(255,70,0,.2) 49% 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(255,70,0,.2) 49% 51%, transparent 52%);
+  background-size: .4cqw .4cqw, .32cqw .32cqw, 1.15cqw 1.15cqw, 1.15cqw 1.15cqw;
+  background-position: 52% 44%, 20% 74%, 82% 26%, 82% 26%;
+}
+.pd-r7::before {
+  right: 5.5cqw; top: 42cqw; width: 32cqw; height: 12cqw;
+  transform: rotate(10deg);
+}
+.pd-r7::after {
+  right: 10cqw; top: 41cqw; width: 25cqw; height: 14cqw;
+  background-image:
+    radial-gradient(circle, rgba(255,70,0,.58) 0 .14cqw, transparent .16cqw),
+    linear-gradient(45deg, transparent 48%, rgba(255,70,0,.23) 49% 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(255,70,0,.23) 49% 51%, transparent 52%);
+  background-size: .4cqw .4cqw, 1.1cqw 1.1cqw, 1.1cqw 1.1cqw;
+  background-position: 54% 44%, 20% 62%, 20% 62%;
+}
+.process__making--pledis .pd-sec > * { z-index: 1; }
+.pd-r1::before,
+.pd-r2::before,
+.pd-r3::before,
+.pd-r4::before,
+.pd-r5::before,
+.pd-r6::before,
+.pd-r7::before {
+  z-index: 0; border: 0; border-radius: 50%; opacity: .72;
+  right: var(--planet-right); top: var(--planet-top);
+  width: var(--planet-size); height: var(--planet-size);
+  transform: none;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255,255,255,.95) 0 8%, transparent 9%),
+    radial-gradient(circle at 62% 68%, rgba(255,70,0,.12) 0 12%, transparent 13%),
+    radial-gradient(circle at 42% 42%, #fff4ef 0 34%, #ffd8c8 35% 63%, rgba(255,70,0,.18) 64% 100%);
+  box-shadow:
+    inset -0.35cqw -0.25cqw 0.9cqw rgba(255,70,0,.12),
+    0 0 0 1px rgba(255,70,0,.12),
+    var(--planet-star-1),
+    var(--planet-star-2);
+}
+.pd-r1::after,
+.pd-r2::after,
+.pd-r3::after,
+.pd-r4::after,
+.pd-r5::after,
+.pd-r6::after,
+.pd-r7::after {
+  z-index: 0; opacity: .78;
+  right: var(--orbit-right); top: var(--orbit-top);
+  width: var(--orbit-w); height: var(--orbit-h);
+  transform: rotate(var(--orbit-rotate));
+  background-image:
+    radial-gradient(ellipse at 50% 50%, transparent 57%, rgba(255,70,0,.18) 58% 59%, transparent 60%),
+    radial-gradient(circle at 78% 32%, rgba(255,70,0,.68) 0 .16cqw, transparent .18cqw),
+    radial-gradient(circle at 24% 72%, rgba(255,70,0,.4) 0 .1cqw, transparent .12cqw),
+    linear-gradient(90deg, transparent 48%, rgba(255,70,0,.32) 49% 51%, transparent 52%),
+    linear-gradient(0deg, transparent 48%, rgba(255,70,0,.32) 49% 51%, transparent 52%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 1.25cqw 1.25cqw, 1.25cqw 1.25cqw;
+  background-position: center, center, center, var(--star-pos), var(--star-pos);
+}
+.pd-r1 {
+  --planet-right: 17cqw; --planet-top: 15cqw; --planet-size: 5.8cqw;
+  --orbit-right: 9.2cqw; --orbit-top: 12.1cqw; --orbit-w: 20cqw; --orbit-h: 8.2cqw; --orbit-rotate: -15deg;
+  --planet-star-1: -7cqw -1.8cqw 0 -2.72cqw rgba(255,70,0,.65);
+  --planet-star-2: 8.2cqw 2.7cqw 0 -2.76cqw rgba(255,70,0,.5);
+  --star-pos: 18% 22%;
+}
+.pd-r2 {
+  --planet-right: 10.8cqw; --planet-top: 13.4cqw; --planet-size: 4.8cqw;
+  --orbit-right: 4.8cqw; --orbit-top: 11.4cqw; --orbit-w: 18.5cqw; --orbit-h: 7.4cqw; --orbit-rotate: 13deg;
+  --planet-star-1: -5.7cqw 2.4cqw 0 -2.25cqw rgba(255,70,0,.55);
+  --planet-star-2: 7.1cqw -1.6cqw 0 -2.32cqw rgba(255,70,0,.45);
+  --star-pos: 72% 74%;
+}
+.pd-r3 {
+  --planet-right: 12.2cqw; --planet-top: 8.2cqw; --planet-size: 6.3cqw;
+  --orbit-right: 4.1cqw; --orbit-top: 5.4cqw; --orbit-w: 22.5cqw; --orbit-h: 9cqw; --orbit-rotate: -21deg;
+  --planet-star-1: -6.8cqw 3.4cqw 0 -2.9cqw rgba(255,70,0,.6);
+  --planet-star-2: 8.8cqw -2.1cqw 0 -2.95cqw rgba(255,70,0,.5);
+  --star-pos: 84% 70%;
+}
+.pd-r4 {
+  --planet-right: 14.5cqw; --planet-top: 10.6cqw; --planet-size: 5.2cqw;
+  --orbit-right: 7.2cqw; --orbit-top: 8.1cqw; --orbit-w: 20.4cqw; --orbit-h: 8cqw; --orbit-rotate: 17deg;
+  --planet-star-1: -7.6cqw 1.5cqw 0 -2.45cqw rgba(255,70,0,.55);
+  --planet-star-2: 7.8cqw 3cqw 0 -2.5cqw rgba(255,70,0,.45);
+  --star-pos: 24% 76%;
+}
+.pd-r5 {
+  --planet-right: 13.7cqw; --planet-top: 9.6cqw; --planet-size: 5.9cqw;
+  --orbit-right: 5.5cqw; --orbit-top: 7cqw; --orbit-w: 21.5cqw; --orbit-h: 8.6cqw; --orbit-rotate: -11deg;
+  --planet-star-1: -6.5cqw -1.4cqw 0 -2.65cqw rgba(255,70,0,.62);
+  --planet-star-2: 8cqw 2.4cqw 0 -2.66cqw rgba(255,70,0,.5);
+  --star-pos: 88% 24%;
+}
+.pd-r6 {
+  --planet-right: 16cqw; --planet-top: 10.6cqw; --planet-size: 4.9cqw;
+  --orbit-right: 9.7cqw; --orbit-top: 8.6cqw; --orbit-w: 18.6cqw; --orbit-h: 7.2cqw; --orbit-rotate: -18deg;
+  --planet-star-1: -5.8cqw 2.8cqw 0 -2.35cqw rgba(255,70,0,.5);
+  --planet-star-2: 6.7cqw -1.7cqw 0 -2.38cqw rgba(255,255,255,.72);
+  --star-pos: 78% 24%;
+}
+.pd-r7 {
+  --planet-right: 15.6cqw; --planet-top: 42.2cqw; --planet-size: 4.7cqw;
+  --orbit-right: 9.8cqw; --orbit-top: 40.4cqw; --orbit-w: 17.8cqw; --orbit-h: 6.9cqw; --orbit-rotate: 10deg;
+  --planet-star-1: -5cqw -1cqw 0 -2.25cqw rgba(255,70,0,.52);
+  --planet-star-2: 6.3cqw 2.2cqw 0 -2.3cqw rgba(255,70,0,.42);
+  --star-pos: 20% 68%;
+}
 /* SECTION · 히어로 — 이미지 자체 비율로 자연스럽게 */
+.pd-hero { background: #14182b; }
 .pd-hero__img { display: block; width: 100%; height: auto; }
+.pd-hero__copy {
+  position: absolute; left: 15.8cqw; top: 25.2cqw;
+  color: #fff; font-family: "Pretendard Variable", Pretendard, sans-serif;
+  text-shadow: 0 0.14cqw 0.55cqw rgba(10,18,42,0.45);
+}
+.pd-hero__logo {
+  display: block; width: 12.7cqw; height: auto;
+  margin: 0 0 0.08cqw -0.08cqw;
+  filter: drop-shadow(0 0.12cqw 0.28cqw rgba(20,16,40,0.22));
+}
+.pd-hero__title {
+  margin: 0.08cqw 0 0;
+  font-size: clamp(8px, 1.02cqw, 19.6px); font-weight: 700;
+  letter-spacing: 0.01em; line-height: 1.15;
+}
+.pd-hero__meta {
+  margin: 0.18cqw 0 0;
+  font-size: clamp(7px, 0.78cqw, 15px); font-weight: 500;
+  letter-spacing: 0.015em; line-height: 1.2;
+  opacity: .92;
+}
 
 /* ── SECTION 1 · WHY REDESIGN (1440×1263, cqw = px/14.4) ── */
-.pd-r1 { aspect-ratio: 1440 / 1263; background: #fcfafa;
+.pd-r1 { aspect-ratio: 1440 / 1450; background: #fcfafa;
   font-family: "Pretendard Variable", Pretendard, sans-serif; }
 .pd-r1__num {
   position: absolute; left: 6.944cqw; top: 6.875cqw;
   font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
   background: linear-gradient(180deg, #ffdfd2 0%, #fff 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  -webkit-text-stroke: 1px rgba(255,70,0,0.12);
 }
 .pd-r1__eyebrow {
   position: absolute; left: 17.986cqw; top: 13.333cqw;
@@ -2173,26 +2441,26 @@ html.process-open { overflow: hidden; }
 }
 .pd-r1__hl { color: #ff4600; }
 .pd-r1__lead1 {
-  position: absolute; left: 44.653cqw; top: 19.5cqw;
+  position: absolute; left: 6.944cqw; top: 31.25cqw;
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; color: #666; line-height: 1.55;
 }
 .pd-r1__lead2 {
-  position: absolute; left: 44.653cqw; top: 24.5cqw;
+  position: absolute; left: 6.944cqw; top: 36.083cqw;
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; color: #666; line-height: 1.75;
 }
 .pd-r1__before {
-  position: absolute; left: 8.611cqw; top: 31.736cqw;
+  position: absolute; left: 8.611cqw; top: 42.5cqw;
   font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #444;
 }
 .pd-r1__before-sub {
-  position: absolute; left: 12.986cqw; top: 31.806cqw;
+  position: absolute; left: 12.986cqw; top: 42.57cqw;
   font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400; color: #666;
 }
 /* 스크린샷 4장 */
 .pd-r1__ss {
-  position: absolute; top: 34.375cqw;
+  position: absolute; top: 45.139cqw;
   height: 31.042cqw; object-fit: cover; border-radius: 0.278cqw;
 }
 .pd-r1__ss--1 { left: 8.611cqw; width: 18.611cqw; }
@@ -2201,7 +2469,7 @@ html.process-open { overflow: hidden; }
 .pd-r1__ss--4 { left: 73.264cqw; width: 18.125cqw; }
 /* 스크린샷 하단 레이블 (중앙 정렬) */
 .pd-r1__nav {
-  position: absolute; top: 66.806cqw;
+  position: absolute; top: 77.57cqw;
   transform: translateX(-50%);
   font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500;
   color: #444; text-align: center; line-height: 1.2;
@@ -2217,17 +2485,17 @@ html.process-open { overflow: hidden; }
 .pd-r1__nav--4 { left: 82.326cqw; }
 /* 문제점 */
 .pd-r1__prob-lbl {
-  position: absolute; left: 8.611cqw; top: 75.347cqw;
+  position: absolute; left: 8.611cqw; top: 86.111cqw;
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 500; color: #ff4600; line-height: 1.5;
 }
 .pd-r1__prob-line {
-  position: absolute; left: 8.611cqw; top: 78.681cqw;
+  position: absolute; left: 8.611cqw; top: 89.445cqw;
   width: 2.222cqw; border-top: 1px solid #ff4600; display: block;
 }
 /* 문제 카드 3장 */
 .pd-r1__card {
-  position: absolute; top: 75.347cqw;
+  position: absolute; top: 86.111cqw;
   width: 22.083cqw; min-height: 8.333cqw; height: auto;
   background: #fff; border-radius: 0.694cqw; border: 1px solid #eaeaea;
   display: flex; align-items: center; padding: 0 1.5cqw; gap: 1.111cqw;
@@ -2252,13 +2520,14 @@ html.process-open { overflow: hidden; }
 }
 
 /* ── SECTION 2 · REDESIGN DIRECTION (1440×1171, cqw = px/14.4) ── */
-.pd-r2 { aspect-ratio: 1440 / 1171; background: #fff;
+.pd-r2 { aspect-ratio: 1440 / 1300; background: #fff;
   font-family: "Pretendard Variable", Pretendard, sans-serif; }
 .pd-r2__num {
   position: absolute; left: 6.944cqw; top: 2.917cqw;
   font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
   background: linear-gradient(180deg, #ffdfd2 0%, #fff 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  -webkit-text-stroke: 1px rgba(255,70,0,0.12);
 }
 .pd-r2__eyebrow {
   position: absolute; left: 19.236cqw; top: 9.375cqw;
@@ -2277,12 +2546,12 @@ html.process-open { overflow: hidden; }
 }
 .pd-r2__hl { color: #ff4600; }
 .pd-r2__lead1 {
-  position: absolute; left: 43.75cqw; top: 16.667cqw;
+  position: absolute; left: 6.944cqw; top: 27.222cqw;
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; color: #666; line-height: 1.55;
 }
 .pd-r2__lead2 {
-  position: absolute; left: 43.75cqw; top: 20.556cqw;
+  position: absolute; left: 6.944cqw; top: 32.056cqw;
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; color: #666; line-height: 1.75;
 }
@@ -2290,32 +2559,33 @@ html.process-open { overflow: hidden; }
   position: absolute; left: 7.5cqw;
   width: 33.542cqw; height: 10.625cqw;
   background: #fff; border-radius: 0.694cqw; border: 1px solid #eaeaea;
-  display: flex; align-items: center; padding: 0 1.667cqw; gap: 1.25cqw;
+  display: grid; grid-template-columns: 7.431cqw minmax(0, 1fr);
+  align-items: center; column-gap: 1.25cqw; padding: 0 1.667cqw;
 }
-.pd-r2__card--1 { top: 28.472cqw; }
-.pd-r2__card--2 { top: 41.181cqw; }
-.pd-r2__card--3 { top: 53.889cqw; }
-.pd-r2__card--4 { top: 66.597cqw; }
-.pd-r2__icon { flex-shrink: 0; object-fit: contain; width: 5.417cqw; height: auto; }
+.pd-r2__card--1 { top: 39.236cqw; }
+.pd-r2__card--2 { top: 51.945cqw; }
+.pd-r2__card--3 { top: 64.653cqw; }
+.pd-r2__card--4 { top: 77.361cqw; }
+.pd-r2__icon { justify-self: center; object-fit: contain; width: 5.417cqw; height: auto; }
 .pd-r2__icon--2 { width: 7.431cqw; }
 .pd-r2__icon--3 { width: 5.556cqw; }
 .pd-r2__icon--4 { width: 5.417cqw; }
-.pd-r2__ctext { display: flex; flex-direction: column; gap: 0.417cqw; }
+.pd-r2__ctext { display: flex; flex-direction: column; gap: 0.417cqw; min-width: 0; }
 .pd-r2__ctext strong {
-  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #ff4600;
+  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #ff4600; line-height: 1.2;
 }
 .pd-r2__ctext p {
   margin: 0; font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400;
   color: #444; line-height: 1.5;
 }
 .pd-r2__diagram {
-  position: absolute; left: 45.278cqw; top: 28.194cqw;
+  position: absolute; left: 45.278cqw; top: 38.958cqw;
   width: 50.278cqw; height: auto; display: block;
 }
 
 /* ── SECTION 3 · MAIN EXPERIENCE (1440×1781, cqw = px/14.4) ── */
 .pd-r3 {
-  aspect-ratio: 1440 / 1781; background: #fcfafa;
+  aspect-ratio: 1440 / 1940; background: #fcfafa;
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 .pd-r3__num {
@@ -2332,7 +2602,7 @@ html.process-open { overflow: hidden; }
 }
 .pd-r3__h1,
 .pd-r3__h2 {
-  position: absolute; left: 6.944cqw; margin: 0;
+  position: absolute; left: 7.5cqw; margin: 0;
   font-size: clamp(16px, 3.472cqw, 50px); font-weight: 600;
   color: #222; line-height: 1.24; white-space: nowrap;
 }
@@ -2341,22 +2611,22 @@ html.process-open { overflow: hidden; }
 .pd-r3__h1 span { color: #ff4600; }
 .pd-r3__lead1,
 .pd-r3__lead2 {
-  position: absolute; left: 43.75cqw; margin: 0;
+  position: absolute; left: 7.5cqw; margin: 0;
   font-size: clamp(8px, 1.111cqw, 16px); font-weight: 400;
   color: #666; line-height: 1.65;
 }
-.pd-r3__lead1 { top: 17.847cqw; }
-.pd-r3__lead2 { top: 21.736cqw; }
+.pd-r3__lead1 { top: 28.194cqw; }
+.pd-r3__lead2 { top: 33.25cqw; }
 .pd-r3__screen {
   position: absolute; left: 7.5cqw; width: 38.049cqw;
   object-fit: cover; display: block;
 }
 .pd-r3__screen--hero {
-  top: 28.75cqw; height: 18.054cqw;
+  top: 40.417cqw; height: 18.054cqw;
   object-position: top center;
 }
 .pd-r3__screen--flow {
-  top: 46.804cqw; height: 72.988cqw;
+  top: 58.471cqw; height: 72.988cqw;
   object-position: bottom center;
 }
 .pd-r3__flow {
@@ -2365,11 +2635,11 @@ html.process-open { overflow: hidden; }
 .pd-r3__item {
   position: absolute; left: 60.278cqw; width: 32.5cqw; min-height: 8cqw;
 }
-.pd-r3__item--1 { top: 33.889cqw; }
-.pd-r3__item--2 { top: 51.181cqw; }
-.pd-r3__item--3 { top: 72.847cqw; }
-.pd-r3__item--4 { top: 93.611cqw; }
-.pd-r3__item--5 { top: 110.694cqw; }
+.pd-r3__item--1 { top: 45.556cqw; }
+.pd-r3__item--2 { top: 62.848cqw; }
+.pd-r3__item--3 { top: 84.514cqw; }
+.pd-r3__item--4 { top: 105.278cqw; }
+.pd-r3__item--5 { top: 122.361cqw; }
 .pd-r3__line {
   position: absolute; left: -14.722cqw; top: 0.625cqw;
   width: 9.861cqw; border-top: 1px solid #ffdfd2;
@@ -2398,7 +2668,7 @@ html.process-open { overflow: hidden; }
 
 /* ── SECTION 4 · SUB PAGE REDESIGN (1440×2194, cqw = px/14.4) ── */
 .pd-r4 {
-  aspect-ratio: 1440 / 2194; background: #fcfafa;
+  aspect-ratio: 1440 / 2310; background: #fcfafa;
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 .pd-r4__num {
@@ -2415,7 +2685,7 @@ html.process-open { overflow: hidden; }
 }
 .pd-r4__h1,
 .pd-r4__h2 {
-  position: absolute; left: 6.944cqw; margin: 0;
+  position: absolute; left: 7.5cqw; margin: 0;
   font-size: clamp(16px, 3.472cqw, 50px); font-weight: 600;
   color: #222; line-height: 1.24; white-space: nowrap;
 }
@@ -2423,7 +2693,7 @@ html.process-open { overflow: hidden; }
 .pd-r4__h2 { top: 20.833cqw; }
 .pd-r4__h2 span { color: #ff4600; }
 .pd-r4__lead {
-  position: absolute; left: 51.389cqw; top: 21.458cqw;
+  position: absolute; left: 7.5cqw; top: 27.917cqw;
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; color: #666; line-height: 1.65;
 }
@@ -2432,10 +2702,10 @@ html.process-open { overflow: hidden; }
   width: 82.778cqw; height: 29.028cqw;
   background: #fff; border: 1px solid #eaeaea; border-radius: 0.694cqw;
 }
-.pd-r4__card--1 { top: 27.917cqw; }
-.pd-r4__card--2 { top: 58.889cqw; }
-.pd-r4__card--3 { top: 89.306cqw; }
-.pd-r4__card--4 { top: 119.722cqw; }
+.pd-r4__card--1 { top: 36.417cqw; }
+.pd-r4__card--2 { top: 67.389cqw; }
+.pd-r4__card--3 { top: 97.806cqw; }
+.pd-r4__card--4 { top: 128.222cqw; }
 .pd-r4__copy {
   position: absolute; left: 2.083cqw; top: 2.639cqw;
   width: 35.417cqw; color: #666;
@@ -2467,8 +2737,8 @@ html.process-open { overflow: hidden; }
 }
 .pd-r4__shot {
   position: absolute; top: 3.264cqw;
-  border-radius: 1.389cqw; border: 1px solid #eaeaea;
-  box-shadow: 0.139cqw 0.278cqw 0.278cqw rgba(0,0,0,0.10);
+  border-radius: 1.389cqw;
+  filter: drop-shadow(0.28cqw 0.55cqw 0.42cqw rgba(0,0,0,0.12));
   object-fit: cover; display: block;
 }
 .pd-r4__shot--before {
@@ -2498,13 +2768,15 @@ html.process-open { overflow: hidden; }
 
 /* ── SECTION 5 · AI WORKFLOW (1440×939, cqw = px/14.4) ── */
 .pd-r5 {
-  aspect-ratio: 1440 / 939; background: #fcfafa;
+  aspect-ratio: 1440 / 1190; background: #fcfafa;
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 .pd-r5__num {
   position: absolute; left: 7.5cqw; top: 2.639cqw;
   font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
-  color: #fcebe7; -webkit-text-stroke: 1px rgba(255,70,0,0.5);
+  background: linear-gradient(180deg, #ffdfd2 0%, #fff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  -webkit-text-stroke: 1px rgba(255,70,0,0.12);
 }
 .pd-r5__eyebrow {
   position: absolute; left: 19.931cqw; top: 9.097cqw;
@@ -2513,7 +2785,7 @@ html.process-open { overflow: hidden; }
 }
 .pd-r5__h1,
 .pd-r5__h2 {
-  position: absolute; left: 6.944cqw; margin: 0;
+  position: absolute; left: 7.5cqw; margin: 0;
   font-size: clamp(16px, 3.472cqw, 50px); font-weight: 600;
   color: #222; line-height: 1.24; white-space: nowrap;
 }
@@ -2522,19 +2794,19 @@ html.process-open { overflow: hidden; }
 .pd-r5__h2 span { color: #ff4600; }
 .pd-r5__lead1,
 .pd-r5__lead2 {
-  position: absolute; left: 44.514cqw; margin: 0;
+  position: absolute; left: 7.5cqw; margin: 0;
   font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; color: #666; line-height: 1.65;
 }
-.pd-r5__lead1 { top: 16.667cqw; }
-.pd-r5__lead2 { top: 20.556cqw; }
+.pd-r5__lead1 { top: 26.944cqw; }
+.pd-r5__lead2 { top: 32cqw; }
 .pd-r5__card {
-  position: absolute; top: 27.5cqw;
-  width: 40.833cqw; height: 35.139cqw;
+  position: absolute; top: 39.514cqw;
+  width: 40.833cqw; height: 38.6cqw;
   background: #fff; border: 1px solid #eaeaea; border-radius: 0.694cqw;
 }
 .pd-r5__card--prompt { left: 7.5cqw; }
-.pd-r5__card--code { left: 50.556cqw; }
+.pd-r5__card--code { left: 52cqw; }
 .pd-r5__label {
   display: flex; align-items: center; gap: 0.694cqw;
   position: absolute; left: 2.847cqw; top: 2.083cqw;
@@ -2553,17 +2825,17 @@ html.process-open { overflow: hidden; }
   font-weight: 600; line-height: 1.35;
 }
 .pd-r5__desc {
-  position: absolute; left: 6.667cqw; top: 6.944cqw;
+  position: absolute; left: 6.667cqw; top: 8.333cqw;
   margin: 0; color: #666; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; line-height: 1.55;
 }
-.pd-r5__desc--second { top: 10.347cqw; }
+.pd-r5__desc--second { top: 13.166cqw; }
 .pd-r5__visual {
-  position: absolute; left: 6.667cqw; top: 10.347cqw;
+  position: absolute; left: 6.667cqw; top: 13.333cqw;
   width: 29.861cqw; height: 14.167cqw; object-fit: cover; display: block;
 }
 .pd-r5__prompt {
-  position: absolute; left: 6.667cqw; top: 25.208cqw;
+  position: absolute; left: 6.667cqw; top: 28.889cqw;
   width: 29.931cqw; height: 7.778cqw;
   background: #fff8f6; padding: 0.764cqw 0.764cqw 0.694cqw;
 }
@@ -2578,7 +2850,7 @@ html.process-open { overflow: hidden; }
   font-weight: 400; line-height: 1.28;
 }
 .pd-r5__chips {
-  position: absolute; left: 6.667cqw; top: 14.028cqw;
+  position: absolute; left: 6.667cqw; top: 18cqw;
   display: flex; gap: 0.694cqw;
 }
 .pd-r5__chips span {
@@ -2588,7 +2860,7 @@ html.process-open { overflow: hidden; }
   font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; white-space: nowrap;
 }
 .pd-r5__codeimg {
-  position: absolute; left: 5.347cqw; top: 17.431cqw;
+  position: absolute; left: 5.347cqw; top: 21.667cqw;
   width: 32.5cqw; height: 15.903cqw; object-fit: cover; display: block;
 }
 
@@ -2604,7 +2876,7 @@ html.process-open { overflow: hidden; }
 }
 .pd-r6__h1,
 .pd-r6__h2 {
-  position: absolute; left: 6.944cqw; margin: 0;
+  position: absolute; left: 7.5cqw; margin: 0;
   font-size: clamp(16px, 3.472cqw, 50px); font-weight: 600;
   color: #222; line-height: 1.24; white-space: nowrap;
 }
@@ -2673,7 +2945,7 @@ html.process-open { overflow: hidden; }
 }
 .pd-r7__h1,
 .pd-r7__h2 {
-  position: absolute; left: 7.5cqw; margin: 0;
+  position: absolute; left: 8.056cqw; margin: 0;
   font-size: clamp(16px, 3.472cqw, 50px); font-weight: 600;
   color: #222; line-height: 1.24; white-space: nowrap;
 }
@@ -2687,7 +2959,7 @@ html.process-open { overflow: hidden; }
   font-weight: 400; line-height: 1.55;
 }
 .pd-r7__lead1 { top: 31.806cqw; }
-.pd-r7__lead2 { top: 37.153cqw; }
+.pd-r7__lead2 { top: 38.362cqw; }
 .pd-r7__img {
   position: absolute; left: 54.861cqw; top: 8.958cqw;
   width: 45.139cqw; height: 32.153cqw; object-fit: cover;

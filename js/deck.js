@@ -74,6 +74,7 @@
        구형 브라우저 대비 aria-hidden 도 유지 */
     p.toggleAttribute("inert", i !== 0);
   });
+  root.classList.add("deck-ready");
 
   function media(p, play) {
     const v = p.querySelector("video");
