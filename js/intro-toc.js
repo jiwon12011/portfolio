@@ -17,7 +17,7 @@
     { key: "jaringobi", num: "01", title: "자린고비",      sub: "Branding / 2025", thumb: "img/main/main_jaringobi.webp", preview: "img/jaringobi/jaringobi_thumb.mp4" },
     { key: "gwihon",    num: "02", title: "귀혼",          sub: "UXUI / 2025",     thumb: "img/main/main_hon.webp",       preview: "img/hon/hon_thumb.mp4" },
     { key: "pledis",    num: "03", title: "플레디스",      sub: "Branding / 2025", thumb: "img/main/main_pledis.webp",      preview: "img/pledis/pledis_intro.mp4" },
-    { key: "yumi",      num: "04", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp",      preview: "img/yumi_cell/yumicell_thumb.mp4" },
+    { key: "yumi",      num: "04", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp",      preview: "img/yumi_cell/yumicell_intro2.mp4" },
     { key: "poze",      num: "05", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
     { key: "mathhub",   num: "06", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp",       preview: "img/mathhub/mathhub_intro.mp4" },
     { key: "sangsang",  num: "07", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp",          preview: "img/sangsangdoor/sangsangdoor_intro.mp4" },
