@@ -904,12 +904,12 @@ img.is-empty { color: transparent; }
 /* delay .4s = 이전(out)을 .4초 멈춰 보여준 뒤 굴림(both 로 딜레이 중 translateY 0 유지 → 이전이 또렷이 보임).
    duration .7s 로 천천히 → "3 보였다가 → 4로 굴러 멈춤"이 눈에 들어오게. */
 .intro-list__item.is-rolling .intro-roll__out {
-  animation: introRollOut .9s cubic-bezier(.22, 1, .36, 1) .7s both;
+  animation: introRollOut .9s cubic-bezier(.22, 1, .36, 1) .5s both;
 }
 /* base(현재 내용)는 딜레이 중 118%(화면 밖, 숨김) 유지(backwards) → 이전이 빠지며 현재가 올라와 안착. */
 .intro-list__item.is-rolling > img,
 .intro-list__item.is-rolling > div {
-  animation: introRollIn .9s cubic-bezier(.22, 1, .36, 1) .7s backwards;
+  animation: introRollIn .9s cubic-bezier(.22, 1, .36, 1) .5s backwards;
 }
 
 /* prefers-reduced-motion: 연출 생략, 즉시 표시(롤·out 레이어 모두 무력화) */

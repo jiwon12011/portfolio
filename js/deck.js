@@ -145,7 +145,7 @@
       if (out.parentNode) out.remove();
       center._rollCleanup = null;
     };
-    const t = setTimeout(cleanup, 1800);      // 롤 hold .7s + 애니 .9s = 1.6s + 여유
+    const t = setTimeout(cleanup, 1600);      // 롤 hold .5s + 애니 .9s = 1.4s + 여유
     center._rollCleanup = cleanup;
   }
 
