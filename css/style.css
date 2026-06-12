@@ -2393,7 +2393,7 @@ html.process-open { overflow: hidden; }
 .pd-hero { background: #14182b; }
 .pd-hero__img { display: block; width: 100%; height: auto; }
 .pd-hero__copy {
-  position: absolute; left: 15.8cqw; top: 25.2cqw;
+  position: absolute; left: 15.8cqw; top: 22.7cqw;
   color: #fff; font-family: "Pretendard Variable", Pretendard, sans-serif;
   text-shadow: 0 0.14cqw 0.55cqw rgba(10,18,42,0.45);
 }
@@ -2404,7 +2404,7 @@ html.process-open { overflow: hidden; }
 }
 .pd-hero__title {
   margin: 0.08cqw 0 0;
-  font-size: clamp(8px, 1.02cqw, 19.6px); font-weight: 700;
+  font-size: clamp(8px, 1.02cqw, 19.6px); font-weight: 500;
   letter-spacing: 0.01em; line-height: 1.15;
 }
 .pd-hero__meta {
