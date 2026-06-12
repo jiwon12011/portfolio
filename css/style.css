@@ -2585,9 +2585,12 @@ html.process-open { overflow: hidden; }
 
 /* ── SECTION 3 · MAIN EXPERIENCE (1440×1781, cqw = px/14.4) ── */
 .pd-r3 {
-  aspect-ratio: 1440 / 1940; background: #fcfafa;
+  aspect-ratio: 1440 / 1940;
+  background: #fff5ee url("../img/pledis/process/s3_bg.webp") center / cover no-repeat;
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
+.pd-r3::before,
+.pd-r3::after { display: none; }
 .pd-r3__num {
   position: absolute; left: 7.5cqw; top: 3.889cqw;
   font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
