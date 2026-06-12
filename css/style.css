@@ -899,8 +899,8 @@ html.off-main .intro-list--live {
   border-radius: 13px; border: 1px solid transparent; cursor: pointer;
   /* Stage2: transform/opacity 전환(rotateX·scale·opacity). 트랙 굴림과 동기 리듬. */
   transition: background .25s, border-color .25s,
-              transform .55s cubic-bezier(.22,1,.36,1),
-              opacity   .55s cubic-bezier(.22,1,.36,1);
+              transform .42s cubic-bezier(.22,1,.36,1),
+              opacity   .42s cubic-bezier(.22,1,.36,1);
   transform-origin: center center;
 }
 .intro-list__item img { width: 56px; height: 48px; object-fit: cover; border-radius: 9px; transition: transform .28s cubic-bezier(.34,1.5,.64,1); }
@@ -908,16 +908,28 @@ html.off-main .intro-list--live {
 .intro-list__item h4 { margin: 2px 0; font-size: 14px; font-weight: 700; color: var(--it-title); }
 .intro-list__item p { margin: 0; font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
 
-/* 뮤직플레이어 느낌 — 활성(가운데) 항목에 작은 이퀄라이저 포인트 */
-.intro-list__eq { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); display: none; align-items: flex-end; gap: 2px; height: 15px; }
-.intro-list__item.is-active .intro-list__eq { display: flex; }
-.intro-list__eq i { width: 2px; height: 40%; border-radius: 1px; background: var(--it-eq, linear-gradient(180deg, #E2EFFF, #7FAEE5)); transform-origin: bottom; animation: introEq 1s ease-in-out infinite; }
-.intro-list__eq i:nth-child(1) { animation-delay: -.1s; }
-.intro-list__eq i:nth-child(2) { animation-delay: -.55s; }
-.intro-list__eq i:nth-child(3) { animation-delay: -.3s; }
-.intro-list__eq i:nth-child(4) { animation-delay: -.7s; }
-@keyframes introEq { 0%,100% { height: 28%; } 50% { height: 100%; } }
-@media (prefers-reduced-motion: reduce) { .intro-list__eq i { animation: none; height: 60%; } }
+/* 뮤직플레이어 느낌 — 활성(가운데) 항목에 "재생 중" 펄스 도트(차분·미니멀).
+   ::after = 고정 중심 도트, ::before = 천천히 퍼졌다 사라지는 펄스 링. 테마색(--it-eq) 연동. */
+.intro-list__eq { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); display: none; width: 7px; height: 7px; opacity: 1; }
+.intro-list__item.is-active .intro-list__eq { display: block; }
+.intro-list__eq::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: var(--it-eq, linear-gradient(135deg, #E2EFFF, #7FAEE5)); opacity: .95;
+}
+.intro-list__eq::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: var(--it-eq, linear-gradient(135deg, #E2EFFF, #7FAEE5));
+  animation: introPulse 2s ease-out infinite;
+}
+@keyframes introPulse {
+  0%   { transform: scale(1);    opacity: .55; }
+  100% { transform: scale(2.4);  opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-list__eq::before { animation: none; opacity: .35; transform: scale(1.4); }
+  .intro-list__item[data-slot="0"] { animation: none; }
+  .intro-list--live:not(.is-rolling) .intro-list__frame { animation: none; }
+}
 
 /* ── 거리별 위계: 가운데(slot 0) 또렷, 멀수록 흐림.
    Stage2: opacity 에 rotateX(휠 기울임) + scale(원근 크기) 추가.
@@ -945,18 +957,11 @@ html.off-main .intro-list--live {
 /* ── 안착 강조 키프레임 — 가운데 카드가 들어오는 순간 미세 발광 후 소멸(0.45s) ── */
 @keyframes pickerSettle {
   0%   { box-shadow: 0 0 0   0   rgba(255,255,255,0); }
-  30%  { box-shadow: 0 0 14px 4px rgba(200,220,255,.35), 0 0 28px 8px rgba(160,195,255,.18); }
+  30%  { box-shadow: 0 0 8px 2px rgba(200,220,255,.18), 0 0 16px 4px rgba(160,195,255,.09); }
   100% { box-shadow: 0 0 0   0   rgba(255,255,255,0); }
 }
 
-/* eq 밝아짐 — 안착 순간 brightness 살짝 올림 */
-.intro-list__item[data-slot="0"] .intro-list__eq {
-  animation: pickerSettle .45s cubic-bezier(.22,1,.36,1) both,
-             introEq 1s ease-in-out infinite;
-  filter: brightness(1.3);
-}
-/* introEq 와 충돌 방지: eq i 는 기존 introEq 그대로 */
-.intro-list__item[data-slot="0"] .intro-list__eq i { animation: introEq 1s ease-in-out infinite; filter: none; }
+/* (펄스 도트 eq 는 .intro-list__eq ::before/::after 가 전담 — 가운데 칸 전용 추가 규칙 불필요) */
 
 /* ── 데스크톱(1440px+)에서만 휠 입체감(rotateX·perspective)과 깊이 blur 추가(성능 비용) ──
    모바일/태블릿은 scale + opacity 위계만으로 거리감(3D 레이어 승격·blur 없음 → 저사양 60fps). */
@@ -980,36 +985,16 @@ html.off-main .intro-list--live {
   top: 50%; height: var(--frame-h, 56px);
   transform: translateY(-50%);
   border-radius: 13px;
-  /* Stage2 글래스 */
-  background: rgba(255,255,255,.08);
+  /* 글래스 — 원래 활성 박스와 같은 테마색 톤([data-project]별 --it-box-bg/border). */
+  background: var(--it-box-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1.2px solid rgba(255,255,255,.2);
+  border: 1.2px solid var(--it-box-border);
   box-shadow:
-    inset 0  1px 2px rgba(255,255,255,.30),
+    inset 0  1px 2px rgba(255,255,255,.22),
     inset 0 -1px 1px rgba(0,0,0,.10);
   pointer-events: none;
   z-index: 0;
-  overflow: hidden;   /* 오로라 그라데이션 ::before 가 radius 에서 잘리도록 */
-}
-
-/* 오로라 상단 림: 은은한 색조 하이라이트(opacity ~0.4) */
-.intro-list__frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  /* 상단 좌→우 무지갯빛 림. 옅게 올려 글래스 질감 강화. */
-  background: linear-gradient(
-    95deg,
-    rgba(180,210,255,.38) 0%,
-    rgba(200,170,255,.28) 35%,
-    rgba(170,235,220,.22) 68%,
-    rgba(255,255,255,.12) 100%
-  );
-  -webkit-mask-image: linear-gradient(180deg, #fff 0%, transparent 55%);
-          mask-image: linear-gradient(180deg, #fff 0%, transparent 55%);
-  pointer-events: none;
 }
 
 /* 프레임 안착 반짝: 트랙 굴림이 끝날 때 림이 순간 밝아짐(is-rolling 해제 시 자연스럽게) */
@@ -1017,10 +1002,9 @@ html.off-main .intro-list--live {
   animation: frameRimFlash .35s cubic-bezier(.22,1,.36,1) both;
 }
 @keyframes frameRimFlash {
-  0%   { box-shadow: inset 0 1px 2px rgba(255,255,255,.30), inset 0 -1px 1px rgba(0,0,0,.10); }
-  40%  { box-shadow: inset 0 1px 6px rgba(255,255,255,.55), inset 0 -1px 2px rgba(0,0,0,.08),
-                     0 0 18px 4px rgba(200,220,255,.22); }
-  100% { box-shadow: inset 0 1px 2px rgba(255,255,255,.30), inset 0 -1px 1px rgba(0,0,0,.10); }
+  0%   { box-shadow: inset 0 1px 2px rgba(255,255,255,.22), inset 0 -1px 1px rgba(0,0,0,.10); }
+  40%  { box-shadow: inset 0 1px 3px rgba(255,255,255,.28), inset 0 -1px 1px rgba(0,0,0,.09); }
+  100% { box-shadow: inset 0 1px 2px rgba(255,255,255,.22), inset 0 -1px 1px rgba(0,0,0,.10); }
 }
 
 .intro-list__viewport .intro-list__track { position: relative; z-index: 1; }
@@ -1058,7 +1042,7 @@ html.off-main .intro-list--live {
   .intro-list__item[data-slot="1"] { filter: none; }
   .intro-list__item img, .intro-list__item:hover img { transition: none; transform: none; }
   .intro-list__frame { backdrop-filter: none; -webkit-backdrop-filter: none; animation: none; }
-  .intro-list__item[data-slot="0"] .intro-list__eq { animation: introEq 1s ease-in-out infinite; filter: none; }
+  .intro-list__eq::before { animation: none; }
 }
 
 /* 스크롤 힌트(중앙 하단) */
@@ -1128,7 +1112,7 @@ html.off-main .intro-list--live {
     inset 0 1px 2px rgba(255,255,255,0.45),
     inset 0 -1px 1px rgba(20,30,50,0.05);
 }
-/* 공유 rim light ::before — frame 은 Stage2 블록에서 독립 오로라로 전담 */
+/* 공유 rim light ::before — 선택 프레임은 테마색 글래스로 별도 처리(::before 미사용) */
 .intro-process::before,
 .intro-index::before,
 .intro-hints::before {
@@ -1373,6 +1357,8 @@ html.process-open { overflow: hidden; }
 .process__eq i:nth-child(3){ height: 90%; animation-delay:-.30s }
 .process__eq i:nth-child(4){ height: 45%; animation-delay:-.70s }
 .process__eq i:nth-child(5){ height: 65%; animation-delay:-.20s }
+/* process__eq 전용 키프레임(인트로 목차 eq 는 펄스 도트로 바뀌어 더는 안 씀) */
+@keyframes introEq { 0%,100% { height: 28%; } 50% { height: 100%; } }
 .process__eq--sm { height: 13px; }
 .process__eq--sm i { width: 3px; }
 

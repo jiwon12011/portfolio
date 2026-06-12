@@ -57,7 +57,7 @@
       (p.preview ? ' data-preview="' + p.preview + '"' : "") + ">" +
       '<img src="' + p.thumb + '" alt="" loading="lazy" />' +
       "<div><span>" + esc(p.num) + "</span><h4>" + esc(p.title) + "</h4><p>" + esc(p.sub) + "</p></div>" +
-      '<span class="intro-list__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>' +
+      '<span class="intro-list__eq" aria-hidden="true"></span>' +
     "</li>";
 
   /* 전체 링을 cur 가 가운데(off 0) 오도록 렌더. 위아래 대칭으로 RING_HALF 칸씩 펼친다.
@@ -77,7 +77,11 @@
   /* 한 칸 실측 높이(+gap) → --row. 반응형 clamp 때문에 하드코딩 금지, 매번 측정.
      gap 은 트랙 computed style 의 row-gap 으로 읽는다. */
   const measureRow = () => {
-    const first = track.querySelector(".intro-list__item");
+    /* 반드시 가운데 칸(data-slot="0")을 잰다 — 다른 칸은 transform: scale(<1) 이 걸려
+       getBoundingClientRect().height 가 "시각상 줄어든" 높이를 돌려주기 때문(레이아웃 높이 아님).
+       scale 칸을 재면 --row/--frame-h 가 작게 잡혀 프레임이 가운데 카드와 한 칸 어긋난다. */
+    const first = track.querySelector('.intro-list__item[data-slot="0"]')
+               || track.querySelector(".intro-list__item");
     if (!first) return 0;
     const h = first.getBoundingClientRect().height;
     const cs = getComputedStyle(track);
@@ -178,14 +182,28 @@
        --row(px) 로 calc → 한 칸 실측 높이만큼 정확히 굴림. */
     track.style.transform = `translateY(calc(${-signed} * var(--row)))`;
 
+    /* ── 덜커덩 제거: 롤 시작 시 각 카드 data-slot 을 목적지(=−signed 이동) 기준으로 즉시 갱신.
+       recenter(prev) 의 reflow 가 "from" 스냅샷을 확정했으므로, 슬롯이 바뀌면 CSS 가 각 카드의
+       scale/opacity/blur 를 굴림 dur/ease 에 맞춰 모핑한다. 가운데로 들어오는 카드가 굴러오며
+       풀사이즈로 차오르고, settle 의 recenter(next)는 이미 같은 슬롯값이라 점프가 안 보인다.
+       transition 을 트랙 굴림과 동일 dur/ease 로 동기화(filter 포함 — 기본 transition 엔 filter 없음). */
+    const itemTrans = `background .25s, border-color .25s,` +
+      ` transform ${dur}s ${ease}, opacity ${dur}s ${ease}, filter ${dur}s ${ease}`;
+    track.querySelectorAll(".intro-list__item").forEach((item) => {
+      item.style.transition = itemTrans;
+      item.dataset.slot = String(parseInt(item.dataset.slot, 10) - signed);
+    });
+
     const settle = () => {
       track.removeEventListener("transitionend", onEnd);
       pendingEnd = null;
       if (cleanupTimer) { clearTimeout(cleanupTimer); cleanupTimer = null; }
-      live.classList.remove("is-rolling");
       rolling = false;
-      /* current 는 이미 next. 트랙을 next 중심으로 재중심 + translateY 0 (점프 안 보임) */
+      /* current 는 이미 next. 트랙을 next 중심으로 재중심 + translateY 0 (점프 안 보임).
+         data-slot 이 이미 목적지 기준이라 재렌더해도 시각 점프 없음. */
       recenter(next);
+      /* is-rolling 해제는 recenter 뒤로 — DOM 안정 후 frameRimFlash 가 깔끔히 발동(확정 튐 완화) */
+      live.classList.remove("is-rolling");
       track.style.willChange = "auto";       // 롤 끝 → 레이어 해제
       if (hadFocus) focusCenter();
     };
@@ -206,6 +224,15 @@
      deck 의 첫 setCurrent(실제 진입)가 reduce 폴백처럼 즉시 재중심으로 정확히 그리게 한다. */
   recenter(0);
   live.dataset.project = PROJECTS[0].key;
+
+  /* 폰트 로드 후 재중심 — 첫 측정은 폴백 폰트 기준이라 카드 높이(=--row/--frame-h)가
+     웹폰트 스왑 후 달라지면서 프레임과 가운데 카드가 한 칸 어긋날 수 있음. 폰트 준비되면
+     현재 중심으로 다시 그려(measureRow 포함) 정합을 맞춘다. 롤 중이면 settle 이 처리. */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      if (!rolling) recenter(current < 0 ? 0 : current);
+    });
+  }
 
   /* 리사이즈/폰트 로드 후 --row 재측정(롤 중이 아닐 때만, 레이아웃 정합 유지) */
   let rT = null;
