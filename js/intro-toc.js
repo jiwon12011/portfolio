@@ -26,13 +26,13 @@
   /* ▼ 프로젝트 추가는 여기 한 줄. 순서 = 목차 순환 순서.
      preview = 호버 미리보기용 경량 클립(없으면 정적 썸네일만) */
   const PROJECTS = [
-    { key: "jaringobi", num: "01", title: "자린고비",      sub: "Branding / 2025", thumb: "img/main/main_jaringobi.webp", preview: "img/jaringobi/jaringobi_thumb.mp4" },
-    { key: "gwihon",    num: "02", title: "귀혼",          sub: "UXUI / 2025",     thumb: "img/main/main_hon.webp",       preview: "img/hon/hon_thumb.mp4" },
-    { key: "pledis",    num: "03", title: "플레디스",      sub: "Branding / 2025", thumb: "img/main/main_pledis.webp",    preview: "img/pledis/pledis_intro.mp4" },
-    { key: "yumi",      num: "04", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp",      preview: "img/yumi_cell/yumicell_intro2.mp4" },
-    { key: "poze",      num: "05", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
-    { key: "mathhub",   num: "06", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp",   preview: "img/mathhub/mathhub_intro.mp4" },
-    { key: "sangsang",  num: "07", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp",      preview: "img/sangsangdoor/sangsangdoor_intro.mp4" },
+    { key: "gwihon",    num: "01", title: "귀혼",          sub: "UXUI / 2025",     thumb: "img/main/main_hon.webp",       preview: "img/hon/hon_thumb.mp4" },
+    { key: "jaringobi", num: "02", title: "자린고비",      sub: "Branding / 2025", thumb: "img/main/main_jaringobi.webp", preview: "img/jaringobi/jaringobi_thumb.mp4" },
+    { key: "yumi",      num: "03", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp",      preview: "img/yumi_cell/yumicell_intro2.mp4" },
+    { key: "sangsang",  num: "04", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp",      preview: "img/sangsangdoor/sangsangdoor_intro.mp4" },
+    { key: "mathhub",   num: "05", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp",   preview: "img/mathhub/mathhub_intro.mp4" },
+    { key: "pledis",    num: "06", title: "플레디스",      sub: "Branding / 2025", thumb: "img/main/main_pledis.webp",    preview: "img/pledis/pledis_intro.mp4" },
+    { key: "poze",      num: "07", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
     { key: "playlist",  num: "08", title: "우리 사이의 음표", sub: "Visual Novel / 2025", thumb: "img/main/main_playlist_game.webp", preview: "img/playlist_game/playlist_game_intro.mp4" },
   ];
 
@@ -47,15 +47,17 @@
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* 한 칸 마크업. slot = 가운데(0) 기준 시각 거리(−HALF..HALF), 그 밖은 |slot|>HALF(클립됨) */
+  /* 한 칸 마크업. slot = 가운데(0) 기준 시각 거리(−HALF..HALF), 그 밖은 |slot|>HALF(클립됨).
+     클립/런웨이 칸(|slot|>HALF)은 화면 밖이라 aria-hidden — 스크린리더가 보이는 5칸만 읽도록(중복·미표시 칸 제외). */
   const itemHTML = (p, slot, active) =>
     '<li class="intro-list__item' + (active ? " is-active" : "") + '"' +
       ' data-go="' + p.key + '" data-slot="' + slot + '"' +
       ' role="button" tabindex="' + (active ? "0" : "-1") + '"' +
       ' aria-label="' + esc(p.title) + ' 프로젝트로 이동"' +
       (active ? ' aria-current="true"' : "") +
+      (Math.abs(slot) > HALF ? ' aria-hidden="true"' : "") +
       (p.preview ? ' data-preview="' + p.preview + '"' : "") + ">" +
-      '<img src="' + p.thumb + '" alt="" loading="lazy" />' +
+      '<img src="' + p.thumb + '" alt="" loading="eager" />' +
       "<div><span>" + esc(p.num) + "</span><h4>" + esc(p.title) + "</h4><p>" + esc(p.sub) + "</p></div>" +
       '<span class="intro-list__eq" aria-hidden="true"></span>' +
     "</li>";
@@ -139,6 +141,7 @@
     if (prev < 0 || reduce()) {
       if (cleanupTimer) { clearTimeout(cleanupTimer); cleanupTimer = null; }
       rolling = false;
+      live.classList.remove("is-init");   // 실제 진입 시작 → 이후부터 frameRimFlash 허용
       recenter(next);
       if (hadFocus) focusCenter();
       return;
@@ -176,7 +179,7 @@
     const dur = Math.min(0.9, 0.42 + Math.sqrt(dist - 1) * 0.16);
     const ease = dist <= 1
       ? "cubic-bezier(.22,1,.36,1)"            // 인접: 부드럽게 한 칸 안착
-      : "cubic-bezier(.32,0,.2,1)";            // 먼 점프: 빠르게 굴러 감속 착지
+      : "cubic-bezier(.16,1,.3,1)";            // 먼 점프: 빠른 출발 + 감속 착지(expo-out, 휠 스핀 물리감)
     track.style.transition = `transform ${dur}s ${ease}`;
     /* signed>0(다음): 콘텐츠가 위로 올라가야 다음 칸이 가운데로 → translateY 음수.
        --row(px) 로 calc → 한 칸 실측 높이만큼 정확히 굴림. */
@@ -191,7 +194,18 @@
       ` transform ${dur}s ${ease}, opacity ${dur}s ${ease}, filter ${dur}s ${ease}`;
     track.querySelectorAll(".intro-list__item").forEach((item) => {
       item.style.transition = itemTrans;
-      item.dataset.slot = String(parseInt(item.dataset.slot, 10) - signed);
+      const ns = parseInt(item.dataset.slot, 10) - signed;  // 목적지 슬롯
+      item.dataset.slot = String(ns);
+      /* 롤 도는 동안에도 활성/포커스/aria 를 새 가운데(ns===0)로 즉시 이관.
+         안 하면 ~0.5s 간 "재생 중" 도트가 나가는 카드에 남고 aria-current 가 어긋남. */
+      const isC = ns === 0;
+      item.classList.toggle("is-active", isC);
+      item.tabIndex = isC ? 0 : -1;
+      if (isC) item.setAttribute("aria-current", "true");
+      else item.removeAttribute("aria-current");
+      /* 화면 밖(클립) 칸은 SR 에서 숨김 — 보이는 5칸만 노출 */
+      if (Math.abs(ns) > HALF) item.setAttribute("aria-hidden", "true");
+      else item.removeAttribute("aria-hidden");
     });
 
     const settle = () => {
@@ -221,7 +235,9 @@
   };
 
   /* 초기 seed: 첫 프로젝트로 재중심해 둠(메인에선 CSS 가 숨김). current 는 −1 로 둬서
-     deck 의 첫 setCurrent(실제 진입)가 reduce 폴백처럼 즉시 재중심으로 정확히 그리게 한다. */
+     deck 의 첫 setCurrent(실제 진입)가 reduce 폴백처럼 즉시 재중심으로 정확히 그리게 한다.
+     is-init: 시드 단계 표시 — 첫 진입 전까지 frameRimFlash 가 의미 없이 1회 발동하는 것 차단. */
+  live.classList.add("is-init");
   recenter(0);
   live.dataset.project = PROJECTS[0].key;
 

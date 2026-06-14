@@ -922,9 +922,11 @@ html.off-main .intro-list--live {
   animation: introPulse 2s ease-out infinite;
 }
 @keyframes introPulse {
-  0%   { transform: scale(1);    opacity: .55; }
-  100% { transform: scale(2.4);  opacity: 0; }
+  0%   { transform: scale(1);    opacity: .65; }
+  100% { transform: scale(1.8);  opacity: 0; }
 }
+/* 메인 화면(목차 숨김)에선 펄스 무한 애니 정지 — 안 보이는데 도는 비용/배터리 절약 */
+html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
   .intro-list__eq::before { animation: none; opacity: .35; transform: scale(1.4); }
   .intro-list__item[data-slot="0"] { animation: none; }
@@ -950,6 +952,9 @@ html.off-main .intro-list--live {
   /* 안착 강조: 가운데 카드에 은은한 발광(줄어들고 사라지는 한 번 반짝) */
   animation: pickerSettle .45s cubic-bezier(.22,1,.36,1) both;
 }
+/* 롤 중에는 pickerSettle 억제 — 굴림 시작 시 slot="0" 으로 갱신되는 순간 조기 발동 방지.
+   is-rolling 해제(settle, recenter 뒤) 후 새 가운데 카드에서만 한 번 발동되게 한다. */
+.intro-list--live.is-rolling .intro-list__item[data-slot="0"] { animation: none; }
 /* 가운데는 클릭/호버해도 또렷, 옆칸은 호버 시 강조 */
 .intro-list__item:hover { opacity: 1; transform: scale(1); }
 .intro-list__item:hover img { transform: scale(1.08); }
@@ -997,8 +1002,9 @@ html.off-main .intro-list--live {
   z-index: 0;
 }
 
-/* 프레임 안착 반짝: 트랙 굴림이 끝날 때 림이 순간 밝아짐(is-rolling 해제 시 자연스럽게) */
-.intro-list--live:not(.is-rolling) .intro-list__frame {
+/* 프레임 안착 반짝: 트랙 굴림이 끝날 때 림이 순간 밝아짐(is-rolling 해제 시 자연스럽게).
+   :not(.is-init) — 첫 로드 시드 recenter(0)에서 의미 없이 1회 발동하는 것을 막음(첫 진입 시 해제). */
+.intro-list--live:not(.is-rolling):not(.is-init) .intro-list__frame {
   animation: frameRimFlash .35s cubic-bezier(.22,1,.36,1) both;
 }
 @keyframes frameRimFlash {
@@ -1143,7 +1149,8 @@ html.off-main .intro-list--live {
   --it-title: #2d2416;
   --it-text: #3d3226;
   --it-muted: rgba(45,36,22,0.64);
-  --it-box-bg: rgba(255,245,235,0.30);
+  /* 밝은 노을 영상 위에서 본문(11px) 대비 확보 — 불투명도 ↑(0.30→0.45) */
+  --it-box-bg: rgba(255,245,235,0.45);
   --it-box-border: rgba(255,154,68,0.36);
   --it-on-accent: #fff;
   --it-eq: linear-gradient(180deg, #ffc890, #ff9a44);
@@ -1701,6 +1708,9 @@ html.process-open { overflow: hidden; }
 .process--poze .pcard:hover .pcard__go { background: rgba(214,150,162,0.42); color: #fff; }
 /* ptag = 밝은 베이지 + 어두운 글자 */
 .process--poze .ptag { background: rgba(230,221,210,0.92); color: #5c4a45; }
+/* 노션 배지 — POZE 더스티 로즈 액센트로(기본 세이지 그린 대신), 그림자도 따뜻하게 */
+.process--poze .pcard__notion { background: #cf9ea6;
+  box-shadow: 0 9px 22px -8px rgba(58,33,38,0.5), inset 0 1px 1px rgba(255,255,255,0.45); }
 
 /* ===================================================================
    플레디스(PLEDIS ARCHIVE) 모달 — 딥 네이비 슬레이트 + 피치/크림 + 브랜드 오렌지 태그 (#4)
@@ -1743,6 +1753,11 @@ html.process-open { overflow: hidden; }
 .process--pledis .process__now-meta strong { color: #e8ebf5; }
 .process--pledis .process__now-ctrl button { color: #c2c8de; }
 .process--pledis .process__now-ctrl button:hover { color: #fff; }
+/* NOW PLAYING 앨범아트 — 가로형 워드마크라 네이비 타일 위에 contain 으로 앉혀 앨범커버 느낌(POZE 처럼) */
+.process--pledis .process__now-art {
+  object-fit: contain; padding: 8px;
+  background: linear-gradient(150deg, #3a4166, #2a3050);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.08); }
 /* 카드 */
 .process--pledis .pcard {
   background: linear-gradient(160deg, rgba(54,62,90,0.52), rgba(40,46,68,0.40));
