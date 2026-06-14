@@ -16,6 +16,38 @@
 
 ---
 
+## 2026.06.14 — 피커 휠 목차 마감 + 프로젝트 순서 변경 + 제작과정 모션·prev/next 전환 + 숫자 ghost 수정
+
+### 피커 휠 PROJECTS 목차 (라이브 1개로 통합)
+- `feat/picker-toc` 머지 → 정렬·색·안착·eq 손질
+- **정렬 버그**: `measureRow`가 트랙 첫 카드(런웨이, `scale(.80)`)를 재서 `getBoundingClientRect` 가 줄어든 시각 높이를 줌 → `--row/--frame-h` 가 작게 잡혀 프레임-카드 한 칸 어긋남. **가운데 칸(`data-slot="0"`, scale 1) 실측으로 수정**
+- 안착 "덜커덩": 롤 시작 시 각 카드 `data-slot` 을 목적지로 갱신 → scale/opacity/blur 가 굴림과 함께 모핑(settle 점프 제거)
+- 프레임 색 테마색(`--it-box-bg/border`)으로 복원(무지개 제거), eq 이퀄라이저 바 → **펄스 도트**
+- 팀 점검 후 a11y(롤 중 aria/도트 이관, 클립 칸 aria-hidden)·모션(이징·글로우)·perf(eager·펄스 정지) 마이크로 패치
+
+### 프로젝트 순서 변경 ⭐
+- 순서: **귀혼·자린고비·유미·상상의문·MathHub·플레디스·POZE·우리사이의음표**
+- ⚠️ **순서의 진짜 기준 = `index.html` 의 `.deck-panel` DOM 순서**(deck.js 가 querySelectorAll 순서를 그대로 피커 `setCurrent` 에 넘김). 바꾸려면 ① 인트로 패널 8개 블록 이동 ② 각 패널 정적 `PROJECT 0N` eyebrow 번호 ③ `intro-toc.js` PROJECTS 배열+num — **셋 다**. (하단 `NN/08` 페이저는 deck.js 동적 갱신, `.process` 모달 DOM 순서는 무관)
+
+### 제작과정 디테일
+- POZE 노션 배지 세이지그린→**더스티 로즈(`#cf9ea6`)**, 플레디스 NOW PLAYING **앨범아트** 추가
+- **플레디스 제작과정 스크롤 모션 신규**(`js/making-pledis.js`, GSAP ScrollTrigger). 9섹션 시네마틱
+- ⚠️ **smooth-process 적용 모달은 CSS `scroll-behavior:auto` 목록(style.css ~1450)에 꼭 포함.** 빠지면 기본 `scroll-behavior:smooth` 와 lerp 가 이중 스무딩 충돌 → 스크롤이 바닥까지 안 감(플레디스가 이걸로 헤맴)
+- ⚠️ **플레디스 섹션 숫자 ghost**: `-webkit-text-stroke` + `background-clip:text`(투명 채움) = "4" 등 글리프 외곽선이 이중 렌더되는 webkit 버그(정적 CSS, 모션 무관). 외곽선 제거 + 그라데이션 끝색 `#fff→#ffc9bf`(흰 배경에 안 묻히게)
+
+### NOW PLAYING ⏮/⏭ → 양옆 프로젝트 제작과정 전환 (신규)
+- 순환 + 덱/피커 동기화(닫으면 그 프로젝트로 복귀) + 8개 전부
+- **reorder-safe 핵심**: 양옆을 `window.__introToc.order`(=PROJECTS 키 순서, 단일 소스)에서 계산하고 **키로** 모달 open → 목차 순서 바꿔도 자동. `.process` 모달 DOM 순서에 의존 안 함
+- 전환은 **크로스페이드로 결정**(슬라이드 반려). ⚠️ 모달이 닫힐 때 `display:none` 이라 열 때 첫 페인트 비용 발생 → 슬라이드는 "타겟 페인트 전엔 못 움직여" 시작 멈칫이 보임. 깜빡임 3원인 = ① `void offsetWidth` 강제 리플로우 ② 슬라이드 끝 backdrop-filter 재활성 플래시 ③ 끝의 `ScrollTrigger.refresh`(197개) 프리즈 → 각각 제거(리플로우 삭제 / 블러 토글 안 함 / refresh·덱싱크를 `requestIdleCallback`)
+- `__introToc.order` 노출(intro-toc.js), `__deck.jumpToProject(key)` 노출(deck.js, 쿨다운 없이 즉시 동기화)
+
+### 검증
+- 전 JS 17개 문법 OK + 헤드리스(`npx playwright`, 전역 `~/.npm/_npx/*`)로 6개 플로우 콘솔 에러 0
+
+**커밋:** `efefd2f` 피커 색/정렬/덜커덩/eq · `16d7a92` 순서 재배치+a11y/모션/perf+POZE배지/플레디스앨범아트 · `78ab3a4` 플레디스 모션+스무스스크롤 · `0f0a8af` prev/next 전환 · `b05574d` 숫자 ghost
+
+---
+
 ## 2026.06.04 — 인트로 소개·테마 마감 + POZE 제작과정 모달 + 비례 스케일링
 
 ### 프로젝트 인트로
