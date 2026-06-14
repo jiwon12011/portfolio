@@ -42,6 +42,9 @@
       gsap.from(els, {
         opacity: 0, y: 40, duration: 1.05, ease: "expo.out", stagger: 0.1,
         scrollTrigger: ST(sec, "top 92%"),  /* 86% → 92%: 짧은 스크롤러 대응 */
+        /* 완료 후 인라인 transform 제거 — 그라데이션 채움(background-clip:text)+외곽선(text-stroke)
+           숫자에 식별 transform 이 남으면 webkit 에서 채움/외곽선이 어긋나 ghost 가 생김. */
+        clearProps: "transform",
       });
     };
 
@@ -217,6 +220,7 @@
     if (pd6Heads.length) gsap.from(pd6Heads, {
       opacity: 0, y: 40, duration: 1.05, ease: "expo.out", stagger: 0.1,
       scrollTrigger: ST("#pd6 .pd-r6__lead", "top 92%"),  /* 86% → 92% */
+      clearProps: "transform",   // 숫자 ghost 방지(완료 후 인라인 transform 제거)
     });
 
     /* 카드 3개 — y 진입 + stagger */
