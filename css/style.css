@@ -1450,7 +1450,8 @@ html.process-open { overflow: hidden; }
 #process .process__content,
 #process-poze .process__content,
 #process-gwihon .process__content,
-#process-yumi .process__content { scroll-behavior: auto; }
+#process-yumi .process__content,
+#process-pledis .process__content { scroll-behavior: auto; }
 .process__content::-webkit-scrollbar { width: 8px; }
 .process__content::-webkit-scrollbar-thumb { background: rgba(90,104,76,0.28); border-radius: 4px; }
 

@@ -1,7 +1,7 @@
 /* =======================================================================
    smooth-process.js — 제작 과정 모달 "전용" 부드러운 스크롤(경량 커스텀)
    -----------------------------------------------------------------------
-   · 대상: 자린고비(#process) · POZE(#process-poze) · 귀혼(#process-gwihon)
+   · 대상: 자린고비(#process) · POZE(#process-poze) · 귀혼(#process-gwihon) · 유미(#process-yumi) · 플레디스(#process-pledis)
    · 본문은 모달 내부 커스텀 스크롤러(.process__content)가 스크롤되는 구조라
      Lenis(content transform 방식)와 충돌 → 네이티브 scrollTop 을 매 프레임 lerp
      보간하는 경량 방식으로 직접 구현한다.
@@ -16,7 +16,7 @@
 (() => {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi"];
+  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis"];
   const EASE = 0.14;            // 0~1, 클수록 더 즉각적(작을수록 더 미끄럽게)
 
   window.__processLenis = window.__processLenis || {};
