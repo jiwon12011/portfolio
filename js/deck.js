@@ -197,6 +197,27 @@
   const go   = (dir, opts) => { if (N >= 2) slide((idx + dir + N) % N, dir, opts); };  // 루프
   const goTo = (t, opts)   => { if (t !== idx) slide(t, t > idx ? 1 : -1, opts); };    // 점프
 
+  /* 키로 "즉시" 전환 — 애니메이션·쿨다운 없이 덱 상태(idx/active/inert/목차/영상)만 맞춘다.
+     제작과정 모달이 위를 덮고 있을 때(process-open) 뒤 배경을 타겟 프로젝트로 조용히 동기화하는 용도.
+     슬라이드 lock 을 안 타므로 prev/next 연타에도 덱-모달이 안 어긋난다. */
+  function jumpToProject(key) {
+    const t = panels.findIndex((p) => p.dataset.project === key);
+    if (t < 0 || t === idx) return;
+    const out = panels[idx], inc = panels[t], dir = t > idx ? 1 : -1;
+    tr(out, false); tr(inc, false);                       // 트랜지션 없이 즉시 배치
+    out.style.transform = `translateX(${dir > 0 ? -100 : 100}%)`;
+    inc.style.transform = "translateX(0)";
+    out.classList.remove("is-active"); inc.classList.add("is-active");
+    out.setAttribute("aria-hidden", "true"); inc.setAttribute("aria-hidden", "false");
+    out.setAttribute("inert", ""); inc.removeAttribute("inert");
+    media(out, false); media(inc, true);
+    syncIntro(inc, 0);                                    // 라이브 목차(피커)도 그 프로젝트로
+    root.classList.toggle("off-main", t !== 0);
+    idx = t;
+    preloadNeighbors();
+  }
+  window.__deck = { jumpToProject };
+
   /* 제작과정·About 오버레이가 열려 있으면 뒤 배경(프로젝트 전환)은 잠금 */
   const locked = () => document.documentElement.classList.contains("process-open")
     || document.documentElement.classList.contains("about-open");

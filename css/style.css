@@ -1320,6 +1320,14 @@ html.process-open { overflow: hidden; }
 .process.is-closing .process__exit-glass { backdrop-filter: none; -webkit-backdrop-filter: none; }
 .process.is-closing .process__panel { animation: procPanelOut .30s cubic-bezier(.4,0,.7,1) both; }
 
+/* ── prev/next 전환 = 크로스페이드: 현재 모달이 위에서 살짝 줌아웃+페이드되며 사라지고,
+   그 밑에서 타겟이 평소대로 열리며 드러난다. translateX 슬라이드와 달리 타겟이 페인트되는 동안
+   opacity 로 흡수돼 "시작 멈칫"이 안 보이고, 토글되는 backdrop-filter 가 없어 "끝 플래시"도 없다.
+   사라지는 현재의 블러만 끔(어차피 없어짐 → 비용↓·이중블러 방지), 타겟 블러는 그대로 유지. ── */
+.process.is-switch-out { z-index: 102; animation: procSwitchOut .3s cubic-bezier(.4,0,.2,1) both; }
+.process.is-switch-out .process__scrim { backdrop-filter: none; -webkit-backdrop-filter: none; }
+@keyframes procSwitchOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.04); } }
+
 @keyframes procScrimIn  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes procScrimOut { from { opacity: 1; } to { opacity: 0; } }
 @keyframes procPanelIn {
@@ -1333,6 +1341,7 @@ html.process-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .process.is-open .process__scrim, .process.is-open .process__panel,
   .process.is-closing .process__scrim, .process.is-closing .process__panel { animation: none; }
+  .process.is-switch-out { animation: none; }
 }
 
 /* ── 좌측 고정 네비 ── */

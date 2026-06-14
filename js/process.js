@@ -115,6 +115,16 @@
       if (e.key === "Escape" && modal.classList.contains("is-open")) close();
     });
 
+    /* NOW PLAYING ⏮/⏭ → 양옆 프로젝트 제작과정(순환). 가운데(.is-play)는 재생/일시정지 전용. */
+    const ctrlBtns = [...modal.querySelectorAll(".process__now-ctrl button")];
+    if (ctrlBtns.length >= 3) {
+      const prevBtn = ctrlBtns[0], nextBtn = ctrlBtns[ctrlBtns.length - 1];
+      prevBtn.setAttribute("aria-label", "이전 프로젝트 제작과정");
+      nextBtn.setAttribute("aria-label", "다음 프로젝트 제작과정");
+      prevBtn.addEventListener("click", () => navProcess(modal, -1));
+      nextBtn.addEventListener("click", () => navProcess(modal, +1));
+    }
+
     /* NOW PLAYING 재생/일시정지(아이콘만) */
     const playBtn = modal.querySelector(".process__now-ctrl .is-play");
     if (playBtn) {
@@ -139,6 +149,60 @@
   }
 
   modals.forEach((m) => { try { byProject[m.dataset.project] = setup(m); } catch (e) { console.error("[process.js] setup failed:", m.dataset.project, e); } });
+
+  /* ── NOW PLAYING ⏮/⏭ → 양옆 프로젝트 제작과정으로 이동(순환) ──
+     순서는 intro-toc 의 PROJECTS(단일 소스)에서 가져온다 → 키 기반이라 목차 순서를 바꿔도
+     자동으로 따라온다(process 모달 DOM 순서·하드코딩에 의존하지 않음).
+     전환 = 타겟 open() + 현재 soft-hide(close() 는 process-open 을 내리고 뒤 영상을 켜므로 안 씀)
+     + 덱/피커를 타겟으로 즉시 동기화(닫으면 그 프로젝트 인트로로 복귀). */
+  let switchTimer = null;
+  function navProcess(currentModal, step) {
+    const order = window.__introToc && window.__introToc.order;
+    if (!order || !order.length) return;
+    const curKey = currentModal.dataset.project;
+    const i = order.indexOf(curKey);
+    if (i < 0) return;
+    const targetKey = order[(i + step + order.length) % order.length];  // 순환
+    if (!targetKey || targetKey === curKey) return;
+    const targetModal = document.querySelector('.process[data-project="' + targetKey + '"]');
+    const targetCtrl = byProject[targetKey];
+    if (!targetModal || !targetCtrl) return;
+
+    /* 진행 중 전환 정리(연타 안전): 클릭된 모달·타겟 외 열린 모달 즉시 제거 */
+    if (switchTimer) { clearTimeout(switchTimer); switchTimer = null; }
+    modals.forEach((m) => {
+      if (m !== currentModal && m !== targetModal && m.classList.contains("is-open")) {
+        m.classList.remove("is-open", "is-closing", "is-switch-out");
+        m.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    /* 1) 타겟을 현재 "밑에서" 평소대로 open. 단 open() 안의 ScrollTrigger.refresh(197개 트리거,
+       ~90ms 메인스레드 블로킹 = hitch 본체)는 잠시 꺼서 건너뛰고, 전환이 끝난 뒤 idle 에 한 번 한다.
+       강제 reflow(void offsetWidth) 안 함 → 시작 멈칫 없음. 타겟의 procPanelIn(페이드+스케일) 진입이
+       현재가 사라지며 자연스레 드러난다. */
+    const savedRefresh = window.__makingRefresh;
+    window.__makingRefresh = null;
+    targetCtrl.open();
+    window.__makingRefresh = savedRefresh;
+    /* 2) 현재를 위에서 살짝 줌아웃+페이드 → 그 밑 타겟이 드러남(크로스페이드, 빈 틈/플래시 없음) */
+    currentModal.classList.add("is-switch-out");
+    switchTimer = setTimeout(() => {
+      switchTimer = null;
+      currentModal.classList.remove("is-open", "is-closing", "is-switch-out");
+      currentModal.setAttribute("aria-hidden", "true");
+      const curHero = currentModal.querySelector(".process__hero-media");
+      if (curHero) curHero.pause();
+      /* 무거운 동기화(덱/피커 + ScrollTrigger refresh)는 전환 끝난 뒤 idle 에 → "끝 프리즈" 방지.
+         그 사이 닫혀도 안전, 연타 시엔 마지막 것만 실행됨(switchTimer 로 직전 것 취소). */
+      const sync = () => {
+        if (window.__deck && window.__deck.jumpToProject) window.__deck.jumpToProject(targetKey);
+        if (window.__makingRefresh) window.__makingRefresh();
+      };
+      if (window.requestIdleCallback) requestIdleCallback(sync, { timeout: 400 });
+      else setTimeout(sync, 80);
+    }, 320);   // procSwitchOut .3s + 여유
+  }
 
   /* .intro-process 버튼(있으면) → 해당 프로젝트 모달 */
   document.querySelectorAll(".intro-process").forEach((b) => {
