@@ -36,8 +36,8 @@
      CYLINDER_R    : 실린더 반경(px). 크게 → 카드 더 넓게.    ← 노브 #1
      PERSP_3D      : CSS perspective(px). 작게 → 과장된 원근. ← 노브 #2
      FOCUS_ADVANCE : 포커스 카드 추가 전진 Z(px).              ← 노브 #3 ── */
-  const CYLINDER_R    = 340;
-  const PERSP_3D      = 1800;
+  const CYLINDER_R    = 520;
+  const PERSP_3D      = 2750;
   const FOCUS_ADVANCE = 70;
 
   const CX  = 733;     // 중심 X (디자인 px, 1466 캔버스 기준)
@@ -307,7 +307,10 @@
          · 카드 중심을 (CX, y)에 고정. perspective 가 X투영·깊이스케일 자동처리.
          · 포커스: θ_eff → 0 lerp(정면 회전) + R 전진(전경화).
          · gather: R 에 적용(2D 의 X오프셋 대신). ── */
-      const θ_eff = lerp(θ, 0, fa);            // 포커스 카드 → 정면으로 회전
+      /* 포커스: 절대 0 이 아니라 '가장 가까운 정면 각도(0 mod 2π)'로 최단 회전
+         → phase 누적값(예 8rad)에서 0까지 빙글빙글 도는 '휘이익' 현상 제거 */
+      const θFront = Math.round(θ / (Math.PI * 2)) * (Math.PI * 2);
+      const θ_eff  = lerp(θ, θFront, fa);      // 포커스 카드 → 최단경로로 정면 회전
       const z_eff = Math.cos(θ_eff);
       const base  = depthVis(z_eff);           // 3D 모드: scale 0.92~1.04, blur ≤4px
       /* gather 된 반경 + 포커스 전진 */
