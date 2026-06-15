@@ -16,6 +16,54 @@
 
 ---
 
+## 2026.06.15 — MathHub 제작과정 전체 빌드 + 메인 카드 캐러셀 3D 버전(원본/3D 토글) + 임시 위치 편집 도구
+
+> ⚠️ **나중에 바꾸거나 엎을 때 아래 "되돌리기 가이드"부터 읽을 것.** 메인 카드 캐러셀은 임시 dev UI가 붙어 있고 좌표 시스템이 원본/3D 둘로 나뉜다.
+
+### ⭐ 되돌리기 / 변경 가이드 (메인 카드 캐러셀)
+- **두 버전 공존.** 우상단 토글: `localStorage('orbitVersion')` = `'3d'` | `'original'`(기본). `?ver=3d` URL로 강제 미리보기. 토글 변경 시 자동 `reload`(orbit은 1회 초기화 구조).
+  - **OFF(기본)=원본** = 빌보드 + 마우스 따라 이동(legacy wobble + steering·패럴럭스). 원래 쓰던 버전.
+  - **ON=3D** = perspective + 카드별 `rotateY(θ)translateZ(R)` 진짜 실린더 연속회전.
+- **좌표가 버전별로 분리됨(핵심).** `js/orbit.js` 상단:
+  - 원본: `CENTERS_ORIGINAL` + `GHOST_THETA0_ORIGINAL`
+  - 3D: `CENTERS_3D` + `GHOST_THETA0_3D`, **최종 위치는 `THETA0_3D_OVERRIDE`(각도 rad 12) / `Y_3D_OVERRIDE`(높이 px 12)** 가 덮어씀(현재 source of truth). null이면 CENTERS_3D 기본.
+  - → **3D 위치 바꾸려면 `THETA0_3D_OVERRIDE`/`Y_3D_OVERRIDE` 배열만** 고치면 됨(원본 안 깨짐).
+  - 인덱스 0~11 = `CARD_NAMES` = DOM `.card-arm` 순서: visual-archive·자린고비·귀혼·about·플레디스·유미·POZE·content-lab·skills·MathHub·상상의문·우리사이의음표.
+- **임시 dev 컨트롤 — 확정 후 반드시 제거**(없애도 본 기능 영향 없음):
+  - HTML(`index.html` `.scene` 안): `.ver-toggle`(#orbitVerToggle) · `.orbit-pause`(#orbitPauseBtn) · `.orbit-edit-btn`(#orbitEditBtn)
+  - JS(`orbit.js`): `wireVerToggle()`·`wirePause()`·`buildPosEditor()` IIFE, `userPaused` phase 게이트, `?ver` 파라미터
+  - CSS(`style.css`): `.ver-toggle*`·`.orbit-pause*`·`.orbit-edit*`
+  - **한 버전 최종 고정**: `IS_3D`를 하드코딩 → 위 임시 UI/JS/CSS 삭제.
+- **위치 편집 워크플로우**: `?ver=3d` → ⏸ 회전 멈춤 → ✎ 위치 편집(각도/높이 실시간) → "값 복사" → override 배열에 붙여넣기.
+- 튜닝 노브(3D 전용, orbit.js 상단): `CYLINDER_R`(반경=가로 넓이) · `PERSP_3D`(원근, 클수록 카드 작고 덜 휨) · `CARD_SCALE_3D`(전체 크기) · `PLAYER_SCALE_3D`(자린고비·POZE만) · `FOCUS_ADVANCE`(호버 전진).
+- 모션 함정: ① 호버 = 카드 **제자리 고정 + trailing `rotateY(-θ·fa)`**(면만 정면). 중앙 이동시키면 커서 이탈 깜빡임. ② trailing 각도 **θ [-π,π] 정규화**(phase 누적 시 '팽이' 방지). ③ about 로드 정면 = `phase` 초기값 `-theta0[FRONT_CARD_3D=3]`.
+- **perf 절대 규칙(검증 완료)**: `transform-style:preserve-3d` 금지(filter 평탄화로 글로우/블러 깨짐)→perspective만. 회전 카드 `backdrop-filter` 금지(모바일 붕괴). 모바일·reduceMotion 자동 2D 폴백.
+- 고스트 3장(MathHub·상상의문·음표, idx9~11) = 이제 **클릭+호버 정상 카드**(GHOST 디밍/스킵 제거). `index.html`에서 해당 카드에 `data-card`(mathhub/sangsang/playlist) 부여 + `card-arm--ghost`/`aria-hidden` 제거.
+
+### MathHub 제작과정 (#process-mathhub) — 본문 8개 섹션 완성
+- 카드 개요(#mhsec-01) 아래 `process__making--mathhub`에 히어로 + #mh1~#mh7
+- **1440 Figma 좌표 → `cqw`(=px/14.4)** 변환해 `.mh-sec`(container-type:inline-size) 절대배치(귀혼/유미 패턴)
+- 섹션: #mh-hero · #mh1(OVERVIEW+PROBLEM) · #mh2(IA REBUILD) · #mh3(SEARCH&FILTER) · #mh4(CONTENT NAV) · #mh5(PAGE-SPECIFIC) · #mh6(COLOR, 순수 CSS) · #mh7(TROUBLESHOOTING+OUTRO)
+- nav 목차 7개 + 인트로 PROCESS INDEX 7개 — `data-track`↔섹션 id(mh1~mh7) 1:1(process.js 제네릭, 자동)
+- 모션 `js/making-mathhub.js`(GSAP 진입, transform/opacity·once·reduced-motion) + 스크립트 태그 + smooth-process SELECTORS·**style.css scroll-behavior:auto 목록에 `#process-mathhub` 추가**(이중 스무딩 방지)
+- 손글씨 `@font-face 'GangwonEducationHyunokSam'`(noonfonts CDN) → 섹션2 인용구
+- ⚠️ 함정: `nth-of-type`은 같은 태그 전체를 셈(모디파이어 클래스로 해결) / **투명모서리 이미지는 box-shadow·border 대신 `filter:drop-shadow`**(알파 따라가 박스 제거) / `.mh-s2__quote`(position:static)에 transform 주면 absolute 자식 튐→opacity만 / GSAP `from`+`clearProps:"transform"`로 translateX(-50%) 중앙정렬 리사이즈 안전 / making header 셀렉터 `[class$="__title"],[class*="__title--"]`로 과매칭 방지
+- 섹션2 빠진 에셋(BEFORE 스크린샷+AFTER 아이콘4) 받아 변환. 카드개요 영상 `mathhub_process_re.mp4`로 교체
+
+### 자린고비 인트로 영상
+- `img/jaringobi/jaringobi_intro.mp4` 새 영상 교체 + **`?v=3` 캐시버스팅**(파일 바꿔도 브라우저 캐시로 안 바뀌어 보임). 원본 git `29a3107` + `.src-png` 백업
+
+### 에셋 워크플로우
+- PNG→WebP: `/opt/homebrew/bin/cwebp`(배경/일반 q82 + 가로1920 상한, 아이콘 lossless). **원본 PNG는 `.src-png/`(gitignore) 백업** 후 루트 정리. MathHub 33종 + 섹션2 5종
+
+### 팀 하네스(jiwon-harness) 설치
+- `.claude/agents`(6) + commands + 완료검증 훅 + `team-memory/`. "우리팀 불러와"로 팀 모드
+- ⚠️ 이번에 designer 좌표 제안이 회전+인물가림으로 빗나가 여러 번 원복 → **배치/좌표는 에이전트 추측보다 위치 편집기로 직접 잡는 게 정답**(이 교훈으로 편집 패널 제작)
+
+**커밋(주요):** `4a5f696` 이미지33 WebP · `c17ab7d`~`bec42d5` MathHub 섹션 · `df7d8df` 섹션4 도트+drop-shadow · `d43ae2b` 제작과정 모션+스무스 · `ce8c4c3` nav+영상 · `23e26bb` 버전토글 · `2404cfd` 3D실린더 · `dc252f5` 호버제자리·크기 · `80970ae` 회전멈춤 · `81ec217` 편집패널 · `3902935` 위치override
+
+---
+
 ## 2026.06.14 — 피커 휠 목차 마감 + 프로젝트 순서 변경 + 제작과정 모션·prev/next 전환 + 숫자 ghost 수정
 
 ### 피커 휠 PROJECTS 목차 (라이브 1개로 통합)
