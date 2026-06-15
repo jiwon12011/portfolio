@@ -2192,6 +2192,39 @@ html.process-open { overflow: hidden; }
 .mh-s5__shot--6 { left: 10.486cqw; top: 113.125cqw; width: 62.292cqw; height: 18.611cqw; }
 .mh-s5__shot--7 { left: 72.986cqw; top: 117.222cqw; width: 17.361cqw; height: 12.083cqw; }
 
+/* ── SECTION 06 · COLOR GUIDELINES (디자인 1440×857 → cqw = px/14.4) ── */
+.mh-s6 { aspect-ratio: 1440 / 857; background: #f7f8fc;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+
+/* 라벨 / 헤딩 / 리드 */
+.mh-s6__no { position: absolute; left: 6.944cqw; top: 3.611cqw;
+  font-size: 2.083cqw; font-weight: 600; line-height: 1.2; color: #316efa; }
+.mh-s6__cat { position: absolute; left: 10.278cqw; top: 4.028cqw;
+  font-size: 1.389cqw; font-weight: 600; line-height: 1.2; color: #316efa; letter-spacing: .01em; }
+.mh-s6__title { position: absolute; left: 6.944cqw; top: 7.986cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s6__title span { color: #181a3b; }
+.mh-s6__title b { color: #316efa; font-weight: 600; }
+.mh-s6__lead { position: absolute; left: 6.944cqw; top: 18.819cqw; margin: 0;
+  font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* 컬러 카드 4 */
+.mh-s6__card { position: absolute; top: 25.764cqw; width: 19.444cqw; height: 24.375cqw;
+  background: #fff; border: 1px solid #d0dee9; border-radius: 1.042cqw; }
+.mh-s6__card--1 { left: 6.944cqw; }
+.mh-s6__card--2 { left: 29.167cqw; }
+.mh-s6__card--3 { left: 51.389cqw; }
+.mh-s6__card--4 { left: 73.611cqw; }
+.mh-s6__swatch { position: absolute; left: 1.389cqw; top: 1.389cqw; width: 16.667cqw; height: 17.292cqw; }
+.mh-s6__card--1 .mh-s6__swatch { background: #c5dcff; }
+.mh-s6__card--2 .mh-s6__swatch { background: #247bf1; }
+.mh-s6__card--3 .mh-s6__swatch { background: #31bceb; }
+.mh-s6__card--4 .mh-s6__swatch { background: #a0a0a0; }
+.mh-s6__name { position: absolute; left: 1.389cqw; top: 19.375cqw; margin: 0;
+  font-size: 1.528cqw; font-weight: 500; line-height: 1.4; color: #222; }
+.mh-s6__hex { position: absolute; left: 1.389cqw; top: 21.875cqw;
+  font-size: 1.111cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
