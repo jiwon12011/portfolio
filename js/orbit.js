@@ -63,29 +63,30 @@
     { x: 733,  y: 285 }, // ghost-playlist (상단-좌후방)
   ];
 
-  /* 디밍(고스트) 인덱스 집합 — mathhub(9)만 흐릿하게.
-     상상의 문(10)·우리 사이의 음표(11)는 실제 카드로 승격(클릭 가능·정상 밝기). */
-  const GHOST_SET = new Set([9]);
+  /* 고스트 카드 인덱스 범위 (CENTERS 9, 10, 11) */
+  const GHOST_START = 9;
 
-  /* 고스트 추가 distant 가중치: scale × GHOST_SCALE, opacity × GHOST_OPACITY */
+  /* ── 고스트 전용 뒤쪽 각도(rad) — 조정 쉽게 한 곳에 모음
+     cos(θ) < 0 = 인물 뒤. 2.6~3.7 rad 범위에서 고르게 분산.
+     y 는 CENTERS[i].y 로 별도 지정. ── */
+  const GHOST_THETA0 = [
+    2.40,  // mathhub  — 우후방(rotX≈1087) · 위쪽(y250)
+    3.90,  // door     — 좌후방(rotX≈372)  · 중간(y470)
+    3.50,  // playlist — 좌후방(rotX≈549)  · 상단(y285)
+  ];
+
+  /* 고스트 추가 distant 가중치: 일반 뒤 카드보다 한 톤 더 멀리 보이게.
+     scale × GHOST_SCALE, opacity × GHOST_OPACITY — 과하지 않게. */
   const GHOST_SCALE   = 0.87;
   const GHOST_OPACITY = 0.90;
   const RING_YS = [206, 432, 660];  // 빛 궤도 링 높이
 
-  /* 뒤쪽 배치 각도(rad) — 인덱스 9~11(mathhub·door·playlist). cos(θ)<0 = 인물 뒤. */
-  const POS_GHOST_START = 9;
-  const GHOST_THETA0 = [
-    2.40,  // mathhub
-    3.90,  // 상상의 문
-    3.50,  // 우리 사이의 음표
-  ];
-
-  /* 초기각(원복): 0~8 은 이미지#4 X 위치 기반 asin + SPREAD, 9~11 은 뒤쪽 각도.
-     (균등분포는 앞쪽에서 큰 카드가 겹쳐 정신없어 폐기 → 원래의 정돈된 디오라마 배치로 복원) */
+  /* 초기각: 이미지#4 X 위치 기반 + SPREAD 로 살짝 넓게.
+     고스트(인덱스 9~11)는 asin 으로 90° 이상 표현 불가 → GHOST_THETA0 로 override. */
   const clamp01 = (v) => Math.max(-1, Math.min(1, v));
   const SPREAD = 1.32;
   const theta0 = CENTERS.map((c, i) => {
-    if (i >= POS_GHOST_START) return GHOST_THETA0[i - POS_GHOST_START];
+    if (i >= GHOST_START) return GHOST_THETA0[i - GHOST_START];
     return Math.asin(clamp01((c.x - CX) / RX)) * SPREAD;
   });
 
@@ -242,7 +243,7 @@
     const base = depthVis(z);
 
     /* 고스트 카드: 정면화 없이 뒤쪽 distant 가중치만 적용 */
-    const isGhost = GHOST_SET.has(i);
+    const isGhost = i >= GHOST_START;
 
     const fa = isGhost ? 0 : easeOutCubic(focusAmt[i]);
     const someFocused = focusIdx !== -1;
@@ -291,7 +292,7 @@
 
   /* ── 호버/포커스 바인딩 → freeze + 정면화 ───────────────────────── */
   arms.forEach((arm, i) => {
-    if (GHOST_SET.has(i)) return;
+    if (i >= GHOST_START) return;
     const enter = () => {
       cancelAnimationFrame(pendingLeave);
       focusIdx = i; speedTarget = 0;
@@ -631,7 +632,7 @@
     /* 정적 배치. 호버 정면화는 살짝 살림. 인트로 blur/Y/Z 없음(reduceMotion=true → applyArm 내 처리). */
     arms.forEach((a, i) => placeArm(a, i, 1));
     arms.forEach((arm, i) => {
-      if (GHOST_SET.has(i)) return;
+      if (i >= GHOST_START) return;
       arm.addEventListener("mouseenter", () => { focusAmt[i] = 1; focusIdx = i; redrawStatic(); });
       arm.addEventListener("mouseleave", () => { focusAmt[i] = 0; if (focusIdx === i) focusIdx = -1; redrawStatic(); });
       arm.addEventListener("focusin",  () => { focusAmt[i] = 1; focusIdx = i; redrawStatic(); });
