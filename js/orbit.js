@@ -33,6 +33,14 @@
   const RPM = 0.05;    // 라디안/초 (한 바퀴 ≈ 126초)
   const CHARACTER_Z = 10;
 
+  /* ── 하이브리드 인트로(2번 안): 진입 시 1회전 시네마틱 소개 → 디자인 레이아웃에
+     안착 후 정지(정적 디오라마 + 마우스 패럴럭스). 자동 배회(idle wobble)·steering 회전 제거.
+     ▶ 되돌리기: 아래를 false 로 두면 기존 상시 회전(idle+steering) 그대로 복원됨. ── */
+  const HYBRID_INTRO_SPIN = true;
+  const SPIN_TURNS = 1;     // 인트로 회전 바퀴 수(2π 배수여야 디자인 레이아웃에 정확히 안착)
+  const SPIN_START = 1.8;   // 카드 리빌 끝난 뒤 스핀 시작(초)
+  const SPIN_DUR   = 11;    // 스핀 지속(초) — 끝나면 phase 고정(정지)
+
   /* 카드 중심(이미지#4 배치) — DOM 순서와 동일 */
   const CENTERS = [
     { x: 355,  y: 190 }, // visual-archive
@@ -84,6 +92,8 @@
   /* easeOutBack — 카드 착지 overshoot(진폭 계수 c=1.4, 보수적)
      reduceMotion 시에는 easeOutCubic 으로 대체 */
   const easeOutBack  = (t) => { const c = 1.4; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+  /* easeInOutSine — 하이브리드 인트로 스핀: 느리게 시작 → 가속 → 부드럽게 정지(휠 세틀) */
+  const easeInOutSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
   const PHI = (1 + Math.sqrt(5)) / 2;     // bobbing 위상 분산(뭉침 방지)
 
   /* ── prefers-reduced-motion / 모바일 감지 ────────────────────────── */
@@ -99,6 +109,7 @@
      focusAmt[]: 카드별 정면화 진행도(0→1) lerp 상태.
      tiltX/Y   : 마우스 기반 패럴럭스 틸트(-1..1), tiltXSmooth/Y lerp 추종. */
   let phase = 0;
+  let spinT = 0;          // 하이브리드 인트로 스핀 누적시간(호버 freeze 시 일시정지)
   let bobT = 0;           // 부유(bobbing) 전용 시간 — freeze 시 느려지되 멈추진 않음
   let speedMul = 1;
   let speedTarget = 1;
@@ -241,7 +252,8 @@
     let   blur    = base.blur * (1 - fa);
     let   zi      = isFocused ? FRONT_Z : base.zi;
 
-    const bobAmp = 2 + 2 * ((z + 1) / 2);
+    /* 하이브리드: 정지 후 '둥둥' 인상 방지 위해 부유 진폭 대폭 축소(≈0.6~1.2px) */
+    const bobAmp = HYBRID_INTRO_SPIN ? (0.6 + 0.6 * ((z + 1) / 2)) : (2 + 2 * ((z + 1) / 2));
     const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
     const y = 423.5 + (yRaw - 423.5) * G;
 
@@ -455,12 +467,20 @@
     tiltXSmooth += (tiltX - tiltXSmooth) * Math.min(dt * 1.8, 1);
     tiltYSmooth += (tiltY - tiltYSmooth) * Math.min(dt * 1.8, 1);
 
-    /* 바운디드 스윙 + steering */
-    const idle = 0.18 * Math.sin(tShow * 0.28)
-               + 0.055 * Math.sin(tShow * 0.17 + 1.1)
-               + 0.028 * Math.sin(tShow * 0.11 + 2.7);
-    const phaseTarget = idle + steerSmooth * 0.42;
-    phase += (phaseTarget - phase) * Math.min(dt * 3.5, 1) * speedMul;
+    if (HYBRID_INTRO_SPIN) {
+      /* 하이브리드: 진입 1회전(2π 배수) 시네마틱 소개 → 디자인 레이아웃에 정확히 안착 후 정지.
+         idle wobble·steering 회전 없음(자동 배회 제거). 호버 freeze(speedMul→0) 시 스핀 일시정지. */
+      spinT += dt * speedMul;
+      const st = clamp((spinT - SPIN_START) / SPIN_DUR, 0, 1);
+      phase = easeInOutSine(st) * (Math.PI * 2 * SPIN_TURNS);
+    } else {
+      /* (기존) 상시 바운디드 스윙 + steering */
+      const idle = 0.18 * Math.sin(tShow * 0.28)
+                 + 0.055 * Math.sin(tShow * 0.17 + 1.1)
+                 + 0.028 * Math.sin(tShow * 0.11 + 2.7);
+      const phaseTarget = idle + steerSmooth * 0.42;
+      phase += (phaseTarget - phase) * Math.min(dt * 3.5, 1) * speedMul;
+    }
 
     /* 카드별 정면화 진행도 lerp */
     arms.forEach((_, i) => {
