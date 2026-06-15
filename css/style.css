@@ -1906,10 +1906,10 @@ html.process-open { overflow: hidden; }
 .mh-s1__card-val { font-size: 1.528cqw; font-weight: 600; line-height: 1.4; color: #222; }
 .mh-s1__card-sub { font-size: 1.389cqw; font-weight: 500; line-height: 1.4; color: #444; }
 
-/* 우측 히어로 목업 */
+/* 우측 히어로 목업 (투명 둥근 모서리 → drop-shadow가 알파 모양을 따라감) */
 .mh-s1__shot { position: absolute; left: 41.875cqw; top: 31.042cqw;
-  width: 51.181cqw; height: 45.278cqw; border-radius: 2.083cqw; border: 1px solid #d0dee9;
-  box-shadow: 2px 4px 4px rgba(0,0,0,.1); object-fit: cover; object-position: top; display: block; }
+  width: 51.181cqw; height: 45.278cqw; object-fit: cover; object-position: top; display: block;
+  filter: drop-shadow(.14cqw .28cqw .7cqw rgba(40,70,130,.16)); }
 
 /* From archive 밴드 */
 .mh-s1__band { position: absolute; left: 6.944cqw; top: 79.236cqw;
@@ -1928,8 +1928,8 @@ html.process-open { overflow: hidden; }
 .mh-s1__pcard--2 { left: 36.25cqw; }
 .mh-s1__pcard--3 { left: 65.556cqw; }
 .mh-s1__pcard-shot { position: absolute; left: 3.403cqw; top: 1.875cqw;
-  width: 20.833cqw; height: 23.194cqw; border-radius: .694cqw;
-  box-shadow: 0 .833cqw 2.222cqw -.556cqw rgba(40,70,130,.22); object-fit: cover; object-position: top; display: block; }
+  width: 20.833cqw; height: 23.194cqw; object-fit: cover; object-position: top; display: block;
+  filter: drop-shadow(0 .556cqw 1.111cqw rgba(40,70,130,.18)); }
 .mh-s1__pcard-no { position: absolute; left: 1.042cqw; top: 27.153cqw;
   width: 2.917cqw; height: 2.917cqw; border-radius: 50%; background: #f6f8fd;
   display: flex; align-items: center; justify-content: center;
@@ -1939,10 +1939,10 @@ html.process-open { overflow: hidden; }
 .mh-s1__pcard-desc { position: absolute; left: 5cqw; top: 30.556cqw; margin: 0;
   font-size: 1.042cqw; font-weight: 500; line-height: 1.4; color: #444; }
 
-/* BEFORE 경험 진단 다이어그램 */
+/* BEFORE 경험 진단 다이어그램 (투명 둥근 모서리) */
 .mh-s1__diagram { position: absolute; left: 50%; transform: translateX(-50%); top: 171.111cqw;
-  width: 86.181cqw; height: 62.986cqw; border-radius: 1.389cqw; border: 1px solid #fff;
-  object-fit: cover; display: block; }
+  width: 86.181cqw; height: 62.986cqw; object-fit: cover; display: block;
+  filter: drop-shadow(0 .556cqw 1.389cqw rgba(40,70,130,.12)); }
 
 /* 손글씨체 (강원교육현옥샘) — 제작과정 인용구 전용 */
 @font-face {
@@ -2120,6 +2120,13 @@ html.process-open { overflow: hidden; }
 .mh-s4__conn--2 { left: 37.639cqw; top: 64cqw; width: 8.472cqw; }
 .mh-s4__conn--3 { left: 74.236cqw; top: 65cqw; width: 2.986cqw; }
 
+/* 연결점 도트 (커넥터가 메인 스크린샷에 닿는 지점) */
+.mh-s4__node { position: absolute; width: .694cqw; height: .694cqw; border-radius: 50%;
+  background: #316efa; transform: translate(-50%, -50%); }
+.mh-s4__node--1 { left: 46.111cqw; top: 45.833cqw; }
+.mh-s4__node--2 { left: 46.111cqw; top: 64cqw; }
+.mh-s4__node--3 { left: 74.236cqw; top: 65cqw; }
+
 /* 레전드 3 */
 .mh-s4__leg { position: absolute; }
 .mh-s4__leg--1 { left: 6.944cqw; top: 42.986cqw; }
@@ -2273,10 +2280,10 @@ html.process-open { overflow: hidden; }
 .mh-s7__ctype { display: block; font-size: 1.111cqw; font-weight: 500; line-height: 1.4; color: #444; }
 .mh-s7__cmsg { margin: .278cqw 0 0; font-size: 1.389cqw; font-weight: 500; line-height: 1.4; color: #222; }
 
-/* 코드 에디터 */
+/* 코드 에디터 (투명 둥근 모서리) */
 .mh-s7__code { position: absolute; left: 47.917cqw; top: 24.236cqw; width: 45.139cqw; height: 42.222cqw;
-  border-radius: 1.042cqw; object-fit: cover; object-position: top; display: block;
-  box-shadow: 0 1.111cqw 3.333cqw -1.111cqw rgba(20,30,60,.32); }
+  object-fit: cover; object-position: top; display: block;
+  filter: drop-shadow(0 .833cqw 1.667cqw rgba(20,30,60,.26)); }
 
 /* 마무리 카피 (중앙) */
 .mh-s7__outro { position: absolute; left: 50%; transform: translateX(-50%); top: 80.347cqw; margin: 0;
