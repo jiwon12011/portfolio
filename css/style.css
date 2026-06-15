@@ -2083,6 +2083,55 @@ html.process-open { overflow: hidden; }
 .mh-s3__leg-head h5 { margin: 0; font-size: .972cqw; font-weight: 600; line-height: 1.4; color: #222; }
 .mh-s3__leg p { margin: .35cqw 0 0; font-size: .833cqw; font-weight: 400; line-height: 1.4; color: #444; }
 
+/* ── SECTION 04 · CONTENT NAVIGATION (디자인 1440×1397 → cqw = px/14.4) ── */
+.mh-s4 { aspect-ratio: 1440 / 1397;
+  background: linear-gradient(180deg, #f4f8fe 0%, #fefbf6 100%);
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+
+/* 라벨 / 헤딩 / 리드 */
+.mh-s4__no { position: absolute; left: 6.944cqw; top: 3.681cqw;
+  font-size: 2.083cqw; font-weight: 600; line-height: 1.2; color: #316efa; }
+.mh-s4__cat { position: absolute; left: 10.278cqw; top: 4.097cqw;
+  font-size: 1.389cqw; font-weight: 600; line-height: 1.2; color: #316efa; letter-spacing: .01em; }
+.mh-s4__title { position: absolute; left: 6.944cqw; top: 8.056cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s4__title span { color: #181a3b; }
+.mh-s4__title b { color: #316efa; font-weight: 600; }
+.mh-s4__lead { position: absolute; left: 6.944cqw; top: 18.889cqw; margin: 0;
+  font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* 메인 페이지 스크린샷 */
+.mh-s4__main { position: absolute; left: 46.111cqw; top: 32.778cqw;
+  width: 28.125cqw; height: 57.292cqw; border-radius: .694cqw; background: #eef3fb;
+  object-fit: cover; object-position: top; display: block;
+  box-shadow: 0 .833cqw 2.778cqw -.833cqw rgba(40,70,130,.2); }
+
+/* 콜아웃 스크린샷 */
+.mh-s4__shot { position: absolute; border-radius: .556cqw; background: #eef3fb;
+  object-fit: cover; object-position: top; display: block;
+  box-shadow: 0 .556cqw 1.667cqw -.556cqw rgba(40,70,130,.16); }
+.mh-s4__shot--nav { left: 28.264cqw; top: 40.833cqw; width: 6.597cqw; height: 15.417cqw; }
+.mh-s4__shot--sec { left: 26.597cqw; top: 62.083cqw; width: 11.042cqw; height: 10.347cqw; }
+.mh-s4__shot--ans { left: 77.222cqw; top: 63.889cqw; width: 14.792cqw; height: 6.944cqw; }
+
+/* 점선 커넥터 (근사) */
+.mh-s4__conn { position: absolute; height: 0; border-top: 1.5px dashed #9bb8e8; }
+.mh-s4__conn--1 { left: 34.861cqw; top: 45.833cqw; width: 11.25cqw; }
+.mh-s4__conn--2 { left: 37.639cqw; top: 64cqw; width: 8.472cqw; }
+.mh-s4__conn--3 { left: 74.236cqw; top: 65cqw; width: 2.986cqw; }
+
+/* 레전드 3 */
+.mh-s4__leg { position: absolute; }
+.mh-s4__leg--1 { left: 6.944cqw; top: 42.986cqw; }
+.mh-s4__leg--2 { left: 6.944cqw; top: 63.611cqw; }
+.mh-s4__leg--3 { left: 77.222cqw; top: 71.875cqw; }
+.mh-s4__leg-head { display: flex; align-items: center; gap: .694cqw; }
+.mh-s4__leg-no { flex: none; width: 1.389cqw; height: 1.389cqw; border-radius: 50%;
+  background: #316efa; color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: .833cqw; font-weight: 600; }
+.mh-s4__leg-head h5 { margin: 0; font-size: 1.111cqw; font-weight: 600; line-height: 1.4; color: #222; }
+.mh-s4__leg p { margin: .417cqw 0 0; font-size: .972cqw; font-weight: 400; line-height: 1.4; color: #444; }
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
