@@ -136,6 +136,14 @@
   /* 로드 시 정면에 둘 카드 인덱스(3D 연속회전 한정) — about(3). phase 초기값으로 사용. */
   const FRONT_CARD_3D = 3;
 
+  /* ── 위치 편집기 적용 슬롯 ──────────────────────────────────────────
+     편집 패널 '복사' 결과(각도/높이 배열)를 아래 두 배열에 붙여넣으면 그 값으로 고정.
+     null = 미사용(위 CENTERS_3D/GHOST_THETA0_3D 기본값 사용). ── */
+  const THETA0_3D_OVERRIDE = null;
+  const Y_3D_OVERRIDE = null;
+
+  const CARD_NAMES = ["visual-archive","자린고비","귀혼","about","플레디스","유미","POZE","content-lab","skills","MathHub","상상의 문","우리 사이의 음표"];
+
   /* 고스트 "위치" 인덱스 범위 (CENTERS 9, 10, 11) — theta0 positioning 전용.
      ⚠ 호버/디밍과 무관: 9~11도 일반 카드처럼 호버 포커스·정상 밝기로 승격됨.
         좌표만 GHOST_THETA0 로 뒤쪽 배치(좌표는 designer 담당). */
@@ -167,6 +175,11 @@
     if (i >= POS_GHOST_START) return GHOST_THETA0[i - POS_GHOST_START];
     return Math.asin(clamp01((c.x - CX) / RX)) * SPREAD;
   });
+  /* 카드 높이 배열(편집 가능). placeArm 은 cardY[i] 사용. */
+  const cardY = CENTERS.map((c) => c.y);
+  /* 편집기 복사값 override(3D 전용) */
+  if (IS_3D && Array.isArray(THETA0_3D_OVERRIDE)) THETA0_3D_OVERRIDE.forEach((v, i) => { if (typeof v === "number") theta0[i] = v; });
+  if (IS_3D && Array.isArray(Y_3D_OVERRIDE)) Y_3D_OVERRIDE.forEach((v, i) => { if (typeof v === "number") cardY[i] = v; });
 
   /* lerp + clamp + ease 유틸 */
   const lerp  = (a, b, t) => a + (b - a) * t;
@@ -397,7 +410,7 @@
       const bobAmp = ORBIT_MODE !== "legacy"
         ? (0.6 + 0.6 * ((z_eff + 1) / 2))
         : (2   + 2   * ((z_eff + 1) / 2));
-      const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
+      const yRaw = cardY[i] + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
       const y    = 423.5 + (yRaw - 423.5) * G;
 
       /* 포커스 카드: 위치(θ)는 그대로, 면만 뷰어 쪽으로 un-tilt.
@@ -436,7 +449,7 @@
       const bobAmp = ORBIT_MODE !== "legacy"
         ? (0.6 + 0.6 * ((z + 1) / 2))
         : (2   + 2   * ((z + 1) / 2));
-      const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
+      const yRaw = cardY[i] + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
       const y    = 423.5 + (yRaw - 423.5) * G;
 
       /* ③ dim 경로: 피사계심도 dimBlur 추가 */
@@ -824,4 +837,38 @@
     else startRAF();
   });
   window.addEventListener("pagehide", stopRAF);
+
+  /* ── 위치 편집 패널(임시 — 3D 전용. 확정 후 제거) ───────────────────
+     각 카드 각도(rad)/높이(px)를 직접 입력 → 실시간 반영. '값 복사'로 배열 출력. ── */
+  if (IS_3D) (function buildPosEditor() {
+    const scene = document.querySelector(".scene");
+    if (!scene) return;
+    const panel = document.createElement("div");
+    panel.className = "orbit-edit"; panel.hidden = true;
+    panel.innerHTML = '<div class="orbit-edit__hd">위치 편집<span>idx · 각도(rad) · 높이(px)</span></div>';
+    CARD_NAMES.forEach((name, i) => {
+      const row = document.createElement("div"); row.className = "orbit-edit__row";
+      row.innerHTML = `<span class="orbit-edit__nm">${i} ${name}</span>`;
+      const a = document.createElement("input");
+      a.type = "number"; a.step = "0.05"; a.value = theta0[i].toFixed(2); a.title = "각도";
+      const yo = document.createElement("input");
+      yo.type = "number"; yo.step = "5"; yo.value = Math.round(cardY[i]); yo.title = "높이";
+      a.addEventListener("input", () => { const v = parseFloat(a.value); if (!isNaN(v)) theta0[i] = v; });
+      yo.addEventListener("input", () => { const v = parseFloat(yo.value); if (!isNaN(v)) cardY[i] = v; });
+      row.append(a, yo); panel.append(row);
+    });
+    const copy = document.createElement("button");
+    copy.className = "orbit-edit__copy"; copy.type = "button"; copy.textContent = "값 복사";
+    copy.addEventListener("click", () => {
+      const out = "THETA0_3D_OVERRIDE = [" + theta0.map((v) => +v.toFixed(3)).join(", ") + "];\n"
+                + "Y_3D_OVERRIDE = [" + cardY.map((v) => Math.round(v)).join(", ") + "];";
+      try { navigator.clipboard.writeText(out); } catch (e) {}
+      console.log(out);
+      copy.textContent = "복사됨!"; setTimeout(() => (copy.textContent = "값 복사"), 1200);
+    });
+    panel.append(copy);
+    scene.append(panel);
+    const tg = document.getElementById("orbitEditBtn");
+    if (tg) tg.addEventListener("click", () => { panel.hidden = !panel.hidden; });
+  })();
 })();

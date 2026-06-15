@@ -123,6 +123,35 @@ html:not(.deck-ready) body::before {
 }
 .orbit-pause.is-paused { background: rgba(75,115,232,0.55); border-color: rgba(150,185,255,0.6); }
 
+/* ── 위치 편집 토글 버튼 + 패널(임시, 3D 전용) ── */
+.orbit-edit-btn {
+  position: absolute; top: calc(clamp(16px, 2.4vh, 30px) + 90px); right: clamp(18px, 2vw, 36px);
+  z-index: 60; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.34);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: .04em; color: #fff;
+  box-shadow: 0 6px 20px -8px rgba(20,35,70,.4);
+}
+.orbit-edit {
+  position: absolute; top: clamp(16px, 2.4vh, 30px); right: clamp(150px, 14vw, 220px);
+  z-index: 61; width: 270px; max-height: 80vh; overflow-y: auto;
+  padding: 12px; border-radius: 14px;
+  background: rgba(18,26,40,0.82); border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  font-family: "Pretendard Variable", Pretendard, sans-serif; color: #fff;
+  box-shadow: 0 16px 40px -16px rgba(0,0,0,.6);
+}
+.orbit-edit[hidden] { display: none; }
+.orbit-edit__hd { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.orbit-edit__hd span { display: block; font-size: 10px; font-weight: 400; opacity: .6; margin-top: 2px; }
+.orbit-edit__row { display: grid; grid-template-columns: 1fr 64px 64px; gap: 6px; align-items: center; margin-bottom: 5px; }
+.orbit-edit__nm { font-size: 11px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.orbit-edit input { width: 100%; padding: 4px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1); color: #fff; font-size: 11px; }
+.orbit-edit__copy { width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; cursor: pointer;
+  background: #4b73e8; border: none; color: #fff; font-size: 12px; font-weight: 600; }
+
 
 .scene__photo,
 .scene__character {
