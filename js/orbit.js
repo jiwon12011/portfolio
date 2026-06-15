@@ -107,8 +107,8 @@
   const CENTERS_3D = [
     { x: 355,  y: 190 }, // visual-archive
     { x: 733,  y: 158 }, // jaringobi
-    { x: 467,  y: 695 }, // gwihon   ← POZE 자리로 이동
-    { x: 293,  y: 461 }, // about
+    { x: 293,  y: 461 }, // gwihon   ← about 원래 자리로 이동
+    { x: 600,  y: 380 }, // about    ← 앞쪽 배치(로드 시 정면, 아래 START_PHASE로 맞춤)
     { x: 1184, y: 233 }, // pledis
     { x: 960,  y: 434 }, // yumi
     { x: 230,  y: 660 }, // poze     ← about·상상의문 중간 아래단
@@ -116,9 +116,11 @@
     { x: 1174, y: 566 }, // skills
     { x: 733,  y: 250 }, // mathhub
     { x: 733,  y: 470 }, // 상상의 문(door)
-    { x: 733,  y: 285 }, // 우리 사이의 음표(playlist)
+    { x: 733,  y: 720 }, // 우리 사이의 음표(playlist)  ← 가장 아래단
   ];
   const CENTERS = IS_3D ? CENTERS_3D : CENTERS_ORIGINAL;
+  /* 로드 시 정면에 둘 카드 인덱스(3D 연속회전 한정) — about(3). phase 초기값으로 사용. */
+  const FRONT_CARD_3D = 3;
 
   /* 고스트 "위치" 인덱스 범위 (CENTERS 9, 10, 11) — theta0 positioning 전용.
      ⚠ 호버/디밍과 무관: 9~11도 일반 카드처럼 호버 포커스·정상 밝기로 승격됨.
@@ -128,11 +130,18 @@
   /* ── 고스트 전용 뒤쪽 각도(rad) — 조정 쉽게 한 곳에 모음
      cos(θ) < 0 = 인물 뒤. 2.6~3.7 rad 범위에서 고르게 분산.
      y 는 CENTERS[i].y 로 별도 지정. ── */
-  const GHOST_THETA0 = [
+  const GHOST_THETA0_ORIGINAL = [
     2.40,  // mathhub
     3.90,  // 상상의 문(door)
     3.50,  // 우리 사이의 음표(playlist)
   ];
+  /* 3D 전용 뒤쪽 각도 — 한 카드씩 조정 */
+  const GHOST_THETA0_3D = [
+    2.40,  // mathhub
+    3.90,  // 상상의 문(door)
+    4.30,  // 우리 사이의 음표(playlist)  ← 더 왼쪽
+  ];
+  const GHOST_THETA0 = IS_3D ? GHOST_THETA0_3D : GHOST_THETA0_ORIGINAL;
 
   const RING_YS = [206, 432, 660];  // 빛 궤도 링 높이
 
@@ -168,7 +177,7 @@
      focusIdx  : 현재 정면화할 카드 index(-1 없음).
      focusAmt[]: 카드별 정면화 진행도(0→1) lerp 상태.
      tiltX/Y   : 마우스 기반 패럴럭스 틸트(-1..1), tiltXSmooth/Y lerp 추종. */
-  let phase = 0;
+  let phase = (IS_3D && ORBIT_MODE === "continuous") ? -theta0[FRONT_CARD_3D] : 0;  // 로드 시 about 정면
   let spinT = 0;          // 하이브리드 인트로 스핀 누적시간(호버 freeze 시 일시정지)
   let bobT = 0;           // 부유(bobbing) 전용 시간 — freeze 시 느려지되 멈추진 않음
   let speedMul = 1;
