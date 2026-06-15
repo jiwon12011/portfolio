@@ -339,9 +339,10 @@
       const y    = 423.5 + (yRaw - 423.5) * G;
 
       /* 포커스 카드: 위치(θ)는 그대로, 면만 뷰어 쪽으로 un-tilt.
-         trailRotY = -θ * fa (도 단위): fa=0 원래 각도, fa=1 정면 향함.
-         dim 카드는 fa≈0이므로 trailRotY≈0 — 별도 계산 불필요. */
-      const trailRotY = -θ * fa * (180 / Math.PI);
+         ⚠ θ = theta0 + phase 라 phase 누적 시 -θ 가 커져 카드가 '팽이'처럼 여러 바퀴 돔.
+         → θ 를 [-π,π] 로 정규화(θNorm)해 '최단 각도'만 돌려 정면을 향하게. */
+      const θNorm = θ - Math.round(θ / (Math.PI * 2)) * (Math.PI * 2);
+      const trailRotY = -θNorm * fa * (180 / Math.PI);
 
       /* ③ dim 경로: 피사계심도 dimBlur 추가 */
       if (someFocused && !isFocused) {
