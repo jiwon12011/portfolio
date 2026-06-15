@@ -52,6 +52,20 @@
     });
   })();
 
+  /* ── 회전 멈춤 버튼(임시 — 위치 잡기용. 나중에 HTML/CSS 와 함께 제거) ──
+     userPaused 가 true 면 phase 갱신을 건너뛰어 회전이 멈춘다. ── */
+  let userPaused = false;
+  (function wirePause() {
+    const b = document.getElementById("orbitPauseBtn");
+    if (!b) return;
+    b.addEventListener("click", () => {
+      userPaused = !userPaused;
+      b.classList.toggle("is-paused", userPaused);
+      b.setAttribute("aria-pressed", String(userPaused));
+      b.textContent = userPaused ? "▶ 회전 재생" : "⏸ 회전 멈춤";
+    });
+  })();
+
   /* CYLINDER_3D: 3D 실린더(rotateY+translateZ) 경로 사용 여부. 버전 토글에 연동. */
   const CYLINDER_3D   = IS_3D;
   /* ── CYLINDER_3D 전용 튜닝 노브 ──────────────────────────────────
@@ -108,7 +122,7 @@
     { x: 355,  y: 190 }, // visual-archive
     { x: 733,  y: 158 }, // jaringobi
     { x: 293,  y: 461 }, // gwihon   ← about 원래 자리로 이동
-    { x: 600,  y: 380 }, // about    ← 앞쪽 배치(로드 시 정면, 아래 START_PHASE로 맞춤)
+    { x: 600,  y: 230 }, // about    ← 앞쪽 배치(로드 시 정면) · y 위로(정가운데 회피)
     { x: 1184, y: 233 }, // pledis
     { x: 960,  y: 434 }, // yumi
     { x: 230,  y: 660 }, // poze     ← about·상상의문 중간 아래단
@@ -139,7 +153,7 @@
   const GHOST_THETA0_3D = [
     2.40,  // mathhub
     3.90,  // 상상의 문(door)
-    4.30,  // 우리 사이의 음표(playlist)  ← 더 왼쪽
+    2.70,  // 우리 사이의 음표(playlist)  ← 왼쪽(이전 4.30은 반대방향이라 되돌림)
   ];
   const GHOST_THETA0 = IS_3D ? GHOST_THETA0_3D : GHOST_THETA0_ORIGINAL;
 
@@ -631,10 +645,10 @@
     if (ORBIT_MODE === "continuous") {
       /* 진짜 느린 단방향 연속 회전 + 마우스 좌우 = 속도 변조(위치 오프셋 아님).
          호버 freeze(speedMul→0) 시 정지. idle wobble 없음(방향 없는 흔들림 제거). */
-      phase += SPIN_SPEED * (1 + steerSmooth * STEER_BIAS) * dt * speedMul;
+      phase += SPIN_SPEED * (1 + steerSmooth * STEER_BIAS) * dt * speedMul * (userPaused ? 0 : 1);
     } else if (ORBIT_MODE === "hybrid") {
       /* 진입 1회전(2π 배수) 시네마틱 소개 → 디자인 레이아웃에 안착 후 정지. */
-      spinT += dt * speedMul;
+      spinT += dt * speedMul * (userPaused ? 0 : 1);
       const st = clamp((spinT - SPIN_START) / SPIN_DUR, 0, 1);
       phase = easeInOutSine(st) * (Math.PI * 2 * SPIN_TURNS);
     } else {
@@ -643,7 +657,7 @@
                  + 0.055 * Math.sin(tShow * 0.17 + 1.1)
                  + 0.028 * Math.sin(tShow * 0.11 + 2.7);
       const phaseTarget = idle + steerSmooth * 0.42;
-      phase += (phaseTarget - phase) * Math.min(dt * 3.5, 1) * speedMul;
+      phase += (phaseTarget - phase) * Math.min(dt * 3.5, 1) * speedMul * (userPaused ? 0 : 1);
     }
 
     /* 카드별 정면화 진행도 lerp */

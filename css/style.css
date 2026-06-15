@@ -111,6 +111,18 @@ html:not(.deck-ready) body::before {
 .ver-toggle__sw input:checked + .ver-toggle__track { background: #4b73e8; }
 .ver-toggle__sw input:checked + .ver-toggle__track .ver-toggle__thumb { transform: translateX(18px); }
 
+/* ── 회전 멈춤 버튼(임시) ── */
+.orbit-pause {
+  position: absolute; top: calc(clamp(16px, 2.4vh, 30px) + 48px); right: clamp(18px, 2vw, 36px);
+  z-index: 60; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.34);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: .04em; color: #fff;
+  box-shadow: 0 6px 20px -8px rgba(20,35,70,.4);
+}
+.orbit-pause.is-paused { background: rgba(75,115,232,0.55); border-color: rgba(150,185,255,0.6); }
+
 
 .scene__photo,
 .scene__character {
