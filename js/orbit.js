@@ -139,8 +139,8 @@
   /* ── 위치 편집기 적용 슬롯 ──────────────────────────────────────────
      편집 패널 '복사' 결과(각도/높이 배열)를 아래 두 배열에 붙여넣으면 그 값으로 고정.
      null = 미사용(위 CENTERS_3D/GHOST_THETA0_3D 기본값 사용). ── */
-  const THETA0_3D_OVERRIDE = null;
-  const Y_3D_OVERRIDE = null;
+  const THETA0_3D_OVERRIDE = [-2.95, -0.1, -1.2, -0.8, 1.364, 0.59, -1.6, 0.1, 2.3, 2.4, 3.6, 2.7];
+  const Y_3D_OVERRIDE = [190, 190, 230, 510, 233, 434, 645, 660, 566, 250, 470, 720];
 
   const CARD_NAMES = ["visual-archive","자린고비","귀혼","about","플레디스","유미","POZE","content-lab","skills","MathHub","상상의 문","우리 사이의 음표"];
 
