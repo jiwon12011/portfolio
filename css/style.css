@@ -86,6 +86,31 @@ html:not(.deck-ready) body::before {
   background: #0d1521;
 }
 
+/* ── 메인 버전 전환 토글(우측 상단, 임시 프리뷰) ── */
+.ver-toggle {
+  position: absolute; top: clamp(16px, 2.4vh, 30px); right: clamp(18px, 2vw, 36px);
+  z-index: 60; display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 999px;
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.34);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  font-family: "Pretendard Variable", Pretendard, sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: .04em; color: #fff;
+  box-shadow: 0 6px 20px -8px rgba(20,35,70,.4);
+}
+.ver-toggle__txt { text-transform: uppercase; opacity: .92; }
+.ver-toggle__sw { position: relative; display: inline-flex; cursor: pointer; }
+.ver-toggle__sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.ver-toggle__track {
+  width: 40px; height: 22px; border-radius: 999px; display: inline-block; position: relative;
+  background: rgba(255,255,255,0.32); transition: background .2s;
+}
+.ver-toggle__thumb {
+  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform .2s;
+}
+.ver-toggle__sw input:checked + .ver-toggle__track { background: #4b73e8; }
+.ver-toggle__sw input:checked + .ver-toggle__track .ver-toggle__thumb { transform: translateX(18px); }
+
 
 .scene__photo,
 .scene__character {

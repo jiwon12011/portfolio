@@ -28,10 +28,26 @@
       canvas ember 파티클(sin 깜빡임, 앰버색, glow 스프라이트 캐싱)
    ====================================================================== */
 (() => {
-  /* ── 3D 실린더 캐러셀 토글 ─────────────────────────────────────────
-     true  → 안 A: perspective + rotateY(θ) + translateZ(R) 방식.
-     false → 기존 빌보드 2D 투영(RX·sin θ) 완전 복원. ── */
-  const CYLINDER_3D   = true;
+  /* ── 메인 버전 전환(우측 상단 토글) ────────────────────────────────
+     localStorage('orbitVersion') === '3d' → 3D 실린더 회전 버전
+     그 외(기본)                          → 원본(빌보드 + 마우스 따라 이동)
+     토글 변경 시 값 저장 후 location.reload()(orbit 은 1회 초기화 구조). ── */
+  const ORBIT_VER = (() => { try { return localStorage.getItem("orbitVersion"); } catch (e) { return null; } })();
+  const IS_3D = ORBIT_VER === "3d";
+
+  /* 우측 상단 토글 배선(존재 시) — DOM 은 defer 라 준비됨 */
+  (function wireVerToggle() {
+    const t = document.getElementById("orbitVerToggle");
+    if (!t) return;
+    t.checked = IS_3D;
+    t.addEventListener("change", () => {
+      try { localStorage.setItem("orbitVersion", t.checked ? "3d" : "original"); } catch (e) {}
+      location.reload();
+    });
+  })();
+
+  /* CYLINDER_3D: 3D 실린더(rotateY+translateZ) 경로 사용 여부. 버전 토글에 연동. */
+  const CYLINDER_3D   = IS_3D;
   /* ── CYLINDER_3D 전용 튜닝 노브 ──────────────────────────────────
      CYLINDER_R    : 실린더 반경(px). 크게 → 카드 더 넓게.    ← 노브 #1
      PERSP_3D      : CSS perspective(px). 작게 → 과장된 원근. ← 노브 #2
@@ -57,7 +73,7 @@
      "hybrid"     : 진입 1회전 시네마틱 소개 후 정지(정적 디오라마+패럴럭스).
      "legacy"     : 기존 제자리 wobble(±15°, RPM 미사용) — 비추천(어색함의 원인).
      ▶ 다듬기 핵심 값: SPIN_SPEED(속도) · STEER_BIAS(마우스 감도) · bobAmp(부유). ── */
-  const ORBIT_MODE = "continuous";
+  const ORBIT_MODE = IS_3D ? "continuous" : "legacy";  // 3D=연속회전, 원본=레거시(마우스 따라 이동)
   const SPIN_SPEED = 0.09;   // [continuous] rad/s — 단방향 회전 속도(한 바퀴 ≈ 70초)
   const STEER_BIAS = 0.40;   // [continuous] 마우스 좌우 → 회전 속도 ±가감
   const SPIN_TURNS = 1;      // [hybrid] 인트로 회전 바퀴 수(2π 배수 안착)
