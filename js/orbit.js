@@ -63,7 +63,7 @@
     { x: 733,  y: 285 }, // ghost-playlist (상단-좌후방)
   ];
 
-  /* 고스트(클릭 불가·디밍) 인덱스 집합 — mathhub(9)만.
+  /* 디밍(고스트) 인덱스 집합 — mathhub(9)만 흐릿하게.
      상상의 문(10)·우리 사이의 음표(11)는 실제 카드로 승격(클릭 가능·정상 밝기). */
   const GHOST_SET = new Set([9]);
 
@@ -72,11 +72,22 @@
   const GHOST_OPACITY = 0.90;
   const RING_YS = [206, 432, 660];  // 빛 궤도 링 높이
 
-  /* 초기각: 12장을 원 둘레에 '균등 분포'(앞쪽 뭉침 제거·균형 확보).
-     기존엔 카드 x좌표 asin 기반이라 실카드 9장이 전부 앞쪽 ~150°에 몰려 회전 시 뭉쳤음.
-     y(높이)는 CENTERS 값을 유지해 세로 변화를 줌. START_OFFSET = 시작 위상(취향). */
-  const START_OFFSET = 0;
-  const theta0 = CENTERS.map((c, i) => START_OFFSET + i * (Math.PI * 2 / CENTERS.length));
+  /* 뒤쪽 배치 각도(rad) — 인덱스 9~11(mathhub·door·playlist). cos(θ)<0 = 인물 뒤. */
+  const POS_GHOST_START = 9;
+  const GHOST_THETA0 = [
+    2.40,  // mathhub
+    3.90,  // 상상의 문
+    3.50,  // 우리 사이의 음표
+  ];
+
+  /* 초기각(원복): 0~8 은 이미지#4 X 위치 기반 asin + SPREAD, 9~11 은 뒤쪽 각도.
+     (균등분포는 앞쪽에서 큰 카드가 겹쳐 정신없어 폐기 → 원래의 정돈된 디오라마 배치로 복원) */
+  const clamp01 = (v) => Math.max(-1, Math.min(1, v));
+  const SPREAD = 1.32;
+  const theta0 = CENTERS.map((c, i) => {
+    if (i >= POS_GHOST_START) return GHOST_THETA0[i - POS_GHOST_START];
+    return Math.asin(clamp01((c.x - CX) / RX)) * SPREAD;
+  });
 
   /* lerp + clamp + ease 유틸 */
   const lerp  = (a, b, t) => a + (b - a) * t;
