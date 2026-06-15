@@ -35,10 +35,12 @@
   /* ── CYLINDER_3D 전용 튜닝 노브 ──────────────────────────────────
      CYLINDER_R    : 실린더 반경(px). 크게 → 카드 더 넓게.    ← 노브 #1
      PERSP_3D      : CSS perspective(px). 작게 → 과장된 원근. ← 노브 #2
-     FOCUS_ADVANCE : 포커스 카드 추가 전진 Z(px).              ← 노브 #3 ── */
+     FOCUS_ADVANCE : 포커스 카드 추가 전진 Z(px).              ← 노브 #3
+     CARD_SCALE_3D : 3D 전체 스케일(카드 --w 불변, cover 기준). ← 노브 #4 ── */
   const CYLINDER_R    = 520;
   const PERSP_3D      = 2750;
-  const FOCUS_ADVANCE = 70;
+  const FOCUS_ADVANCE = 30;   // 70 → 30: trailRotY 방식 도입 후 커서 이탈 최소화
+  const CARD_SCALE_3D = 0.82; // 전경 카드 크기 다운 — cover 카드(202px) 기준
 
   const CX  = 733;     // 중심 X (디자인 px, 1466 캔버스 기준)
   const RX  = 525;     // 수평 반경 (세로축 회전 반지름)
@@ -133,7 +135,7 @@
   let steer = 0;          // 목표 steering
   let steerSmooth = 0;    // 부드럽게 따라가는 steering
   let focusIdx = -1;
-  let pendingLeave = 0;   // A→B 전환 글리치 방지용 rAF id
+  let pendingLeave = null; // A→B 전환 글리치 방지용 timer id (setTimeout 기반)
   const focusAmt = CENTERS.map(() => 0);
 
   /* ② 패럴럭스: 마우스 틸트 상태 */
@@ -244,7 +246,7 @@
      introZ 는 translateZ 에 흡수: totalZ = effectiveR + introZ (= R-320→R).
      → 카드가 실린더 안쪽에서 바깥으로 펼쳐지는 인트로 리빌.
      filter 파이프라인(blur/brightness/drop-shadow 글로우)은 기존과 동일. ── */
-  function applyArm3D(arm, cx, y, scale, opacity, blur, bright, zi, introAlpha, effectiveR, thetaRad, focusGlow, extraBlur, rawT) {
+  function applyArm3D(arm, cx, y, scale, opacity, blur, bright, zi, introAlpha, effectiveR, thetaRad, focusGlow, extraBlur, rawT, trailRotY) {
     const rawZT           = easeOutCubic(rawT === undefined ? introAlpha : rawT);
     const introEasedScale = lerp(0.9, 1, introAlpha);
     const introY          = reduceMotion ? 0 : lerp(-28, 0, rawZT);
@@ -256,9 +258,12 @@
     const finalScale = scale * introEasedScale;
     const thetaDeg   = thetaRad * (180 / Math.PI);
     const totalZ     = effectiveR + introZ;
+    /* trailRotY(도): 포커스 시 translateZ 뒤에 역회전을 더해 카드 면만 뷰어 쪽으로 un-tilt.
+       카드 XY 위치(θ)는 그대로여서 커서 밑을 벗어나지 않음 — 깜빡임 방지 핵심. */
+    const trailDeg   = trailRotY || 0;
 
     arm.style.transform =
-      `translate(${cx.toFixed(1)}px, ${(y + introY).toFixed(1)}px) translate(-50%, -50%) rotateY(${thetaDeg.toFixed(2)}deg) translateZ(${totalZ.toFixed(1)}px) scale(${finalScale.toFixed(4)})`;
+      `translate(${cx.toFixed(1)}px, ${(y + introY).toFixed(1)}px) translate(-50%, -50%) rotateY(${thetaDeg.toFixed(2)}deg) translateZ(${totalZ.toFixed(1)}px)${trailDeg ? ` rotateY(${trailDeg.toFixed(2)}deg)` : ""} scale(${finalScale.toFixed(4)})`;
     arm.style.opacity = (opacity * introOpa).toFixed(4);
     arm.style.zIndex  = zi;
 
@@ -305,19 +310,17 @@
     if (CYLINDER_3D && !isMobile) {
       /* ── 안 A: perspective + rotateY(θ) + translateZ(R) 경로 ──────────
          · 카드 중심을 (CX, y)에 고정. perspective 가 X투영·깊이스케일 자동처리.
-         · 포커스: θ_eff → 0 lerp(정면 회전) + R 전진(전경화).
+         · 포커스: θ 위치 고정, translateZ 뒤 rotateY(-θ·fa) 트레일링으로
+           카드 면만 뷰어 쪽으로 un-tilt → 카드가 커서 밑에 머뭄(깜빡임 방지).
          · gather: R 에 적용(2D 의 X오프셋 대신). ── */
-      /* 포커스: 절대 0 이 아니라 '가장 가까운 정면 각도(0 mod 2π)'로 최단 회전
-         → phase 누적값(예 8rad)에서 0까지 빙글빙글 도는 '휘이익' 현상 제거 */
-      const θFront = Math.round(θ / (Math.PI * 2)) * (Math.PI * 2);
-      const θ_eff  = lerp(θ, θFront, fa);      // 포커스 카드 → 최단경로로 정면 회전
-      const z_eff = Math.cos(θ_eff);
+      const z_eff = Math.cos(θ);
       const base  = depthVis(z_eff);           // 3D 모드: scale 0.92~1.04, blur ≤4px
-      /* gather 된 반경 + 포커스 전진 */
+      /* gather 된 반경 + 포커스 전진(작게: 커서 이탈 방지) */
       const gR    = CYLINDER_R * G;
       const effR  = lerp(gR, gR + FOCUS_ADVANCE, fa);
 
-      let scale   = lerp(base.scale,   FRONT_SCALE, fa);
+      /* CARD_SCALE_3D: 3D 전체 스케일 다운(노브 #4). 카드 --w 불변. */
+      let scale   = lerp(base.scale,   FRONT_SCALE, fa) * CARD_SCALE_3D;
       let opacity = lerp(base.opacity, 1.0,         fa);
       let blur    = base.blur * (1 - fa);
       let zi      = isFocused ? FRONT_Z : base.zi;
@@ -336,6 +339,11 @@
         return;
       }
 
+      /* 포커스 카드: 위치(θ)는 그대로, 면만 뷰어 쪽으로 un-tilt.
+         trailRotY = -θ * fa (도 단위): fa=0 원래 각도, fa=1 정면 향함.
+         dim 카드는 fa≈0이므로 trailRotY≈0 — 별도 계산 불필요. */
+      const trailRotY = -θ * fa * (180 / Math.PI);
+
       /* ③ dim 경로: 피사계심도 dimBlur 추가 */
       if (someFocused && !isFocused) {
         const dimT    = easeOutCubic(focusAmt[focusIdx]);
@@ -343,12 +351,12 @@
         const bright  = lerp(1, DIM_BRIGHT,  dimT);
         const dimBlur = lerp(0, DIM_BLUR,    dimT);
         applyArm3D(arm, CX, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi,
-                   introAlpha, effR, θ_eff, 0, dimBlur, rawT);
+                   introAlpha, effR, θ, 0, dimBlur, rawT);
         return;
       }
 
       const focusGlow = isFocused ? fa : 0;
-      applyArm3D(arm, CX, y, scale, opacity, blur, 1, zi, introAlpha, effR, θ_eff, focusGlow, 0, rawT);
+      applyArm3D(arm, CX, y, scale, opacity, blur, 1, zi, introAlpha, effR, θ, focusGlow, 0, rawT, trailRotY);
 
     } else {
       /* ── 기존 2D 빌보드 경로 (CYLINDER_3D=false 또는 모바일 폴백) ──── */
@@ -400,15 +408,18 @@
   arms.forEach((arm, i) => {
     if (i >= GHOST_START) return;
     const enter = () => {
-      cancelAnimationFrame(pendingLeave);
+      clearTimeout(pendingLeave);
       focusIdx = i; speedTarget = 0;
     };
     const leave = (e) => {
       if (e && e.type === "focusout" && arm.contains(e.relatedTarget)) return;
       if (focusIdx !== i) return;
-      pendingLeave = requestAnimationFrame(() => {
+      clearTimeout(pendingLeave);
+      /* 50ms 히스테리시스: trailRotY 방식 위치 고정 후 추가 안전망.
+         A→B 카드 연속 이동 시 짧은 leave 이벤트를 무시. */
+      pendingLeave = setTimeout(() => {
         if (focusIdx === i) { focusIdx = -1; speedTarget = 1; }
-      });
+      }, 50);
     };
     arm.addEventListener("mouseenter", enter);
     arm.addEventListener("mouseleave", leave);
