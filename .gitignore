@@ -16,3 +16,6 @@
 # 안 쓰는 잡파일 보관함(로컬 정리)
 /_unused/
 .src-png/
+
+# jiwon-harness 런타임 (테스트·빌드 캡처)
+.jiwon-team/
