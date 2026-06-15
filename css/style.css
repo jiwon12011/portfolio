@@ -2132,6 +2132,66 @@ html.process-open { overflow: hidden; }
 .mh-s4__leg-head h5 { margin: 0; font-size: 1.111cqw; font-weight: 600; line-height: 1.4; color: #222; }
 .mh-s4__leg p { margin: .417cqw 0 0; font-size: .972cqw; font-weight: 400; line-height: 1.4; color: #444; }
 
+/* ── SECTION 05 · PAGE-SPECIFIC UI (디자인 1440×2013 → cqw = px/14.4) ── */
+.mh-s5 { aspect-ratio: 1440 / 2013; background: #ffffff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.mh-s5__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 0; }
+.mh-s5 > :not(.mh-s5__bg) { z-index: 1; }
+
+/* 라벨 / 헤딩 / 리드 */
+.mh-s5__no { position: absolute; left: 6.944cqw; top: 3.472cqw;
+  font-size: 2.083cqw; font-weight: 600; line-height: 1.2; color: #316efa; }
+.mh-s5__title { position: absolute; left: 6.944cqw; top: 7.847cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s5__title span { color: #181a3b; }
+.mh-s5__title b { color: #316efa; font-weight: 600; }
+.mh-s5__lead { position: absolute; left: 6.944cqw; top: 18.681cqw; margin: 0;
+  font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* 패널 박스 */
+.mh-s5__panel { position: absolute; left: 6.944cqw; width: 86.111cqw; height: 32.083cqw;
+  background: #fff; border: 1px solid #d0dee9; border-radius: 1.042cqw; }
+.mh-s5__panel--1 { top: 32.569cqw; }
+.mh-s5__panel--2 { top: 66.736cqw; }
+.mh-s5__panel--3 { top: 100.903cqw; }
+
+/* 번호 배지 */
+.mh-s5__badge { position: absolute; left: 9.028cqw; width: 2.917cqw; height: 2.917cqw;
+  border-radius: 50%; background: #f6f8fd; display: flex; align-items: center; justify-content: center;
+  font-size: 1.25cqw; font-weight: 600; color: #316efa; }
+.mh-s5__badge--1 { top: 34.653cqw; }
+.mh-s5__badge--2 { top: 68.819cqw; }
+.mh-s5__badge--3 { top: 102.986cqw; }
+
+/* 카테고리 제목 / 서브 / 설명 */
+.mh-s5__cat { position: absolute; left: 12.986cqw; margin: 0;
+  font-size: 1.528cqw; font-weight: 500; line-height: 1.4; color: #222; }
+.mh-s5__cat--1 { top: 35.278cqw; }
+.mh-s5__cat--2 { top: 69.444cqw; }
+.mh-s5__cat--3 { top: 103.611cqw; }
+.mh-s5__sub { position: absolute; left: 12.986cqw; margin: 0;
+  font-size: 1.042cqw; font-weight: 500; line-height: 1.4; color: #444; }
+.mh-s5__sub--1 { top: 37.431cqw; }
+.mh-s5__sub--2 { top: 71.597cqw; }
+.mh-s5__sub--3 { top: 105.764cqw; }
+.mh-s5__desc { position: absolute; left: 12.986cqw; margin: 0;
+  font-size: .972cqw; font-weight: 500; line-height: 1.5; color: #666; }
+.mh-s5__desc--1 { top: 39.375cqw; }
+.mh-s5__desc--2 { top: 73.542cqw; }
+.mh-s5__desc--3 { top: 107.708cqw; }
+
+/* 스크린샷 */
+.mh-s5__shot { position: absolute; border-radius: .556cqw; background: #eef3fb;
+  object-fit: cover; object-position: top; display: block;
+  box-shadow: 0 .417cqw 1.389cqw -.556cqw rgba(40,70,130,.14); }
+.mh-s5__shot--1 { left: 10.486cqw; top: 44.514cqw; width: 62.292cqw; height: 18.889cqw; }
+.mh-s5__shot--2 { left: 73.958cqw; top: 45.903cqw; width: 14.236cqw; height: 8.819cqw; }
+.mh-s5__shot--3 { left: 73.958cqw; top: 55.069cqw; width: 14.236cqw; height: 8.889cqw; }
+.mh-s5__shot--4 { left: 10.486cqw; top: 77.917cqw; width: 62.292cqw; height: 19.653cqw; }
+.mh-s5__shot--5 { left: 73.958cqw; top: 79.653cqw; width: 15.417cqw; height: 16.181cqw; }
+.mh-s5__shot--6 { left: 10.486cqw; top: 113.125cqw; width: 62.292cqw; height: 18.611cqw; }
+.mh-s5__shot--7 { left: 72.986cqw; top: 117.222cqw; width: 17.361cqw; height: 12.083cqw; }
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
