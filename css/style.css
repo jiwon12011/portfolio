@@ -2115,8 +2115,8 @@ html.process-open { overflow: hidden; }
 .mh-s4__shot--sec { left: 26.597cqw; top: 62.083cqw; width: 11.042cqw; height: 10.347cqw; }
 .mh-s4__shot--ans { left: 77.222cqw; top: 63.889cqw; width: 14.792cqw; height: 6.944cqw; }
 
-/* 점선 커넥터 (근사) */
-.mh-s4__conn { position: absolute; height: 0; border-top: 1.5px dashed #9bb8e8; }
+/* 점선 커넥터 (근사) — border-top 선을 top 기준 중심정렬해 도트 중심과 일치 */
+.mh-s4__conn { position: absolute; height: 0; border-top: 1.5px dashed #9bb8e8; transform: translateY(-50%); }
 .mh-s4__conn--1 { left: 34.861cqw; top: 45.833cqw; width: 11.25cqw; }
 .mh-s4__conn--2 { left: 37.639cqw; top: 64cqw; width: 8.472cqw; }
 .mh-s4__conn--3 { left: 74.236cqw; top: 65cqw; width: 2.986cqw; }

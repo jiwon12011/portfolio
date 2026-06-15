@@ -83,7 +83,7 @@
     up("#mh1 .mh-s1__shot", "top 80%", { y: 0, x: 44, duration: 1.0 });
     up("#mh1 .mh-s1__band", "top 82%", { y: 30 });
     group("#mh1 .mh-s1__pcard", "top 82%", { y: 32, stagger: 0.12 });
-    up("#mh1 .mh-s1__diagram", "top 82%", { y: 32, duration: 0.95, clearProps: "transform" }); /* translateX(-50%) 중앙정렬 → 완료 후 CSS 복원 */
+    fade("#mh1 .mh-s1__diagram", "top 82%", { duration: 1.0 }); /* 큰 이미지+drop-shadow → transform 재래스터 버벅임 회피, opacity만 */
 
     /* ================================================================
        SECTION 2 · IA REBUILD (#mh2)
