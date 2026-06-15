@@ -2018,6 +2018,71 @@ html.process-open { overflow: hidden; }
 .mh-s2__cat-desc { position: absolute; left: 1.042cqw; top: 10.625cqw; margin: 0;
   font-size: .972cqw; font-weight: 400; line-height: 1.4; color: #444; }
 
+/* ── SECTION 03 · SEARCH & FILTER UX (디자인 1440×1043 → cqw = px/14.4) ── */
+.mh-s3 { aspect-ratio: 1440 / 1043;
+  background: linear-gradient(180deg, #f2f7fe 0%, #fef9f2 100%);
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+
+/* 라벨 / 헤딩 / 리드 */
+.mh-s3__no { position: absolute; left: 6.944cqw; top: 3.403cqw;
+  font-size: 2.083cqw; font-weight: 600; line-height: 1.2; color: #316efa; }
+.mh-s3__cat { position: absolute; left: 10.278cqw; top: 3.819cqw;
+  font-size: 1.389cqw; font-weight: 600; line-height: 1.2; color: #316efa; letter-spacing: .01em; }
+.mh-s3__title { position: absolute; left: 6.944cqw; top: 7.778cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s3__title span { color: #181a3b; }
+.mh-s3__title b { color: #316efa; font-weight: 600; }
+.mh-s3__lead { position: absolute; left: 6.944cqw; top: 18.611cqw; margin: 0;
+  font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* BEFORE / AFTER 패널 */
+.mh-s3__panel { position: absolute; top: 30.069cqw; height: 35.417cqw;
+  background: #fff; border: 1px solid #d0dee9; border-radius: 1.042cqw; }
+.mh-s3__panel--before { left: 6.944cqw; width: 21.458cqw; }
+.mh-s3__panel--after { left: 29.792cqw; width: 63.264cqw; }
+.mh-s3__pill { position: absolute; top: 31.458cqw; height: 2.361cqw; border-radius: .694cqw;
+  display: flex; align-items: center; padding: 0 .833cqw;
+  font-size: 1.111cqw; font-weight: 500; line-height: 1; color: #fff; }
+.mh-s3__pill--before { left: 8.333cqw; background: #626262; }
+.mh-s3__pill--after { left: 31.181cqw; background: #316efa; }
+
+/* BEFORE 콘텐츠 */
+.mh-s3__before-shot { position: absolute; left: 8.125cqw; top: 35.903cqw;
+  width: 19.097cqw; height: 20.694cqw; border-radius: .556cqw; background: #eef3fb;
+  object-fit: cover; object-position: top; display: block; }
+.mh-s3__before-title { position: absolute; left: 8.125cqw; top: 57.986cqw; margin: 0;
+  font-size: 1.111cqw; font-weight: 600; line-height: 1.4; color: #222; }
+.mh-s3__before-desc { position: absolute; left: 8.333cqw; top: 60cqw; margin: 0;
+  font-size: .972cqw; font-weight: 400; line-height: 1.4; color: #222; }
+
+/* AFTER 스크린샷 3 */
+.mh-s3__shot { position: absolute; border-radius: .556cqw; background: #eef3fb;
+  object-fit: cover; object-position: top; display: block;
+  box-shadow: 0 .556cqw 1.667cqw -.556cqw rgba(40,70,130,.16); }
+.mh-s3__shot--2 { left: 33.264cqw; top: 35.903cqw; width: 23.264cqw; height: 20.694cqw; }
+.mh-s3__shot--3 { left: 62.708cqw; top: 35.903cqw; width: 26.806cqw; height: 10.903cqw; }
+.mh-s3__shot--4 { left: 62.708cqw; top: 46.528cqw; width: 26.875cqw; height: 10.069cqw; }
+
+/* step 번호 (스크린샷 위) */
+.mh-s3__step { position: absolute; width: 1.389cqw; height: 1.389cqw; border-radius: 50%;
+  background: rgba(49,110,250,.7); color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: .833cqw; font-weight: 600; }
+.mh-s3__step--a1 { left: 32.569cqw; top: 35.556cqw; }
+.mh-s3__step--a2 { left: 62.014cqw; top: 35.556cqw; }
+.mh-s3__step--a3 { left: 62.014cqw; top: 46.25cqw; }
+
+/* AFTER 하단 레전드 3 */
+.mh-s3__leg { position: absolute; top: 58.75cqw; }
+.mh-s3__leg--1 { left: 35.347cqw; }
+.mh-s3__leg--2 { left: 52.361cqw; }
+.mh-s3__leg--3 { left: 72.222cqw; }
+.mh-s3__leg-head { display: flex; align-items: center; gap: .694cqw; }
+.mh-s3__leg-no { flex: none; width: 1.389cqw; height: 1.389cqw; border-radius: 50%;
+  background: #316efa; color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: .833cqw; font-weight: 600; }
+.mh-s3__leg-head h5 { margin: 0; font-size: .972cqw; font-weight: 600; line-height: 1.4; color: #222; }
+.mh-s3__leg p { margin: .35cqw 0 0; font-size: .833cqw; font-weight: 400; line-height: 1.4; color: #444; }
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
