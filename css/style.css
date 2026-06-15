@@ -167,7 +167,7 @@ html:not(.deck-ready) body::before {
   height: 847px;
   transform: translate(-50%, -50%) scale(var(--scale, 1));
   transform-origin: center center;
-  perspective: 1100px;        /* 포커스 카드 rotateY 입체감(orbit.js) */
+  perspective: 1800px;        /* 기본값. CYLINDER_3D=true 시 orbit.js 가 PERSP_3D 로 override */
 }
 
 /* 씬 컬러그레이딩 — 배경 위(z:3, 카드/캐릭터 아래)에 따뜻-차가운 시네마 톤 */

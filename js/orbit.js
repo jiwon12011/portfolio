@@ -28,6 +28,18 @@
       canvas ember 파티클(sin 깜빡임, 앰버색, glow 스프라이트 캐싱)
    ====================================================================== */
 (() => {
+  /* ── 3D 실린더 캐러셀 토글 ─────────────────────────────────────────
+     true  → 안 A: perspective + rotateY(θ) + translateZ(R) 방식.
+     false → 기존 빌보드 2D 투영(RX·sin θ) 완전 복원. ── */
+  const CYLINDER_3D   = true;
+  /* ── CYLINDER_3D 전용 튜닝 노브 ──────────────────────────────────
+     CYLINDER_R    : 실린더 반경(px). 크게 → 카드 더 넓게.    ← 노브 #1
+     PERSP_3D      : CSS perspective(px). 작게 → 과장된 원근. ← 노브 #2
+     FOCUS_ADVANCE : 포커스 카드 추가 전진 Z(px).              ← 노브 #3 ── */
+  const CYLINDER_R    = 340;
+  const PERSP_3D      = 1800;
+  const FOCUS_ADVANCE = 70;
+
   const CX  = 733;     // 중심 X (디자인 px, 1466 캔버스 기준)
   const RX  = 525;     // 수평 반경 (세로축 회전 반지름)
   const RPM = 0.05;    // 라디안/초 (한 바퀴 ≈ 126초)
@@ -129,14 +141,17 @@
   let tiltXSmooth = 0, tiltYSmooth = 0; // lerp 추종값
 
   /* depth(z) → 기본 시각 매핑 (focus 영향 전).
-     앞(z=+1) 크고 또렷, 뒤(z=-1) 작고 흐림 — 깊이 리듬 강화. */
+     앞(z=+1) 크고 또렷, 뒤(z=-1) 작고 흐림 — 깊이 리듬 강화.
+     3D 모드: perspective 가 깊이스케일 자동처리 → scale 범위 좁힘(0.92~1.04).
+     뒤 카드 blur 4px 로 높여 rotateY 미러 텍스트 가독성 차단. */
   function depthVis(z) {
     const t = (z + 1) / 2;                 // 0(뒤) ~ 1(앞)
+    const use3D = CYLINDER_3D && !isMobile;
     return {
-      scale:   lerp(0.74, 1.16, t),        // 뒤 0.74 ~ 앞 1.16
-      opacity: lerp(0.60, 1.0,  t),        // 뒤 0.60 ~ 앞 1.0
-      blur:    z < 0 ? (1 - t / 0.5) * 1.5 : 0, // 뒤만 ≤1.5px, 앞은 0
-      zi:      z >= 0 ? CHARACTER_Z + 5 : CHARACTER_Z - 5,
+      scale:   use3D ? lerp(0.92, 1.04, t) : lerp(0.74, 1.16, t),
+      opacity: lerp(0.60, 1.0, t),
+      blur:    z < 0 ? (1 - t / 0.5) * (use3D ? 4.0 : 1.5) : 0,
+      zi:      z >= 0 ? CHARACTER_Z + 5 : CHARACTER_Z - 7,  // 후방 카드(3) < SVG링(4)·파티클(5) → 뚫지 않게
     };
   }
 
@@ -154,6 +169,8 @@
   const photoEl  = document.querySelector(".scene__photo");
   if (charEl) charEl.style.zIndex = CHARACTER_Z;
   const stage    = document.querySelector(".orbit-stage");
+  /* CYLINDER_3D 모드: perspective 를 PERSP_3D 로 override(CSS 1800px 기본값 강화) */
+  if (CYLINDER_3D && !isMobile && stage) stage.style.perspective = PERSP_3D + "px";
 
   /* ── 스케일 값 읽기: orbit-stage 의 CSS var(--scale) → 패럴럭스 이동량 보정 */
   function getStageScale() {
@@ -222,6 +239,47 @@
     applyArm(arm, x, y, scale, opacity, blur, bright, zi, introAlpha, 0, 0, dimBlur, rawT);
   }
 
+  /* ── applyArm3D: CYLINDER_3D 모드 전용 ──────────────────────────────
+     perspective 가 X투영·깊이스케일 자동처리 → rotateY(θ)+translateZ(R) 으로 배치.
+     introZ 는 translateZ 에 흡수: totalZ = effectiveR + introZ (= R-320→R).
+     → 카드가 실린더 안쪽에서 바깥으로 펼쳐지는 인트로 리빌.
+     filter 파이프라인(blur/brightness/drop-shadow 글로우)은 기존과 동일. ── */
+  function applyArm3D(arm, cx, y, scale, opacity, blur, bright, zi, introAlpha, effectiveR, thetaRad, focusGlow, extraBlur, rawT) {
+    const rawZT           = easeOutCubic(rawT === undefined ? introAlpha : rawT);
+    const introEasedScale = lerp(0.9, 1, introAlpha);
+    const introY          = reduceMotion ? 0 : lerp(-28, 0, rawZT);
+    const iBlur           = introBlurEnabled ? lerp(4, 0, introAlpha) : 0;
+    const introOpa        = Math.min(introAlpha * 1.6, 1);
+    /* translateZ(R + introZ): 카드가 실린더 내부(-320)에서 표면(0)으로 펼쳐짐 */
+    const introZ          = reduceMotion ? 0 : lerp(-320, 0, rawZT);
+
+    const finalScale = scale * introEasedScale;
+    const thetaDeg   = thetaRad * (180 / Math.PI);
+    const totalZ     = effectiveR + introZ;
+
+    arm.style.transform =
+      `translate(${cx.toFixed(1)}px, ${(y + introY).toFixed(1)}px) translate(-50%, -50%) rotateY(${thetaDeg.toFixed(2)}deg) translateZ(${totalZ.toFixed(1)}px) scale(${finalScale.toFixed(4)})`;
+    arm.style.opacity = (opacity * introOpa).toFixed(4);
+    arm.style.zIndex  = zi;
+
+    const f = [];
+    const totalBlur = blur + iBlur + (extraBlur || 0);
+    if (totalBlur > 0.05) f.push(`blur(${totalBlur.toFixed(2)}px)`);
+    if (bright < 0.999)   f.push(`brightness(${bright.toFixed(3)})`);
+
+    /* ③ 포커스 카드 블룸: drop-shadow 2겹 (흰 코어 + 파란 헤일로) */
+    if (focusGlow && focusGlow > 0.02) {
+      const g  = focusGlow;
+      const r1 = (6  * g).toFixed(1);
+      const a1 = (0.42 * g).toFixed(3);
+      const r2 = (16 * g).toFixed(1);
+      const a2 = (0.26 * g).toFixed(3);
+      f.push(`drop-shadow(0 0 ${r1}px rgba(230,245,255,${a1}))`);
+      f.push(`drop-shadow(0 4px ${r2}px rgba(100,170,255,${a2}))`);
+    }
+    arm.style.filter = f.length ? f.join(" ") : "none";
+  }
+
   /* ── placeArm: 한 카드 배치 ─────────────────────────────────────
      회전 위치(rotX/rotZ)와 정면 위치(z=1, x=CX) 사이를 focusAmt 로 블렌드.
      비포커스 카드는 다른 카드가 포커스됐을 때 dim(어둡게+뒤로). */
@@ -237,57 +295,102 @@
     const c = CENTERS[i];
     if (!c) return;
     const θ = theta0[i] + phase;
-    const s = Math.sin(θ);
-    const z = Math.cos(θ);                 // depth: 앞(+1) ~ 뒤(-1)
-    const rotX = CX + RX * s;
-    const base = depthVis(z);
 
-    /* 고스트 카드: 정면화 없이 뒤쪽 distant 가중치만 적용 */
-    const isGhost = i >= GHOST_START;
-
-    const fa = isGhost ? 0 : easeOutCubic(focusAmt[i]);
+    const isGhost     = i >= GHOST_START;
+    const fa          = isGhost ? 0 : easeOutCubic(focusAmt[i]);
     const someFocused = focusIdx !== -1;
     const isFocused   = !isGhost && focusIdx === i;
+    const G           = window.__cardGather || 1;
 
-    /* 넓은 화면에서 카드를 중앙(733, 423.5)으로 살짝 모으기(gather) */
-    const G = window.__cardGather || 1;
-    const x = 733 + (rotX - 733) * G;
-    let   scale   = lerp(base.scale,   FRONT_SCALE, fa);
-    let   opacity = lerp(base.opacity, 1.0,         fa);
-    let   blur    = base.blur * (1 - fa);
-    let   zi      = isFocused ? FRONT_Z : base.zi;
+    if (CYLINDER_3D && !isMobile) {
+      /* ── 안 A: perspective + rotateY(θ) + translateZ(R) 경로 ──────────
+         · 카드 중심을 (CX, y)에 고정. perspective 가 X투영·깊이스케일 자동처리.
+         · 포커스: θ_eff → 0 lerp(정면 회전) + R 전진(전경화).
+         · gather: R 에 적용(2D 의 X오프셋 대신). ── */
+      const θ_eff = lerp(θ, 0, fa);            // 포커스 카드 → 정면으로 회전
+      const z_eff = Math.cos(θ_eff);
+      const base  = depthVis(z_eff);           // 3D 모드: scale 0.92~1.04, blur ≤4px
+      /* gather 된 반경 + 포커스 전진 */
+      const gR    = CYLINDER_R * G;
+      const effR  = lerp(gR, gR + FOCUS_ADVANCE, fa);
 
-    /* legacy 외에는 '둥둥' 인상 방지 위해 부유 진폭 대폭 축소(≈0.6~1.2px) */
-    const bobAmp = ORBIT_MODE !== "legacy" ? (0.6 + 0.6 * ((z + 1) / 2)) : (2 + 2 * ((z + 1) / 2));
-    const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
-    const y = 423.5 + (yRaw - 423.5) * G;
+      let scale   = lerp(base.scale,   FRONT_SCALE, fa);
+      let opacity = lerp(base.opacity, 1.0,         fa);
+      let blur    = base.blur * (1 - fa);
+      let zi      = isFocused ? FRONT_Z : base.zi;
 
-    /* 고스트 배치 */
-    if (isGhost) {
-      scale   *= GHOST_SCALE;
-      opacity *= GHOST_OPACITY;
-      applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, 0, 0, 0, rawT);
-      return;
+      const bobAmp = ORBIT_MODE !== "legacy"
+        ? (0.6 + 0.6 * ((z_eff + 1) / 2))
+        : (2   + 2   * ((z_eff + 1) / 2));
+      const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
+      const y    = 423.5 + (yRaw - 423.5) * G;
+
+      /* 고스트: 정면화 없음, gather된 반경 그대로 */
+      if (isGhost) {
+        scale   *= GHOST_SCALE;
+        opacity *= GHOST_OPACITY;
+        applyArm3D(arm, CX, y, scale, opacity, blur, 1, zi, introAlpha, gR, θ, 0, 0, rawT);
+        return;
+      }
+
+      /* ③ dim 경로: 피사계심도 dimBlur 추가 */
+      if (someFocused && !isFocused) {
+        const dimT    = easeOutCubic(focusAmt[focusIdx]);
+        opacity      *= lerp(1, DIM_OPACITY, dimT);
+        const bright  = lerp(1, DIM_BRIGHT,  dimT);
+        const dimBlur = lerp(0, DIM_BLUR,    dimT);
+        applyArm3D(arm, CX, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi,
+                   introAlpha, effR, θ_eff, 0, dimBlur, rawT);
+        return;
+      }
+
+      const focusGlow = isFocused ? fa : 0;
+      applyArm3D(arm, CX, y, scale, opacity, blur, 1, zi, introAlpha, effR, θ_eff, focusGlow, 0, rawT);
+
+    } else {
+      /* ── 기존 2D 빌보드 경로 (CYLINDER_3D=false 또는 모바일 폴백) ──── */
+      const s    = Math.sin(θ);
+      const z    = Math.cos(θ);                 // depth: 앞(+1) ~ 뒤(-1)
+      const rotX = CX + RX * s;
+      const base = depthVis(z);
+
+      const x = 733 + (rotX - 733) * G;
+      let   scale   = lerp(base.scale,   FRONT_SCALE, fa);
+      let   opacity = lerp(base.opacity, 1.0,         fa);
+      let   blur    = base.blur * (1 - fa);
+      let   zi      = isFocused ? FRONT_Z : base.zi;
+
+      const bobAmp = ORBIT_MODE !== "legacy"
+        ? (0.6 + 0.6 * ((z + 1) / 2))
+        : (2   + 2   * ((z + 1) / 2));
+      const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
+      const y    = 423.5 + (yRaw - 423.5) * G;
+
+      /* 고스트 배치 */
+      if (isGhost) {
+        scale   *= GHOST_SCALE;
+        opacity *= GHOST_OPACITY;
+        applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, 0, 0, 0, rawT);
+        return;
+      }
+
+      /* ③ dim 경로: 피사계심도 dimBlur 추가 */
+      if (someFocused && !isFocused) {
+        const dimT    = easeOutCubic(focusAmt[focusIdx]);
+        opacity      *= lerp(1, DIM_OPACITY, dimT);
+        const bright  = lerp(1, DIM_BRIGHT,  dimT);
+        const dimBlur = lerp(0, DIM_BLUR,    dimT);
+        scaleDimAndApply(arm, x, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi, introAlpha, dimBlur, rawT);
+        return;
+      }
+
+      /* fa > 0.92 구간에서 tilt 점감 → 안착 시 잔떨림 제거 */
+      const tiltFade = fa < 0.92 ? fa : lerp(fa, 0, (fa - 0.92) / 0.08);
+      const rotY     = (isFocused && !reduceMotion) ? z * -3.5 * tiltFade : 0;
+
+      const focusGlow = isFocused ? fa : 0;
+      applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, rotY, focusGlow, 0, rawT);
     }
-
-    /* ③ dim 경로: 피사계심도 dimBlur 추가 */
-    if (someFocused && !isFocused) {
-      const dimT = easeOutCubic(focusAmt[focusIdx]);
-      opacity *= lerp(1, DIM_OPACITY, dimT);
-      const bright  = lerp(1, DIM_BRIGHT, dimT);
-      const dimBlur = lerp(0, DIM_BLUR, dimT);   // 피사계심도: 포커스 진행도에 비례
-      scaleDimAndApply(arm, x, y, scale * lerp(1, DIM_SCALE, dimT), opacity, blur, bright, zi, introAlpha, dimBlur, rawT);
-      return;
-    }
-
-    /* fa > 0.92 구간에서 tilt 점감 → 안착 시 잔떨림 제거 */
-    const tiltFade = fa < 0.92 ? fa : lerp(fa, 0, (fa - 0.92) / 0.08);
-    const rotY = (isFocused && !reduceMotion) ? z * -3.5 * tiltFade : 0;
-
-    /* ③ 포커스 카드 블룸: fa 기반 focusGlow */
-    const focusGlow = isFocused ? fa : 0;
-
-    applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, rotY, focusGlow, 0, rawT);
   }
 
   /* ── 호버/포커스 바인딩 → freeze + 정면화 ───────────────────────── */
