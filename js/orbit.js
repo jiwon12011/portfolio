@@ -33,13 +33,18 @@
   const RPM = 0.05;    // 라디안/초 (한 바퀴 ≈ 126초)
   const CHARACTER_Z = 10;
 
-  /* ── 하이브리드 인트로(2번 안): 진입 시 1회전 시네마틱 소개 → 디자인 레이아웃에
-     안착 후 정지(정적 디오라마 + 마우스 패럴럭스). 자동 배회(idle wobble)·steering 회전 제거.
-     ▶ 되돌리기: 아래를 false 로 두면 기존 상시 회전(idle+steering) 그대로 복원됨. ── */
-  const HYBRID_INTRO_SPIN = true;
-  const SPIN_TURNS = 1;     // 인트로 회전 바퀴 수(2π 배수여야 디자인 레이아웃에 정확히 안착)
-  const SPIN_START = 1.8;   // 카드 리빌 끝난 뒤 스핀 시작(초)
-  const SPIN_DUR   = 11;    // 스핀 지속(초) — 끝나면 phase 고정(정지)
+  /* ── 회전 모드 ─────────────────────────────────────────────────────
+     "continuous" : 진짜 느린 단방향 연속 회전(배럴 의도대로 카드가 앞/뒤로 지나감).
+                    마우스 좌우 = 속도 가감, 호버 = freeze. ← 현재 선택(다듬기 대상)
+     "hybrid"     : 진입 1회전 시네마틱 소개 후 정지(정적 디오라마+패럴럭스).
+     "legacy"     : 기존 제자리 wobble(±15°, RPM 미사용) — 비추천(어색함의 원인).
+     ▶ 다듬기 핵심 값: SPIN_SPEED(속도) · STEER_BIAS(마우스 감도) · bobAmp(부유). ── */
+  const ORBIT_MODE = "continuous";
+  const SPIN_SPEED = 0.09;   // [continuous] rad/s — 단방향 회전 속도(한 바퀴 ≈ 70초)
+  const STEER_BIAS = 0.40;   // [continuous] 마우스 좌우 → 회전 속도 ±가감
+  const SPIN_TURNS = 1;      // [hybrid] 인트로 회전 바퀴 수(2π 배수 안착)
+  const SPIN_START = 1.8;    // [hybrid] 스핀 시작(초)
+  const SPIN_DUR   = 11;     // [hybrid] 스핀 지속(초)
 
   /* 카드 중심(이미지#4 배치) — DOM 순서와 동일 */
   const CENTERS = [
@@ -252,8 +257,8 @@
     let   blur    = base.blur * (1 - fa);
     let   zi      = isFocused ? FRONT_Z : base.zi;
 
-    /* 하이브리드: 정지 후 '둥둥' 인상 방지 위해 부유 진폭 대폭 축소(≈0.6~1.2px) */
-    const bobAmp = HYBRID_INTRO_SPIN ? (0.6 + 0.6 * ((z + 1) / 2)) : (2 + 2 * ((z + 1) / 2));
+    /* legacy 외에는 '둥둥' 인상 방지 위해 부유 진폭 대폭 축소(≈0.6~1.2px) */
+    const bobAmp = ORBIT_MODE !== "legacy" ? (0.6 + 0.6 * ((z + 1) / 2)) : (2 + 2 * ((z + 1) / 2));
     const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
     const y = 423.5 + (yRaw - 423.5) * G;
 
@@ -467,14 +472,17 @@
     tiltXSmooth += (tiltX - tiltXSmooth) * Math.min(dt * 1.8, 1);
     tiltYSmooth += (tiltY - tiltYSmooth) * Math.min(dt * 1.8, 1);
 
-    if (HYBRID_INTRO_SPIN) {
-      /* 하이브리드: 진입 1회전(2π 배수) 시네마틱 소개 → 디자인 레이아웃에 정확히 안착 후 정지.
-         idle wobble·steering 회전 없음(자동 배회 제거). 호버 freeze(speedMul→0) 시 스핀 일시정지. */
+    if (ORBIT_MODE === "continuous") {
+      /* 진짜 느린 단방향 연속 회전 + 마우스 좌우 = 속도 변조(위치 오프셋 아님).
+         호버 freeze(speedMul→0) 시 정지. idle wobble 없음(방향 없는 흔들림 제거). */
+      phase += SPIN_SPEED * (1 + steerSmooth * STEER_BIAS) * dt * speedMul;
+    } else if (ORBIT_MODE === "hybrid") {
+      /* 진입 1회전(2π 배수) 시네마틱 소개 → 디자인 레이아웃에 안착 후 정지. */
       spinT += dt * speedMul;
       const st = clamp((spinT - SPIN_START) / SPIN_DUR, 0, 1);
       phase = easeInOutSine(st) * (Math.PI * 2 * SPIN_TURNS);
     } else {
-      /* (기존) 상시 바운디드 스윙 + steering */
+      /* legacy: 기존 제자리 wobble + steering(±15°, 비추천) */
       const idle = 0.18 * Math.sin(tShow * 0.28)
                  + 0.055 * Math.sin(tShow * 0.17 + 1.1)
                  + 0.028 * Math.sin(tShow * 0.11 + 2.7);
