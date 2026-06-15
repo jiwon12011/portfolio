@@ -1971,14 +1971,13 @@ html.process-open { overflow: hidden; }
   font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
 
 /* 손글씨 인용 (우상단) */
-.mh-s2__quote { position: absolute; left: 63.68cqw; top: 12.22cqw; width: 20.5cqw; height: 7.1cqw; margin: 0;
-  font-family: "GangwonEducationHyunokSam", "Pretendard Variable", sans-serif; }
-.mh-s2__quote p { position: absolute; left: 50%; transform: translateX(-50%); top: .3cqw; margin: 0;
-  white-space: nowrap; text-align: center; font-size: 1.528cqw; font-weight: 500; line-height: 1.4; color: #316efa; }
+.mh-s2__quote { margin: 0; font-family: "GangwonEducationHyunokSam", "Pretendard Variable", sans-serif; }
+.mh-s2__quote p { position: absolute; left: 68.125cqw; top: 12.847cqw; width: max-content; margin: 0;
+  text-align: center; font-size: 1.528cqw; font-weight: 500; line-height: 1.4; color: #316efa; white-space: nowrap; }
 .mh-s2__quote-mark { position: absolute; font-size: 2.5cqw; line-height: 1; color: #316efa; }
-.mh-s2__quote-mark--o { left: 3cqw; top: -.1cqw; }
-.mh-s2__quote-mark--c { right: 0; bottom: 0; }
-.mh-s2__quote-arrow { position: absolute; left: 0; top: 4.9cqw; width: 3.469cqw; height: 7.083cqw; display: block; }
+.mh-s2__quote-mark--o { left: 67.153cqw; top: 12.222cqw; }
+.mh-s2__quote-mark--c { left: 83.333cqw; top: 16.528cqw; }
+.mh-s2__quote-arrow { position: absolute; left: 63.681cqw; top: 17.153cqw; width: 3.469cqw; height: 7.083cqw; display: block; }
 
 /* BEFORE / AFTER 패널 */
 .mh-s2__panel { position: absolute; top: 27.569cqw; height: 26.458cqw;
