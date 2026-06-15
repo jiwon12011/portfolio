@@ -66,19 +66,19 @@
 
   /* 카드 중심(이미지#4 배치) — DOM 순서와 동일 */
   const CENTERS = [
-    { x: 615,  y: 200 }, // visual-archive  (각도 distinct·세로 stacking 제거)
-    { x: 733,  y: 150 }, // jaringobi       (중심·최상단)
-    { x: 401,  y: 550 }, // gwihon
-    { x: 319,  y: 420 }, // about           (최좌측)
-    { x: 1147, y: 250 }, // pledis          (우측 끝)
-    { x: 851,  y: 480 }, // yumi
-    { x: 502,  y: 700 }, // poze            (최하단)
-    { x: 964,  y: 650 }, // content-lab
-    { x: 1065, y: 350 }, // skills
+    { x: 355,  y: 190 }, // visual-archive
+    { x: 733,  y: 158 }, // jaringobi
+    { x: 506,  y: 420 }, // gwihon  (플레디스와 위치 교환 → 좌중앙)
+    { x: 293,  y: 461 }, // about
+    { x: 1184, y: 233 }, // pledis  (귀혼과 위치 교환 → 우상단)
+    { x: 960,  y: 434 }, // yumi
+    { x: 467,  y: 695 }, // poze
+    { x: 965,  y: 682 }, // content-lab
+    { x: 1174, y: 566 }, // skills
     /* ── 인덱스 9~11: 뒤쪽 배치(theta0 는 GHOST_THETA0 로 override). 호버/밝기는 일반 카드 ── */
-    { x: 733,  y: 200 }, // mathhub
-    { x: 733,  y: 450 }, // 상상의 문(door)
-    { x: 733,  y: 350 }, // 우리 사이의 음표(playlist)
+    { x: 733,  y: 250 }, // mathhub
+    { x: 733,  y: 470 }, // 상상의 문(door)
+    { x: 733,  y: 285 }, // 우리 사이의 음표(playlist)
   ];
 
   /* 고스트 "위치" 인덱스 범위 (CENTERS 9, 10, 11) — theta0 positioning 전용.
@@ -90,9 +90,9 @@
      cos(θ) < 0 = 인물 뒤. 2.6~3.7 rad 범위에서 고르게 분산.
      y 는 CENTERS[i].y 로 별도 지정. ── */
   const GHOST_THETA0 = [
-    2.20,  // mathhub  — 뒤쪽 호 균등(2.2)
-    3.00,  // door     — 중간 앵커(3.0)
-    3.80,  // playlist — 우측 끝(3.8)
+    2.40,  // mathhub
+    3.90,  // 상상의 문(door)
+    3.50,  // 우리 사이의 음표(playlist)
   ];
 
   const RING_YS = [206, 432, 660];  // 빛 궤도 링 높이
