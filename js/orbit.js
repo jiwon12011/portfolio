@@ -36,11 +36,15 @@
      CYLINDER_R    : 실린더 반경(px). 크게 → 카드 더 넓게.    ← 노브 #1
      PERSP_3D      : CSS perspective(px). 작게 → 과장된 원근. ← 노브 #2
      FOCUS_ADVANCE : 포커스 카드 추가 전진 Z(px).              ← 노브 #3
-     CARD_SCALE_3D : 3D 전체 스케일(카드 --w 불변, cover 기준). ← 노브 #4 ── */
+     CARD_SCALE_3D : 3D 전체 스케일(카드 --w 불변, cover 기준). ← 노브 #4
+     PLAYER_SCALE_3D: player 카드(.card--player)만 추가 축소.   ← 노브 #5 ── */
   const CYLINDER_R    = 520;
   const PERSP_3D      = 2750;
   const FOCUS_ADVANCE = 30;   // 70 → 30: trailRotY 방식 도입 후 커서 이탈 최소화
-  const CARD_SCALE_3D = 0.82; // 전경 카드 크기 다운 — cover 카드(202px) 기준
+  const CARD_SCALE_3D = 0.92; // 0.82→0.92: 전체 카드 크기 복원 — cover 카드(202px) 기준
+  /* 가로로 긴 player 카드(.card--player = 자린고비·POZE)만 한 톤 더 작게.
+     CARD_SCALE_3D 위에 곱해짐(1=영향 없음). 다른 타입(cover/link/about/lab/skills) 불변. */
+  const PLAYER_SCALE_3D = 0.85;
 
   const CX  = 733;     // 중심 X (디자인 px, 1466 캔버스 기준)
   const RX  = 525;     // 수평 반경 (세로축 회전 반지름)
@@ -62,37 +66,35 @@
 
   /* 카드 중심(이미지#4 배치) — DOM 순서와 동일 */
   const CENTERS = [
-    { x: 355,  y: 190 }, // visual-archive
-    { x: 733,  y: 158 }, // jaringobi
-    { x: 506,  y: 420 }, // gwihon  (플레디스와 위치 교환 → 좌중앙)
-    { x: 293,  y: 461 }, // about
-    { x: 1184, y: 233 }, // pledis  (귀혼과 위치 교환 → 우상단)
-    { x: 960,  y: 434 }, // yumi
-    { x: 467,  y: 695 }, // poze
-    { x: 965,  y: 682 }, // content-lab
-    { x: 1174, y: 566 }, // skills
-    /* ── 고스트 카드(인덱스 9~11): 뒤쪽 배치 — theta0 는 아래에서 override ── */
-    { x: 733,  y: 250 }, // ghost-mathhub  (우상단-후방, y만 위치 잡기용)
-    { x: 733,  y: 470 }, // ghost-door     (좌-후방 중앙)
-    { x: 733,  y: 285 }, // ghost-playlist (상단-좌후방)
+    { x: 615,  y: 200 }, // visual-archive  (각도 distinct·세로 stacking 제거)
+    { x: 733,  y: 150 }, // jaringobi       (중심·최상단)
+    { x: 401,  y: 550 }, // gwihon
+    { x: 319,  y: 420 }, // about           (최좌측)
+    { x: 1147, y: 250 }, // pledis          (우측 끝)
+    { x: 851,  y: 480 }, // yumi
+    { x: 502,  y: 700 }, // poze            (최하단)
+    { x: 964,  y: 650 }, // content-lab
+    { x: 1065, y: 350 }, // skills
+    /* ── 인덱스 9~11: 뒤쪽 배치(theta0 는 GHOST_THETA0 로 override). 호버/밝기는 일반 카드 ── */
+    { x: 733,  y: 200 }, // mathhub
+    { x: 733,  y: 450 }, // 상상의 문(door)
+    { x: 733,  y: 350 }, // 우리 사이의 음표(playlist)
   ];
 
-  /* 고스트 카드 인덱스 범위 (CENTERS 9, 10, 11) */
-  const GHOST_START = 9;
+  /* 고스트 "위치" 인덱스 범위 (CENTERS 9, 10, 11) — theta0 positioning 전용.
+     ⚠ 호버/디밍과 무관: 9~11도 일반 카드처럼 호버 포커스·정상 밝기로 승격됨.
+        좌표만 GHOST_THETA0 로 뒤쪽 배치(좌표는 designer 담당). */
+  const POS_GHOST_START = 9;
 
   /* ── 고스트 전용 뒤쪽 각도(rad) — 조정 쉽게 한 곳에 모음
      cos(θ) < 0 = 인물 뒤. 2.6~3.7 rad 범위에서 고르게 분산.
      y 는 CENTERS[i].y 로 별도 지정. ── */
   const GHOST_THETA0 = [
-    2.40,  // mathhub  — 우후방(rotX≈1087) · 위쪽(y250)
-    3.90,  // door     — 좌후방(rotX≈372)  · 중간(y470)
-    3.50,  // playlist — 좌후방(rotX≈549)  · 상단(y285)
+    2.20,  // mathhub  — 뒤쪽 호 균등(2.2)
+    3.00,  // door     — 중간 앵커(3.0)
+    3.80,  // playlist — 우측 끝(3.8)
   ];
 
-  /* 고스트 추가 distant 가중치: 일반 뒤 카드보다 한 톤 더 멀리 보이게.
-     scale × GHOST_SCALE, opacity × GHOST_OPACITY — 과하지 않게. */
-  const GHOST_SCALE   = 0.87;
-  const GHOST_OPACITY = 0.90;
   const RING_YS = [206, 432, 660];  // 빛 궤도 링 높이
 
   /* 초기각: 이미지#4 X 위치 기반 + SPREAD 로 살짝 넓게.
@@ -100,7 +102,7 @@
   const clamp01 = (v) => Math.max(-1, Math.min(1, v));
   const SPREAD = 1.32;
   const theta0 = CENTERS.map((c, i) => {
-    if (i >= GHOST_START) return GHOST_THETA0[i - GHOST_START];
+    if (i >= POS_GHOST_START) return GHOST_THETA0[i - POS_GHOST_START];
     return Math.asin(clamp01((c.x - CX) / RX)) * SPREAD;
   });
 
@@ -160,13 +162,18 @@
   /* ── DOM ─────────────────────────────────────────────────────── */
   const arms = [...document.querySelectorAll(".card-arm")];
   if (arms.length === 0) return;
-  arms.forEach((a) => {
+  arms.forEach((a, i) => {
     /* ③ 포커스 글로우: filter 는 포커스/dim 시에만 — 상시 will-change:filter 금지.
        .card 의 translateZ(0)는 style.css 에서 제거됨 → 이중 레이어 승격 없음. */
     a.style.willChange = "transform, opacity";
     a.style.left = "0px";
     a.style.top = "0px";
+    /* 고스트 위치(9~11) 호버 승격: index 9(mathhub)는 .card-arm--ghost 라 CSS
+       pointer-events:none → 인라인으로 auto 강제(HTML/CSS 불변, JS-only). 10·11은 무해. */
+    if (i >= POS_GHOST_START) a.style.pointerEvents = "auto";
   });
+  /* player 카드(.card--player = 자린고비·POZE) 판별 1회 캐시 — 매 프레임 querySelector 회피. */
+  const isPlayerArm = arms.map((a) => !!a.querySelector(".card--player"));
   const charEl   = document.querySelector(".scene__character");
   const photoEl  = document.querySelector(".scene__photo");
   if (charEl) charEl.style.zIndex = CHARACTER_Z;
@@ -301,10 +308,9 @@
     if (!c) return;
     const θ = theta0[i] + phase;
 
-    const isGhost     = i >= GHOST_START;
-    const fa          = isGhost ? 0 : easeOutCubic(focusAmt[i]);
+    const fa          = easeOutCubic(focusAmt[i]);
     const someFocused = focusIdx !== -1;
-    const isFocused   = !isGhost && focusIdx === i;
+    const isFocused   = focusIdx === i;
     const G           = window.__cardGather || 1;
 
     if (CYLINDER_3D && !isMobile) {
@@ -319,8 +325,9 @@
       const gR    = CYLINDER_R * G;
       const effR  = lerp(gR, gR + FOCUS_ADVANCE, fa);
 
-      /* CARD_SCALE_3D: 3D 전체 스케일 다운(노브 #4). 카드 --w 불변. */
-      let scale   = lerp(base.scale,   FRONT_SCALE, fa) * CARD_SCALE_3D;
+      /* CARD_SCALE_3D: 3D 전체 스케일(노브 #4). player 카드만 PLAYER_SCALE_3D 추가 곱(노브 #5). */
+      let scale   = lerp(base.scale,   FRONT_SCALE, fa) * CARD_SCALE_3D
+                    * (isPlayerArm[i] ? PLAYER_SCALE_3D : 1);
       let opacity = lerp(base.opacity, 1.0,         fa);
       let blur    = base.blur * (1 - fa);
       let zi      = isFocused ? FRONT_Z : base.zi;
@@ -330,14 +337,6 @@
         : (2   + 2   * ((z_eff + 1) / 2));
       const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
       const y    = 423.5 + (yRaw - 423.5) * G;
-
-      /* 고스트: 정면화 없음, gather된 반경 그대로 */
-      if (isGhost) {
-        scale   *= GHOST_SCALE;
-        opacity *= GHOST_OPACITY;
-        applyArm3D(arm, CX, y, scale, opacity, blur, 1, zi, introAlpha, gR, θ, 0, 0, rawT);
-        return;
-      }
 
       /* 포커스 카드: 위치(θ)는 그대로, 면만 뷰어 쪽으로 un-tilt.
          trailRotY = -θ * fa (도 단위): fa=0 원래 각도, fa=1 정면 향함.
@@ -377,14 +376,6 @@
       const yRaw = c.y + Math.sin(bobT * 0.9 + i * PHI * 6.283) * bobAmp;
       const y    = 423.5 + (yRaw - 423.5) * G;
 
-      /* 고스트 배치 */
-      if (isGhost) {
-        scale   *= GHOST_SCALE;
-        opacity *= GHOST_OPACITY;
-        applyArm(arm, x, y, scale, opacity, blur, 1, zi, introAlpha, 0, 0, 0, rawT);
-        return;
-      }
-
       /* ③ dim 경로: 피사계심도 dimBlur 추가 */
       if (someFocused && !isFocused) {
         const dimT    = easeOutCubic(focusAmt[focusIdx]);
@@ -406,7 +397,6 @@
 
   /* ── 호버/포커스 바인딩 → freeze + 정면화 ───────────────────────── */
   arms.forEach((arm, i) => {
-    if (i >= GHOST_START) return;
     const enter = () => {
       clearTimeout(pendingLeave);
       focusIdx = i; speedTarget = 0;
@@ -749,7 +739,6 @@
     /* 정적 배치. 호버 정면화는 살짝 살림. 인트로 blur/Y/Z 없음(reduceMotion=true → applyArm 내 처리). */
     arms.forEach((a, i) => placeArm(a, i, 1));
     arms.forEach((arm, i) => {
-      if (i >= GHOST_START) return;
       arm.addEventListener("mouseenter", () => { focusAmt[i] = 1; focusIdx = i; redrawStatic(); });
       arm.addEventListener("mouseleave", () => { focusAmt[i] = 0; if (focusIdx === i) focusIdx = -1; redrawStatic(); });
       arm.addEventListener("focusin",  () => { focusAmt[i] = 1; focusIdx = i; redrawStatic(); });
