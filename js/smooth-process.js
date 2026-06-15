@@ -16,10 +16,9 @@
 (() => {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+  window.__processLenis = window.__processLenis || {};
   const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis"];
   const EASE = 0.14;            // 0~1, 클수록 더 즉각적(작을수록 더 미끄럽게)
-
-  window.__processLenis = window.__processLenis || {};
 
   const setup = (modal, scrollerSel = ".process__content", ease = EASE, mult = 1) => {
     const scroller = modal.querySelector(scrollerSel);
