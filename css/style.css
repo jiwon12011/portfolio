@@ -1856,6 +1856,169 @@ html.process-open { overflow: hidden; }
 .process--mathhub .ptag { background: rgba(200,218,255,0.88); color: #1a4096; }
 .process--mathhub .pcard__notion { background: #4b73e8; }
 
+/* ── MathHub 제작 과정 본문 (한 섹션씩 추가) — 소프트블루 ── */
+.process__making--mathhub { background: #eaf2fd; box-shadow: 0 24px 60px -32px rgba(110,140,200,0.42); }
+.mh-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf2fd; }
+
+/* SECTION · 히어로 (디자인 1920×1081, 16:9) — 키 비주얼 풀커버 */
+.mh-hero { aspect-ratio: 1920 / 1081; }
+.mh-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── SECTION 01 · OVERVIEW + PROBLEM FINDING (디자인 1440×3473 → cqw = px/14.4) ── */
+.mh-s1 { aspect-ratio: 1440 / 3473; background: #ffffff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.mh-s1__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 0; }
+.mh-s1 > :not(.mh-s1__bg) { z-index: 1; }
+
+/* 섹션 라벨 (01 / PROJECT OVERVIEW) */
+.mh-s1__no { position: absolute; left: 6.944cqw; top: 8.194cqw; margin: 0;
+  font-size: 2.083cqw; font-weight: 600; line-height: 1.2; color: #316efa; }
+.mh-s1__cat { position: absolute; left: 9.931cqw; top: 8.611cqw;
+  font-size: 1.389cqw; font-weight: 600; line-height: 1.2; color: #316efa; letter-spacing: .01em; }
+.mh-s1__no--2 { top: 105.347cqw; }
+.mh-s1__cat--2 { left: 10.278cqw; top: 105.764cqw; }
+
+/* 헤딩 */
+.mh-s1__title { position: absolute; left: 6.944cqw; top: 12.569cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s1__title span { color: #181a3b; }
+.mh-s1__title b { color: #316efa; font-weight: 600; }
+.mh-s1__title--2 { top: 109.722cqw; }
+
+/* 리드 문단 */
+.mh-s1__lead { position: absolute; left: 6.944cqw; top: 23.403cqw; margin: 0;
+  font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+.mh-s1__lead--2 { top: 120.556cqw; }
+
+/* 인포 카드 4 (좌측) */
+.mh-s1__card { position: absolute; left: 6.944cqw; width: 30.833cqw; height: 10.417cqw;
+  display: flex; align-items: center; gap: 1.389cqw; padding-left: 1.736cqw;
+  background: #fff; border: 1px solid #d0dee9; border-radius: 1.042cqw; }
+.mh-s1__card:nth-of-type(1) { top: 31.111cqw; }
+.mh-s1__card:nth-of-type(2) { top: 42.708cqw; }
+.mh-s1__card:nth-of-type(3) { top: 54.306cqw; }
+.mh-s1__card:nth-of-type(4) { top: 65.903cqw; }
+.mh-s1__card-ico { flex: none; width: 6.944cqw; height: 6.944cqw; border-radius: 50%;
+  background: #edf3fd; display: flex; align-items: center; justify-content: center; }
+.mh-s1__card-ico img { width: 3.819cqw; height: 3.819cqw; display: block; }
+.mh-s1__card-txt { display: flex; flex-direction: column; }
+.mh-s1__card-label { font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #316efa; }
+.mh-s1__card-val { font-size: 1.528cqw; font-weight: 600; line-height: 1.4; color: #222; }
+.mh-s1__card-sub { font-size: 1.389cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* 우측 히어로 목업 */
+.mh-s1__shot { position: absolute; left: 41.875cqw; top: 31.042cqw;
+  width: 51.181cqw; height: 45.278cqw; border-radius: 2.083cqw; border: 1px solid #d0dee9;
+  box-shadow: 2px 4px 4px rgba(0,0,0,.1); object-fit: cover; object-position: top; display: block; }
+
+/* From archive 밴드 */
+.mh-s1__band { position: absolute; left: 6.944cqw; top: 79.236cqw;
+  width: 86.111cqw; height: 15.278cqw; border-radius: 2.083cqw;
+  background: rgba(190,211,252,.5); }
+.mh-s1__band-title { position: absolute; left: 8.333cqw; top: 2.986cqw; margin: 0;
+  font-size: 3.333cqw; font-weight: 600; line-height: 1.4; }
+.mh-s1__band-title span { color: #222; }
+.mh-s1__band-title b { color: #316efa; font-weight: 600; }
+.mh-s1__band-img { position: absolute; left: 48.819cqw; top: .556cqw;
+  width: 33.264cqw; height: 13.681cqw; object-fit: contain; display: block; }
+
+/* 문제 카드 3 (스크린샷 자체가 프레임 목업 → 뒤 흰 박스 없이 떠 보이게) */
+.mh-s1__pcard { position: absolute; top: 130.972cqw; width: 27.569cqw; height: 36.667cqw; }
+.mh-s1__pcard--1 { left: 6.944cqw; }
+.mh-s1__pcard--2 { left: 36.25cqw; }
+.mh-s1__pcard--3 { left: 65.556cqw; }
+.mh-s1__pcard-shot { position: absolute; left: 3.403cqw; top: 1.875cqw;
+  width: 20.833cqw; height: 23.194cqw; border-radius: .694cqw;
+  box-shadow: 0 .833cqw 2.222cqw -.556cqw rgba(40,70,130,.22); object-fit: cover; object-position: top; display: block; }
+.mh-s1__pcard-no { position: absolute; left: 1.042cqw; top: 27.153cqw;
+  width: 2.917cqw; height: 2.917cqw; border-radius: 50%; background: #f6f8fd;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25cqw; font-weight: 600; color: #316efa; }
+.mh-s1__pcard-title { position: absolute; left: 5cqw; top: 27.778cqw; margin: 0;
+  font-size: 1.528cqw; font-weight: 500; line-height: 1.4; color: #222; }
+.mh-s1__pcard-desc { position: absolute; left: 5cqw; top: 30.556cqw; margin: 0;
+  font-size: 1.042cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* BEFORE 경험 진단 다이어그램 */
+.mh-s1__diagram { position: absolute; left: 50%; transform: translateX(-50%); top: 171.111cqw;
+  width: 86.181cqw; height: 62.986cqw; border-radius: 1.389cqw; border: 1px solid #fff;
+  object-fit: cover; display: block; }
+
+/* 손글씨체 (강원교육현옥샘) — 제작과정 인용구 전용 */
+@font-face {
+  font-family: 'GangwonEducationHyunokSam';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduHyeonokT_OTFMediumA.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
+/* ── SECTION 02 · IA REBUILD (디자인 1440×876 → cqw = px/14.4) ── */
+.mh-s2 { aspect-ratio: 1440 / 876; background: #ffffff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.mh-s2__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 0; }
+.mh-s2 > :not(.mh-s2__bg) { z-index: 1; }
+
+/* 라벨 / 헤딩 / 리드 */
+.mh-s2__no { position: absolute; left: 6.944cqw; top: 3.333cqw;
+  font-size: 2.083cqw; font-weight: 600; line-height: 1.2; color: #316efa; }
+.mh-s2__cat { position: absolute; left: 10.278cqw; top: 3.75cqw;
+  font-size: 1.389cqw; font-weight: 600; line-height: 1.2; color: #316efa; letter-spacing: .01em; }
+.mh-s2__title { position: absolute; left: 6.944cqw; top: 7.708cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s2__title span { color: #181a3b; }
+.mh-s2__title b { color: #316efa; font-weight: 600; }
+.mh-s2__lead { position: absolute; left: 6.944cqw; top: 18.542cqw; margin: 0;
+  font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* 손글씨 인용 (우상단) */
+.mh-s2__quote { position: absolute; left: 63.68cqw; top: 12.22cqw; width: 20.5cqw; height: 7.1cqw; margin: 0;
+  font-family: "GangwonEducationHyunokSam", "Pretendard Variable", sans-serif; }
+.mh-s2__quote p { position: absolute; left: 50%; transform: translateX(-50%); top: .3cqw; margin: 0;
+  white-space: nowrap; text-align: center; font-size: 1.528cqw; font-weight: 500; line-height: 1.4; color: #316efa; }
+.mh-s2__quote-mark { position: absolute; font-size: 2.5cqw; line-height: 1; color: #316efa; }
+.mh-s2__quote-mark--o { left: 3cqw; top: -.1cqw; }
+.mh-s2__quote-mark--c { right: 0; bottom: 0; }
+.mh-s2__quote-arrow { position: absolute; left: 0; top: 4.9cqw; width: 3.469cqw; height: 7.083cqw; display: block; }
+
+/* BEFORE / AFTER 패널 */
+.mh-s2__panel { position: absolute; top: 27.569cqw; height: 26.458cqw;
+  background: #fff; border: 1px solid #d0dee9; border-radius: 1.042cqw; }
+.mh-s2__panel--before { left: 6.944cqw; width: 32.5cqw; }
+.mh-s2__panel--after { left: 43.333cqw; width: 49.792cqw; }
+.mh-s2__pill { position: absolute; top: 1.389cqw; height: 2.361cqw; border-radius: .694cqw;
+  display: flex; align-items: center; padding: 0 .833cqw;
+  font-size: 1.111cqw; font-weight: 500; line-height: 1; color: #fff; }
+.mh-s2__pill--before { left: 1.389cqw; background: #626262; }
+.mh-s2__pill--after { left: 1.389cqw; background: #316efa; }
+.mh-s2__panel-title { position: absolute; top: 1.806cqw; left: 8.611cqw;
+  font-size: 1.111cqw; font-weight: 600; line-height: 1.4; color: #222; }
+.mh-s2__panel--after .mh-s2__panel-title { left: 7.917cqw; }
+.mh-s2__panel-desc { position: absolute; top: 5.139cqw; left: 1.389cqw; margin: 0;
+  font-size: .972cqw; font-weight: 400; line-height: 1.4; color: #222; }
+.mh-s2__before-shot { position: absolute; left: 3.264cqw; top: 9.306cqw;
+  width: 26.042cqw; height: 15.486cqw; border-radius: .556cqw; background: #eef3fb;
+  object-fit: cover; object-position: top; display: block; }
+
+/* AFTER 카테고리 카드 4 */
+.mh-s2__cat-card { position: absolute; top: 36.528cqw; width: 11.111cqw; height: 15.486cqw;
+  border-radius: .694cqw; }
+.mh-s2__cat-card--1 { left: 44.722cqw; background: #e8f1fd; }
+.mh-s2__cat-card--2 { left: 56.667cqw; background: #e0f2f5; }
+.mh-s2__cat-card--3 { left: 68.611cqw; background: #ece9fc; }
+.mh-s2__cat-card--4 { left: 80.556cqw; background: #fef2d7; }
+.mh-s2__cat-no { position: absolute; left: .694cqw; top: .694cqw;
+  font-size: 1.111cqw; font-weight: 600; line-height: 1.4; }
+.mh-s2__cat-card--1 .mh-s2__cat-no { color: #569eff; }
+.mh-s2__cat-card--2 .mh-s2__cat-no { color: #5bc8da; }
+.mh-s2__cat-card--3 .mh-s2__cat-no { color: #9682ff; }
+.mh-s2__cat-card--4 .mh-s2__cat-no { color: #ffcb57; }
+.mh-s2__cat-ico { position: absolute; left: 50%; transform: translateX(-50%); top: 2.847cqw;
+  width: 5.903cqw; height: 4.792cqw; object-fit: contain; display: block; }
+.mh-s2__cat-title { position: absolute; left: 1.042cqw; top: 8.75cqw; margin: 0;
+  font-size: 1.111cqw; font-weight: 500; line-height: 1.4; color: #222; }
+.mh-s2__cat-desc { position: absolute; left: 1.042cqw; top: 10.625cqw; margin: 0;
+  font-size: .972cqw; font-weight: 400; line-height: 1.4; color: #444; }
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
