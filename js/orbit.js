@@ -32,7 +32,13 @@
      localStorage('orbitVersion') === '3d' → 3D 실린더 회전 버전
      그 외(기본)                          → 원본(빌보드 + 마우스 따라 이동)
      토글 변경 시 값 저장 후 location.reload()(orbit 은 1회 초기화 구조). ── */
-  const ORBIT_VER = (() => { try { return localStorage.getItem("orbitVersion"); } catch (e) { return null; } })();
+  const ORBIT_VER = (() => {
+    try {
+      const p = new URLSearchParams(location.search).get("ver"); // ?ver=3d|original → 미리보기 강제
+      if (p === "3d" || p === "original") return p;
+      return localStorage.getItem("orbitVersion");
+    } catch (e) { return null; }
+  })();
   const IS_3D = ORBIT_VER === "3d";
 
   /* 우측 상단 토글 배선(존재 시) — DOM 은 defer 라 준비됨 */
@@ -80,8 +86,9 @@
   const SPIN_START = 1.8;    // [hybrid] 스핀 시작(초)
   const SPIN_DUR   = 11;     // [hybrid] 스핀 지속(초)
 
-  /* 카드 중심(이미지#4 배치) — DOM 순서와 동일 */
-  const CENTERS = [
+  /* 카드 중심(이미지#4 배치) — DOM 순서와 동일.
+     ⚠ 원본/3D 버전이 좌표를 따로 가짐(3D 만 미세조정해도 원본 안 깨지게). */
+  const CENTERS_ORIGINAL = [
     { x: 355,  y: 190 }, // visual-archive
     { x: 733,  y: 158 }, // jaringobi
     { x: 506,  y: 420 }, // gwihon  (플레디스와 위치 교환 → 좌중앙)
@@ -96,6 +103,22 @@
     { x: 733,  y: 470 }, // 상상의 문(door)
     { x: 733,  y: 285 }, // 우리 사이의 음표(playlist)
   ];
+  /* 3D(회전) 버전 전용 좌표 — 여기를 한 카드씩 미세조정. */
+  const CENTERS_3D = [
+    { x: 355,  y: 190 }, // visual-archive
+    { x: 733,  y: 158 }, // jaringobi
+    { x: 467,  y: 695 }, // gwihon   ← POZE 자리로 이동
+    { x: 293,  y: 461 }, // about
+    { x: 1184, y: 233 }, // pledis
+    { x: 960,  y: 434 }, // yumi
+    { x: 230,  y: 660 }, // poze     ← about·상상의문 중간 아래단
+    { x: 965,  y: 682 }, // content-lab
+    { x: 1174, y: 566 }, // skills
+    { x: 733,  y: 250 }, // mathhub
+    { x: 733,  y: 470 }, // 상상의 문(door)
+    { x: 733,  y: 285 }, // 우리 사이의 음표(playlist)
+  ];
+  const CENTERS = IS_3D ? CENTERS_3D : CENTERS_ORIGINAL;
 
   /* 고스트 "위치" 인덱스 범위 (CENTERS 9, 10, 11) — theta0 positioning 전용.
      ⚠ 호버/디밍과 무관: 9~11도 일반 카드처럼 호버 포커스·정상 밝기로 승격됨.
