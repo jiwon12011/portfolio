@@ -2225,6 +2225,73 @@ html.process-open { overflow: hidden; }
 .mh-s6__hex { position: absolute; left: 1.389cqw; top: 21.875cqw;
   font-size: 1.111cqw; font-weight: 500; line-height: 1.4; color: #444; }
 
+/* ── SECTION 07 · PUBLISHING TROUBLESHOOTING + OUTRO (디자인 1440×2419 → cqw = px/14.4) ── */
+.mh-s7 { aspect-ratio: 1440 / 2419; background: #ffffff;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.mh-s7__bg { position: absolute; left: 0; top: 0; width: 100cqw; height: 111.667cqw;
+  object-fit: cover; display: block; z-index: 0; }
+.mh-s7 > :not(.mh-s7__bg) { z-index: 1; }
+
+/* 라벨 / 헤딩 / 리드 */
+.mh-s7__no { position: absolute; left: 6.944cqw; top: 3.472cqw;
+  font-size: 2.083cqw; font-weight: 600; line-height: 1.2; color: #316efa; }
+.mh-s7__cat { position: absolute; left: 10.278cqw; top: 3.889cqw;
+  font-size: 1.389cqw; font-weight: 600; line-height: 1.2; color: #316efa; letter-spacing: .01em; }
+.mh-s7__title { position: absolute; left: 6.944cqw; top: 7.847cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s7__title span { color: #181a3b; }
+.mh-s7__title b { color: #316efa; font-weight: 600; }
+.mh-s7__lead { position: absolute; left: 6.944cqw; top: 18.681cqw; margin: 0;
+  font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* Commit Log 카드 */
+.mh-s7__log { position: absolute; left: 6.944cqw; top: 24.236cqw; width: 37.847cqw; height: 42.222cqw;
+  background: #fff; border: 1px solid #d0dee9; border-radius: 1.042cqw;
+  box-shadow: 0 1.111cqw 2.778cqw -1.111cqw rgba(40,70,130,.12); }
+.mh-s7__gh { position: absolute; left: 8.403cqw; top: 25.625cqw; width: 2.083cqw; height: 2.083cqw; display: block; }
+.mh-s7__log-title { position: absolute; left: 11.111cqw; top: 25.972cqw;
+  font-size: 1.111cqw; font-weight: 500; line-height: 1.4; color: #222; }
+.mh-s7__log-divider { position: absolute; left: 8.264cqw; top: 28.75cqw; width: 29.028cqw; height: 0;
+  border-top: 1px solid #d0dee9; }
+.mh-s7__timeline { position: absolute; left: 9.74cqw; top: 32.292cqw; width: 0; height: 26.389cqw;
+  border-left: 1.5px solid #316efa; }
+
+/* 커밋 도트 */
+.mh-s7__dot { position: absolute; left: 9.444cqw; width: .625cqw; height: .625cqw;
+  border-radius: 50%; background: #316efa; }
+.mh-s7__dot--1 { top: 31.944cqw; }
+.mh-s7__dot--2 { top: 40.764cqw; }
+.mh-s7__dot--3 { top: 49.583cqw; }
+.mh-s7__dot--4 { top: 58.403cqw; }
+
+/* 커밋 항목 */
+.mh-s7__commit { position: absolute; left: 12.083cqw; }
+.mh-s7__commit--1 { top: 31.597cqw; }
+.mh-s7__commit--2 { top: 40.417cqw; }
+.mh-s7__commit--3 { top: 49.236cqw; }
+.mh-s7__commit--4 { top: 57.986cqw; }
+.mh-s7__ctype { display: block; font-size: 1.111cqw; font-weight: 500; line-height: 1.4; color: #444; }
+.mh-s7__cmsg { margin: .278cqw 0 0; font-size: 1.389cqw; font-weight: 500; line-height: 1.4; color: #222; }
+
+/* 코드 에디터 */
+.mh-s7__code { position: absolute; left: 47.917cqw; top: 24.236cqw; width: 45.139cqw; height: 42.222cqw;
+  border-radius: 1.042cqw; object-fit: cover; object-position: top; display: block;
+  box-shadow: 0 1.111cqw 3.333cqw -1.111cqw rgba(20,30,60,.32); }
+
+/* 마무리 카피 (중앙) */
+.mh-s7__outro { position: absolute; left: 50%; transform: translateX(-50%); top: 80.347cqw; margin: 0;
+  width: max-content; text-align: center; font-size: 3.611cqw; font-weight: 600; line-height: 1.12; }
+.mh-s7__outro b { color: #316efa; font-weight: 600; }
+.mh-s7__outro span { color: #181a3b; }
+.mh-s7__outro-1 { position: absolute; left: 50%; transform: translateX(-50%); top: 90.486cqw; margin: 0;
+  width: max-content; text-align: center; font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+.mh-s7__outro-2 { position: absolute; left: 50%; transform: translateX(-50%); top: 94.306cqw; margin: 0;
+  width: max-content; text-align: center; font-size: 1.25cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* 마무리 히어로 (풀블리드 하단) */
+.mh-s7__hero { position: absolute; left: 0; top: 111.667cqw; width: 100cqw; height: 56.319cqw;
+  object-fit: cover; display: block; }
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
