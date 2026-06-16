@@ -1938,6 +1938,25 @@ html.process-open { overflow: hidden; }
 .process--mathhub .ptag { background: rgba(200,218,255,0.88); color: #1a4096; }
 .process--mathhub .pcard__notion { background: #4b73e8; }
 
+/* ── 우리 사이의 음표(playlist) 카드 개요 — 라벤더 글래스 ── */
+.process--playlist .pcard {
+  background: linear-gradient(160deg, rgba(255,255,255,0.60), rgba(240,234,250,0.44));
+  border-color: rgba(255,255,255,0.72); }
+.process--playlist .pcard:hover {
+  background: linear-gradient(160deg, rgba(236,228,250,0.72), rgba(218,205,240,0.56));
+  border-color: rgba(150,120,210,0.5); }
+.process--playlist .pcard h3 { color: #2a2342; }
+.process--playlist .pcard p { color: #6b5e88; }
+.process--playlist .pcard--info dt { color: #8a7bb0; }
+.process--playlist .pcard--info dd { color: #221a3a; }
+.process--playlist .pcard--info dd i { color: #8a7bb0; }
+.process--playlist .pcard__tool-label { color: #8a7bb0; }
+.process--playlist .pcard__go {
+  background: rgba(255,255,255,0.5); border-color: rgba(160,130,215,0.5); color: #6a4fa0; }
+.process--playlist .pcard:hover .pcard__go { background: rgba(138,111,200,0.5); color: #fff; }
+.process--playlist .ptag { background: rgba(216,204,240,0.9); color: #4a3d6e; }
+.process--playlist .pcard__notion { background: #8a6fc0; }
+
 /* ── MathHub 제작 과정 본문 (한 섹션씩 추가) — 소프트블루 ── */
 .process__making--mathhub { background: #eaf2fd; box-shadow: 0 24px 60px -32px rgba(110,140,200,0.42); }
 .mh-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf2fd; }
