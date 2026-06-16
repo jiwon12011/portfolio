@@ -8,7 +8,7 @@
   const grid = document.getElementById("banner-grid");
   if (!grid) return;
 
-  /* 배너 데이터 — 세로배너(2열) 먼저, 가로배너(wide=풀폭 한 줄씩) 아래로. ar = 종횡비(공간 확보) */
+  /* 배너 데이터 — 2열 그리드, 한 줄에 2개씩. 같은 종횡비끼리 묶여 행이 가지런. ar = 종횡비(공간 확보) */
   const BANNERS = [
     { src: "img/banner/promo-spring.webp",       cap: "봄 프로모션 배너",     ar: "4/5" },
     { src: "img/banner/promo-summer.webp",       cap: "여름 프로모션 배너",   ar: "4/5" },
@@ -18,13 +18,6 @@
     { src: "img/banner/bagel.webp",              cap: "치즈 베이글",          ar: "4/5" },
     { src: "img/banner/poster-drunk.webp",       cap: "만취남녀",            ar: "7/10" },
     { src: "img/banner/poster-garbagetime.webp", cap: "가비지타임",          ar: "7/10" },
-    { src: "img/banner/graphic.webp",            cap: "그래픽 기초",          ar: "2/1",   wide: true },
-    { src: "img/banner/strip-poze.webp",         cap: "POZE 띠배너",          ar: "86/20", wide: true },
-    { src: "img/banner/strip-personalcolor.webp",cap: "퍼스널컬러 띠배너",    ar: "86/20", wide: true },
-    { src: "img/banner/strip-scissors.webp",     cap: "가위 띠배너",          ar: "86/20", wide: true },
-    { src: "img/banner/strip-wine.webp",         cap: "와인 띠배너",          ar: "86/20", wide: true },
-    { src: "img/banner/strip-zerowaste.webp",    cap: "제로웨이스트 띠배너",  ar: "86/20", wide: true },
-    { src: "img/banner/strip-watch.webp",        cap: "워치 띠배너",          ar: "86/20", wide: true },
   ];
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 

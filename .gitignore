@@ -13,6 +13,13 @@
 # 배너 원본(webp만 커밋)
 /무제 폴더/
 
+# 제작과정 섹션 원본(대용량 PNG/MP4) — webp/최적화본만 커밋, raw 소스는 로컬 보관
+img/**/raw/
+# 루트에 임시로 떨군 원본 드롭(변환 후 raw 로 정리하거나 삭제)
+/image */*.png
+/image *.png
+/icons_transparent_background_clean*.png
+
 # 안 쓰는 잡파일 보관함(로컬 정리)
 /_unused/
 .src-png/

@@ -17,7 +17,7 @@
 | 유미의 세포들 | `#process-yumi` | ✅ 완성 (making-yumi.js, smooth-process 적용) |
 | MathHub | `#process-mathhub` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
 | 상상의 문 | `#process-sangsang` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
-| 우리 사이의 음표 | `#process-playlist` | ⏳ 셸만 있음 — 본문 섹션 미추가 |
+| 우리 사이의 음표 | `#process-playlist` | 🔨 본문 6섹션 완성 — pl1 개요·pl2 컨셉·pl3 랜딩디자인·pl4 게임시스템(멀티루트,하트미터 CSS)·pl5 구현구조·pl6 내러티브(타임라인+캐릭터6). Figma → cqw 포팅, `pl-*` 클래스, 에셋 `img/playlist_game/process/`, 원본 `raw/`. nav 6개(상한 6). 남은 일: 상단 인트로 셸(plsec-01) POZE식 교체. pl3·pl6 배경은 전용 이미지 없어 그라데이션 대체 |
 | 플레디스 | `#process-pledis` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 (영상: pledis_process.mp4) |
 
 ### 콘텐츠 추가할 때 할 일 (⏳ 프로젝트)

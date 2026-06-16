@@ -303,19 +303,12 @@
     if (totalBlur > 0.05) f.push(`blur(${totalBlur.toFixed(2)}px)`);
     if (bright < 0.999) f.push(`brightness(${bright.toFixed(3)})`);
 
-    /* ③ 포커스 카드 블룸: drop-shadow 2겹 (파란/흰, 최대 ~22px)
-       transform:scale 에 따라가므로 box-shadow 대신 filter:drop-shadow 사용 */
-    if (focusGlow && focusGlow > 0.02) {
-      const g = focusGlow;
-      /* glow1: 흰 코어 글로우(작고 선명) — 은은하게 */
-      const r1 = (6  * g).toFixed(1);
-      const a1 = (0.42 * g).toFixed(3);
-      /* glow2: 파란 헤일로(넓고 부드럽) — 은은하게 */
-      const r2 = (16 * g).toFixed(1);
-      const a2 = (0.26 * g).toFixed(3);
-      f.push(`drop-shadow(0 0 ${r1}px rgba(230,245,255,${a1}))`);
-      f.push(`drop-shadow(0 4px ${r2}px rgba(100,170,255,${a2}))`);
-    }
+    /* ③ 포커스 블룸: filter:drop-shadow 대신 .card::after(box-shadow) 글로우로 처리.
+       filter + transform:scale 를 같은 요소에 동시 적용하면 카드 콘텐츠가 원래 크기로
+       래스터된 뒤 scale 로 확대돼 이미지·텍스트가 흐려진다(포커스 카드 ~1.1배). 글로우
+       강도만 --fglow 로 넘겨 자식(.card::after) 의 opacity 로 표현 → 포커스 카드는 filter
+       가 사라져 선명하게 확대된다. */
+    arm.style.setProperty("--fglow", (focusGlow && focusGlow > 0.02 ? focusGlow : 0).toFixed(3));
 
     arm.style.filter = f.length ? f.join(" ") : "none";
   }
@@ -356,16 +349,9 @@
     if (totalBlur > 0.05) f.push(`blur(${totalBlur.toFixed(2)}px)`);
     if (bright < 0.999)   f.push(`brightness(${bright.toFixed(3)})`);
 
-    /* ③ 포커스 카드 블룸: drop-shadow 2겹 (흰 코어 + 파란 헤일로) */
-    if (focusGlow && focusGlow > 0.02) {
-      const g  = focusGlow;
-      const r1 = (6  * g).toFixed(1);
-      const a1 = (0.42 * g).toFixed(3);
-      const r2 = (16 * g).toFixed(1);
-      const a2 = (0.26 * g).toFixed(3);
-      f.push(`drop-shadow(0 0 ${r1}px rgba(230,245,255,${a1}))`);
-      f.push(`drop-shadow(0 4px ${r2}px rgba(100,170,255,${a2}))`);
-    }
+    /* ③ 포커스 블룸: .card::after(box-shadow) 글로우로 처리 — filter+scale 동시 적용 시
+       콘텐츠가 래스터 후 확대돼 흐려지는 문제 회피(--fglow 로 강도 전달). */
+    arm.style.setProperty("--fglow", (focusGlow && focusGlow > 0.02 ? focusGlow : 0).toFixed(3));
     arm.style.filter = f.length ? f.join(" ") : "none";
   }
 
