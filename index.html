@@ -4219,6 +4219,7 @@
           <li><a href="#pl4" data-track="pl4"><b>04</b><span><h4>게임 시스템</h4><i>GAME SYSTEM</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
           <li><a href="#pl5" data-track="pl5"><b>05</b><span><h4>구현 구조</h4><i>IMPLEMENTATION</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
           <li><a href="#pl6" data-track="pl6"><b>06</b><span><h4>내러티브</h4><i>NARRATIVE DESIGN</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#pl7" data-track="pl7"><b>07</b><span><h4>트러블슈팅</h4><i>TROUBLESHOOTING</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
         </ol>
         <a class="process__cta" href="https://jiwon12011.github.io/music-note_game/" target="_blank" rel="noopener" aria-label="우리 사이의 음표 랜딩 바로가기">
           <span>GO TO WEB</span>
@@ -4529,6 +4530,54 @@
               <img class="pl-narcard__fig" src="img/playlist_game/process/pl_nar_c6.webp" alt="최준혁" loading="lazy">
               <div class="pl-narcard__txt"><p class="pl-narcard__name">최준혁</p><p class="pl-narcard__type">정체해제형</p><p class="pl-narcard__desc">모두에게 친절한 집주인의 이유<br>잠긴 방, 떠난 사람, 멈춘 시계가<br>다시 움직이며 진심을 드러내는 구조</p></div>
             </article>
+          </section>
+
+          <!-- SECTION 07 · TROUBLESHOOTING + 클로징 (디자인 1440×2262 → cqw=px/14.4) -->
+          <section class="pl-sec pl-ts-sec" id="pl7">
+            <span class="pl-ts-top" aria-hidden="true"></span>
+            <span class="pl-badge pl-badge--7" aria-hidden="true">07</span>
+            <p class="pl-eyebrow pl-ts__eyebrow">TROUBLESHOOTING</p>
+            <h3 class="pl-ts__title"><span>선택지부터 엔딩까지,<br>끊김 없이 이어지는 </span><em>플레이 경험</em><span>으로</span></h3>
+            <span class="pl-ts__rule" aria-hidden="true"></span>
+            <p class="pl-ts__lead">비주얼노벨은 화면을 예쁘게 구성하는 것뿐 아니라, 선택지, 세이브, 루트 분기, 엔딩 조건이 끝까지 안정적으로 작동해야 했습니다.<br><br>제작 과정에서는 분기 도달 여부, 기존 세이브 충돌, 선택지 UI 오류, 사운드 자산 부족 등<br>실제 플레이 과정에서 발생할 수 있는 문제를 테스트하며 개선했습니다.</p>
+
+            <!-- ISSUE 카드 3 -->
+            <article class="pl-ts pl-ts--1">
+              <span class="pl-ts__chip"><img src="img/playlist_game/process/pl_ts_ic1.webp" alt="" aria-hidden="true"></span>
+              <p class="pl-ts__no">ISSUE 01</p>
+              <h4 class="pl-ts__title2">ROUTE BALANCE</h4>
+              <p class="pl-ts__sub">도달 불가능한 루트와 엔딩</p>
+              <span class="pl-ts__tag pl-ts__tag--p">문제</span><p class="pl-ts__row pl-ts__row--p">호감도 기준이 실제 플레이 흐름과 맞지 않아<br>특정 루트 진입이 어려웠습니다.</p>
+              <span class="pl-ts__tag pl-ts__tag--s">해결</span><p class="pl-ts__row pl-ts__row--s">inkjs 헤드리스 시뮬레이션으로<br>플레이 패턴별 자동 검증을 진행했습니다.</p>
+              <span class="pl-ts__tag pl-ts__tag--r">결과</span><p class="pl-ts__row pl-ts__row--r">루트 진입과 엔딩 기준을 재조정해<br>모든 루트가 엔딩까지 이어지도록 개선했습니다.</p>
+            </article>
+            <article class="pl-ts pl-ts--2">
+              <span class="pl-ts__chip"><img src="img/playlist_game/process/pl_ts_ic2.webp" alt="" aria-hidden="true"></span>
+              <p class="pl-ts__no">ISSUE 02</p>
+              <h4 class="pl-ts__title2">SAVE GUARD</h4>
+              <p class="pl-ts__sub">구조 변경 후 세이브 충돌 위험</p>
+              <span class="pl-ts__tag pl-ts__tag--p">문제</span><p class="pl-ts__row pl-ts__row--p">스토리 구조 수정 후 기존 세이브 데이터와<br>새 스토리 구조가 충돌할 위험이 있었습니다.</p>
+              <span class="pl-ts__tag pl-ts__tag--s">해결</span><p class="pl-ts__row pl-ts__row--s">storyV 버전 가드와 LoadJson try/catch,<br>안전 폴백 처리를 추가했습니다.</p>
+              <span class="pl-ts__tag pl-ts__tag--r">결과</span><p class="pl-ts__row pl-ts__row--r">잘못된 세이브 데이터로 인한<br>크래시를 방지할 수 있었습니다.</p>
+            </article>
+            <article class="pl-ts pl-ts--3">
+              <span class="pl-ts__chip"><img src="img/playlist_game/process/pl_ts_ic3.webp" alt="" aria-hidden="true"></span>
+              <p class="pl-ts__no">ISSUE 03</p>
+              <h4 class="pl-ts__title2">SOUND DESIGN</h4>
+              <p class="pl-ts__sub">음악 게임인데 음원이 없는 문제</p>
+              <span class="pl-ts__tag pl-ts__tag--p">문제</span><p class="pl-ts__row pl-ts__row--p">음악을 주요 소재로 삼았지만<br>별도로 사용할 수 있는 음원 자산이 없었습니다.</p>
+              <span class="pl-ts__tag pl-ts__tag--s">해결</span><p class="pl-ts__row pl-ts__row--s">Web Audio API를 활용해 별도 음원 파일 없이<br>장면별 배경음을 코드로 생성했습니다.</p>
+              <span class="pl-ts__tag pl-ts__tag--r">결과</span><p class="pl-ts__row pl-ts__row--r">음원 파일 없이도 장면별 분위기를 만들고<br>게임의 몰입감을 높일 수 있었습니다.</p>
+            </article>
+
+            <!-- 클로징 밴드 -->
+            <span class="pl-close-band" aria-hidden="true"></span>
+            <h3 class="pl-close__title"><span>랜딩에서 플레이까지,<br></span><em>하나의 흐름으로 연결</em><span>한 비주얼노벨 웹</span></h3>
+            <p class="pl-close__p1">플레이리스트 : 우리 사이의 음표는 게임의 분위기를 소개하는 랜딩페이지에서 시작해<br>선택지, 호감도, 루트 분기, 세이브, 멀티엔딩이 작동하는 비주얼노벨 게임으로 이어지는 프로젝트입니다.</p>
+            <p class="pl-close__p2">이번 프로젝트를 통해 비주얼노벨에서 중요한 것은 장면을 많이 보여주는 것이 아니라,<br>사용자의 선택이 관계를 바꾸고 그 관계가 다시 루트와 엔딩으로 이어지는 구조를 설계하는 것임을 배웠습니다.</p>
+
+            <!-- 최종 히어로 -->
+            <img class="pl-ts__hero" src="img/playlist_game/process/pl_ts_hero.webp" alt="우리 사이의 음표 — The End" loading="lazy">
           </section>
         </div>
       </div>

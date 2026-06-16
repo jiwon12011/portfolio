@@ -3252,6 +3252,56 @@ html.process-open { overflow: hidden; }
 .pl-narcard__type { position: absolute; top: 5.486cqw; margin: 0; font-size: 1.389cqw; font-weight: 500; color: #e67889; }
 .pl-narcard__desc { position: absolute; top: 7.431cqw; margin: 0; font-size: 1.06cqw; font-weight: 500; line-height: 1.45; color: #444; }
 
+/* ============================================================
+   SECTION 07 · TROUBLESHOOTING + 클로징 (1440×2262 → cqw=px/14.4)
+   ============================================================ */
+.pl-ts-sec { aspect-ratio: 1440 / 2262; background: #fed7d6; }
+.pl-ts-top { position: absolute; left: 0; top: 0; width: 100%; height: 65.139cqw;
+  background: linear-gradient(180deg, #fdf8f3 0%, #fed7d6 100%); }
+.pl-badge--7 { left: 6.944cqw; top: 6.944cqw; }
+.pl-ts__eyebrow { left: 11.736cqw; top: 7.431cqw; color: #ee786a; }
+.pl-ts__title { position: absolute; left: 6.944cqw; top: 10.486cqw; margin: 0;
+  font-size: 3.611cqw; font-weight: 600; line-height: 1.12; white-space: nowrap; }
+.pl-ts__title em { font-style: normal; color: #e67889; }
+.pl-ts__title span { color: #222; }
+.pl-ts__rule { position: absolute; left: 6.944cqw; top: 20.764cqw; width: 0.139cqw; height: 5.972cqw; background: #e48b93; }
+.pl-ts__lead { position: absolute; left: 8.056cqw; top: 20.625cqw; margin: 0;
+  font-size: 1.111cqw; font-weight: 500; line-height: 1.4; color: #444; }
+
+/* ISSUE 카드 3 */
+.pl-ts { position: absolute; width: 26.944cqw; height: 26.597cqw; background: #fff;
+  border: 1px solid #e48b93; border-radius: 1.042cqw;
+  box-shadow: 0 0.8cqw 2.2cqw -1.2cqw rgba(207,95,142,0.28); }
+.pl-ts--1 { left: 6.944cqw;  top: 30.208cqw; }
+.pl-ts--2 { left: 36.528cqw; top: 30.208cqw; }
+.pl-ts--3 { left: 66.111cqw; top: 30.208cqw; }
+.pl-ts__chip { position: absolute; left: 1.528cqw; top: 1.458cqw; width: 6.944cqw; height: 7.361cqw;
+  background: #fdf0f0; border: 1px solid #e67889; border-radius: 1.042cqw; display: grid; place-items: center; }
+.pl-ts__chip img { width: 5cqw; height: auto; display: block; }
+.pl-ts__no { position: absolute; left: 9.722cqw; top: 1.667cqw; margin: 0; font-size: 1.042cqw; font-weight: 500; color: #de617c; }
+.pl-ts__title2 { position: absolute; left: 9.722cqw; top: 4.861cqw; margin: 0; font-size: 1.806cqw; font-weight: 600; color: #222; }
+.pl-ts__sub { position: absolute; left: 9.722cqw; top: 7.361cqw; margin: 0; font-size: 1.111cqw; font-weight: 400; color: #e67889; }
+.pl-ts__tag { position: absolute; left: 1.528cqw; width: 3.333cqw; height: 1.944cqw; border-radius: 1cqw;
+  background: #fdf0f0; border: 1px solid #e67889; display: grid; place-items: center;
+  font-size: 0.972cqw; font-weight: 600; color: #e67889; }
+.pl-ts__row { position: absolute; left: 5.694cqw; right: 1.4cqw; margin: 0; font-size: 1.042cqw; font-weight: 400; line-height: 1.4; color: #444; }
+.pl-ts__tag--p, .pl-ts__row--p { top: 11.875cqw; }
+.pl-ts__tag--s, .pl-ts__row--s { top: 16.597cqw; }
+.pl-ts__tag--r, .pl-ts__row--r { top: 21.319cqw; }
+
+/* 클로징 밴드 */
+.pl-close__title { position: absolute; left: 50%; transform: translateX(-50%); top: 72.083cqw; margin: 0;
+  width: max-content; text-align: center; font-size: 3.611cqw; font-weight: 500; line-height: 1.12; }
+.pl-close__title em { font-style: normal; color: #e67889; }
+.pl-close__title span { color: #444; }
+.pl-close__p1, .pl-close__p2 { position: absolute; left: 50%; transform: translateX(-50%); margin: 0;
+  width: max-content; text-align: center; font-size: 1.25cqw; font-weight: 500; line-height: 1.45; color: #444; }
+.pl-close__p1 { top: 82.917cqw; }
+.pl-close__p2 { top: 88.472cqw; }
+
+/* 최종 히어로 */
+.pl-ts__hero { position: absolute; left: 0; top: 101.042cqw; width: 100%; height: 56.042cqw; object-fit: cover; display: block; }
+
 .process__making--pledis { background: #0f1320; box-shadow: 0 24px 60px -32px rgba(30,40,80,0.5); }
 .pd-sec { position: relative; container-type: inline-size; overflow: hidden; background: #0f1320; }
 .pd-r1::before,
