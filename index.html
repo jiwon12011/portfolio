@@ -47,25 +47,21 @@
 
   <!-- ── 로딩 스플래시: 좌상단 워드마크 타이핑 (즉시 페인트, 다 쳐지면 페이드 → 메인) ── -->
   <style>
-    #splash{position:fixed;inset:0;z-index:99999;background:#0a0b11;
-      transition:opacity .6s ease;}
+    #splash{position:fixed;inset:0;z-index:99999;background:#0a0b11;transition:opacity .6s ease;}
     #splash.leaving{opacity:0;}
-    #splash .splash-name{position:absolute;left:clamp(28px,3.4vw,65px);top:clamp(28px,3.4vw,65px);
-      margin:0;display:inline-flex;align-items:baseline;gap:10px;
-      font-family:"Pretendard Variable",Pretendard,sans-serif;
-      font-size:14px;font-weight:700;letter-spacing:.14em;color:#fff;text-shadow:0 1px 10px rgba(10,18,40,.5);}
-    #splash .splash-name .mk{font-size:17px;font-weight:800;opacity:.92;}
-    #splash .splash-name .tx{white-space:pre;}
-    #splash .splash-name .cur{display:inline-block;width:2px;height:1.05em;background:#fff;
-      margin-left:2px;transform:translateY(2px);animation:caret .85s steps(1,end) infinite;}
+    /* 워드마크는 .scene-name / .scene-name__mark 스타일을 그대로 상속 → 메인과 위치·모양 100% 동일 */
+    #splash .scene-name{z-index:1;}
+    #splash .sp-tw{display:inline-flex;align-items:center;}
+    #splash .cur{display:inline-block;width:2px;height:0.95em;background:#fff;margin-left:3px;
+      animation:caret .85s steps(1,end) infinite;}
     @keyframes caret{0%,50%{opacity:1;}50.01%,100%{opacity:0;}}
-    @media (prefers-reduced-motion:reduce){ #splash .splash-name .cur{animation:none;opacity:0;} }
+    @media (prefers-reduced-motion:reduce){ #splash .cur{animation:none;opacity:0;} }
   </style>
 </head>
 <body>
   <!-- 로딩 스플래시: 좌상단 워드마크 타이핑 -->
   <div id="splash" aria-hidden="true">
-    <p class="splash-name"><span class="mk">#</span><span class="tx"></span><span class="cur"></span></p>
+    <p class="scene-name"><span class="scene-name__mark material-symbols-outlined" aria-hidden="true">tag</span><span class="sp-tw"><span class="tx"></span><span class="cur"></span></span></p>
   </div>
   <script>
   (function(){
