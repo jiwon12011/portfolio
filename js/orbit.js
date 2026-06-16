@@ -29,9 +29,10 @@
    ====================================================================== */
 (() => {
   /* ── 메인 버전 전환(우측 상단 토글) ────────────────────────────────
-     localStorage('orbitVersion') === '3d' → 3D 실린더 회전 버전
-     그 외(기본)                          → 원본(빌보드 + 마우스 따라 이동)
-     토글 변경 시 값 저장 후 location.reload()(orbit 은 1회 초기화 구조). ── */
+     localStorage('orbitVersion') === 'original' → 원본(빌보드 + 마우스 따라 이동)
+     그 외(기본)                                 → 3D 실린더 회전 버전  ← 현재 기본
+     토글 변경 시 값 저장 후 location.reload()(orbit 은 1회 초기화 구조).
+     ※ 토글 UI 는 CSS 로 숨겼지만 배선·localStorage 기능은 그대로 유지. ── */
   const ORBIT_VER = (() => {
     try {
       const p = new URLSearchParams(location.search).get("ver"); // ?ver=3d|original → 미리보기 강제
@@ -39,7 +40,8 @@
       return localStorage.getItem("orbitVersion");
     } catch (e) { return null; }
   })();
-  const IS_3D = ORBIT_VER === "3d";
+  /* 기본값 = 3D 회전. localStorage 가 명시적으로 'original' 일 때만 원본. */
+  const IS_3D = ORBIT_VER === "original" ? false : true;
 
   /* 우측 상단 토글 배선(존재 시) — DOM 은 defer 라 준비됨 */
   (function wireVerToggle() {

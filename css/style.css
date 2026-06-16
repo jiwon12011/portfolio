@@ -152,6 +152,12 @@ html:not(.deck-ready) body::before {
 .orbit-edit__copy { width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; cursor: pointer;
   background: #4b73e8; border: none; color: #fff; font-size: 12px; font-weight: 600; }
 
+/* ── 임시 개발용 컨트롤 숨김 ──────────────────────────────────────────
+   버전 토글(.ver-toggle) · 회전 멈춤(.orbit-pause) · 위치 편집(.orbit-edit-btn)
+   세 컨트롤은 화면에서만 감춤. DOM·JS 배선·localStorage 기능은 그대로라
+   다시 보려면 이 한 줄만 지우면 됨. */
+.ver-toggle, .orbit-pause, .orbit-edit-btn { display: none !important; }
+
 
 .scene__photo,
 .scene__character {
