@@ -2518,6 +2518,82 @@ html.process-open { overflow: hidden; }
 .process--gwihon .pcard__notion { background: #e6b46a; }
 /* GO TO WEB 카드도 나머지 카드와 동일한 기본 호버 효과로 통일(특수 오버라이드 없음) */
 
+/* ====================================================================
+   상상의 문 — 차가운 near-black 글래스 + 샴페인 골드
+   (귀혼 골드 구조 베이스, 톤만 더 어둡고 쿨하게)
+==================================================================== */
+.process--sangsang .process__exit-glass { background: rgba(28,26,34,0.5); border-color: rgba(232,212,150,0.26); }
+.process--sangsang .process__exit-label { color: rgba(240,232,216,0.95); }
+.process--sangsang .process__exit-arrow svg { stroke: rgba(240,232,216,0.82); }
+.process--sangsang .process__exit-fill { background: rgba(238,214,142,0.92); }
+.process--sangsang.is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(244,218,140,.95), rgba(212,170,80,1)); box-shadow: 0 0 10px rgba(212,170,80,.55); }
+
+.process--sangsang .process__panel {
+  background: linear-gradient(158deg, rgba(34,32,42,0.55), rgba(18,17,24,0.42));
+  border-color: rgba(232,212,150,0.16);
+}
+.process--sangsang .process__nav {
+  background: linear-gradient(160deg, rgba(28,26,36,0.52), rgba(16,15,22,0.38));
+  border-color: rgba(232,212,150,0.14);
+}
+.process--sangsang .process__hero { background: #0e0d14; }
+.process--sangsang .process__back { color: #ece4d2; }
+.process--sangsang .process__back:hover { color: #fff; }
+.process--sangsang .process__label { color: #b0a890; }
+.process--sangsang .process__eq i { background: linear-gradient(180deg, #f2d98c, #c9a44f); } /* 샴페인 골드 */
+.process--sangsang .process__tracks b { color: #b0a280; }
+.process--sangsang .process__tracks h4 { color: #ede5d2; }
+.process--sangsang .process__tracks i { color: #9c8f74; }
+.process--sangsang .process__tplay { fill: #c9b88f; }
+.process--sangsang .process__tracks a:hover {
+  background: rgba(235,205,130,0.10); border-color: rgba(226,196,120,0.24); }
+/* active = 샴페인 골드 패널 + 어두운 갈색 글자 */
+.process--sangsang .process__tracks .is-active a {
+  background: linear-gradient(155deg, rgba(238,214,142,0.96), rgba(212,178,100,0.95));
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: 0 13px 28px -14px rgba(30,22,6,0.6), inset 0 1px 1px rgba(255,255,255,0.6);
+}
+.process--sangsang .process__tracks .is-active b { color: #6f5526; }
+.process--sangsang .process__tracks .is-active h4 { color: #322610; }
+.process--sangsang .process__tracks .is-active i { color: rgba(50,38,16,0.62); }
+.process--sangsang .process__tracks .is-active .process__tplay { fill: #6f5526; }
+/* GO TO WEB — 샴페인 골드 고스트 */
+.process--sangsang .process__cta {
+  color: #eccf86; background: rgba(255,255,255,0.06); border-color: rgba(226,196,120,0.5); }
+.process--sangsang .process__cta:hover {
+  background: rgba(226,196,120,0.16); border-color: rgba(226,196,120,0.85); }
+/* NOW PLAYING */
+.process--sangsang .process__now {
+  background: linear-gradient(160deg, rgba(30,28,38,0.58), rgba(18,17,24,0.44));
+  border-color: rgba(232,212,150,0.14); }
+.process--sangsang .process__now-art {
+  background: radial-gradient(115% 115% at 50% 38%, rgba(58,48,78,0.5), rgba(14,12,20,0.94));
+  box-shadow: inset 0 0 0 1px rgba(240,216,150,0.14); }
+.process--sangsang .process__now-meta span { color: #9c8f74; }
+.process--sangsang .process__now-meta strong { color: #f1e8d6; }
+.process--sangsang .process__now-ctrl button { color: #d6c9b4; }
+.process--sangsang .process__now-ctrl button:hover { color: #fff; }
+/* 카드 */
+.process--sangsang .pcard {
+  background: linear-gradient(160deg, rgba(38,36,46,0.52), rgba(22,21,28,0.40));
+  border-color: rgba(232,212,150,0.14); }
+.process--sangsang .pcard:hover {
+  background: linear-gradient(160deg, rgba(50,47,58,0.58), rgba(30,28,38,0.46));
+  border-color: rgba(232,212,150,0.42); }
+.process--sangsang .pcard h3 { color: #f2ebd9; }
+.process--sangsang .pcard p { color: #bcb29c; }
+.process--sangsang .pcard--info dt { color: #b4a890; }
+.process--sangsang .pcard--info dd { color: #ede5d2; }
+.process--sangsang .pcard--info dd i { color: #9c8f74; }
+.process--sangsang .pcard__tool-label { color: #b4a890; }
+.process--sangsang .pcard__go {
+  background: rgba(255,255,255,0.10); border-color: rgba(240,228,200,0.30); color: #ece4d2; }
+.process--sangsang .pcard:hover .pcard__go { background: rgba(226,184,100,0.45); color: #fff; }
+/* ptag = 샴페인 골드 */
+.process--sangsang .ptag { background: rgba(238,214,142,0.92); color: #4e3a12; }
+/* 노션 배지 — 골드 */
+.process--sangsang .pcard__notion { background: #e6c46a; }
+
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--gwihon { background: #1a1410; box-shadow: 0 24px 60px -32px rgba(20,12,6,0.55); }
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }

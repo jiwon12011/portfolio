@@ -3781,8 +3781,11 @@
           <span class="process__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
         </p>
         <ol class="process__tracks">
-          <!-- TODO: 섹션 목차 추가 -->
-          <li><a href="#ss1" data-track="ss1"><b>01</b><span><h4>개요</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss1" data-track="ss1"><b>01</b><span><h4>브랜드 소개</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss2" data-track="ss2"><b>02</b><span><h4>비주얼 무드</h4><i>VISUAL DIRECTION</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss3" data-track="ss3"><b>03</b><span><h4>사용자 경험</h4><i>EXPERIENCE</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss4" data-track="ss4"><b>04</b><span><h4>리빌드 과정</h4><i>REBUILD</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss5" data-track="ss5"><b>05</b><span><h4>결과 및 마무리</h4><i>OUTCOME</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
         </ol>
         <!-- TODO: href에 실제 링크 연결 -->
         <a class="process__cta" href="https://doorlove1234-coder.github.io/sangsangDoor/" target="_blank" rel="noopener" aria-label="상상의 문 바로가기">
@@ -3808,13 +3811,59 @@
             <video class="process__hero-media" src="img/sangsangdoor/sangsangdoor_process.mp4"
                    muted loop autoplay playsinline preload="metadata"></video>
           </div>
-          <div class="process__soon">
-            <span class="process__soon-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-            <p class="process__soon-tag">COMING SOON</p>
-            <h3>제작 과정을 준비 중입니다</h3>
-            <p>이 프로젝트의 메이킹 스토리는 곧 공개됩니다.</p>
+          <div class="process__cards">
+            <article class="pcard pcard--info">
+              <h3>Team Project</h3>
+              <dl>
+                <dt>Period</dt><dd>3weeks <i>(24.04)</i></dd>
+                <dt>Contribution</dt><dd>기획 · 디자인 · 퍼블리싱</dd>
+              </dl>
+              <p class="pcard__tool-label">Tool</p>
+              <div class="pcard__tools">
+                <img src="img/jaringobi/process/FIGMA.webp" alt="Figma" />
+                <img src="img/jaringobi/process/PHOTOSHOP.webp" alt="Photoshop" />
+              </div>
+            </article>
+
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="https://doorlove1234-coder.github.io/sangsangDoor/" target="_blank" rel="noopener" aria-label="상상의 문 웹사이트 바로가기"></a>
+              <span class="ptag">LIVE SITE</span>
+              <h3>웹사이트 바로가기</h3>
+              <p>상상의문 공식 웹사이트</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/sangsangdoor/sangsangdoor_live.webp" alt="상상의 문 웹사이트 목업" />
+            </article>
+
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="https://sour-homburg-988.notion.site/380a90bb4a50802e9895c72be7580d5f" target="_blank" rel="noopener" aria-label="상상의 문 제작 과정 (Notion)"></a>
+              <span class="ptag">CASE STUDY</span>
+              <h3>제작 과정 보기</h3>
+              <p>리디자인 과정과 주요 설계</p>
+              <div class="pcard__shotwrap">
+                <span class="pcard__notion" aria-hidden="true"><img src="img/jaringobi/notion_icon.png" alt="" /></span>
+                <img class="pcard__shot" src="img/sangsangdoor/sangsangdoor_case.webp" alt="상상의 문 제작 과정" />
+              </div>
+            </article>
+
+            <!-- TODO: 제안서 전용 배포 URL 받으면 href 교체 -->
+            <article class="pcard pcard--shot">
+              <span class="pcard__go" aria-hidden="true">&#8594;</span>
+              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="상상의 문 제안서 및 결과 보기"></a>
+              <span class="ptag">PROPOSAL</span>
+              <h3>제안서 및 결과 보기</h3>
+              <p>클라이언트 제안서 &amp; 최종 결과</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/sangsangdoor/sangsangdoor_proposal.webp" alt="상상의 문 제안서" />
+            </article>
           </div>
         </section>
+
+        <div class="process__soon">
+          <span class="process__soon-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          <p class="process__soon-tag">COMING SOON</p>
+          <h3>제작 과정을 준비 중입니다</h3>
+          <p>이 프로젝트의 메이킹 스토리는 곧 공개됩니다.</p>
+        </div>
       </div>
     </div>
   </div>
