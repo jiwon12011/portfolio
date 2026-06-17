@@ -24,6 +24,7 @@
     const tracks  = [...modal.querySelectorAll(".process__tracks li")];
     const anchors = tracks.map((li) => li.querySelector("a"));
     const heroVid = modal.querySelector(".process__hero-media");
+    const doorVid = modal.querySelector(".ss-story-pg__door");   /* 상상의문 메인 문 영상 (open 에서 src 주입) */
 
     /* 이미지 디코딩을 메인 스레드 밖에서 → 스크롤 중 디코딩 블로킹/freeze 완화 */
     modal.querySelectorAll("img").forEach((i) => { i.decoding = "async"; });
@@ -54,6 +55,7 @@
       content.scrollTop = 0;                                 /* 재오픈은 항상 상단부터 */
       requestAnimationFrame(() => { content.scrollTop = 0; updateSpy(); });  /* 렌더 후 한 번 더 확실히 */
       if (heroVid) { heroVid.muted = true; const p = heroVid.play(); if (p && p.catch) p.catch(() => {}); }
+      if (doorVid) { if (!doorVid.src) doorVid.src = "img/sangsangdoor/process/ss_door.mp4"; doorVid.muted = true; const pd = doorVid.play(); if (pd && pd.catch) pd.catch(() => {}); }
       document.querySelectorAll(".project-intro video").forEach((v) => v.pause());
       if (window.__makingRefresh) requestAnimationFrame(() => { window.__makingRefresh(); content.scrollTop = 0; });
     };
@@ -63,6 +65,7 @@
       modal.setAttribute("aria-hidden", "true");
       document.documentElement.classList.remove("process-open");
       if (heroVid) heroVid.pause();
+      if (doorVid) doorVid.pause();
       const back = document.querySelector(".project-intro.is-active video");
       if (back) setTimeout(() => {                           /* display:none·합성 flush 이후 디코더 시작 */
         if (back.readyState < 2) back.load();

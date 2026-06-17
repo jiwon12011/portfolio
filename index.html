@@ -35,6 +35,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" media="print" onload="this.media='all'"
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" />
+  <!-- Cormorant Garamond (상상의 문 제작과정 세리프) — 비동기 -->
+  <link rel="stylesheet" media="print" onload="this.media='all'"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap" />
   <!-- Material Symbols (인트로 아이콘 — 히어로엔 없음) — 렌더 블로킹 해제: 비동기 로드.
        display=block 유지로 폰트 전 raw 텍스트(ligature) 노출 방지(로드되면 나타남) -->
   <link rel="preload" as="style"
@@ -3815,20 +3818,22 @@
             <article class="pcard pcard--info">
               <h3>Team Project</h3>
               <dl>
-                <dt>Period</dt><dd>3weeks <i>(24.04)</i></dd>
-                <dt>Contribution</dt><dd>기획 · 디자인 · 퍼블리싱</dd>
+                <dt>Period</dt><dd>2 weeks <i>(26.05.27 - 06.10)</i></dd>
+                <dt>Contribution</dt><dd>80% <i>(기획, 디자인, 개발, 영업)</i></dd>
               </dl>
               <p class="pcard__tool-label">Tool</p>
               <div class="pcard__tools">
-                <img src="img/jaringobi/process/FIGMA.webp" alt="Figma" />
-                <img src="img/jaringobi/process/PHOTOSHOP.webp" alt="Photoshop" />
+                <img src="img/pledis/tool_figma.webp" alt="Figma" />
+                <img src="img/pledis/tool_openai.webp" alt="ChatGPT" />
+                <img src="img/pledis/tool_claude.webp" alt="Claude" />
+                <img src="img/pledis/tool_codex.webp" alt="Codex" />
               </div>
             </article>
 
             <article class="pcard pcard--shot">
               <span class="pcard__go" aria-hidden="true">&#8594;</span>
               <a class="pcard__link" href="https://doorlove1234-coder.github.io/sangsangDoor/" target="_blank" rel="noopener" aria-label="상상의 문 웹사이트 바로가기"></a>
-              <span class="ptag">LIVE SITE</span>
+              <span class="ptag">GO TO WEB</span>
               <h3>웹사이트 바로가기</h3>
               <p>상상의문 공식 웹사이트</p>
               <img class="pcard__shot pcard__shot--bleed" src="img/sangsangdoor/sangsangdoor_live.webp" alt="상상의 문 웹사이트 목업" />
@@ -3836,33 +3841,271 @@
 
             <article class="pcard pcard--shot">
               <span class="pcard__go" aria-hidden="true">&#8594;</span>
-              <a class="pcard__link" href="https://sour-homburg-988.notion.site/380a90bb4a50802e9895c72be7580d5f" target="_blank" rel="noopener" aria-label="상상의 문 제작 과정 (Notion)"></a>
-              <span class="ptag">CASE STUDY</span>
-              <h3>제작 과정 보기</h3>
-              <p>리디자인 과정과 주요 설계</p>
-              <div class="pcard__shotwrap">
-                <span class="pcard__notion" aria-hidden="true"><img src="img/jaringobi/notion_icon.png" alt="" /></span>
-                <img class="pcard__shot" src="img/sangsangdoor/sangsangdoor_case.webp" alt="상상의 문 제작 과정" />
-              </div>
+              <a class="pcard__link" href="https://doorlove1234-coder.github.io/door_proposal/" target="_blank" rel="noopener" aria-label="상상의 문 제안서 바로가기"></a>
+              <span class="ptag">GO TO PROPOSAL</span>
+              <h3>제안서 바로가기</h3>
+              <p>리뉴얼 제안 &amp; 최종 결과</p>
+              <img class="pcard__shot pcard__shot--bleed" src="img/sangsangdoor/sangsangdoor_proposal.webp" alt="상상의 문 제안서" />
             </article>
 
-            <!-- TODO: 제안서 전용 배포 URL 받으면 href 교체 -->
             <article class="pcard pcard--shot">
               <span class="pcard__go" aria-hidden="true">&#8594;</span>
-              <a class="pcard__link" href="#" target="_blank" rel="noopener" aria-label="상상의 문 제안서 및 결과 보기"></a>
-              <span class="ptag">PROPOSAL</span>
-              <h3>제안서 및 결과 보기</h3>
-              <p>클라이언트 제안서 &amp; 최종 결과</p>
-              <img class="pcard__shot pcard__shot--bleed" src="img/sangsangdoor/sangsangdoor_proposal.webp" alt="상상의 문 제안서" />
+              <a class="pcard__link" href="https://sour-homburg-988.notion.site/380a90bb4a50802e9895c72be7580d5f" target="_blank" rel="noopener" aria-label="상상의 문 작업 기록 (Notion)"></a>
+              <span class="ptag">PROCESS</span>
+              <h3>작업 기록 정리</h3>
+              <p>기획부터 퍼블리싱까지의 기록</p>
+              <div class="pcard__shotwrap">
+                <span class="pcard__notion" aria-hidden="true"><img src="img/jaringobi/notion_icon.png" alt="" /></span>
+                <img class="pcard__shot" src="img/sangsangdoor/sangsangdoor_case.webp" alt="상상의 문 작업 기록" />
+              </div>
             </article>
           </div>
         </section>
 
-        <div class="process__soon">
-          <span class="process__soon-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-          <p class="process__soon-tag">COMING SOON</p>
-          <h3>제작 과정을 준비 중입니다</h3>
-          <p>이 프로젝트의 메이킹 스토리는 곧 공개됩니다.</p>
+        <!-- ── 상상의 문 제작 과정 본문 (한 섹션씩 추가) ── -->
+        <div class="process__making process__making--sangsang">
+
+          <!-- SECTION 1 · 히어로 (SANG SANG MOON 키 비주얼) — 디자인 1440×903 -->
+          <section class="ss-sec ss-hero" id="ss-hero">
+            <img class="ss-hero__bg" src="img/sangsangdoor/process/ss_hero_bg.webp" alt="상상의 문 — 방탈출 웹사이트 키 비주얼" loading="lazy" />
+            <div class="ss-hero__scrim" aria-hidden="true"></div>
+            <p class="ss-hero__kicker">ESCAPE ROOM WEBSITE</p>
+            <p class="ss-hero__sang ss-hero__sang--1">SANG</p>
+            <p class="ss-hero__sang ss-hero__sang--2">SANG</p>
+            <p class="ss-hero__moon">MOON</p>
+            <p class="ss-hero__meta ss-hero__meta--team">Team Project</p>
+            <p class="ss-hero__meta ss-hero__meta--role">Planning · Design · Publishing</p>
+            <p class="ss-hero__meta ss-hero__meta--date">26.05.27 - 06.05</p>
+          </section>
+
+          <!-- SECTION 2 · OVERVIEW (브랜드 소개) — 디자인 1440×753 -->
+          <section class="ss-sec ss-overview" id="ss1">
+            <img class="ss-overview__bg" src="img/sangsangdoor/process/ss_overview_bg.webp" alt="상상의 문 — 방탈출 팀 플레이 장면" loading="lazy" />
+            <p class="ss-overview__kicker">Overview</p>
+            <h3 class="ss-overview__title">예약 사이트를 넘어,<br><span class="ss-em">세계관에 입장</span>하는 경험을 만들다</h3>
+            <p class="ss-overview__lead">지점별 테마를 찾기 어려웠던 기존 구조를 탐색에서 예약까지<br>자연스럽게 이어지는 사용자 중심 흐름으로 다시 설계했습니다.</p>
+          </section>
+
+          <!-- SECTION 3 · TEAM RESEARCH (사용자 리서치) — 디자인 1440×1715 -->
+          <section class="ss-sec ss-tr" id="ss2">
+            <p class="ss-tr__kicker">TEAM RESEARCH</p>
+            <h3 class="ss-tr__title">기존 사이트를 함께 살펴보며, 각자가 느낀<br><span class="ss-em">불편함과 개선이 필요한 지점</span>을 정리했습니다.</h3>
+
+            <!-- 데코 아이콘 (문=오른쪽 그룹 / 열쇠=왼쪽 그룹) -->
+            <img class="ss-tr__deco ss-tr__deco--door" src="img/sangsangdoor/process/ss_magicdoor.webp" alt="" aria-hidden="true" loading="lazy" />
+            <img class="ss-tr__deco ss-tr__deco--key" src="img/sangsangdoor/process/ss_key.webp" alt="" aria-hidden="true" loading="lazy" />
+
+            <!-- 카드 1 · BRAND MOOD (위·오른쪽에서 진입) -->
+            <article class="ss-tr__card ss-tr__card--1 ss-tr__in--r">
+              <p class="ss-tr__cat">BRAND MOOD</p>
+              <p class="ss-tr__quote">“첫 화면이 방탈출 사이트보다<br>일반 소개 페이지처럼 느껴졌다.”</p>
+              <p class="ss-tr__desc">밝은 파스텔 톤과 정적인 구성으로 인해<br>상상의문이 가진 공포감과 신비감이<br>첫인상에서 충분히 전달되지 않았습니다.</p>
+              <p class="ss-tr__name">팀원 서**</p>
+              <img class="ss-tr__avatar" src="img/sangsangdoor/process/ss_profile_01.webp" alt="" aria-hidden="true" loading="lazy" />
+            </article>
+
+            <!-- 카드 2 · THEME FINDING (위·오른쪽에서 진입) -->
+            <article class="ss-tr__card ss-tr__card--2 ss-tr__in--r">
+              <p class="ss-tr__cat">THEME FINDING</p>
+              <p class="ss-tr__quote">“지점마다 테마가 다른데,<br>메인에서 차이를 파악하기 어려웠다.”</p>
+              <p class="ss-tr__desc">사용자는 방문할 지점에서 가능한 테마를<br>먼저 확인해야 하지만, 기존 메인에서는<br>지점별 테마 구조가 명확하게 드러나지 않았습니다.</p>
+              <p class="ss-tr__name">팀원 장**</p>
+              <img class="ss-tr__avatar" src="img/sangsangdoor/process/ss_profile_02.webp" alt="" aria-hidden="true" loading="lazy" />
+            </article>
+
+            <!-- 카드 3 · SCROLL FATIGUE (아래·왼쪽에서 진입) -->
+            <article class="ss-tr__card ss-tr__card--3 ss-tr__in--l">
+              <p class="ss-tr__cat">SCROLL FATIGUE</p>
+              <p class="ss-tr__quote">“테마 소개 페이지가 길어서<br>테마를 찾기까지 계속 내려야 했다.”</p>
+              <p class="ss-tr__desc">테마 정보가 단순 세로 나열 방식으로 구성되어<br>사용자가 원하는 테마를 찾기까지<br>탐색 피로가 발생할 수 있다고 판단했습니다.</p>
+              <p class="ss-tr__name">팀원 김**</p>
+              <img class="ss-tr__avatar" src="img/sangsangdoor/process/ss_profile_03.webp" alt="" aria-hidden="true" loading="lazy" />
+            </article>
+
+            <!-- 카드 4 · BOOKING FLOW (아래·왼쪽에서 진입) -->
+            <article class="ss-tr__card ss-tr__card--4 ss-tr__in--l">
+              <p class="ss-tr__cat">BOOKING FLOW</p>
+              <p class="ss-tr__quote">“예약 버튼은 있지만, 테마 탐색에서<br>예약까지 이어지는 흐름은 약했다.”</p>
+              <p class="ss-tr__desc">테마를 확인한 뒤 바로 예약으로 이어지는<br>동선이 약해, 사용자의 선택이<br>자연스럽게 행동으로 연결되기 어려웠습니다.</p>
+              <p class="ss-tr__name">팀원 정**</p>
+              <img class="ss-tr__avatar" src="img/sangsangdoor/process/ss_profile_04.webp" alt="" aria-hidden="true" loading="lazy" />
+            </article>
+
+            <!-- 구분선 + 스파클 -->
+            <span class="ss-tr__rule ss-tr__rule--l" aria-hidden="true"></span>
+            <svg class="ss-tr__sparkle" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 1.5c.55 5 4.95 9.4 9.95 9.95v1.1C16.95 13.1 12.55 17.5 12 22.5c-.55-5-4.95-9.4-9.95-9.95v-1.1C7.05 10.9 11.45 6.5 12 1.5Z" fill="#d8caba" opacity=".85"/></svg>
+            <span class="ss-tr__rule ss-tr__rule--r" aria-hidden="true"></span>
+
+            <!-- COMMON INSIGHT -->
+            <p class="ss-tr__ci-kicker">COMMON INSIGHT</p>
+            <p class="ss-tr__ci ss-tr__ci--1">팀원들의 의견은 결국 ‘분위기 부족’과 ‘탐색 흐름의 불편함’으로 모였습니다.</p>
+            <p class="ss-tr__ci ss-tr__ci--2">정보는 있었지만, 사용자가 상상의문을 경험하고 원하는 테마를 선택하기까지의 흐름은 부족했습니다.</p>
+            <p class="ss-tr__ci ss-tr__ci--3">이 인사이트를 바탕으로 <span class="ss-tr__ci-em">브랜드 무드, 테마 탐색, 예약 동선</span>을 리디자인의 핵심 개선 방향으로 설정했습니다.</p>
+          </section>
+
+          <!-- SECTION 4 · STORY 포스터 (브랜드 세계관) — story.html 포스터 포팅 -->
+          <section class="ss-sec ss-story" id="ss3">
+            <div class="ss-story__poster">
+              <!-- 반짝이는 별 -->
+              <span class="ss-story__star" style="left:26%; top:11%; width:2.6%; animation-delay:0s;"></span>
+              <span class="ss-story__star" style="left:67%; top:13%; width:3.4%; animation-delay:.7s;"></span>
+              <span class="ss-story__star" style="left:79%; top:20%; width:2.2%; animation-delay:1.3s;"></span>
+              <span class="ss-story__star" style="left:20%; top:18%; width:2%;   animation-delay:2s;"></span>
+
+              <!-- 상상의 문 로고 -->
+              <div class="ss-story__lyr ss-story__logo ss-anim" data-anim="drop"><img src="img/sangsangdoor/process/ss_story_logo.webp" alt="상상의 문" loading="lazy" /></div>
+
+              <!-- 좌측 카피 -->
+              <div class="ss-story__lyr ss-story__copyL ss-story__copy ss-anim" data-anim="left">
+                <p class="ss-story__h">상상했던 공간,<br>예상하지 못한 공간</p>
+                <p class="ss-story__t">익숙한 문 너머에는<br>당신의 상상이 만든<br>이야기 속 공간이 펼쳐집니다.</p>
+              </div>
+
+              <!-- 우측 카피 -->
+              <div class="ss-story__lyr ss-story__copyR ss-story__copy ss-anim" data-anim="right">
+                <p class="ss-story__t">어딘가 낯설고,<br>어딘가 스산한 이곳에서<br>당신의 상상력은<br>가장 빛나는 열쇠가 됩니다.</p>
+              </div>
+
+              <!-- 좌상단 종이 -->
+              <div class="ss-story__lyr ss-story__paperL ss-anim" data-anim="drop"><img src="img/sangsangdoor/process/ss_story_l1.webp" alt="" aria-hidden="true" loading="lazy" /></div>
+
+              <!-- 생각풍선 -->
+              <div class="ss-story__lyr ss-story__bubble ss-anim" data-anim="pop">
+                <span>이 문을 열면<br>어떤 공간이<br>기다리고 있을까?</span>
+              </div>
+
+              <!-- 열쇠구멍 액자 -->
+              <div class="ss-story__lyr ss-story__frame ss-anim" data-anim="swing"><img src="img/sangsangdoor/process/ss_story_r1.webp" alt="" aria-hidden="true" loading="lazy" /></div>
+
+              <!-- 우측 종이 -->
+              <div class="ss-story__lyr ss-story__paperR ss-anim" data-anim="drop"><img src="img/sangsangdoor/process/ss_story_r3.webp" alt="" aria-hidden="true" loading="lazy" /></div>
+
+              <!-- 손전등 든 소녀 -->
+              <div class="ss-story__lyr ss-story__girl ss-anim" data-anim="rise"><img src="img/sangsangdoor/process/ss_story_r2.webp" alt="손전등을 든 소녀" loading="lazy" /></div>
+
+              <!-- 램프·시계·책 정물 -->
+              <div class="ss-story__lyr ss-story__still ss-anim" data-anim="rise"><img src="img/sangsangdoor/process/ss_story_l3.webp" alt="" aria-hidden="true" loading="lazy" /></div>
+
+              <!-- 가운데 카피 -->
+              <div class="ss-story__lyr ss-story__copyM ss-story__copy ss-anim" data-anim="up">
+                <p class="ss-story__t">상상의 문은<br>단순한 탈출이 아닌,<br>이야기의 주인공이 되어<br>직접 경험하고, 선택하며<br>결말을 만들어가는 곳입니다.</p>
+              </div>
+
+              <!-- 하단 우측 카피 -->
+              <p class="ss-story__lyr ss-story__copyB ss-anim" data-anim="up">지금 당신만의 이야기를 시작해보세요</p>
+            </div>
+          </section>
+
+          <!-- SECTION 5 · 페이지 디자인 (frame-395) -->
+          <section class="ss-sec ss-story-pg" id="ss4">
+
+            <!-- 상단 타이틀 위 열쇠 (모션용) -->
+            <img class="ss-story-pg__key ss-story-pg__key--top"
+                 src="img/sangsangdoor/process/ss_keyicon.webp" alt="" aria-hidden="true"
+                 width="252" height="128" loading="lazy" />
+
+            <!-- 상단 타이틀 -->
+            <h3 class="ss-story-pg__head">UNLOCK THE IMAGINARY DOOR</h3>
+            <p class="ss-story-pg__sub">상상의문을 여는 순간, 이야기는 시작됩니다.</p>
+
+            <!-- MAIN PAGE -->
+            <p class="ss-story-pg__label ss-story-pg__label--main">MAIN PAGE</p>
+            <p class="ss-story-pg__caption ss-story-pg__caption--main">문이 열리며,<br>
+              <span class="ss-em">상상의문 세계관으로 진입</span>하는 첫 화면</p>
+
+            <!-- 메인페이지 뒤 흐릿한 배경 -->
+            <img class="ss-story-pg__mainbg" src="img/sangsangdoor/process/ss_main_bg.webp"
+                 role="presentation" alt="" width="1440" height="1556" loading="lazy" />
+
+            <!-- 문 영상 (히어로) — open() 에서 src 주입 -->
+            <video class="ss-story-pg__door" poster="img/sangsangdoor/process/ss_door_poster.webp"
+                   preload="none" muted loop playsinline></video>
+
+            <!-- 메인페이지 캡처 -->
+            <img class="ss-story-pg__main" src="img/sangsangdoor/process/ss_main.webp"
+                 alt="상상의 문 메인 페이지" width="848" height="1382" loading="lazy" />
+
+            <!-- THEME PAGE -->
+            <p class="ss-story-pg__label ss-story-pg__label--theme">THEME PAGE</p>
+            <p class="ss-story-pg__desc ss-story-pg__desc--theme">지점별 필터로 원하는 테마 접근 시간 단축<br>카드형 레이아웃으로 핵심 정보 비교</p>
+            <img class="ss-story-pg__cap ss-story-pg__cap--theme" src="img/sangsangdoor/process/ss_theme.webp"
+                 alt="테마 페이지" width="766" height="532" loading="lazy" />
+
+            <!-- RESERVATION PAGE -->
+            <p class="ss-story-pg__label ss-story-pg__label--reserve">RESERVATION PAGE</p>
+            <p class="ss-story-pg__desc ss-story-pg__desc--reserve">선택한 테마 정보와 예약 폼을 함께 배치<br>날짜·시간·인원 선택 흐름을 단계적으로 정리</p>
+            <img class="ss-story-pg__cap ss-story-pg__cap--reserve" src="img/sangsangdoor/process/ss_reserve.webp"
+                 alt="예약 페이지" width="822" height="1190" loading="lazy" />
+
+            <!-- 명패 + 열쇠 (모션용) -->
+            <img class="ss-story-pg__plaque" src="img/sangsangdoor/process/ss_plaque.webp"
+                 alt="" aria-hidden="true" width="403" height="257" loading="lazy" />
+            <p class="ss-story-pg__plaque-text">당신의 상상력이<br>새로운 이야기를 여는<br>열쇠가 될 것 입니다.</p>
+            <img class="ss-story-pg__key ss-story-pg__key--lock"
+                 src="img/sangsangdoor/process/ss_keyicon.webp" alt="" aria-hidden="true"
+                 width="210" height="107" loading="lazy" />
+
+            <!-- 하단 팀 프로세스 배경 사진 + 페이드 -->
+            <img class="ss-story-pg__photobg" src="img/sangsangdoor/process/ss_process_bg.webp"
+                 role="presentation" alt="" width="1440" height="734" loading="lazy" />
+            <span class="ss-story-pg__photofade" aria-hidden="true"></span>
+
+            <!-- TEAM PROCESS -->
+            <p class="ss-story-pg__label ss-story-pg__label--team">TEAM PROCESS</p>
+            <p class="ss-story-pg__caption ss-story-pg__caption--team"><span class="ss-em">일정과 참여도 차이를 조율</span>하며,<br>작업 기준을 다시 세웠습니다</p>
+
+            <!-- 이슈/액션/결과 카드 3개 -->
+            <article class="ss-story-pg__card ss-story-pg__card--1">
+              <p class="ss-story-pg__cnum">01 / ISSUE</p>
+              <p class="ss-story-pg__ctitle">진행 속도와 작업 기준의 차이</p>
+              <p class="ss-story-pg__cbody">개인 작업 일정이 겹치면서<br>팀 작업에 투입되는 시간과 완성도에 차이가 생겼고,<br>초기 산출물의 방향도 일정하게 모이지 않았습니다.</p>
+            </article>
+            <article class="ss-story-pg__card ss-story-pg__card--2">
+              <p class="ss-story-pg__cnum">02 / ACTION</p>
+              <p class="ss-story-pg__ctitle">기준을 먼저 정리하고 공유</p>
+              <p class="ss-story-pg__cbody">프로젝트가 멈추지 않도록<br>기존 사이트 분석, 문제 정리, 레퍼런스 조사,<br>페이지 구조 초안을 먼저 정리했습니다.</p>
+            </article>
+            <article class="ss-story-pg__card ss-story-pg__card--3">
+              <p class="ss-story-pg__cnum">03 / RESULT</p>
+              <p class="ss-story-pg__ctitle">공통 방향으로 다시 정렬</p>
+              <p class="ss-story-pg__cbody">팀원 의견을 바탕으로<br>브랜드 무드 부족, 테마 탐색의 불편함,<br>예약 흐름의 약함이라는 핵심 문제를 정리했습니다.</p>
+            </article>
+          </section>
+
+          <!-- SECTION 6 · RESULT / PROPOSAL / OUTRO (frame-396) — 디자인 1440×2584 -->
+          <section class="ss-sec ss-outro" id="ss5">
+            <!-- PROPOSAL -->
+            <p class="ss-outro__kicker ss-outro__kicker--proposal">PROPOSAL</p>
+            <h3 class="ss-outro__title">브랜드 개선안을 정리해<br><span class="ss-em">실제 업장에 전달</span>했습니다</h3>
+            <img class="ss-outro__shot ss-outro__shot--1 ss-slide-r" src="img/sangsangdoor/process/ss_proposal1.webp" alt="상상의 문 제안서" width="878" height="464" loading="lazy" />
+            <img class="ss-outro__shot ss-outro__shot--2 ss-slide-r" src="img/sangsangdoor/process/ss_proposal2.webp" alt="상상의 문 제안서 전달본" width="878" height="464" loading="lazy" />
+            <p class="ss-outro__desc ss-outro__desc--proposal">완성된 리디자인 결과물을 바탕으로 기존 사이트의 문제, 개선 방향,<br>주요 화면, 기대 효과를 정리해 실제 상상의문 업장에 제안서 형태로 전달했습니다.</p>
+
+            <!-- 구분선 + 스파클 -->
+            <span class="ss-outro__rule ss-outro__rule--l" aria-hidden="true"></span>
+            <svg class="ss-outro__sparkle" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 1.5c.55 5 4.95 9.4 9.95 9.95v1.1C16.95 13.1 12.55 17.5 12 22.5c-.55-5-4.95-9.4-9.95-9.95v-1.1C7.05 10.9 11.45 6.5 12 1.5Z" fill="#d8caba" opacity=".85"/></svg>
+            <span class="ss-outro__rule ss-outro__rule--r" aria-hidden="true"></span>
+
+            <!-- RESULT -->
+            <p class="ss-outro__kicker ss-outro__kicker--result">RESULT</p>
+            <p class="ss-outro__lesson ss-outro__lesson--1">이번 프로젝트를 통해 리디자인은 단순히 화면을 예쁘게 바꾸는 일이 아니라,<br>브랜드 경험과 사용자의 행동 흐름을 함께 설계하는 과정임을 배웠습니다.</p>
+            <p class="ss-outro__lesson ss-outro__lesson--2">상상의 문의 분위기를 유지하면서 사용자가 원하는 테마를 빠르게 찾고 예약까지 이어질 수 있도록,<br>비주얼 무드와 정보 구조의 균형이 중요하다는 점을 알게 되었습니다.</p>
+
+            <!-- LIVE SITE / GITHUB (오른쪽에서 쇽쇽쇽 슬라이드) -->
+            <div class="ss-outro__ri ss-outro__ri--live ss-slide-r">
+              <p class="ss-outro__ri-label">LIVE SITE</p>
+              <p class="ss-outro__ri-desc">완성된 화면을 실제 웹에서 확인할 수 있도록 배포했습니다.</p>
+            </div>
+            <div class="ss-outro__ri ss-outro__ri--git ss-slide-r">
+              <p class="ss-outro__ri-label">GITHUB</p>
+              <p class="ss-outro__ri-desc">HTML, CSS, JavaScript 기반의 구현 소스를 정리했습니다.</p>
+            </div>
+
+            <!-- 아웃트로 -->
+            <img class="ss-outro__bg" src="img/sangsangdoor/process/ss_outro_bg.webp" alt="" aria-hidden="true" width="1440" height="734" loading="lazy" />
+            <p class="ss-outro__thanks">Thank you for watching</p>
+          </section>
+
         </div>
       </div>
     </div>
@@ -4697,6 +4940,7 @@
   <script src="js/making-yumi.js" defer></script>
   <script src="js/making-pledis.js" defer></script>
   <script src="js/making-mathhub.js" defer></script>
+  <script src="js/making-sangsang.js" defer></script>
   <script src="js/smooth-process.js" defer></script>
 </body>
 </html>
