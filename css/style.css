@@ -1427,9 +1427,9 @@ html.process-open { overflow: hidden; }
 
 /* ── 좌측 고정 네비 ── */
 .process__nav {
-  flex: none; width: clamp(242px, 18.5vw, 355px);
+  flex: none; width: clamp(200px, 14.5vw, 300px);
   display: flex; flex-direction: column;
-  padding: clamp(18px,1.5vw,29px);
+  padding: clamp(12px, 1.2vw, 22px);
   border-radius: 22px;
   background: linear-gradient(160deg, rgba(245,248,243,0.52), rgba(225,231,222,0.34));
   border: 1px solid rgba(255,255,255,0.46);
@@ -1477,6 +1477,11 @@ html.process-open { overflow: hidden; }
 .process__tracks h4 { margin: 0; font-size: 14px; font-weight: 700; color: #303b2c; }
 .process__tracks i { font-style: normal; display: block; margin-top: 1px;
   font-size: 9.5px; letter-spacing: 0.1em; color: #8b9680; }
+/* 좁아진 네비 폭에서 1fr 가운데 칸이 내용보다 못 줄어 오버플로 나는 것 방지:
+   span이 실제로 압축되게 min-width:0, 영문 부제/제목은 넘치면 말줄임 */
+.process__tracks span { min-width: 0; }
+.process__tracks h4, .process__tracks i {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .process__tplay { width: 13px; height: 13px; fill: #9aa68c; opacity: .55; flex: none; }
 .process__tracks a:hover { background: rgba(118,138,92,0.15);
   border-color: rgba(118,138,92,0.22); transform: translateX(2px); }
@@ -1629,7 +1634,7 @@ html.process-open { overflow: hidden; }
 .process__hero img,
 .process__hero-media { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; display: block; }
 
-.process__cards { flex: none; display: grid; grid-template-columns: 1.16fr 1fr 1fr 1fr;
+.process__cards { flex: none; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: clamp(12px,1vw,19px); margin-top: clamp(14px,1.39vw,27px);
   margin-bottom: clamp(14px,2.2vh,28px); }   /* 카드~패널 하단 여백 → 플러시 이미지 안 잘리게 */
 
@@ -1646,6 +1651,9 @@ html.process-open { overflow: hidden; }
   box-shadow: 0 18px 38px -22px rgba(40,60,30,0.42), 0 0 16px rgba(150,180,120,0.18), inset 0 1px 1px rgba(255,255,255,0.6); }
 .pcard h3 { margin: 11px 0 0; font-size: clamp(15px,1.05vw,20px); font-weight: 800; color: #222c1d; }
 .pcard p { margin: 6px 0 0; font-size: 12.5px; line-height: 1.5; color: #5b6750; }
+/* 카드 타이틀 밑 서브카피(영문 부제·"기획부터 …의 기록" 등) 숨김 — 모든 프로젝트 공통.
+   info 카드의 Period/Contribution/Tool(.pcard__tool-label)은 클래스가 있어 영향 없음 */
+.pcard > p:not([class]) { display: none; }
 
 .pcard__go { position: absolute; top: 15px; right: 15px; width: 30px; height: 30px;
   border-radius: 50%; border: 1px solid rgba(80,96,60,0.28); background: rgba(255,255,255,0.42);
