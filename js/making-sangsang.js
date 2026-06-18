@@ -562,8 +562,22 @@
       const thanks = scroller.querySelector("#ss5 .ss-outro__thanks");
       if (thanks) {
         gsap.set(thanks, { xPercent: -50 });
-        gsap.from(thanks, {
-          opacity: 0, y: 18, duration: 0.85, ease: "power3.out",
+        /* 글자별 등장 — 수동 split(SplitText 미로드), 부모 센터링 유지·자식 char만 떠오름 */
+        const tTxt = thanks.textContent;
+        thanks.setAttribute("aria-label", tTxt);
+        thanks.textContent = "";
+        const tChars = [];
+        for (const ch of tTxt) {
+          const sp = document.createElement("span");
+          sp.setAttribute("aria-hidden", "true");
+          sp.style.display = "inline-block";
+          sp.style.whiteSpace = "pre";
+          sp.textContent = ch === " " ? " " : ch;
+          thanks.appendChild(sp);
+          tChars.push(sp);
+        }
+        gsap.from(tChars, {
+          yPercent: 120, autoAlpha: 0, duration: 0.6, ease: "power3.out", stagger: 0.045,
           scrollTrigger: ST("#ss5 .ss-outro__thanks", "top 90%"),
         });
       }
