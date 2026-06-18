@@ -2814,7 +2814,7 @@ html.process-open { overflow: hidden; }
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 2.778cqw; line-height: 1.35; color: #fff; }
 .ss-outro__title .ss-em { color: #ffc284; }
 .ss-outro__shot { position: absolute; top: 21.458cqw; width: 45cqw; height: 23.8cqw;
-  object-fit: contain; object-position: center top; border-radius: 1.042cqw; border: 1px solid #fff3e8; display: block; background: #0a0a14; }
+  object-fit: cover; object-position: center top; border-radius: 1.042cqw; border: 1px solid #fff3e8; display: block; background: #0a0a14; }
 .ss-outro__shot--1 { left: 3.5cqw; }
 .ss-outro__shot--2 { right: 3.5cqw; }
 .ss-outro__desc { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-align: center;
