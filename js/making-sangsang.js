@@ -95,13 +95,28 @@
        SECTION 1 · OVERVIEW (#ss1)
        kicker / title / lead 페이드+업 순차 진입
     ================================================================ */
-    // 배경: 어둡게 시작해서 천천히 밝아짐 (brightness 필터)
-    const ovBg = scroller.querySelector("#ss1 .ss-overview__bg");
-    if (ovBg) {
-      gsap.from(ovBg, {
-        filter: "brightness(0.62)", duration: 1.2, ease: "power2.out",
-        scrollTrigger: ST("#ss1", "top 90%"),
+    // 배경: 마우스 움직임에 따라 부드럽게 흔들리는 패럴랙스 (brightness 페이드 대체)
+    // ※ 정밀 포인터(데스크톱)에서만 — 터치기기는 정적
+    const ovBg  = scroller.querySelector("#ss1 .ss-overview__bg");
+    const ss1El = scroller.querySelector("#ss1");
+    if (ovBg && ss1El && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      /* 살짝 확대 → 흔들려도 가장자리 안 보이게(.ss-sec overflow:hidden로 클립) */
+      gsap.set(ovBg, { scale: 1.1, transformOrigin: "50% 50%", willChange: "transform" });
+      const xTo = gsap.quickTo(ovBg, "x",        { duration: 0.7, ease: "power2" });
+      const yTo = gsap.quickTo(ovBg, "y",        { duration: 0.7, ease: "power2" });
+      const rTo = gsap.quickTo(ovBg, "rotation", { duration: 0.9, ease: "power2" });
+      const AMPX = 26, AMPY = 18, AMPR = 1.1; /* px / px / deg */
+      let rect = null; /* pointerenter에서 캐싱 → mousemove 강제 reflow 제거 */
+      ss1El.addEventListener("pointerenter", () => { rect = ss1El.getBoundingClientRect(); });
+      ss1El.addEventListener("pointermove", (e) => {
+        if (!rect) rect = ss1El.getBoundingClientRect();
+        const nx = (e.clientX - rect.left) / rect.width  - 0.5; /* -0.5 ~ 0.5 */
+        const ny = (e.clientY - rect.top)  / rect.height - 0.5;
+        xTo(-nx * AMPX); /* 마우스 반대로 → 패럴랙스 */
+        yTo(-ny * AMPY);
+        rTo(nx * AMPR);  /* 좌우에 따라 미세 기울기 */
       });
+      ss1El.addEventListener("pointerleave", () => { xTo(0); yTo(0); rTo(0); });
     }
 
     rise("#ss1 .ss-overview__kicker", {

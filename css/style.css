@@ -2843,7 +2843,7 @@ html.process-open { overflow: hidden; }
   margin-left: -0.833cqw; margin-top: -0.833cqw; width: 1.667cqw; height: 1.667cqw; }
 .ss-outro__lesson { position: absolute; left: 50%; margin: 0; text-align: center;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.389cqw; line-height: 1.6; color: #fff;
-  max-width: 90cqw; }
+  white-space: nowrap; }
 .ss-outro__lesson--1 { top: 82.569cqw; }
 .ss-outro__lesson--2 { top: 88cqw; }
 .ss-outro__ri { position: absolute; top: 102.153cqw; text-align: center; width: 28cqw; }
