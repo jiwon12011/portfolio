@@ -432,10 +432,14 @@
 
         const onWheelBlock = (e) => { e.preventDefault(); };
         const addScrollBlock = () => {
+          /* smooth-process lerp도 동시에 freeze — 두 핸들러가 같은 scroller를 공유하므로
+           * smooth-process가 target을 누적하면 달칵 hold가 무력화될 수 있음 */
+          window.__processLenis?.sangsang?.freeze?.();
           scroller.addEventListener("wheel",     onWheelBlock, { passive: false });
           scroller.addEventListener("touchmove", onWheelBlock, { passive: false });
         };
         const removeScrollBlock = () => {
+          window.__processLenis?.sangsang?.unfreeze?.();
           scroller.removeEventListener("wheel",     onWheelBlock);
           scroller.removeEventListener("touchmove", onWheelBlock);
         };
