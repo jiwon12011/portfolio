@@ -480,11 +480,11 @@
       });
       rise("#ss5 .ss-outro__thanks", { y: 18, scrollTrigger: ST("#ss5 .ss-outro__thanks", "top 90%") });
 
-      /* 제안서 캡처 — 오른쪽에서 왼쪽으로 슬라이드(스크롤 시 오른쪽 이미지가 들어옴) */
+      /* 제안서 캡처 3장 — 오른쪽에서 왼쪽으로 촤라라 순차 슬라이드 */
       const shots = scroller.querySelectorAll("#ss5 .ss-outro__shot");
       if (shots.length) gsap.from(shots, {
-        opacity: 0, x: 90, duration: 1.05, ease: "power3.out", stagger: 0.18,
-        scrollTrigger: ST("#ss5 .ss-outro__shot--1", "top 82%"),
+        opacity: 0, x: 180, duration: 1.1, ease: "power2.out", stagger: 0.2,
+        scrollTrigger: ST("#ss5 .ss-outro__shot--1", "top 84%"),
       });
 
       /* LIVE → GITHUB → PROPOSAL 오른쪽에서 왼쪽으로 샤악 흘러 들어옴 */

@@ -55,7 +55,9 @@
       content.scrollTop = 0;                                 /* 재오픈은 항상 상단부터 */
       requestAnimationFrame(() => { content.scrollTop = 0; updateSpy(); });  /* 렌더 후 한 번 더 확실히 */
       if (heroVid) { heroVid.muted = true; const p = heroVid.play(); if (p && p.catch) p.catch(() => {}); }
-      if (doorVid) { if (!doorVid.src) doorVid.src = "img/sangsangdoor/process/ss_door.mp4"; doorVid.muted = true; const pd = doorVid.play(); if (pd && pd.catch) pd.catch(() => {}); }
+      if (doorVid) { if (!doorVid.src) doorVid.src = "img/sangsangdoor/process/ss_door_hero.mp4"; doorVid.muted = true; const pd = doorVid.play(); if (pd && pd.catch) pd.catch(() => {}); }
+      const themeVid = modal.querySelector("video.ss-story-pg__cap--theme");
+      if (themeVid) { themeVid.muted = true; const pt = themeVid.play(); if (pt && pt.catch) pt.catch(() => {}); }
       document.querySelectorAll(".project-intro video").forEach((v) => v.pause());
       if (window.__makingRefresh) requestAnimationFrame(() => { window.__makingRefresh(); content.scrollTop = 0; });
     };
