@@ -55,25 +55,29 @@
       });
     }
 
-    // 큰 글씨(SANG-1, SANG-2, MOON): 각각 아래→위로 착착착 (stagger 0.22)
+    // 큰 글씨(SANG-1, SANG-2, MOON): 클립와이프 + 스케일 시네마틱 진입
+    // kicker + meta: heroTL에 통합해 배경→텍스트→메타 순 계층화
     const bigTexts = scroller.querySelectorAll(
       "#ss-hero .ss-hero__sang--1, #ss-hero .ss-hero__sang--2, #ss-hero .ss-hero__moon"
     );
     if (bigTexts.length) {
-      gsap.from(bigTexts, {
-        opacity: 0, y: 60, duration: 1.0, ease: "power3.out", stagger: 0.22,
-        scrollTrigger: ST("#ss-hero", "top 85%"),
+      const heroTL = gsap.timeline({
+        scrollTrigger: { trigger: scroller.querySelector("#ss-hero"), scroller, start: "top 85%", once: true },
       });
-    }
-    // kicker + meta 3개: 위로 샥샥샥 (빠른 stagger 0.1)
-    const metaTexts = scroller.querySelectorAll(
-      "#ss-hero .ss-hero__kicker, #ss-hero .ss-hero__meta--team, #ss-hero .ss-hero__meta--role, #ss-hero .ss-hero__meta--date"
-    );
-    if (metaTexts.length) {
-      gsap.from(metaTexts, {
-        opacity: 0, y: 20, duration: 0.7, ease: "power3.out", stagger: 0.1, delay: 0.55,
-        scrollTrigger: ST("#ss-hero", "top 85%"),
+      bigTexts.forEach((el, i) => {
+        heroTL.from(el, {
+          clipPath: "inset(110% 0% -10% 0%)",
+          y: 40, opacity: 0,
+          duration: 0.9, ease: "power4.out",
+        }, i * 0.2);
       });
+      heroTL.from(
+        scroller.querySelectorAll(
+          "#ss-hero .ss-hero__kicker, #ss-hero .ss-hero__meta--team, #ss-hero .ss-hero__meta--role, #ss-hero .ss-hero__meta--date"
+        ),
+        { opacity: 0, y: 18, duration: 0.7, ease: "power3.out", stagger: 0.1 },
+        "-=0.3"
+      );
     }
 
     /* ================================================================
@@ -102,12 +106,12 @@
       scrollTrigger: ST("#ss1 .ss-overview__lead", "top 84%"),
     });
 
-    // ss1 .ss-em: 흰색→오렌지 컬러 스윕 (진입 시 1회)
+    // ss1 .ss-em: 흰색→오렌지 + 글로우 텍스트섀도 동시 진행 (duration 1.0, power3)
     const ovEm = scroller.querySelector("#ss1 .ss-overview__title .ss-em");
     if (ovEm) {
       gsap.fromTo(ovEm,
-        { color: "#ffffff" },
-        { color: "#ffc284", duration: 0.6, ease: "power2.out", delay: 0.3,
+        { color: "#ffffff", textShadow: "none" },
+        { color: "#ffc284", textShadow: "0 0 1.2cqw rgba(255,194,132,0.55)", duration: 1.0, ease: "power3.out", delay: 0.3,
           scrollTrigger: ST("#ss1 .ss-overview__title", "top 80%") }
       );
     }
@@ -204,12 +208,12 @@
       });
     }
 
-    // ss2 .ss-em (tr__title 안): 흰색→오렌지 컬러 스윕
+    // ss2 .ss-em (tr__title 안): 흰색→오렌지 + 글로우 텍스트섀도 동시 진행
     const trEm = scroller.querySelector("#ss2 .ss-tr__title .ss-em");
     if (trEm) {
       gsap.fromTo(trEm,
-        { color: "#ffffff" },
-        { color: "#ffc284", duration: 0.6, ease: "power2.out", delay: 0.3,
+        { color: "#ffffff", textShadow: "none" },
+        { color: "#ffc284", textShadow: "0 0 1.2cqw rgba(255,194,132,0.55)", duration: 1.0, ease: "power3.out", delay: 0.3,
           scrollTrigger: ST("#ss2 .ss-tr__title", "top 80%") }
       );
     }
@@ -476,11 +480,11 @@
       rise("#ss5 .ss-outro__kicker--proposal", { y: 18, scrollTrigger: ST("#ss5 .ss-outro__kicker--proposal", "top 88%") });
       rise("#ss5 .ss-outro__title", { y: 28, duration: 0.95, delay: 0.06, scrollTrigger: ST("#ss5 .ss-outro__title", "top 86%") });
 
-      // ss5 .ss-em들: 흰색→오렌지
+      // ss5 .ss-em, ss4 .ss-em: 흰색→오렌지 + 글로우 텍스트섀도 동시 진행
       scroller.querySelectorAll("#ss5 .ss-em, #ss4 .ss-em").forEach((em) => {
         gsap.fromTo(em,
-          { color: "#ffffff" },
-          { color: "#ffc284", duration: 0.6, ease: "power2.out", delay: 0.25,
+          { color: "#ffffff", textShadow: "none" },
+          { color: "#ffc284", textShadow: "0 0 1.2cqw rgba(255,194,132,0.55)", duration: 1.0, ease: "power3.out", delay: 0.25,
             scrollTrigger: ST(em, "top 80%") }
         );
       });
