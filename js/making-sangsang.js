@@ -495,6 +495,132 @@
       });
     }
 
+    /* ================================================================
+       SECTION 4 추가 모션 (#ss4) — 헤드라인 char 비행 / 페이지·카드 진입 / 골드 글로우
+       · KEY(keyTop/keyLock/trail)·plaque(endTrigger)는 건드리지 않음
+    ================================================================ */
+    {
+      const ss4El = scroller.querySelector("#ss4");
+
+      /* ① UNLOCK 헤드라인 — 글자 단위 비행 등장(수동 split, SplitText 불필요) */
+      const splitChars = (el) => {
+        const raw = el.textContent;
+        el.textContent = "";
+        el.setAttribute("aria-label", raw);
+        return [...raw].map((ch) => {
+          const s = document.createElement("span");
+          s.style.display = "inline-block";
+          s.textContent = ch === " " ? " " : ch;
+          el.appendChild(s);
+          return s;
+        });
+      };
+      const pgHead = ss4El && ss4El.querySelector(".ss-story-pg__head");
+      if (pgHead) {
+        const chars = splitChars(pgHead);
+        gsap.set(pgHead, { perspective: 800 });
+        gsap.from(chars, {
+          x: () => gsap.utils.random(-220, 220),
+          y: () => gsap.utils.random(-70, 70),
+          rotateY: 160, rotate: () => gsap.utils.random(-12, 12),
+          opacity: 0, duration: 0.9, ease: "power3.out",
+          stagger: { amount: 0.5, from: "random" },
+          scrollTrigger: ST("#ss4 .ss-story-pg__head", "top 82%"),
+        });
+
+        /* ④ 골드 글로우 — 헤드라인 뒤 빛 번짐(헤드라인 진입과 동시) */
+        const glow = document.createElement("span");
+        glow.className = "ss-pg-glow";
+        glow.setAttribute("aria-hidden", "true");
+        ss4El.appendChild(glow);
+        gsap.set(glow, { opacity: 0, scale: 0.6, transformOrigin: "50% 50%" });
+        gsap.to(glow, {
+          opacity: 1, scale: 1, duration: 1.4, ease: "power2.out",
+          scrollTrigger: ST("#ss4 .ss-story-pg__head", "top 82%"),
+        });
+      }
+
+      /* ② 페이지 쇼케이스 — 이미지 솟기 + 텍스트 좌우 슬라이드
+         (caption--team은 .ss-em 전용 핸들러와 겹쳐 제외 / plaque 이미지는 endTrigger라 제외) */
+      [
+        ["#ss4 .ss-story-pg__sub",            { x: -36 }],
+        ["#ss4 .ss-story-pg__label--main",    { x: -30 }],
+        ["#ss4 .ss-story-pg__caption--main",  { x:  40 }],
+        ["#ss4 .ss-story-pg__mainbg",         { y:  60, scale: 1.04 }],
+        ["#ss4 .ss-story-pg__main",           { y:  50 }],
+        ["#ss4 .ss-story-pg__label--theme",   { x: -30 }],
+        ["#ss4 .ss-story-pg__desc--theme",    { x:  40 }],
+        ["#ss4 .ss-story-pg__cap--theme",     { y:  50, scale: 1.04 }],
+        ["#ss4 .ss-story-pg__label--reserve", { x: -30 }],
+        ["#ss4 .ss-story-pg__desc--reserve",  { x:  40 }],
+        ["#ss4 .ss-story-pg__cap--reserve",   { y:  50, scale: 1.04 }],
+        ["#ss4 .ss-story-pg__plaque-text",    { x: -40 }],
+      ].forEach(([sel, vars]) => {
+        const el = scroller.querySelector(sel);
+        if (!el) return;
+        gsap.from(el, Object.assign(
+          { opacity: 0, duration: 0.95, ease: "power3.out", transformOrigin: "50% 50%" },
+          vars,
+          { scrollTrigger: ST(sel, "top 86%") }
+        ));
+      });
+
+      /* ③ 팀 프로세스 카드 01/02/03 — 순차 진입 + 내부 텍스트 스태거 */
+      const teamCards = scroller.querySelectorAll(
+        "#ss4 .ss-story-pg__card--1, #ss4 .ss-story-pg__card--2, #ss4 .ss-story-pg__card--3"
+      );
+      if (teamCards.length) {
+        const cardTL = gsap.timeline({
+          scrollTrigger: { trigger: teamCards[0], scroller, start: "top 88%", once: true },
+        });
+        teamCards.forEach((card, i) => {
+          cardTL.from(card, { opacity: 0, y: 40, duration: 0.8, ease: "power3.out" }, i * 0.15);
+          const inner = card.querySelectorAll(
+            ".ss-story-pg__cnum, .ss-story-pg__ctitle, .ss-story-pg__cbody"
+          );
+          if (inner.length) cardTL.from(inner, {
+            opacity: 0, y: 12, duration: 0.55, ease: "power2.out", stagger: 0.08,
+          }, i * 0.15 + 0.12);
+        });
+      }
+    }
+
+    /* ================================================================
+       마그네틱 골드 글로우 — ss5 링크카드(LIVE/GITHUB/PROPOSAL) + CTA
+       · 포인터 따라 광원이 번짐(스크롤 무관 → 모달서 안정), quickTo 60fps
+    ================================================================ */
+    {
+      const magnetics = [...scroller.querySelectorAll("#ss5 .ss-outro__ri")];
+      const ctaEl = document.querySelector("#process-sangsang .process__cta");
+      if (ctaEl) magnetics.push(ctaEl);
+
+      magnetics.forEach((el) => {
+        el.classList.add("ss-mag");
+        const flair = document.createElement("span");
+        flair.className = "ss-mag__flair";
+        flair.setAttribute("aria-hidden", "true");
+        el.appendChild(flair);
+
+        const xTo = gsap.quickTo(flair, "xPercent", { duration: 0.4, ease: "power2" });
+        const yTo = gsap.quickTo(flair, "yPercent", { duration: 0.4, ease: "power2" });
+        const clamp = gsap.utils.clamp(0, 100);
+        const move = (e) => {
+          const r = el.getBoundingClientRect();
+          xTo(clamp(((e.clientX - r.left) / r.width) * 100));
+          yTo(clamp(((e.clientY - r.top) / r.height) * 100));
+        };
+
+        el.addEventListener("mouseenter", (e) => {
+          move(e);
+          gsap.to(flair, { scale: 1, duration: 0.4, ease: "power2.out" });
+        });
+        el.addEventListener("mousemove", move);
+        el.addEventListener("mouseleave", () => {
+          gsap.to(flair, { scale: 0, duration: 0.3, ease: "power2.out" });
+        });
+      });
+    }
+
     /* ── 이미지 로드 후 위치 재계산(레이아웃 점프 보정) ── */
     scroller.querySelectorAll(".process__making--sangsang img").forEach((img) => {
       if (!img.complete) {

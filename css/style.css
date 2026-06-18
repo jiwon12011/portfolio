@@ -2743,7 +2743,7 @@ html.process-open { overflow: hidden; }
   filter: drop-shadow(0 0 1.2cqw rgba(255,180,60,0.55)) drop-shadow(0 0 2.5cqw rgba(200,130,20,0.30)); }
 .ss-story-pg__head { position: absolute; left: 50%; transform: translateX(-50%); top: 11.667cqw; margin: 0;
   font-family: "Cormorant Garamond", serif; font-weight: 400; font-size: 3.333cqw; color: #fff3e8;
-  text-align: center; white-space: nowrap; letter-spacing: .04em; }
+  text-align: center; white-space: nowrap; letter-spacing: .04em; z-index: 2; }
 .ss-story-pg__sub { position: absolute; left: 50%; transform: translateX(-50%); top: 16.389cqw; margin: 0;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.389cqw; color: #fff3e8;
   text-align: center; white-space: nowrap; }
@@ -2839,6 +2839,23 @@ html.process-open { overflow: hidden; }
 .ss-outro__bg { position: absolute; left: 0; top: 122.569cqw; width: 100cqw; height: 50.972cqw; object-fit: cover; display: block; }
 .ss-outro__thanks { position: absolute; left: 50%; transform: translateX(-50%); top: 147.153cqw; margin: 0;
   font-family: "Cormorant Garamond", serif; font-size: 1.389cqw; color: #fff3e8; }
+
+/* ── 마그네틱 골드 글로우 (상상의 문 전용) — 포인터 따라 광원 ── */
+.ss-mag { overflow: hidden; }
+.ss-mag__flair { position: absolute; top: 0; left: 0; width: 160%; aspect-ratio: 1; pointer-events: none;
+  transform: scale(0); transform-origin: 0 0; will-change: transform; z-index: 0; }
+.ss-mag__flair::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,194,132,.5) 0%, rgba(255,150,40,.15) 45%, transparent 70%); }
+.ss-outro__ri.ss-mag > p { position: relative; z-index: 1; }
+#process-sangsang .process__cta.ss-mag { position: relative; }
+#process-sangsang .process__cta.ss-mag > * { position: relative; z-index: 1; }
+
+/* ── ss4 골드 글로우 (UNLOCK 헤드라인 뒤 빛 번짐) ── */
+.ss-pg-glow { position: absolute; left: 50%; top: 10.5cqw; transform: translate(-50%, -50%);
+  width: 52cqw; height: 26cqw; pointer-events: none; z-index: 1;
+  background: radial-gradient(ellipse at center, rgba(255,194,132,.30) 0%, rgba(255,150,40,.10) 42%, transparent 72%);
+  filter: blur(0.8cqw); }
 
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--gwihon { background: #1a1410; box-shadow: 0 24px 60px -32px rgba(20,12,6,0.55); }
