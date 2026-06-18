@@ -447,13 +447,15 @@
                 clackPlayed = true;
                 blockWheel  = true;
 
-                clackTL = gsap.timeline({ onComplete() { blockWheel=false; clackTL=null; } })
+                clackTL = gsap.timeline({ onComplete() { clackTL=null; } })
                   /* 1단계: 열쇠를 살짝 위로 들었다가 — 예비동작 */
                   .to(keyTop, { y: "-=8", duration: 0.1, ease: "power1.in", overwrite: "auto" })
                   /* 2단계: 꽂아 넣기 — 아래로 쾅 + 회전 임팩트 */
                   .to(keyTop, { y: "+=18", rotate: -12, scale: 0.92, duration: 0.12, ease: "power3.in" })
                   /* 3단계: 탄성 복귀 — back 이징으로 흔들림 */
                   .to(keyTop, { y: "-=5", rotate: 0, scale: 1.0, duration: 0.35, ease: "back.out(3)" })
+                  /* 임팩트+반동(~0.57s)까지만 스크롤 차단 → 멈칫 단축. 뒤 흔들림·교체는 스크롤 풀고 진행 */
+                  .call(() => { blockWheel = false; })
                   /* 4단계: 미세 흔들림 settle */
                   .to(keyTop, { rotate: 3, duration: 0.1, ease: "sine.inOut" })
                   .to(keyTop, { rotate: 0, duration: 0.1, ease: "sine.inOut" })
