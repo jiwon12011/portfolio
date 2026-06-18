@@ -484,8 +484,8 @@
                   /* 4단계: top 페이드아웃 + lock 페이드인 */
                   .to(keyTop,  { opacity: 0, duration: 0.18, ease: "power1.in"  }, "+=0.08")
                   .to(keyLock, { opacity: 1, duration: 0.18, ease: "power1.out" }, "<")
-                  /* 5단계: 잠금과 동시에 하단 배경 사진 위→아래로 촤르르 펼침 */
-                  .to(photobg ? photobg : {}, { clipPath: "inset(0 0 0% 0)", duration: 0.8, ease: "power3.out" }, "<");
+                  /* 5단계: 잠금 후 살짝 늦게, 천천히 하단 배경 사진 위→아래로 촤르르 펼침 */
+                  .to(photobg ? photobg : {}, { clipPath: "inset(0 0 0% 0)", duration: 1.5, ease: "power2.out" }, "+=0.2");
               }
             },
 
