@@ -360,12 +360,12 @@
          */
         const WP = [
           /* pos    dur   yR      xCqw            rot(누적)  ease(경로)                          의미                          */
-          [   0,    1.2,  0.05,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동(중심 78cqw, visible, 상단)        */
-          [   1.2,  1.0,  0.11,   68,             190,  "power2.in"   ],  /* →우: off-screen 완전 퇴장(더 위에서)            */
-          [   2.2,  1.6,  0.55,   40,             340,  "none"        ],  /* 화면 밖 우측에서 아래로 하강                     */
-          [   3.8,  1.6,  0.72,  -72,             470,  "none"        ],  /* 뷰포트 아래(숨김)에서 우→좌 횡단 → off-screen 좌측 */
-          [   5.4,  2.0,  0.86,  -10,             590,  "power2.out"  ],  /* ←왼쪽에서 떠오르며 등장(스크롤보다 느린 하강)   */
-          [   7.4,  1.4,  0.95,   FX * 0.6,       665,  "power1.out"  ],  /* 명패 향해 감속 수렴                           */
+          [   0,    1.0,  0.05,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동(중심 78cqw, visible, 상단)        */
+          [   1.0,  0.9,  0.12,   66,             190,  "power2.in"   ],  /* →우: off-screen 퇴장                          */
+          [   1.9,  1.3,  0.34,  -70,             330,  "none"        ],  /* 화면 밖 상단에서 우→좌 횡단(숨김) → off-screen 좌측 */
+          [   3.2,  2.2,  0.60,   -8,             480,  "power2.out"  ],  /* ←왼쪽에서 아래-중간 높이로 또렷이 등장(화면 안)  */
+          [   5.4,  2.2,  0.82,   -6,             600,  "sine.inOut"  ],  /* 화면 안에 머물며 천천히 명패로 하강(스크롤 추종) */
+          [   7.6,  1.2,  0.93,   FX * 0.6,       670,  "power1.out"  ],  /* 명패 향해 감속 수렴                           */
           [   8.8,  1.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합                         */
         ];
 
@@ -528,7 +528,7 @@
                   keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
                 );
                 keyTopTweens.push(
-                  keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 5.4)
+                  keyTL.to(keyTop, { opacity: 1, duration: 1.6, ease: "power2.out" }, 3.4)
                 );
               }
             },
@@ -553,10 +553,10 @@
         keyTopTweens.push(
           keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
         );
-        /* 재등장 페이드인: 우→좌 횡단(숨김) 끝나고 왼쪽에서 떠오르며 들어올 때 또렷해지도록
-         * t=5.4~6.8: WP[4] 진입(왼쪽에서 등장) */
+        /* 재등장 페이드인: 우→좌 횡단(숨김) 끝나고 왼쪽에서 화면 안으로 들어오기 전 또렷해지도록
+         * t=3.4~5.0: WP[3] 진입(왼쪽에서 등장) */
         keyTopTweens.push(
-          keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 5.4)
+          keyTL.to(keyTop, { opacity: 1, duration: 1.6, ease: "power2.out" }, 3.4)
         );
 
         /* 트레일 노드 bloom→fadeout
@@ -890,10 +890,10 @@
           scrollTrigger: {
             trigger: stlCaption,
             scroller,
-            start: "top 78%",
+            start: "top 88%",
             endTrigger: stlReserve || ss4Stl,
-            end: stlReserve ? "bottom 60%" : "bottom bottom",
-            scrub: 0.6,
+            end: stlReserve ? "bottom 8%" : "bottom bottom",  /* 구간 넓힘 → 더 천천히 촤라라 */
+            scrub: 0.8,
             invalidateOnRefresh: true,
           },
         });
