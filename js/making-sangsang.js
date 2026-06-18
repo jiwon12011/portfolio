@@ -401,9 +401,8 @@
               if (self.progress >= 0.98 && !clackPlayed) {
                 clackPlayed = true;
                 blockWheel  = true;
-                window.__processScrollLock = true; /* smooth-process도 함께 멈춤 */
 
-                clackTL = gsap.timeline({ onComplete() { blockWheel=false; window.__processScrollLock=false; clackTL=null; } })
+                clackTL = gsap.timeline({ onComplete() { blockWheel=false; clackTL=null; } })
                   /* 1단계: 열쇠를 살짝 위로 들었다가 — 예비동작 */
                   .to(keyTop, { y: "-=8", duration: 0.1, ease: "power1.in", overwrite: "auto" })
                   /* 2단계: 꽂아 넣기 — 아래로 쾅 + 회전 임팩트 */
@@ -423,7 +422,6 @@
               /* 섹션 위로 되돌아오면 달칵 상태 초기화 */
               clackPlayed = false;
               blockWheel  = false;
-              window.__processScrollLock = false;
               if (clackTL) { clackTL.kill(); clackTL = null; }
               gsap.set(keyTop,  { opacity: 1 });
               gsap.set(keyLock, { opacity: 0 });
