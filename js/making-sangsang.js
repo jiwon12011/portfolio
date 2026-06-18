@@ -701,6 +701,99 @@
     }
 
     /* ================================================================
+       SECTION 4 분위기 요소 (#ss4) — 골드 먼지·배경 별·빛줄기·안개
+       ────────────────────────────────────────────────────────────────
+       · z-index: 0 (이미지·키·트레일 뒤) — 순수 배경 레이어
+       · transform/opacity only — 60fps, 레이아웃 속성 무간섭
+       · 키 scrub·트레일·달칵·기존 ScrollTrigger 절대 미간섭
+       · 총 요소: god ray 2 + 먼지 18 + 별 25 + 안개 2 = 47개
+    ================================================================ */
+    {
+      const ss4Bg = scroller.querySelector("#ss4");
+      if (ss4Bg) {
+        const rnd = (a, b) => a + Math.random() * (b - a);
+
+        /* ① 빛줄기 god ray 2개
+         * transform-origin: 50% 0% → 상단 중심 기준 사선 회전
+         * CSS 애니메이션은 opacity만 — inline transform과 충돌 없음 */
+        [
+          { left: "27cqw", rot: "-13deg", delay: "0s",   dur: "13s" },
+          { left: "61cqw", rot:  "10deg", delay: "-8s",  dur: "17s" },
+        ].forEach((cfg) => {
+          const ray = document.createElement("span");
+          ray.className = "ss-god-ray";
+          ray.setAttribute("aria-hidden", "true");
+          ray.style.left           = cfg.left;
+          ray.style.transform      = `rotate(${cfg.rot})`;
+          ray.style.animationDelay = cfg.delay;
+          ray.style.setProperty("--ray-dur", cfg.dur);
+          ss4Bg.appendChild(ray);
+        });
+
+        /* ② 골드 먼지 입자 18개 — 1~3px, 느리게 사선 부유, opacity 낮게 */
+        for (let i = 0; i < 18; i++) {
+          const d = document.createElement("span");
+          d.className = "ss-dust";
+          d.setAttribute("aria-hidden", "true");
+          const sz = rnd(1, 3);
+          /* 골드 60% / 화이트 40% */
+          const isGold = Math.random() > 0.4;
+          d.style.width      = `${sz.toFixed(1)}px`;
+          d.style.height     = `${sz.toFixed(1)}px`;
+          d.style.left       = `${rnd(3, 97).toFixed(2)}cqw`;
+          d.style.top        = `${rnd(5, 410).toFixed(1)}cqw`;
+          d.style.background = isGold
+            ? `rgba(${220 + Math.floor(rnd(0, 35))},${158 + Math.floor(rnd(0, 50))},${Math.floor(rnd(28, 78))},1)`
+            : "rgba(255,252,240,1)";
+          d.style.setProperty("--df-dur",   `${rnd(17, 29).toFixed(1)}s`);
+          d.style.setProperty("--df-delay", `-${rnd(0, 26).toFixed(1)}s`);
+          d.style.setProperty("--df-hi",    `${rnd(0.13, 0.38).toFixed(2)}`);
+          d.style.setProperty("--df-dx",    `${rnd(-28, 28).toFixed(0)}px`);
+          d.style.setProperty("--df-dy",    `-${rnd(90, 240).toFixed(0)}px`);
+          ss4Bg.appendChild(d);
+        }
+
+        /* ③ 배경 별 점멸 25개 — 1~2px, 트레일(5~6px)보다 훨씬 어둡게 차별화 */
+        for (let i = 0; i < 25; i++) {
+          const s = document.createElement("span");
+          s.className = "ss-bg-star";
+          s.setAttribute("aria-hidden", "true");
+          const sz = Math.random() > 0.72 ? 2 : 1;
+          s.style.width      = `${sz}px`;
+          s.style.height     = `${sz}px`;
+          s.style.left       = `${rnd(1, 99).toFixed(2)}cqw`;
+          s.style.top        = `${rnd(3, 416).toFixed(1)}cqw`;
+          /* 골드빛 vs 냉백 — 트레일의 warm gold/white와 구별되는 어두운 톤 */
+          s.style.background = Math.random() > 0.5
+            ? "rgba(255,220,140,1)"
+            : "rgba(255,255,255,1)";
+          s.style.setProperty("--tw-dur",   `${rnd(2.5, 5.5).toFixed(1)}s`);
+          s.style.setProperty("--tw-delay", `-${rnd(0, 5.5).toFixed(1)}s`);
+          s.style.setProperty("--tw-lo",    `${rnd(0.03, 0.07).toFixed(2)}`);
+          s.style.setProperty("--tw-hi",    `${rnd(0.10, 0.24).toFixed(2)}`);
+          ss4Bg.appendChild(s);
+        }
+
+        /* ④ 안개 추가 레이어 2개 — 섹션 중·하단 어두운 공백 채움
+         * .ss-mist 기본 클래스에서 animation·border-radius 상속
+         * CSS .ss-mist--3/4에서 gradient·delay·duration 오버라이드 */
+        [
+          { cls: "ss-mist--3", left: "8cqw",  top: "158cqw", w: "88cqw",  h: "20cqw" },
+          { cls: "ss-mist--4", left: "-6cqw", top: "268cqw", w: "110cqw", h: "26cqw" },
+        ].forEach((cfg) => {
+          const mist = document.createElement("span");
+          mist.className = `ss-mist ${cfg.cls}`;
+          mist.setAttribute("aria-hidden", "true");
+          mist.style.left   = cfg.left;
+          mist.style.top    = cfg.top;
+          mist.style.width  = cfg.w;
+          mist.style.height = cfg.h;
+          ss4Bg.appendChild(mist);
+        });
+      }
+    }
+
+    /* ================================================================
        마그네틱 골드 글로우 — ss5 링크카드(LIVE/GITHUB/PROPOSAL) + CTA
        · 포인터 따라 광원이 번짐(스크롤 무관 → 모달서 안정), quickTo 60fps
     ================================================================ */

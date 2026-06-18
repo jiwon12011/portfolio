@@ -2902,6 +2902,75 @@ html.process-open { overflow: hidden; }
   background: radial-gradient(ellipse at center, rgba(255,180,80,.18) 0%, rgba(200,120,30,.07) 45%, transparent 70%); }
 @media (prefers-reduced-motion: reduce) { .ss-mist { animation: none; opacity: .5; } }
 
+/* ── ss4 안개 강화: 기존 레이어 그라데이션·크기 증폭 ── */
+.ss-mist--1 {
+  background: radial-gradient(ellipse 80% 40% at 50% 50%,
+    rgba(255,140,30,.11) 0%, rgba(200,100,20,.05) 50%, transparent 72%);
+  height: 28cqw;
+}
+.ss-mist--2 {
+  background: radial-gradient(ellipse 80% 40% at 50% 50%,
+    rgba(255,130,25,.09) 0%, rgba(190,90,16,.04) 50%, transparent 72%);
+  height: 24cqw;
+}
+/* 추가 레이어 3·4 (JS 생성, .ss-mist 상속) — 섹션 중·하단 빈 공간 보강 */
+.ss-mist--3 { animation-delay: -4s;  animation-duration: 19s;
+  background: radial-gradient(ellipse 80% 40% at 50% 50%,
+    rgba(255,135,28,.10) 0%, rgba(195,95,18,.04) 50%, transparent 72%); }
+.ss-mist--4 { animation-delay: -11s; animation-duration: 24s;
+  background: radial-gradient(ellipse 80% 40% at 50% 50%,
+    rgba(255,128,22,.08) 0%, rgba(185,88,14,.03) 50%, transparent 72%); }
+
+/* ── ss4 빛줄기 god ray (JS 생성) ── */
+.ss-god-ray {
+  position: absolute; pointer-events: none; z-index: 0;
+  top: -2cqw; width: 13cqw; height: 92cqw;
+  background: linear-gradient(180deg,
+    rgba(255,215,130,.18) 0%,
+    rgba(255,170,55,.06)  52%,
+    transparent 82%);
+  filter: blur(22px);
+  border-radius: 50px;
+  transform-origin: 50% 0%;
+  animation: ss-ray-fade var(--ray-dur, 14s) ease-in-out infinite alternate;
+}
+@keyframes ss-ray-fade {
+  from { opacity: .5; }
+  to   { opacity: 1;  }
+}
+
+/* ── ss4 배경 별 점멸 (JS 생성) — 트레일보다 어둡고 작음 ── */
+.ss-bg-star {
+  position: absolute; pointer-events: none; border-radius: 50%; z-index: 0;
+  animation: ss-star-twinkle var(--tw-dur, 3.5s) ease-in-out infinite;
+  animation-delay: var(--tw-delay, 0s);
+}
+@keyframes ss-star-twinkle {
+  0%, 100% { opacity: var(--tw-lo, .04); }
+  50%       { opacity: var(--tw-hi, .18); }
+}
+
+/* ── ss4 골드 먼지 입자 (JS 생성) ── */
+.ss-dust {
+  position: absolute; pointer-events: none; border-radius: 50%; z-index: 0;
+  animation: ss-dust-float var(--df-dur, 22s) linear infinite;
+  animation-delay: var(--df-delay, 0s);
+}
+@keyframes ss-dust-float {
+  0%   { opacity: 0;                 transform: translate(0, 0); }
+  12%  { opacity: var(--df-hi, .28); }
+  85%  { opacity: var(--df-hi, .28); }
+  100% { opacity: 0;                 transform: translate(var(--df-dx, 8px), var(--df-dy, -180px)); }
+}
+
+/* ── reduced-motion: ss4 분위기 요소 정적 처리 ── */
+@media (prefers-reduced-motion: reduce) {
+  .ss-god-ray { animation: none; opacity: .07; }
+  .ss-bg-star { animation: none; opacity: .06; }
+  .ss-dust    { display: none; }
+  .ss-mist--3, .ss-mist--4 { animation: none; opacity: .45; }
+}
+
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--gwihon { background: #1a1410; box-shadow: 0 24px 60px -32px rgba(20,12,6,0.55); }
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
