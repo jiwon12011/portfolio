@@ -2963,12 +2963,49 @@ html.process-open { overflow: hidden; }
   100% { opacity: 0;                 transform: translate(var(--df-dx, 8px), var(--df-dy, -180px)); }
 }
 
+/* ── ss4 유성 (JS 생성) — 가끔 사선으로 흐르는 별똥별, 머리 밝고 꼬리 페이드 ── */
+.ss-meteor {
+  position: absolute; pointer-events: none; z-index: 0;
+  width: 16cqw; height: 2px; border-radius: 2px;
+  /* 왼쪽(머리) 밝음 → 오른쪽(꼬리) 사라짐 */
+  background: linear-gradient(90deg,
+    #fff 0%, rgba(255,224,164,.92) 7%, rgba(255,206,128,.35) 38%, transparent 72%);
+  filter: drop-shadow(0 0 5px rgba(255,210,150,.7));
+  transform: rotate(-28deg) translate(0, 0);
+  transform-origin: 0% 50%;
+  opacity: 0;
+  animation: ss-meteor-streak var(--mt-dur, 9s) ease-in infinite;
+  animation-delay: var(--mt-delay, 0s);
+}
+@keyframes ss-meteor-streak {
+  0%   { opacity: 0; transform: rotate(-28deg) translate(0, 0); }
+  6%   { opacity: 1; }
+  18%  { opacity: 0; transform: rotate(-28deg) translate(var(--mt-dx,-200px), var(--mt-dy,106px)); }
+  100% { opacity: 0; transform: rotate(-28deg) translate(var(--mt-dx,-200px), var(--mt-dy,106px)); }
+}
+
+/* ── ss4 골드 보케 (JS 생성) — 초점 나간 큰 광원, 먼지보다 크고 흐릿 ── */
+.ss-bokeh {
+  position: absolute; pointer-events: none; z-index: 0; border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(255,200,120,.22) 0%, rgba(255,180,90,.10) 45%, transparent 70%);
+  filter: blur(8px);
+  animation: ss-bokeh-drift var(--bk-dur, 30s) ease-in-out infinite alternate;
+  animation-delay: var(--bk-delay, 0s);
+}
+@keyframes ss-bokeh-drift {
+  0%   { opacity: var(--bk-lo, .25); transform: translate(0, 0) scale(1); }
+  100% { opacity: var(--bk-hi, .5);  transform: translate(var(--bk-dx,20px), var(--bk-dy,-40px)) scale(1.12); }
+}
+
 /* ── reduced-motion: ss4 분위기 요소 정적 처리 ── */
 @media (prefers-reduced-motion: reduce) {
   .ss-god-ray { animation: none; opacity: .07; }
   .ss-bg-star { animation: none; opacity: .06; }
   .ss-dust    { display: none; }
   .ss-mist--3, .ss-mist--4 { animation: none; opacity: .45; }
+  .ss-meteor  { display: none; }
+  .ss-bokeh   { animation: none; opacity: .3; }
 }
 
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
