@@ -106,13 +106,11 @@
       scrollTrigger: ST("#ss1 .ss-overview__lead", "top 84%"),
     });
 
-    // .ss-em 강조어 전체: 밑에 숨어 있다가 화면 진입 시 위로 올라오며 등장
-    // (CSS에 이미 주황 #ffc284 — 색은 유지, 위치/투명도만 모션)
-    // ※ 이 모달은 scrub 불안정 → once 진입 트리거 사용
+    // .ss-em 강조어 전체: 진입 시 부드럽게 페이드인 (주황 #ffc284는 CSS 유지)
+    // ※ display/transform 변경 금지 — 문장 중간 인라인 em의 줄바꿈·순서 깨짐 방지(이전 yPercent 버그)
     scroller.querySelectorAll(".ss-em").forEach((em) => {
-      gsap.set(em, { display: "inline-block" });
       gsap.from(em, {
-        yPercent: 100, opacity: 0, duration: 1.0, ease: "power3.out",
+        opacity: 0, duration: 0.9, ease: "power2.out",
         scrollTrigger: ST(em, "top 85%"),
       });
     });
@@ -296,7 +294,8 @@
           st.textContent =
             ".ss-key-trail{position:absolute;pointer-events:none;opacity:0;z-index:5;}" +
             ".ss-key-trail__dot{position:absolute;border-radius:50%;" +
-            "transform:translate(-50%,-50%);}";
+            "transform:translate(-50%,-50%);" +
+            "box-shadow:0 0 0.55cqw 0.1cqw rgba(255,214,150,.85),0 0 1.2cqw 0.3cqw rgba(255,180,90,.45);}";
           document.head.appendChild(st);
         }
 
@@ -306,10 +305,10 @@
 
         /*
          * 착지 좌표 (xPercent:-50 적용 후 x=0 = 가로 중앙 50cqw)
-         *   FX = (27.5 + 14.592÷2) − 50 = −15.204cqw
+         *   FX = (24.5 + 14.592÷2) − 50 = −18.204cqw  (keyLock left:24.5cqw 중심 정렬, 명패 텍스트 비침)
          *   FY = 341.319 − 8.889 = 332.43cqw
          */
-        const FX  = -15.204;
+        const FX  = -18.204;
         const FY  =  332.43;
         const AMP =  40;     /* 스윙 진폭: 이미지(20~79cqw) 바깥 + 키 완전 노출 */
 
@@ -342,14 +341,15 @@
          */
         const KEY_CY = 8.889 + 4.444; /* keyTop 수직 중심 시작점 */
 
-        /* [xCqw, yR, [[dx_cqw, dy_cqw, size_px, color], ...]] */
+        /* [xCqw, yR, [[dx_cqw, dy_cqw, size_px, color], ...]]
+         * 별빛 강화: 지점당 도트 2 → 5개(큰 별 + 작은 잔별), 사이즈 변주 + box-shadow 글로우 */
         const TRAIL_CFG = [
-          [ AMP,         0.10, [[-0.8, -1.5, 5, "#ffffff"], [ 1.2,  1.0, 4, "#ffc284"]] ],
-          [-AMP,         0.25, [[ 1.0, -0.8, 5, "#ffc284"], [-1.4,  1.5, 4, "#ffffff"]] ],
-          [ AMP * 0.80,  0.42, [[-0.7, -1.8, 6, "#ffffff"], [ 1.5,  0.9, 4, "#ffc284"]] ],
-          [-AMP * 0.60,  0.59, [[ 1.2, -1.0, 5, "#ffc284"], [-1.0,  1.6, 4, "#ffffff"]] ],
-          [ AMP * 0.35,  0.75, [[-1.0, -1.4, 5, "#ffffff"], [ 1.4,  0.7, 4, "#ffc284"]] ],
-          [ FX * 0.40,   0.90, [[ 0.9, -1.2, 5, "#ffffff"], [-1.2,  1.4, 4, "#ffc284"]] ],
+          [ AMP,         0.10, [[-0.8,-1.5,6,"#ffffff"],[ 1.2, 1.0,4,"#ffc284"],[ 0.3,-0.4,2,"#fff3e8"],[-1.8, 0.6,3,"#ffd9a0"],[ 2.1,-1.4,2,"#ffffff"]] ],
+          [-AMP,         0.25, [[ 1.0,-0.8,6,"#ffc284"],[-1.4, 1.5,4,"#ffffff"],[-0.2,-0.5,2,"#fff3e8"],[ 1.9, 0.7,3,"#ffd9a0"],[-2.2,-1.2,2,"#ffffff"]] ],
+          [ AMP * 0.80,  0.42, [[-0.7,-1.8,7,"#ffffff"],[ 1.5, 0.9,4,"#ffc284"],[ 0.4,-0.3,2,"#fff3e8"],[-1.9, 0.5,3,"#ffd9a0"],[ 2.0,-1.5,2,"#ffffff"]] ],
+          [-AMP * 0.60,  0.59, [[ 1.2,-1.0,6,"#ffc284"],[-1.0, 1.6,4,"#ffffff"],[-0.3,-0.4,2,"#fff3e8"],[ 1.8, 0.8,3,"#ffd9a0"],[-2.1,-1.3,2,"#ffffff"]] ],
+          [ AMP * 0.35,  0.75, [[-1.0,-1.4,6,"#ffffff"],[ 1.4, 0.7,4,"#ffc284"],[ 0.2,-0.5,2,"#fff3e8"],[-1.7, 0.6,3,"#ffd9a0"],[ 1.9,-1.4,2,"#ffffff"]] ],
+          [ FX * 0.40,   0.90, [[ 0.9,-1.2,6,"#ffffff"],[-1.2, 1.4,4,"#ffc284"],[ 0.3,-0.4,2,"#fff3e8"],[-1.8, 0.7,3,"#ffd9a0"],[ 1.9,-1.3,2,"#ffffff"]] ],
         ];
 
         const trailWraps = TRAIL_CFG.map(([xCqw, yR, dots]) => {
@@ -487,11 +487,11 @@
         scrollTrigger: ST("#ss5 .ss-outro__shot--1", "top 82%"),
       });
 
-      /* LIVE SITE → GITHUB 쇽쇽쇽 (오른쪽에서 순차 슬라이드) */
+      /* LIVE → GITHUB → PROPOSAL 오른쪽에서 왼쪽으로 샤악 흘러 들어옴 */
       const ris = scroller.querySelectorAll("#ss5 .ss-outro__ri");
       if (ris.length) gsap.from(ris, {
-        opacity: 0, x: 80, duration: 0.8, ease: "power3.out", stagger: 0.18,
-        scrollTrigger: ST("#ss5 .ss-outro__ri--live", "top 86%"),
+        opacity: 0, x: 160, duration: 1.1, ease: "power2.out", stagger: 0.22,
+        scrollTrigger: ST("#ss5 .ss-outro__ri--live", "top 88%"),
       });
     }
 

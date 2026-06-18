@@ -2782,7 +2782,7 @@ html.process-open { overflow: hidden; }
 .ss-story-pg__plaque-text { position: absolute; left: 50%; transform: translateX(-50%); top: 342.083cqw; margin: 0;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.528cqw; line-height: 1.29;
   letter-spacing: .1em; color: #efd6a7; text-align: center; white-space: nowrap; z-index: 2; }
-.ss-story-pg__key--lock { left: 27.5cqw; top: 341.319cqw; width: 14.592cqw; height: 7.43cqw; z-index: 3; }
+.ss-story-pg__key--lock { left: 24.5cqw; top: 341.319cqw; width: 14.592cqw; height: 7.43cqw; z-index: 3; }
 /* 하단 팀 프로세스 배경 사진 + 상단 페이드 (rectangle-607 대체) */
 .ss-story-pg__photobg { position: absolute; left: 0; top: 348.75cqw; width: 100cqw; height: 50.972cqw;
   object-fit: cover; display: block; z-index: 0; }
@@ -2849,7 +2849,8 @@ html.process-open { overflow: hidden; }
   background: radial-gradient(circle, rgba(255,194,132,.5) 0%, rgba(255,150,40,.15) 45%, transparent 70%); }
 .ss-outro__ri.ss-mag > p { position: relative; z-index: 1; }
 #process-sangsang .process__cta.ss-mag { position: relative; }
-#process-sangsang .process__cta.ss-mag > * { position: relative; z-index: 1; }
+/* flair(.ss-mag__flair)는 제외 — 포함 시 flex 아이템이 되어 CTA 크기 폭주 */
+#process-sangsang .process__cta.ss-mag > :not(.ss-mag__flair) { position: relative; z-index: 1; }
 
 /* ── ss4 골드 글로우 (UNLOCK 헤드라인 뒤 빛 번짐) ── */
 .ss-pg-glow { position: absolute; left: 50%; top: 10.5cqw; transform: translate(-50%, -50%);
