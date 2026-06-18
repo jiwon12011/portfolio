@@ -362,10 +362,10 @@
           /* pos    dur   yR      xCqw            rot(누적)  ease(경로)                          의미                          */
           [   0,    1.2,  0.05,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동(중심 78cqw, visible, 상단)        */
           [   1.2,  1.0,  0.11,   68,             190,  "power2.in"   ],  /* →우: off-screen 완전 퇴장(더 위에서)            */
-          [   2.2,  1.6,  0.52,   32,             360,  "none"        ],  /* 화면 밖 아래로 내려가며 x를 중앙쪽(32)으로 복귀  */
-          [   3.8,  2.0,  0.68,   14,             480,  "power2.out"  ],  /* ↑아래에서 화면 안으로 일찍 떠오름(스크롤보다 느린 하강) */
-          [   5.8,  2.0,  0.84,   -2,             600,  "sine.inOut"  ],  /* ↑계속 떠오르며 명패 향해 글라이딩(길게·또렷)   */
-          [   7.8,  1.0,  0.94,   FX * 0.55,      665,  "power1.out"  ],  /* ←좌: 착지 근접 감속                           */
+          [   2.2,  1.6,  0.55,   40,             340,  "none"        ],  /* 화면 밖 우측에서 아래로 하강                     */
+          [   3.8,  1.6,  0.72,  -72,             470,  "none"        ],  /* 뷰포트 아래(숨김)에서 우→좌 횡단 → off-screen 좌측 */
+          [   5.4,  2.0,  0.86,  -10,             590,  "power2.out"  ],  /* ←왼쪽에서 떠오르며 등장(스크롤보다 느린 하강)   */
+          [   7.4,  1.4,  0.95,   FX * 0.6,       665,  "power1.out"  ],  /* 명패 향해 감속 수렴                           */
           [   8.8,  1.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합                         */
         ];
 
@@ -528,7 +528,7 @@
                   keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
                 );
                 keyTopTweens.push(
-                  keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 2.8)
+                  keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 5.4)
                 );
               }
             },
@@ -553,10 +553,10 @@
         keyTopTweens.push(
           keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
         );
-        /* 재등장 페이드인: 화면 안으로 떠오르기 전 미리 또렷해지도록 일찍·길게
-         * t=2.8~4.2: WP[2]~[3], 키가 아래에서 떠올라 화면에 들어오는 시점 */
+        /* 재등장 페이드인: 우→좌 횡단(숨김) 끝나고 왼쪽에서 떠오르며 들어올 때 또렷해지도록
+         * t=5.4~6.8: WP[4] 진입(왼쪽에서 등장) */
         keyTopTweens.push(
-          keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 2.8)
+          keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 5.4)
         );
 
         /* 트레일 노드 bloom→fadeout
@@ -882,11 +882,23 @@
           return wrap;
         });
 
-        /* 촤르르 순차 점등 후 유지(별빛 라인이 그려지고 남음) */
+        /* 촤라라 — 스크롤 따라 순차 점등(스크럽): 캡션 진입~예약 캡처 통과 구간에 매핑
+         * → 보는 사람이 스크롤하며 별빛이 위에서 아래로 차례로 켜지는 걸 직접 봄 */
         gsap.set(stlWraps, { opacity: 0 });
-        const stlTL = gsap.timeline({ scrollTrigger: ST(stlCaption, "top 82%") });
+        const stlReserve = ss4Stl.querySelector(".ss-story-pg__cap--reserve");
+        const stlTL = gsap.timeline({
+          scrollTrigger: {
+            trigger: stlCaption,
+            scroller,
+            start: "top 78%",
+            endTrigger: stlReserve || ss4Stl,
+            end: stlReserve ? "bottom 60%" : "bottom bottom",
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        });
         stlWraps.forEach((w, idx) => {
-          stlTL.to(w, { opacity: 0.92, duration: 0.16, ease: "power2.out" }, idx * 0.035);
+          stlTL.to(w, { opacity: 0.92, duration: 0.16, ease: "power2.out" }, idx * 0.05);
         });
       }
     }
