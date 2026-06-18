@@ -824,46 +824,69 @@
       const ss4Stl    = scroller.querySelector("#ss4");
       const stlCaption = ss4Stl && ss4Stl.querySelector(".ss-story-pg__caption--main");
       if (ss4Stl && stlCaption) {
-        /* ── 스타일 주입(1회) — 발광 별빛 라인 ── */
+        /* 별빛 라인 = 키 트레일과 같은 반짝이 입자(.ss-key-trail__dot 글로우)를 넓은 지그재그
+         * 경로에 촘촘히 깔아 "촤르르" 순차 점등 → 그려진 뒤 그대로 남음(라인처럼) */
         if (!document.getElementById("ss-stl-style")) {
           const st = document.createElement("style");
           st.id = "ss-stl-style";
-          st.textContent =
-            ".ss-stl-svg{position:absolute;left:0;width:100cqw;pointer-events:none;z-index:4;overflow:visible;}" +
-            ".ss-stl-path{fill:none;stroke:#ffdca6;stroke-width:0.55;stroke-linecap:round;stroke-linejoin:round;" +
-            "filter:drop-shadow(0 0 0.5cqw rgba(255,212,135,.95)) drop-shadow(0 0 1.4cqw rgba(255,165,55,.55));}";
+          st.textContent = ".ss-stl{position:absolute;pointer-events:none;opacity:0;z-index:4;}";
           document.head.appendChild(st);
         }
 
-        /* ── 지그재그 좌표 [x(cqw), y(절대 cqw)] — 캡션 하단~예약 캡처를 좌우로 가로지름 ── */
-        const TOP = 35, BOT = 330, H = BOT - TOP;
-        const PTS = [
-          [50, 35], [22, 58], [80, 88], [16, 122], [82, 158],
-          [18, 194], [78, 228], [22, 262], [80, 296], [44, 330],
+        /* 지그재그 꼭짓점 [x(cqw), y(cqw)] — 폭 넓게(6~94), 캡션 하단~예약 캡처 */
+        const VERTS = [
+          [50, 38], [8, 70], [92, 108], [6, 150], [92, 192],
+          [8, 234], [92, 274], [8, 312], [58, 334],
+        ];
+        /* 꼭짓점 사이 arc-length 비례 보간 → 별빛이 선처럼 이어짐 */
+        const SPACING = 9; /* cqw 간격(작을수록 촘촘) */
+        const pts = [];
+        for (let i = 0; i < VERTS.length - 1; i++) {
+          const [x0, y0] = VERTS[i], [x1, y1] = VERTS[i + 1];
+          const seg = Math.hypot(x1 - x0, y1 - y0);
+          const n = Math.max(1, Math.round(seg / SPACING));
+          for (let k = 0; k < n; k++) {
+            const f = k / n;
+            pts.push([x0 + (x1 - x0) * f, y0 + (y1 - y0) * f]);
+          }
+        }
+        pts.push(VERTS[VERTS.length - 1]);
+
+        /* 노드당 1~2 반짝이 — warm gold/white·크기 변주(자글자글 별빛) */
+        const STAR = [
+          [[0, 0, 5, "#fff9ee"]],
+          [[0, 0, 3, "#ffd080"], [1.1, -0.6, 2, "#ffffff"]],
+          [[0, 0, 6, "#ffffff"]],
+          [[0, 0, 2, "#ffca80"]],
+          [[0, 0, 4, "#ffd080"]],
+          [[0, 0, 3, "#ffffff"], [-0.9, 0.6, 2, "#ffca80"]],
         ];
 
-        const NS  = "http://www.w3.org/2000/svg";
-        const svg = document.createElementNS(NS, "svg");
-        svg.setAttribute("class", "ss-stl-svg");
-        svg.setAttribute("viewBox", `0 0 100 ${H}`);
-        svg.setAttribute("preserveAspectRatio", "none"); /* x·y 모두 1단위=1cqw → stroke 균일 */
-        svg.setAttribute("aria-hidden", "true");
-        svg.style.top    = `${TOP}cqw`;
-        svg.style.height = `${H}cqw`;
+        const stlWraps = pts.map(([x, y], idx) => {
+          const wrap = document.createElement("span");
+          wrap.className  = "ss-stl";
+          wrap.setAttribute("aria-hidden", "true");
+          wrap.style.left = `${x.toFixed(2)}cqw`;
+          wrap.style.top  = `${y.toFixed(2)}cqw`;
+          STAR[idx % STAR.length].forEach(([dx, dy, sz, clr]) => {
+            const dot = document.createElement("span");
+            dot.className       = "ss-key-trail__dot"; /* 키 트레일과 동일 글로우 재사용 */
+            dot.style.left      = `${dx}cqw`;
+            dot.style.top       = `${dy}cqw`;
+            dot.style.width     = `${sz}px`;
+            dot.style.height    = `${sz}px`;
+            dot.style.background = clr;
+            wrap.appendChild(dot);
+          });
+          ss4Stl.appendChild(wrap);
+          return wrap;
+        });
 
-        const d    = "M" + PTS.map(([x, y]) => `${x} ${(y - TOP).toFixed(1)}`).join(" L");
-        const path = document.createElementNS(NS, "path");
-        path.setAttribute("d", d);
-        path.setAttribute("class", "ss-stl-path");
-        path.setAttribute("pathLength", "1");
-        svg.appendChild(path);
-        ss4Stl.appendChild(svg);
-
-        /* ── 캡션 하단에서 라인이 촤라라라락 그려짐(stroke-dashoffset 1→0). 그려진 뒤 유지 ── */
-        gsap.set(path, { strokeDasharray: 1, strokeDashoffset: 1 });
-        gsap.to(path, {
-          strokeDashoffset: 0, duration: 2.4, ease: "power1.inOut",
-          scrollTrigger: ST(stlCaption, "top 80%"),
+        /* 촤르르 순차 점등 후 유지(별빛 라인이 그려지고 남음) */
+        gsap.set(stlWraps, { opacity: 0 });
+        const stlTL = gsap.timeline({ scrollTrigger: ST(stlCaption, "top 82%") });
+        stlWraps.forEach((w, idx) => {
+          stlTL.to(w, { opacity: 0.92, duration: 0.16, ease: "power2.out" }, idx * 0.035);
         });
       }
     }
