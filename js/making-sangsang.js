@@ -361,12 +361,12 @@
         const WP = [
           /* pos    dur   yR      xCqw            rot(누적)  ease(경로)                          의미                          */
           [   0,    1.2,  0.05,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동(중심 78cqw, visible, 상단)        */
-          [   1.2,  0.8,  0.11,   65,             190,  "power2.in"   ],  /* →우: off-screen 완전 퇴장(더 위에서, 빠르게)    */
-          [   2.0,  1.0,  0.42,   70,             300,  "none"        ],  /* 화면 밖 유지·y 하강(짧게 — 안 보이는 시간↓)     */
-          [   3.0,  1.6,  0.74,   44,             420,  "power2.out"  ],  /* ←좌: 예약 높이 재등장(중심 94cqw, 또렷이·천천히) */
-          [   4.6,  1.8,  0.86,   -2,             540,  "sine.inOut"  ],  /* ←좌: 중앙 지나 글라이딩 수렴(길게)             */
-          [   6.4,  1.4,  0.95,   FX * 0.5,       640,  "power1.out"  ],  /* ←좌: 착지 근접 천천히 감속                     */
-          [   7.8,  2.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합                         */
+          [   1.2,  1.0,  0.11,   68,             190,  "power2.in"   ],  /* →우: off-screen 완전 퇴장(더 위에서)            */
+          [   2.2,  1.6,  0.52,   32,             360,  "none"        ],  /* 화면 밖 아래로 내려가며 x를 중앙쪽(32)으로 복귀  */
+          [   3.8,  2.0,  0.68,   14,             480,  "power2.out"  ],  /* ↑아래에서 화면 안으로 일찍 떠오름(스크롤보다 느린 하강) */
+          [   5.8,  2.0,  0.84,   -2,             600,  "sine.inOut"  ],  /* ↑계속 떠오르며 명패 향해 글라이딩(길게·또렷)   */
+          [   7.8,  1.0,  0.94,   FX * 0.55,      665,  "power1.out"  ],  /* ←좌: 착지 근접 감속                           */
+          [   8.8,  1.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합                         */
         ];
 
         /* ── 트레일 노드 생성 — WP 도착 anchor를 보간해 경로 전체 촘촘하게 ──
@@ -528,7 +528,7 @@
                   keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
                 );
                 keyTopTweens.push(
-                  keyTL.to(keyTop, { opacity: 1, duration: 1.2, ease: "power2.out" }, 3.2)
+                  keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 2.8)
                 );
               }
             },
@@ -553,10 +553,10 @@
         keyTopTweens.push(
           keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
         );
-        /* 재등장 페이드인: 예약 높이서 일찍·길게 → 또렷하게 나타나 천천히 글라이딩
-         * t=3.2~4.4: WP[3] 진행 중, 키가 화면 안으로 진입 */
+        /* 재등장 페이드인: 화면 안으로 떠오르기 전 미리 또렷해지도록 일찍·길게
+         * t=2.8~4.2: WP[2]~[3], 키가 아래에서 떠올라 화면에 들어오는 시점 */
         keyTopTweens.push(
-          keyTL.to(keyTop, { opacity: 1, duration: 1.2, ease: "power2.out" }, 3.2)
+          keyTL.to(keyTop, { opacity: 1, duration: 1.4, ease: "power2.out" }, 2.8)
         );
 
         /* 트레일 노드 bloom→fadeout
