@@ -589,11 +589,13 @@
        마그네틱 골드 글로우 — ss5 링크카드(LIVE/GITHUB/PROPOSAL) + CTA
        · 포인터 따라 광원이 번짐(스크롤 무관 → 모달서 안정), quickTo 60fps
     ================================================================ */
-    {
+    /* hover 가능한 정밀 포인터(데스크톱)에서만 — 터치기기는 mouseleave 미발생 → 글로우 잔존 버그 회피 */
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       const magnetics = [...scroller.querySelectorAll("#ss5 .ss-outro__ri")];
       const ctaEl = document.querySelector("#process-sangsang .process__cta");
       if (ctaEl) magnetics.push(ctaEl);
 
+      const clamp = gsap.utils.clamp(0, 100);
       magnetics.forEach((el) => {
         el.classList.add("ss-mag");
         const flair = document.createElement("span");
@@ -603,14 +605,15 @@
 
         const xTo = gsap.quickTo(flair, "xPercent", { duration: 0.4, ease: "power2" });
         const yTo = gsap.quickTo(flair, "yPercent", { duration: 0.4, ease: "power2" });
-        const clamp = gsap.utils.clamp(0, 100);
+        let rect = null; /* mouseenter에서 1회 캐싱 → mousemove hot path에서 강제 reflow 제거 */
         const move = (e) => {
-          const r = el.getBoundingClientRect();
-          xTo(clamp(((e.clientX - r.left) / r.width) * 100));
-          yTo(clamp(((e.clientY - r.top) / r.height) * 100));
+          if (!rect) return;
+          xTo(clamp(((e.clientX - rect.left) / rect.width) * 100));
+          yTo(clamp(((e.clientY - rect.top) / rect.height) * 100));
         };
 
         el.addEventListener("mouseenter", (e) => {
+          rect = el.getBoundingClientRect();
           move(e);
           gsap.to(flair, { scale: 1, duration: 0.4, ease: "power2.out" });
         });
