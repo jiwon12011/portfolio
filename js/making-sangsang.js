@@ -531,11 +531,11 @@
         });
       }
 
-      /* 제안서 캡처 3장 — 오른쪽에서 왼쪽으로 촤라라 순차 슬라이드 */
-      const shots = scroller.querySelectorAll("#ss5 .ss-outro__shot");
-      if (shots.length) gsap.from(shots, {
-        opacity: 0, x: 180, duration: 1.1, ease: "power2.out", stagger: 0.2,
-        scrollTrigger: ST("#ss5 .ss-outro__shot--1", "top 84%"),
+      /* 제안서 캡처 마퀴 — 연속 슬라이드는 CSS가 담당. 진입 시 컨테이너만 페이드인 */
+      const shotsBox = scroller.querySelector("#ss5 .ss-outro__shots");
+      if (shotsBox) gsap.from(shotsBox, {
+        opacity: 0, duration: 0.9, ease: "power2.out",
+        scrollTrigger: ST("#ss5 .ss-outro__shots", "top 84%"),
       });
 
       /* LIVE → GITHUB → PROPOSAL 오른쪽에서 왼쪽으로 샤악 흘러 들어옴 */
