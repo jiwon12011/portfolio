@@ -6113,8 +6113,8 @@ html.lb-open { overflow: hidden; }
 
 /* 우측 콘텐츠 */
 .about__lead { margin: 0 0 clamp(20px, 3.4vh, 52px); font-size: clamp(17px, 1.4vw, 24px); font-weight: 500; line-height: 1.5; color: #2b2b2b; }
-.about__lead b { color: #59a2ee; font-weight: 700; }
-.about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vh, 48px) clamp(30px, 3.5vw, 62px); align-items: start;
+.about__lead b { color: #FD3588; font-weight: 700; }
+.about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vh, 96px) clamp(30px, 3.5vw, 62px); align-items: start;
   margin-top: auto; }   /* 남는 세로 공간을 lead 와 그리드 사이로 흡수 → 그리드 바닥이 INSTA 끝선에 */
 .about__title { margin: 0 0 clamp(10px, 1.4vh, 15px); padding-bottom: clamp(7px, 1vh, 11px); border-bottom: 1px solid #d5d5d5;
   font-size: clamp(13px, 1vw, 15px); font-weight: 700; letter-spacing: 0.06em; }
