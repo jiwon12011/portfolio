@@ -123,8 +123,10 @@
       y: 18,
       scrollTrigger: ST("#ss1 .ss-overview__kicker", "top 86%"),
     });
-    rise("#ss1 .ss-overview__title", {
-      y: 28, duration: 0.95, delay: 0.08,
+    /* 메인 타이틀 — 마스크 와이프(아래→위로 닦이며 등장) + 살짝 상승 (히어로 결과 통일) */
+    gsap.from("#ss1 .ss-overview__title", {
+      clipPath: "inset(110% 0% -10% 0%)",
+      y: 34, opacity: 0, duration: 1.0, ease: "power4.out", delay: 0.08,
       scrollTrigger: ST("#ss1 .ss-overview__title", "top 84%"),
     });
     rise("#ss1 .ss-overview__lead", {
@@ -589,12 +591,25 @@
         });
       }
 
-      /* 제안서 캡처 마퀴 — 연속 슬라이드는 CSS가 담당. 진입 시 컨테이너만 페이드인 */
+      /* 제안서 캡처 마퀴 — 연속 슬라이드는 CSS가 담당. 진입 시 위→아래 클립 와이프로 펼침 */
       const shotsBox = scroller.querySelector("#ss5 .ss-outro__shots");
-      if (shotsBox) gsap.from(shotsBox, {
-        opacity: 0, duration: 0.9, ease: "power2.out",
-        scrollTrigger: ST("#ss5 .ss-outro__shots", "top 84%"),
-      });
+      if (shotsBox) gsap.fromTo(shotsBox,
+        { clipPath: "inset(0 0 100% 0)", opacity: 0 },
+        { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 1.1, ease: "power2.out",
+          scrollTrigger: ST("#ss5 .ss-outro__shots", "top 84%") }
+      );
+
+      /* sparkle — 팝인(back.out) 후 은은한 반짝(scale·opacity yoyo) */
+      const sparkle5 = scroller.querySelector("#ss5 .ss-outro__sparkle");
+      if (sparkle5) gsap.fromTo(sparkle5,
+        { opacity: 0, scale: 0.3, rotate: -40, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "back.out(2.5)",
+          scrollTrigger: ST("#ss5 .ss-outro__sparkle", "top 90%"),
+          onComplete() {
+            gsap.to(sparkle5, { opacity: 0.5, scale: 0.85, duration: 1.6, ease: "sine.inOut", repeat: -1, yoyo: true });
+          },
+        }
+      );
 
       /* LIVE → GITHUB → PROPOSAL 오른쪽에서 왼쪽으로 샤악 흘러 들어옴 */
       const ris = scroller.querySelectorAll("#ss5 .ss-outro__ri");
@@ -654,13 +669,10 @@
       [
         ["#ss4 .ss-story-pg__caption--main",  { x:  40 }],
         ["#ss4 .ss-story-pg__mainbg",         { y:  60, scale: 1.04 }],
-        ["#ss4 .ss-story-pg__main",           { y:  50 }],
         ["#ss4 .ss-story-pg__label--theme",   { x: -30 }],
         ["#ss4 .ss-story-pg__desc--theme",    { x:  40 }],
-        ["#ss4 .ss-story-pg__cap--theme",     { y:  50, scale: 1.04 }],
         ["#ss4 .ss-story-pg__label--reserve", { x: -30 }],
         ["#ss4 .ss-story-pg__desc--reserve",  { x:  40 }],
-        ["#ss4 .ss-story-pg__cap--reserve",   { y:  50, scale: 1.04 }],
       ].forEach(([sel, vars]) => {
         const el = scroller.querySelector(sel);
         if (!el) return;
@@ -669,6 +681,17 @@
           vars,
           { scrollTrigger: ST(sel, "top 86%") }
         ));
+      });
+
+      /* 페이지 캡처 3장(메인·테마·예약) — 위→아래 클립 와이프(촤르르), photobg 리빌과 통일 */
+      ["#ss4 .ss-story-pg__main", "#ss4 .ss-story-pg__cap--theme", "#ss4 .ss-story-pg__cap--reserve"].forEach((sel) => {
+        const el = scroller.querySelector(sel);
+        if (!el) return;
+        gsap.fromTo(el,
+          { clipPath: "inset(0 0 100% 0)", opacity: 0 },
+          { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 1.15, ease: "power2.out",
+            scrollTrigger: ST(sel, "top 84%") }
+        );
       });
 
       /* 중앙 헤드라인 보조(sub)·MAIN 라벨 — gsap 센터링(translateX 제거) */
