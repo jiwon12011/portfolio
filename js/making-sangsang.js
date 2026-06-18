@@ -106,15 +106,15 @@
       scrollTrigger: ST("#ss1 .ss-overview__lead", "top 84%"),
     });
 
-    // ss1 .ss-em: 흰색→오렌지 + 글로우 텍스트섀도 동시 진행 (duration 1.0, power3)
-    const ovEm = scroller.querySelector("#ss1 .ss-overview__title .ss-em");
-    if (ovEm) {
-      gsap.fromTo(ovEm,
-        { color: "#ffffff", textShadow: "none" },
-        { color: "#ffc284", textShadow: "0 0 1.2cqw rgba(255,194,132,0.55)", duration: 1.0, ease: "power3.out", delay: 0.3,
-          scrollTrigger: ST("#ss1 .ss-overview__title", "top 80%") }
-      );
-    }
+    // .ss-em 강조어 전체: 밑에 숨어 있다가 스크롤 도착 시 위로 올라오며 등장
+    // (CSS에서 이미 주황 #ffc284 — 색은 유지, 위치/투명도만 스크럽)
+    scroller.querySelectorAll(".ss-em").forEach((em) => {
+      gsap.set(em, { display: "inline-block" });
+      gsap.from(em, {
+        yPercent: 100, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: em, scroller, start: "top 92%", end: "top 66%", scrub: true },
+      });
+    });
 
     /* ================================================================
        SECTION 2 · TEAM RESEARCH (#ss2)
@@ -206,16 +206,6 @@
           trigger: ciEls[0], scroller, start: "top 88%", once: true,
         },
       });
-    }
-
-    // ss2 .ss-em (tr__title 안): 흰색→오렌지 + 글로우 텍스트섀도 동시 진행
-    const trEm = scroller.querySelector("#ss2 .ss-tr__title .ss-em");
-    if (trEm) {
-      gsap.fromTo(trEm,
-        { color: "#ffffff", textShadow: "none" },
-        { color: "#ffc284", textShadow: "0 0 1.2cqw rgba(255,194,132,0.55)", duration: 1.0, ease: "power3.out", delay: 0.3,
-          scrollTrigger: ST("#ss2 .ss-tr__title", "top 80%") }
-      );
     }
 
     /* ================================================================
@@ -479,15 +469,6 @@
     if (ss5) {
       rise("#ss5 .ss-outro__kicker--proposal", { y: 18, scrollTrigger: ST("#ss5 .ss-outro__kicker--proposal", "top 88%") });
       rise("#ss5 .ss-outro__title", { y: 28, duration: 0.95, delay: 0.06, scrollTrigger: ST("#ss5 .ss-outro__title", "top 86%") });
-
-      // ss5 .ss-em, ss4 .ss-em: 흰색→오렌지 + 글로우 텍스트섀도 동시 진행
-      scroller.querySelectorAll("#ss5 .ss-em, #ss4 .ss-em").forEach((em) => {
-        gsap.fromTo(em,
-          { color: "#ffffff", textShadow: "none" },
-          { color: "#ffc284", textShadow: "0 0 1.2cqw rgba(255,194,132,0.55)", duration: 1.0, ease: "power3.out", delay: 0.25,
-            scrollTrigger: ST(em, "top 80%") }
-        );
-      });
 
       rise("#ss5 .ss-outro__desc--proposal", { y: 20, scrollTrigger: ST("#ss5 .ss-outro__desc--proposal", "top 86%") });
       rise("#ss5 .ss-outro__kicker--result", { y: 16, scrollTrigger: ST("#ss5 .ss-outro__kicker--result", "top 88%") });
