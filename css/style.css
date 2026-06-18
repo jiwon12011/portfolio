@@ -2776,10 +2776,11 @@ html.process-open { overflow: hidden; }
 .ss-story-pg__door { position: absolute; left: 20.556cqw; top: 42.361cqw; width: 58.889cqw; height: 26.25cqw;
   object-fit: cover; display: block; z-index: 1; }
 /* 메인페이지 캡처 */
+/* 별빛 지그재그 트레일 요청2: 캡처 3장을 z:3으로 정규화 (뒤 레이어 z:2, 앞 레이어 z:4 기준) */
 .ss-story-pg__main { position: absolute; left: 20.556cqw; top: 68.958cqw; width: 58.889cqw; height: 95.972cqw;
-  object-fit: cover; display: block; z-index: 2; box-shadow: 0 1.5cqw 4cqw rgba(0,0,0,.45); }
-/* 캡처 공통 (테마·예약) */
-.ss-story-pg__cap { position: absolute; object-fit: cover; display: block;
+  object-fit: cover; display: block; z-index: 3; box-shadow: 0 1.5cqw 4cqw rgba(0,0,0,.45); }
+/* 캡처 공통 (테마·예약) — z:3으로 정규화 */
+.ss-story-pg__cap { position: absolute; object-fit: cover; display: block; z-index: 3;
   border: 1px solid #fff3e8; border-radius: 1.042cqw; box-shadow: 0 1.5cqw 4cqw rgba(0,0,0,.45); }
 .ss-story-pg__desc { position: absolute; margin: 0;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.389cqw; line-height: 1.55; color: #aaa; }

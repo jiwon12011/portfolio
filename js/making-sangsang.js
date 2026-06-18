@@ -811,6 +811,112 @@
     }
 
     /* ================================================================
+       SECTION 4 · 별빛 지그재그 트레일 (#ss4) — 요청2
+       ────────────────────────────────────────────────────────────────
+       · caption--main 하단에서 시작 → 메인·테마·예약 캡처를 지그재그로 가로지름
+       · 이중 레이어: 뒤(z:2) / 앞(z:4) — 캡처(z:3) 기준 앞/뒤 번갈아 통과
+         바통터치: y≈200cqw(FRONT→BACK), y≈247cqw(BACK→FRONT)
+       · 총 노드 18개 × 도트 2개 = 36도트 (성능 예산)
+       · once 진입 트리거 + timed bloom 스태거 (scrub 아님 — 안정)
+       · prefers-reduced-motion: init() early-return 안쪽 → 노드 생성 자체 없음
+    ================================================================ */
+    {
+      const ss4Stl = scroller.querySelector("#ss4");
+      if (ss4Stl) {
+        /* ── 트레일 노드 스타일 주입 (1회만) ── */
+        if (!document.getElementById("ss-stl-style")) {
+          const st = document.createElement("style");
+          st.id = "ss-stl-style";
+          st.textContent =
+            ".ss-stl-node{position:absolute;pointer-events:none;opacity:0;}" +
+            ".ss-stl-node--back{z-index:2;}" +
+            ".ss-stl-node--front{z-index:4;}" +
+            ".ss-stl-dot{position:absolute;border-radius:50%;transform:translate(-50%,-50%);" +
+            "box-shadow:0 0 0.25cqw 0.05cqw rgba(255,235,180,.9)," +
+            "0 0 0.6cqw 0.12cqw rgba(255,200,100,.55)," +
+            "0 0 1.2cqw 0.2cqw rgba(255,155,40,.20);}";
+          document.head.appendChild(st);
+        }
+
+        /* ── 노드 데이터 [y(cqw), x(cqw), layer] ──
+         * y 기준 레이어 분기 (캡처 z:3 기준):
+         *   y <  200cqw      → front(z:4) — 메인 캡처 앞
+         *   200 ≤ y < 247cqw → back(z:2)  — 테마 캡처 뒤
+         *   y ≥  247cqw      → front(z:4) — 예약 캡처 앞
+         * 바통터치(~90ms 겹침): 직전 레이어 fade 중 직후 레이어 bloom 발화 */
+        const STL_NODES = [
+          /* caption--main 하단 ~ 메인 캡처 통과 (FRONT) */
+          [  40, 43, "front"], [  55, 65, "front"],
+          [  74, 20, "front"], [  96, 75, "front"],
+          [ 118, 18, "front"], [ 142, 76, "front"], [ 160, 22, "front"],
+          /* 메인~테마 사이 (FRONT, 바통 준비) */
+          [ 178, 68, "front"], [ 196, 14, "front"],
+          /* 테마 캡처 통과 (BACK, 바통 받음) */
+          [ 203, 52, "back" ], [ 214,  8, "back" ], [ 226, 58, "back" ], [ 239, 10, "back" ],
+          /* 예약 캡처 통과 (FRONT, 바통 받음) */
+          [ 249, 78, "front"], [ 268, 37, "front"],
+          [ 288, 81, "front"], [ 308, 39, "front"], [ 325, 80, "front"],
+        ];
+
+        /* 노드당 도트 2개 — warm gold/white 계열 */
+        const STL_DOTS = [
+          [[-0.6, -0.8, 4, "#fff9ee"], [ 0.8,  0.6, 3, "#ffd080"]],
+          [[ 0.7, -0.7, 3, "#ffd080"], [-0.9,  0.8, 4, "#ffffff"]],
+          [[-0.5, -1.0, 5, "#ffffff"], [ 0.9,  0.5, 2, "#ffca80"]],
+          [[ 0.6, -0.9, 4, "#ffca80"], [-0.8,  0.7, 3, "#fff9ee"]],
+        ];
+
+        /* ── DOM 생성 ── */
+        const stlWraps = STL_NODES.map(([y, x, layer], idx) => {
+          const wrap = document.createElement("span");
+          wrap.className = `ss-stl-node ss-stl-node--${layer}`;
+          wrap.setAttribute("aria-hidden", "true");
+          wrap.style.left = `${x}cqw`;
+          wrap.style.top  = `${y}cqw`;
+          STL_DOTS[idx % STL_DOTS.length].forEach(([dx, dy, sz, clr]) => {
+            const dot = document.createElement("span");
+            dot.className        = "ss-stl-dot";
+            dot.style.left       = `${dx}cqw`;
+            dot.style.top        = `${dy}cqw`;
+            dot.style.width      = `${sz}px`;
+            dot.style.height     = `${sz}px`;
+            dot.style.background = clr;
+            wrap.appendChild(dot);
+          });
+          ss4Stl.appendChild(wrap);
+          return wrap;
+        });
+
+        /* ── once 진입 timed bloom 타임라인 ──
+         * 총 3.2s: 메인 구간(0~1.5s) / 테마 구간(1.5~2.3s) / 예약 구간(2.3~3.2s)
+         * 바통터치 타이밍:
+         *   idx 8→9  (y196→203, FRONT→BACK): t=1.506→1.694s, 겹침 ~90ms
+         *   idx 12→13(y239→249, BACK→FRONT): t=2.259→2.447s, 겹침 ~90ms
+         * 짝수 idx(지그재그 우측 극단) → peakOp 1.0 / 홀수(좌측 극단) → 0.82 */
+        const N_LAST = STL_NODES.length - 1; /* 17 */
+        const BLOOM  = 0.18;
+        const HOLD   = 0.10;
+        const FADE   = 0.55;
+
+        const stlTL = gsap.timeline({
+          scrollTrigger: {
+            trigger: ss4Stl.querySelector(".ss-story-pg__caption--main") || ss4Stl,
+            scroller,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        stlWraps.forEach((wrap, idx) => {
+          const t      = idx * 3.2 / N_LAST;
+          const peakOp = idx % 2 === 0 ? 1.0 : 0.82;
+          stlTL.to(wrap, { opacity: peakOp, duration: BLOOM, ease: "power2.out" }, t);
+          stlTL.to(wrap, { opacity: 0,      duration: FADE,  ease: "power1.in"  }, t + BLOOM + HOLD);
+        });
+      }
+    }
+
+    /* ================================================================
        SECTION 4 분위기 요소 (#ss4) — 골드 먼지·배경 별·빛줄기·안개
        ────────────────────────────────────────────────────────────────
        · z-index: 0 (이미지·키·트레일 뒤) — 순수 배경 레이어
