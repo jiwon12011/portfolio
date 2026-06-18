@@ -55,18 +55,24 @@
       });
     }
 
-    const heroTextSel = [
-      "#ss-hero .ss-hero__kicker",
-      "#ss-hero .ss-hero__sang",
-      "#ss-hero .ss-hero__moon",
-      "#ss-hero .ss-hero__meta",
-    ].join(",");
-    const heroTexts = Array.from(scroller.querySelectorAll(heroTextSel));
-    if (heroTexts.length) {
-      gsap.from(heroTexts, {
-        opacity: 0, y: 22, duration: 0.9, ease: "power3.out",
-        stagger: 0.1, delay: 0.18,
-        scrollTrigger: ST("#ss-hero", "top 80%"),
+    // 큰 글씨(SANG-1, SANG-2, MOON): 각각 아래→위로 착착착 (stagger 0.22)
+    const bigTexts = scroller.querySelectorAll(
+      "#ss-hero .ss-hero__sang--1, #ss-hero .ss-hero__sang--2, #ss-hero .ss-hero__moon"
+    );
+    if (bigTexts.length) {
+      gsap.from(bigTexts, {
+        opacity: 0, y: 60, duration: 1.0, ease: "power3.out", stagger: 0.22,
+        scrollTrigger: ST("#ss-hero", "top 85%"),
+      });
+    }
+    // kicker + meta 3개: 위로 샥샥샥 (빠른 stagger 0.1)
+    const metaTexts = scroller.querySelectorAll(
+      "#ss-hero .ss-hero__kicker, #ss-hero .ss-hero__meta--team, #ss-hero .ss-hero__meta--role, #ss-hero .ss-hero__meta--date"
+    );
+    if (metaTexts.length) {
+      gsap.from(metaTexts, {
+        opacity: 0, y: 20, duration: 0.7, ease: "power3.out", stagger: 0.1, delay: 0.55,
+        scrollTrigger: ST("#ss-hero", "top 85%"),
       });
     }
 
@@ -74,6 +80,15 @@
        SECTION 1 · OVERVIEW (#ss1)
        kicker / title / lead 페이드+업 순차 진입
     ================================================================ */
+    // 배경: 어둡게 시작해서 천천히 밝아짐 (brightness 필터)
+    const ovBg = scroller.querySelector("#ss1 .ss-overview__bg");
+    if (ovBg) {
+      gsap.from(ovBg, {
+        filter: "brightness(0.3)", duration: 1.6, ease: "power2.out",
+        scrollTrigger: ST("#ss1", "top 90%"),
+      });
+    }
+
     rise("#ss1 .ss-overview__kicker", {
       y: 18,
       scrollTrigger: ST("#ss1 .ss-overview__kicker", "top 86%"),
@@ -86,6 +101,16 @@
       y: 20, delay: 0.14,
       scrollTrigger: ST("#ss1 .ss-overview__lead", "top 84%"),
     });
+
+    // ss1 .ss-em: 흰색→오렌지 컬러 스윕 (진입 시 1회)
+    const ovEm = scroller.querySelector("#ss1 .ss-overview__title .ss-em");
+    if (ovEm) {
+      gsap.fromTo(ovEm,
+        { color: "#ffffff" },
+        { color: "#ffc284", duration: 0.6, ease: "power2.out", delay: 0.3,
+          scrollTrigger: ST("#ss1 .ss-overview__title", "top 80%") }
+      );
+    }
 
     /* ================================================================
        SECTION 2 · TEAM RESEARCH (#ss2)
@@ -102,19 +127,23 @@
     });
 
     /* ----------------------------------------------------------------
-       2-B. 카드 클러스터 — 오른쪽에서 서서히 페이드+슬라이드 (once 진입)
+       2-B. 카드 클러스터 — 위/아래 행 방향 분리 슬라이드 (once 진입)
        ----------------------------------------------------------------
-       · 핀/스크럽 방식 폐기 — 각 요소가 뷰포트에 들어올 때 한 번 진입
-       · 6개(카드4 + 문·열쇠 데코) 모두 오른쪽(x:+)에서 부드럽게
+       · 위 행 (in--r 클래스): 오른쪽에서 착착착
+       · 아래 행 (in--l 클래스): 왼쪽에서 착착착
        · x / opacity 만 사용 — 60fps, 레이아웃 변경 없음
     ---------------------------------------------------------------- */
-    scroller.querySelectorAll(
-      "#ss2 .ss-tr__card--1, #ss2 .ss-tr__card--2, #ss2 .ss-tr__deco--door, " +
-      "#ss2 .ss-tr__card--3, #ss2 .ss-tr__card--4, #ss2 .ss-tr__deco--key"
-    ).forEach((el) => {
+    // 위 행 (in--r 클래스): 오른쪽에서 → 착착착
+    scroller.querySelectorAll("#ss2 .ss-tr__in--r, #ss2 .ss-tr__deco--door").forEach((el) => {
       gsap.from(el, {
-        opacity: 0, x: 64,
-        duration: 1.05, ease: "power3.out",
+        opacity: 0, x: 80, duration: 1.05, ease: "power3.out",
+        scrollTrigger: ST(el, "top 84%"),
+      });
+    });
+    // 아래 행 (in--l 클래스): 왼쪽에서 → 착착착
+    scroller.querySelectorAll("#ss2 .ss-tr__in--l, #ss2 .ss-tr__deco--key").forEach((el) => {
+      gsap.from(el, {
+        opacity: 0, x: -80, duration: 1.05, ease: "power3.out",
         scrollTrigger: ST(el, "top 84%"),
       });
     });
@@ -173,6 +202,16 @@
           trigger: ciEls[0], scroller, start: "top 88%", once: true,
         },
       });
+    }
+
+    // ss2 .ss-em (tr__title 안): 흰색→오렌지 컬러 스윕
+    const trEm = scroller.querySelector("#ss2 .ss-tr__title .ss-em");
+    if (trEm) {
+      gsap.fromTo(trEm,
+        { color: "#ffffff" },
+        { color: "#ffc284", duration: 0.6, ease: "power2.out", delay: 0.3,
+          scrollTrigger: ST("#ss2 .ss-tr__title", "top 80%") }
+      );
     }
 
     /* ================================================================
@@ -284,15 +323,21 @@
          * 달칵 제거됨 — onUpdate progress≥0.98 시 시간기반 재생
          * 총 duration = 9.8
          */
+        /*
+         * WP rot: 진자 기울기 → 누적 스핀 720°(2바퀴)
+         * rotate는 ease:"none" 으로 스크롤에 정비례 → "휠리릭" 느낌
+         * 속도: 초반 120°/unit → 후반 37.5°/unit 자연 감속
+         * 좌우 경로(x)는 각 구간 ease 유지 → 진자 리듬 보존
+         */
         const WP = [
-          /* pos    dur   yR      xCqw            rot   ease           */
-          [   0,    1.0,  0.10,   AMP,             20,  "sine.inOut"  ],  /* →우 */
-          [   1.0,  1.8,  0.25,  -AMP,            -20,  "sine.inOut"  ],  /* ←좌 */
-          [   2.8,  1.8,  0.42,   AMP * 0.80,      18,  "sine.inOut"  ],  /* →우 */
-          [   4.6,  1.8,  0.59,  -AMP * 0.60,     -15,  "sine.inOut"  ],  /* ←좌 */
-          [   6.4,  1.4,  0.75,   AMP * 0.35,      10,  "sine.inOut"  ],  /* →우 */
-          [   7.8,  1.2,  0.90,   FX * 0.40,       -5,  "power1.out"  ],  /* ←수렴 */
-          [   9.0,  0.8,  1.00,   FX,               0,  "power2.out"  ],  /* 착지·정렬 */
+          /* pos    dur   yR      xCqw            rot(누적)  ease(경로)    */
+          [   0,    1.0,  0.10,   AMP,             120,  "sine.inOut"  ],  /* →우 */
+          [   1.0,  1.8,  0.25,  -AMP,             270,  "sine.inOut"  ],  /* ←좌 */
+          [   2.8,  1.8,  0.42,   AMP * 0.80,      420,  "sine.inOut"  ],  /* →우 */
+          [   4.6,  1.8,  0.59,  -AMP * 0.60,      540,  "sine.inOut"  ],  /* ←좌 */
+          [   6.4,  1.4,  0.75,   AMP * 0.35,      630,  "sine.inOut"  ],  /* →우 */
+          [   7.8,  1.2,  0.90,   FX * 0.40,       690,  "power1.out"  ],  /* ←수렴 */
+          [   9.0,  0.8,  1.00,   FX,              720,  "power2.out"  ],  /* 착지 (720°=0° 시각) */
         ];
 
         /* ── 트레일 도트 생성 (WP 0~5 경로 지점, 각 2개 = 총 12개) ──
@@ -352,7 +397,7 @@
              * 그 시점에 달칵+스크롤 멈춤 발동. 이후 하단(TEAM PROCESS)은 자유 스크롤 */
             endTrigger: plaque,
             end:        "center center",
-            scrub: 0.6,
+            scrub: 0.4,
             invalidateOnRefresh: true,
 
             onUpdate(self) {
@@ -362,19 +407,19 @@
                 clackPlayed = true;
                 blockWheel  = true;
 
-                clackTL = gsap.timeline({
-                  onComplete() {
-                    blockWheel = false;
-                    clackTL    = null;
-                  },
-                })
-                  .to(keyTop, { rotate: -7, scale: 0.88,
-                                duration: 0.18, ease: "power2.in",   overwrite: "auto" })
-                  .to(keyTop, { rotate:  0, scale: 1.00,
-                                duration: 0.28, ease: "back.out(2)"                    });
-
-                /* --lock 등장: 수축 직후 */
-                gsap.to(keyLock, { opacity: 1, duration: 0.12, delay: 0.22 });
+                clackTL = gsap.timeline({ onComplete() { blockWheel=false; clackTL=null; } })
+                  /* 1단계: 열쇠를 살짝 위로 들었다가 — 예비동작 */
+                  .to(keyTop, { y: "-=8", duration: 0.1, ease: "power1.in", overwrite: "auto" })
+                  /* 2단계: 꽂아 넣기 — 아래로 쾅 + 회전 임팩트 */
+                  .to(keyTop, { y: "+=18", rotate: -12, scale: 0.92, duration: 0.12, ease: "power3.in" })
+                  /* 3단계: 탄성 복귀 — back 이징으로 흔들림 */
+                  .to(keyTop, { y: "-=5", rotate: 0, scale: 1.0, duration: 0.35, ease: "back.out(3)" })
+                  /* 4단계: 미세 흔들림 settle */
+                  .to(keyTop, { rotate: 3, duration: 0.1, ease: "sine.inOut" })
+                  .to(keyTop, { rotate: 0, duration: 0.1, ease: "sine.inOut" })
+                  /* 5단계: top 페이드아웃 + lock 페이드인 */
+                  .to(keyTop,  { opacity: 0, duration: 0.18, ease: "power1.in"  }, "+=0.08")
+                  .to(keyLock, { opacity: 1, duration: 0.18, ease: "power1.out" }, "<");
               }
             },
 
@@ -383,6 +428,7 @@
               clackPlayed = false;
               blockWheel  = false;
               if (clackTL) { clackTL.kill(); clackTL = null; }
+              gsap.set(keyTop,  { opacity: 1 });
               gsap.set(keyLock, { opacity: 0 });
             },
           },
@@ -394,9 +440,9 @@
            * y: per-property ease "none" → 스크롤 대비 하강 속도 균일 (중반 늘어짐 제거)
            * x·rotate: WP별 ease 유지 → 진자 감속/진입 리듬 보존 */
           keyTL.to(keyTop, {
-            y: { value: cp(FY * yR), ease: "none" },
+            y: cp(FY * yR),
             x: cp(xCqw), rotate: rot,
-            ease, duration: dur,
+            ease: "none", duration: dur,
           }, pos);
 
           /* 트레일 bloom→fadeout (착지 WP[6] 제외) */
@@ -429,6 +475,16 @@
     if (ss5) {
       rise("#ss5 .ss-outro__kicker--proposal", { y: 18, scrollTrigger: ST("#ss5 .ss-outro__kicker--proposal", "top 88%") });
       rise("#ss5 .ss-outro__title", { y: 28, duration: 0.95, delay: 0.06, scrollTrigger: ST("#ss5 .ss-outro__title", "top 86%") });
+
+      // ss5 .ss-em들: 흰색→오렌지
+      scroller.querySelectorAll("#ss5 .ss-em, #ss4 .ss-em").forEach((em) => {
+        gsap.fromTo(em,
+          { color: "#ffffff" },
+          { color: "#ffc284", duration: 0.6, ease: "power2.out", delay: 0.25,
+            scrollTrigger: ST(em, "top 80%") }
+        );
+      });
+
       rise("#ss5 .ss-outro__desc--proposal", { y: 20, scrollTrigger: ST("#ss5 .ss-outro__desc--proposal", "top 86%") });
       rise("#ss5 .ss-outro__kicker--result", { y: 16, scrollTrigger: ST("#ss5 .ss-outro__kicker--result", "top 88%") });
       const lessons = scroller.querySelectorAll("#ss5 .ss-outro__lesson");
