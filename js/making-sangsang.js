@@ -321,11 +321,12 @@
         if (!document.getElementById("ss-key-trail-style")) {
           const st = document.createElement("style");
           st.id = "ss-key-trail-style";
+          /* 글로우 은은하게 축소: 3레이어→2레이어, blur·alpha 대폭 감소 */
           st.textContent =
             ".ss-key-trail{position:absolute;pointer-events:none;opacity:0;z-index:5;}" +
             ".ss-key-trail__dot{position:absolute;border-radius:50%;" +
             "transform:translate(-50%,-50%);" +
-            "box-shadow:0 0 0.35cqw 0.06cqw rgba(255,235,160,.95),0 0 0.8cqw 0.15cqw rgba(255,195,80,.60),0 0 1.6cqw 0.25cqw rgba(255,155,40,.25);}";
+            "box-shadow:0 0 0.14cqw 0.02cqw rgba(255,235,160,.65),0 0 0.42cqw 0.07cqw rgba(255,195,80,.28);}";
           document.head.appendChild(st);
         }
 
@@ -358,14 +359,24 @@
          *         → 86°/u → 100°/u → 40°/u(착지 감속)
          * 퇴장/재등장 opacity 트윈은 WP 루프 직후 keyTopTweens에 별도 추가
          */
+        /*
+         * v4 WP 조정 (사용자 피드백 #2·#3):
+         *   start "top 36%" 변경에 맞춰 yR 값을 선형-중앙 추종 이상값(p×336≈FY)에 근접하게 소폭 조정.
+         *   결과: visible 구간(WP[3]~WP[5]) 내내 뷰포트 y ≈ 45~55% (중앙 근처).
+         *   WP[0] yR 0.05→0.10: 초반 우이동 시 스크롤 진행과 보조 맞춰 뷰포트 중앙 유지.
+         *   WP[3] yR 0.60→0.56: 재등장 지점 뷰포트 중앙 정렬 (기존 71%→50%).
+         *   WP[4] yR 0.82→0.79: 하강 구간 중앙 추종.
+         *   WP[5] yR 0.93→0.91: 수렴 직전 중앙 추종.
+         *   WP[1][2][6]: 변경 없음(off-screen/착지 고정).
+         */
         const WP = [
           /* pos    dur   yR      xCqw            rot(누적)  ease(경로)                          의미                          */
-          [   0,    1.0,  0.05,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동(중심 78cqw, visible, 상단)        */
+          [   0,    1.0,  0.10,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동 (yR 0.05→0.10, 중앙 추종 보정) */
           [   1.0,  0.9,  0.12,   66,             190,  "power2.in"   ],  /* →우: off-screen 퇴장                          */
           [   1.9,  1.3,  0.34,  -70,             330,  "none"        ],  /* 화면 밖 상단에서 우→좌 횡단(숨김) → off-screen 좌측 */
-          [   3.2,  2.2,  0.60,   -8,             480,  "power2.out"  ],  /* ←왼쪽에서 아래-중간 높이로 또렷이 등장(화면 안)  */
-          [   5.4,  2.2,  0.82,   -6,             600,  "sine.inOut"  ],  /* 화면 안에 머물며 천천히 명패로 하강(스크롤 추종) */
-          [   7.6,  1.2,  0.93,   FX * 0.6,       670,  "power1.out"  ],  /* 명패 향해 감속 수렴                           */
+          [   3.2,  2.2,  0.56,   -8,             480,  "power2.out"  ],  /* ←왼쪽에서 재등장 (yR 0.60→0.56, 뷰포트 ~50%) */
+          [   5.4,  2.2,  0.79,   -6,             600,  "sine.inOut"  ],  /* 화면 안 하강 (yR 0.82→0.79, 중앙 추종)        */
+          [   7.6,  1.2,  0.91,   FX * 0.6,       670,  "power1.out"  ],  /* 명패 향해 수렴 (yR 0.93→0.91, 중앙 추종)     */
           [   8.8,  1.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합                         */
         ];
 
@@ -450,7 +461,10 @@
           scrollTrigger: {
             trigger:    ss4,
             scroller,
-            start:      "top top",
+            /* "top 36%": scrub 시작 시 keyTop (top:8.889cqw) 이 뷰포트 중앙 근처에 위치.
+             * 계산 근거: key_vp_y = startPct×scroller_h + 8.889cqw_px ≈ 0.36×900+128 = 452px (≈50%).
+             * 기존 "top top"(key 128px=14% → 화면 상단 고착) 대비 중앙 등장+중앙 추종 (#2·#3 해소). */
+            start:      "top 36%",
             /* 명패 카드 중앙이 뷰포트 중앙에 올 때 progress=1 → 달칵.
              * (사용자: 카드가 화면 정중앙에 왔을 때 꽂혀야 함) */
             endTrigger: plaque,
@@ -564,8 +578,9 @@
          * fadeDur: 다음 노드까지 시간의 65% → 연속성 있게 겹쳐 소멸 (촤라락 흐름) */
         trailNodes.forEach(({ t }, idx) => {
           const bloomStart = Math.max(0, t - 0.18);
+          /* bloom 최대 opacity 0.88→0.62: 트레일 도트 자체가 이미 글로우를 포함하므로 절제 */
           keyTL.to(trailWraps[idx], {
-            opacity: 0.88, duration: 0.22, ease: "power2.out",
+            opacity: 0.62, duration: 0.22, ease: "power2.out",
           }, bloomStart);
           const nextT   = idx < trailNodes.length - 1 ? trailNodes[idx + 1].t : 9.8;
           const fadeDur = Math.min(1.4, Math.max(0.28, (nextT - t) * 0.65));
@@ -898,7 +913,8 @@
           },
         });
         stlWraps.forEach((w, idx) => {
-          stlTL.to(w, { opacity: 0.92, duration: 0.16, ease: "power2.out" }, idx * 0.05);
+          /* 지그재그 별빛 트레일: 0.92→0.68 (박스쉐도우 축소에 맞춰 최대 밝기도 절제) */
+          stlTL.to(w, { opacity: 0.68, duration: 0.16, ease: "power2.out" }, idx * 0.05);
         });
       }
     }

@@ -2740,20 +2740,19 @@ html.process-open { overflow: hidden; }
 /* 상단 열쇠 + 타이틀 */
 .ss-story-pg__key { position: absolute; object-fit: contain; display: block; }
 .ss-story-pg__key--top  { left: 50%; transform: translateX(-50%); top: 8.889cqw; width: 17.5cqw; height: 8.889cqw; z-index: 10;
-  filter: drop-shadow(0 0 0.28cqw rgba(255,235,170,0.95)) drop-shadow(0 0 0.7cqw rgba(255,200,100,0.75)) drop-shadow(0 0 1.6cqw rgba(255,165,50,0.40)) drop-shadow(0 0 3.2cqw rgba(200,120,20,0.18));
+  /* 글로우 은은하게 축소: blur·alpha 대폭 축소, 아우터 레이어 제거 */
+  filter: drop-shadow(0 0 0.12cqw rgba(255,235,170,0.55)) drop-shadow(0 0 0.35cqw rgba(255,200,100,0.32)) drop-shadow(0 0 0.9cqw rgba(255,165,50,0.16));
   animation: ss-key-glow-pulse 2.8s ease-in-out infinite; }
-/* 열쇠 글로우 미세 호흡 펄스 — 코어(샤프) → 인너 → 헤일로 → 아우터 4레이어 warm gold */
+/* 열쇠 글로우 호흡 — 3레이어, 은은한 warm gold */
 @keyframes ss-key-glow-pulse {
   0%,100% { filter:
-    drop-shadow(0 0 0.28cqw rgba(255,235,170,.95))
-    drop-shadow(0 0 0.7cqw  rgba(255,200,100,.75))
-    drop-shadow(0 0 1.6cqw  rgba(255,165,50,.40))
-    drop-shadow(0 0 3.2cqw  rgba(200,120,20,.18)); }
+    drop-shadow(0 0 0.12cqw rgba(255,235,170,.55))
+    drop-shadow(0 0 0.35cqw rgba(255,200,100,.32))
+    drop-shadow(0 0 0.9cqw  rgba(255,165,50,.16)); }
   50%     { filter:
-    drop-shadow(0 0 0.45cqw rgba(255,245,190,1.00))
-    drop-shadow(0 0 1.1cqw  rgba(255,215,130,.88))
-    drop-shadow(0 0 2.3cqw  rgba(255,175,60,.55))
-    drop-shadow(0 0 4.8cqw  rgba(200,130,20,.24)); }
+    drop-shadow(0 0 0.20cqw rgba(255,245,190,.75))
+    drop-shadow(0 0 0.55cqw rgba(255,215,130,.48))
+    drop-shadow(0 0 1.3cqw  rgba(255,175,60,.26)); }
 }
 @media (prefers-reduced-motion: reduce) { .ss-story-pg__key--top, .ss-story-pg__key--lock { animation: none; } }
 .ss-story-pg__head { position: absolute; left: 50%; transform: translateX(-50%); top: 11.667cqw; margin: 0;
@@ -2801,7 +2800,8 @@ html.process-open { overflow: hidden; }
 /* keyLock = keyTop과 동일 크기·착지 위치·글로우 → 달칵 스왑 시 끊김/크기변화 없음
    (keyTop 착지: 중심 50%+FX(-18.204)=31.796cqw, width 17.5 → left 23.046cqw) */
 .ss-story-pg__key--lock { left: 23.046cqw; top: 339.319cqw; width: 17.5cqw; height: 8.889cqw; z-index: 9;
-  filter: drop-shadow(0 0 0.28cqw rgba(255,235,170,0.95)) drop-shadow(0 0 0.7cqw rgba(255,200,100,0.75)) drop-shadow(0 0 1.6cqw rgba(255,165,50,0.40)) drop-shadow(0 0 3.2cqw rgba(200,120,20,0.18));
+  /* key--top과 동일 글로우 축소 적용 */
+  filter: drop-shadow(0 0 0.12cqw rgba(255,235,170,0.55)) drop-shadow(0 0 0.35cqw rgba(255,200,100,0.32)) drop-shadow(0 0 0.9cqw rgba(255,165,50,0.16));
   animation: ss-key-glow-pulse 2.8s ease-in-out infinite; }
 /* 하단 팀 프로세스 배경 사진 + 상단 페이드 (rectangle-607 대체) */
 .ss-story-pg__photobg { position: absolute; left: 0; top: 348.75cqw; width: 100cqw; height: 50.972cqw;
