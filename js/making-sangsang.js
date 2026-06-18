@@ -796,6 +796,26 @@
     }
 
     /* ================================================================
+       SECTION 4 배경 톤 — 열쇠 섹션에서만 은은한 골드-다크 전환
+       · 진입 시 #080d11(쿨) → #0d0a07(웜) 1.4s, 벗어나면 원복
+       · onEnter 콜백 + gsap.to backgroundColor 만 — scrub·pin 없음(모달 안전)
+    ================================================================ */
+    {
+      const ss4Tint = scroller.querySelector("#ss4");
+      if (ss4Tint) {
+        const BASE = "#080d11", WARM = "#0d0a07";
+        const toWarm = () => gsap.to(ss4Tint, { backgroundColor: WARM, duration: 1.4, ease: "power2.out" });
+        const toBase = () => gsap.to(ss4Tint, { backgroundColor: BASE, duration: 1.2, ease: "power2.out" });
+        ScrollTrigger.create({
+          trigger: ss4Tint, scroller,
+          start: "top 70%", end: "bottom 30%",
+          onEnter: toWarm, onEnterBack: toWarm,
+          onLeave: toBase, onLeaveBack: toBase,
+        });
+      }
+    }
+
+    /* ================================================================
        마그네틱 골드 글로우 — ss5 링크카드(LIVE/GITHUB/PROPOSAL) + CTA
        · 포인터 따라 광원이 번짐(스크롤 무관 → 모달서 안정), quickTo 60fps
     ================================================================ */
