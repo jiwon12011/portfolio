@@ -757,7 +757,7 @@
        · z-index: 0 (이미지·키·트레일 뒤) — 순수 배경 레이어
        · transform/opacity only — 60fps, 레이아웃 속성 무간섭
        · 키 scrub·트레일·달칵·기존 ScrollTrigger 절대 미간섭
-       · 총 요소: god ray 2 + 먼지 18 + 별 25 + 안개 2 + 유성 2 + 보케 4 = 53개
+       · 총 요소: god ray 2 + 먼지 18 + 별 25 + 안개 2 + 보케 4 = 51개
     ================================================================ */
     {
       const ss4Bg = scroller.querySelector("#ss4");
@@ -842,25 +842,7 @@
           ss4Bg.appendChild(mist);
         });
 
-        /* ⑤ 유성 2개 — 상단 어두운 영역을 가끔 사선으로 가로지름(머리 down-left 진행, 꼬리 up-right)
-         * 한 주기 앞 ~18%만 보이고 나머지는 idle → 드물게 반짝 흐름. transform/opacity만 */
-        [
-          { left: "72cqw", top: "8cqw",  dx: -210, dy: 112, dur: 8.5,  delay: -2 },
-          { left: "88cqw", top: "46cqw", dx: -180, dy: 96,  dur: 11,   delay: -7 },
-        ].forEach((cfg) => {
-          const m = document.createElement("span");
-          m.className = "ss-meteor";
-          m.setAttribute("aria-hidden", "true");
-          m.style.left = cfg.left;
-          m.style.top  = cfg.top;
-          m.style.setProperty("--mt-dx",    `${cfg.dx}px`);
-          m.style.setProperty("--mt-dy",    `${cfg.dy}px`);
-          m.style.setProperty("--mt-dur",   `${cfg.dur}s`);
-          m.style.setProperty("--mt-delay", `${cfg.delay}s`);
-          ss4Bg.appendChild(m);
-        });
-
-        /* ⑥ 골드 보케 4개 — 초점 나간 큰 광원, 느리게 부유·호흡(먼지보다 크고 흐릿) */
+        /* ⑤ 골드 보케 4개 — 초점 나간 큰 광원, 느리게 부유·호흡(먼지보다 크고 흐릿) */
         for (let i = 0; i < 4; i++) {
           const b = document.createElement("span");
           b.className = "ss-bokeh";
