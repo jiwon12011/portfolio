@@ -418,10 +418,12 @@
           return wrap;
         });
 
-        /* ── 달칵 스크롤 차단 핸들러 (progress≥0.98 시 ~0.5s 차단) ── */
+        /* ── 달칵 스크롤 차단 핸들러 (progress≥0.999 시 ~0.47s 차단) ── */
         let clackPlayed = false;
         let clackTL     = null;
         let blockWheel  = false;
+        /* keyTop WP 트윈 레퍼런스 — 달칵 시 kill, onLeaveBack 시 재구축 */
+        const keyTopTweens = [];
 
         const onWheelBlock = (e) => { if (blockWheel) e.preventDefault(); };
         scroller.addEventListener("wheel",     onWheelBlock, { passive: false });
@@ -441,37 +443,42 @@
             invalidateOnRefresh: true,
 
             onUpdate(self) {
-              /* progress ≥ 0.98 → 달칵 1회 시간기반 재생 + 스크롤 차단
-               * overwrite:"auto" — scrub의 rotate 간섭(현재 ≈-0.3°)을 제거 */
-              if (self.progress >= 0.98 && !clackPlayed) {
+              /* progress ≥ 0.999 → 달칵 1회 시간기반 재생 + 스크롤 차단
+               * 0.999 = 타임라인 9.79s → WP 마지막 트윈(9.0~9.8) 99% 완료
+               * → keyTop이 착지 최종 좌표에 실질적으로 도달한 뒤 발화 */
+              if (self.progress >= 0.999 && !clackPlayed) {
                 clackPlayed = true;
                 blockWheel  = true;
 
-                /* ── scrub 지연 보정 ──────────────────────────────────────
-                 * scrub:0.4 지연으로 progress≥0.98 시점에 렌더된 keyTop이
-                 * 아직 중간 경로에 있을 수 있음. clackTL 상대 이동(y:"-=8")이
-                 * 그 위쪽 좌표를 기준으로 실행 → "위에서 달칵" 현상.
-                 * 달칵 직전 WP 마지막(착지) 좌표로 즉시 스냅해 scrub 지연과
-                 * 완전히 무관하게 항상 키홀 위치에서 clackTL이 시작되게 한다. */
+                /* ── keyTop WP 트윈 kill ────────────────────────────────────
+                 * scrub:0.4가 0.999→1.0 잔여 구간에서도 keyTL을 계속 렌더하면
+                 * clackTL과 충돌해 "달칵 후 중앙으로 내려오는" 잔여 이동 발생.
+                 * keyTopTweens를 모두 kill해 이후 scrub이 keyTop을 건드리지 못하게.
+                 * trail/atmosphere는 타깃이 trailWraps이므로 영향 없음. */
+                keyTopTweens.forEach(t => t.kill());
+                keyTopTweens.length = 0;
+
+                /* ── 최종 착지 좌표로 즉시 스냅 ── */
+                const finalY = cp(FY)();
                 gsap.set(keyTop, {
-                  y:      cp(FY * 1.00)(),   /* WP[6] yR=1.00 착지 */
+                  y:      finalY,            /* WP[6] yR=1.00 착지 */
                   x:      cp(FX)(),          /* WP[6] xCqw=FX 착지 */
                   rotate: 720,               /* WP[6] 720°=0° 시각 */
+                  scale:  1,
                 });
 
                 clackTL = gsap.timeline({ onComplete() { clackTL=null; } })
-                  /* 1단계: 열쇠를 살짝 위로 들었다가 — 예비동작 */
-                  .to(keyTop, { y: "-=8", duration: 0.1, ease: "power1.in", overwrite: "auto" })
-                  /* 2단계: 꽂아 넣기 — 아래로 쾅 + 회전 임팩트 */
-                  .to(keyTop, { y: "+=18", rotate: -12, scale: 0.92, duration: 0.12, ease: "power3.in" })
-                  /* 3단계: 탄성 복귀 — back 이징으로 흔들림 */
-                  .to(keyTop, { y: "-=5", rotate: 0, scale: 1.0, duration: 0.35, ease: "back.out(3)" })
-                  /* 임팩트+반동(~0.57s)까지만 스크롤 차단 → 멈칫 단축. 뒤 흔들림·교체는 스크롤 풀고 진행 */
+                  /* 1단계: 착지 좌표에서 바로 아래로 꽂기 — 예비 들어올림 없음
+                   * 절대값(finalY+18) 사용: kill 후 scrub 간섭 없으므로 안전 */
+                  .to(keyTop, { y: finalY + 18, rotate: -12, scale: 0.92, duration: 0.12, ease: "power3.in", overwrite: "auto" })
+                  /* 2단계: 탄성 복귀 — back.out으로 finalY까지 스프링(오버슈트→안착) */
+                  .to(keyTop, { y: finalY, rotate: 0, scale: 1.0, duration: 0.35, ease: "back.out(3)" })
+                  /* 임팩트+반동(~0.47s)까지만 스크롤 차단 */
                   .call(() => { blockWheel = false; })
-                  /* 4단계: 미세 흔들림 settle */
+                  /* 3단계: 미세 흔들림 settle */
                   .to(keyTop, { rotate: 3, duration: 0.1, ease: "sine.inOut" })
                   .to(keyTop, { rotate: 0, duration: 0.1, ease: "sine.inOut" })
-                  /* 5단계: top 페이드아웃 + lock 페이드인 */
+                  /* 4단계: top 페이드아웃 + lock 페이드인 */
                   .to(keyTop,  { opacity: 0, duration: 0.18, ease: "power1.in"  }, "+=0.08")
                   .to(keyLock, { opacity: 1, duration: 0.18, ease: "power1.out" }, "<");
               }
@@ -482,21 +489,37 @@
               clackPlayed = false;
               blockWheel  = false;
               if (clackTL) { clackTL.kill(); clackTL = null; }
-              gsap.set(keyTop,  { opacity: 1 });
+              /* keyTop 초기 상태 복원 — WP 트윈 kill 후 scrub이 복원 못 하므로 명시 리셋 */
+              gsap.set(keyTop,  { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1 });
               gsap.set(keyLock, { opacity: 0 });
+              /* keyTop WP 트윈 재구축 — kill됐으므로 재스크롤 시 낙하 재생을 위해 복원 */
+              if (keyTopTweens.length === 0) {
+                WP.forEach(([pos, dur, yR, xCqw, rot]) => {
+                  keyTopTweens.push(
+                    keyTL.to(keyTop, {
+                      y: cp(FY * yR),
+                      x: cp(xCqw), rotate: rot,
+                      ease: "none", duration: dur,
+                    }, pos)
+                  );
+                });
+              }
             },
           },
         });
 
-        /* WP → keyTL 트윈 (열쇠 이동·회전, 트레일 bloom은 아래 별도 루프) */
+        /* WP → keyTL 트윈 (열쇠 이동·회전, 트레일 bloom은 아래 별도 루프)
+         * keyTopTweens에 레퍼런스 저장 → 달칵 시 kill, onLeaveBack 시 재구축 */
         WP.forEach(([pos, dur, yR, xCqw, rot]) => {
           /* y: ease:"none" → 스크롤 대비 하강 속도 균일 (중반 늘어짐 제거)
            * x·rotate: WP별 ease 유지 → 진자 감속/진입 리듬 보존 */
-          keyTL.to(keyTop, {
-            y: cp(FY * yR),
-            x: cp(xCqw), rotate: rot,
-            ease: "none", duration: dur,
-          }, pos);
+          keyTopTweens.push(
+            keyTL.to(keyTop, {
+              y: cp(FY * yR),
+              x: cp(xCqw), rotate: rot,
+              ease: "none", duration: dur,
+            }, pos)
+          );
         });
 
         /* 트레일 노드 bloom→fadeout
