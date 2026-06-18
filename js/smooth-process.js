@@ -17,7 +17,7 @@
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   window.__processLenis = window.__processLenis || {};
-  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis", "#process-mathhub"];
+  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis", "#process-mathhub", "#process-sangsang"];
   const EASE = 0.14;            // 0~1, 클수록 더 즉각적(작을수록 더 미끄럽게)
 
   const setup = (modal, scrollerSel = ".process__content", ease = EASE, mult = 1) => {
@@ -34,6 +34,8 @@
     /* 매 프레임 보간 */
     const onTick = () => {
       if (!active) return;
+      /* sangsang 열쇠 달칵 등 외부 스크롤 잠금 중에는 위치 고정(점프 방지) */
+      if (window.__processScrollLock) { current = target = scroller.scrollTop; return; }
       const diff = target - current;
       if (Math.abs(diff) < 0.5) {
         /* 유휴: 스크롤바/키보드 등 외부 변화에 목표 동기화 */
@@ -51,7 +53,7 @@
     }
 
     scroller.addEventListener("wheel", (e) => {
-      if (!active || e.ctrlKey) return;            // 핀치 줌 등은 패스
+      if (!active || e.ctrlKey || window.__processScrollLock) return; // 핀치 줌·달칵 잠금은 패스
       const max = maxScroll();
       if (Math.abs(scroller.scrollTop - current) > 1) current = target = scroller.scrollTop;
       const atTop = current <= 0.5;
