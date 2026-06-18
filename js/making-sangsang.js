@@ -447,6 +447,18 @@
                 clackPlayed = true;
                 blockWheel  = true;
 
+                /* ── scrub 지연 보정 ──────────────────────────────────────
+                 * scrub:0.4 지연으로 progress≥0.98 시점에 렌더된 keyTop이
+                 * 아직 중간 경로에 있을 수 있음. clackTL 상대 이동(y:"-=8")이
+                 * 그 위쪽 좌표를 기준으로 실행 → "위에서 달칵" 현상.
+                 * 달칵 직전 WP 마지막(착지) 좌표로 즉시 스냅해 scrub 지연과
+                 * 완전히 무관하게 항상 키홀 위치에서 clackTL이 시작되게 한다. */
+                gsap.set(keyTop, {
+                  y:      cp(FY * 1.00)(),   /* WP[6] yR=1.00 착지 */
+                  x:      cp(FX)(),          /* WP[6] xCqw=FX 착지 */
+                  rotate: 720,               /* WP[6] 720°=0° 시각 */
+                });
+
                 clackTL = gsap.timeline({ onComplete() { clackTL=null; } })
                   /* 1단계: 열쇠를 살짝 위로 들었다가 — 예비동작 */
                   .to(keyTop, { y: "-=8", duration: 0.1, ease: "power1.in", overwrite: "auto" })
