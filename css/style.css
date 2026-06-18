@@ -2929,7 +2929,7 @@ html.process-open { overflow: hidden; }
     rgba(255,215,130,.18) 0%,
     rgba(255,170,55,.06)  52%,
     transparent 82%);
-  filter: blur(22px);
+  filter: blur(12px);
   border-radius: 50px;
   transform-origin: 50% 0%;
   animation: ss-ray-fade var(--ray-dur, 14s) ease-in-out infinite alternate;
@@ -2968,7 +2968,7 @@ html.process-open { overflow: hidden; }
   position: absolute; pointer-events: none; z-index: 0; border-radius: 50%;
   background: radial-gradient(circle,
     rgba(255,200,120,.22) 0%, rgba(255,180,90,.10) 45%, transparent 70%);
-  filter: blur(8px);
+  filter: blur(4px);
   animation: ss-bokeh-drift var(--bk-dur, 30s) ease-in-out infinite alternate;
   animation-delay: var(--bk-delay, 0s);
 }

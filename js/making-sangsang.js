@@ -123,10 +123,9 @@
       y: 18,
       scrollTrigger: ST("#ss1 .ss-overview__kicker", "top 86%"),
     });
-    /* 메인 타이틀 — 마스크 와이프(아래→위로 닦이며 등장) + 살짝 상승 (히어로 결과 통일) */
-    gsap.from("#ss1 .ss-overview__title", {
-      clipPath: "inset(110% 0% -10% 0%)",
-      y: 34, opacity: 0, duration: 1.0, ease: "power4.out", delay: 0.08,
+    /* 메인 타이틀 — ss-hero 클립와이프와 중복 해소, 차분한 상승 진입 */
+    rise("#ss1 .ss-overview__title", {
+      y: 34, duration: 1.0, ease: "power4.out", delay: 0.08,
       scrollTrigger: ST("#ss1 .ss-overview__title", "top 84%"),
     });
     rise("#ss1 .ss-overview__lead", {
@@ -423,16 +422,23 @@
           return wrap;
         });
 
-        /* ── 달칵 스크롤 차단 핸들러 (progress≥0.999 시 ~0.47s 차단) ── */
+        /* ── 달칵 스크롤 차단 핸들러 (progress≥0.999 시 임팩트+반동 구간만 차단) ──
+         * passive:false 리스너를 상시 붙이면 미발동 시에도 브라우저가 JS 실행 대기.
+         * 달칵 직전에만 add, 임팩트+반동 완료 즉시 remove → 평소 스크롤 지연 0 */
         let clackPlayed = false;
         let clackTL     = null;
-        let blockWheel  = false;
         /* keyTop WP 트윈 레퍼런스 — 달칵 시 kill, onLeaveBack 시 재구축 */
         const keyTopTweens = [];
 
-        const onWheelBlock = (e) => { if (blockWheel) e.preventDefault(); };
-        scroller.addEventListener("wheel",     onWheelBlock, { passive: false });
-        scroller.addEventListener("touchmove", onWheelBlock, { passive: false });
+        const onWheelBlock = (e) => { e.preventDefault(); };
+        const addScrollBlock = () => {
+          scroller.addEventListener("wheel",     onWheelBlock, { passive: false });
+          scroller.addEventListener("touchmove", onWheelBlock, { passive: false });
+        };
+        const removeScrollBlock = () => {
+          scroller.removeEventListener("wheel",     onWheelBlock);
+          scroller.removeEventListener("touchmove", onWheelBlock);
+        };
 
         /* ── keyTL: scrub으로 낙하 전체 제어 ── */
         const keyTL = gsap.timeline({
@@ -453,7 +459,7 @@
                * → keyTop이 착지 최종 좌표에 실질적으로 도달한 뒤 발화 */
               if (self.progress >= 0.999 && !clackPlayed) {
                 clackPlayed = true;
-                blockWheel  = true;
+                addScrollBlock(); /* 임팩트+반동 구간만 차단 */
 
                 /* ── keyTop WP 트윈 kill ────────────────────────────────────
                  * scrub:0.4가 0.999→1.0 잔여 구간에서도 keyTL을 계속 렌더하면
@@ -478,8 +484,8 @@
                   .to(keyTop, { y: finalY + 18, rotate: -12, scale: 0.92, duration: 0.12, ease: "power3.in", overwrite: "auto" })
                   /* 2단계: 탄성 복귀 — back.out으로 finalY까지 스프링(오버슈트→안착) */
                   .to(keyTop, { y: finalY, rotate: 0, scale: 1.0, duration: 0.35, ease: "back.out(3)" })
-                  /* 임팩트+반동(~0.47s)까지만 스크롤 차단 */
-                  .call(() => { blockWheel = false; })
+                  /* 임팩트+반동(~0.47s) 완료 즉시 리스너 제거 */
+                  .call(() => { removeScrollBlock(); })
                   /* 3단계: 미세 흔들림 settle */
                   .to(keyTop, { rotate: 3, duration: 0.1, ease: "sine.inOut" })
                   .to(keyTop, { rotate: 0, duration: 0.1, ease: "sine.inOut" })
@@ -494,7 +500,7 @@
             onLeaveBack() {
               /* 섹션 위로 되돌아오면 달칵 상태 초기화 */
               clackPlayed = false;
-              blockWheel  = false;
+              removeScrollBlock(); /* clackTL 중단 전 혹시 남은 차단 해제 */
               if (clackTL) { clackTL.kill(); clackTL = null; }
               /* keyTop 초기 상태 복원 — WP 트윈 kill 후 scrub이 복원 못 하므로 명시 리셋 */
               gsap.set(keyTop,  { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1 });
@@ -606,7 +612,8 @@
         { opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "back.out(2.5)",
           scrollTrigger: ST("#ss5 .ss-outro__sparkle", "top 90%"),
           onComplete() {
-            gsap.to(sparkle5, { opacity: 0.5, scale: 0.85, duration: 1.6, ease: "sine.inOut", repeat: -1, yoyo: true });
+            /* 3회 yoyo 후 opacity:1·scale:1로 정착 — 무한 반짝임이 마무리 집중 흐트러뜨리는 것 방지 */
+            gsap.to(sparkle5, { opacity: 0.55, scale: 0.87, duration: 1.6, ease: "sine.inOut", repeat: 3, yoyo: true });
           },
         }
       );
@@ -644,9 +651,9 @@
         const chars = splitChars(pgHead);
         gsap.set(pgHead, { perspective: 800 });
         gsap.from(chars, {
-          x: () => gsap.utils.random(-220, 220),
-          y: () => gsap.utils.random(-70, 70),
-          rotateY: 160, rotate: () => gsap.utils.random(-12, 12),
+          x: () => gsap.utils.random(-120, 120),
+          y: () => gsap.utils.random(-45, 45),
+          rotateY: 120, rotate: () => gsap.utils.random(-10, 10),
           opacity: 0, duration: 0.9, ease: "power3.out",
           stagger: { amount: 0.5, from: "random" },
           scrollTrigger: ST("#ss4 .ss-story-pg__head", "top 82%"),
