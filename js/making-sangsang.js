@@ -627,6 +627,19 @@
         });
       }
 
+      /* 명패 골드 풀 — 열쇠 착지 순간 빛 번짐(진입 시 1회 페이드인) */
+      if (ss4El && ss4El.querySelector(".ss-story-pg__plaque")) {
+        const plaqueGlow = document.createElement("span");
+        plaqueGlow.className = "ss-plaque-glow";
+        plaqueGlow.setAttribute("aria-hidden", "true");
+        ss4El.appendChild(plaqueGlow);
+        gsap.set(plaqueGlow, { opacity: 0 });
+        gsap.to(plaqueGlow, {
+          opacity: 1, duration: 1.2, ease: "power2.out",
+          scrollTrigger: ST("#ss4 .ss-story-pg__plaque", "center 60%"),
+        });
+      }
+
       /* ③ 팀 프로세스 카드 01/02/03 — 순차 진입 + 내부 텍스트 스태거 */
       const teamCards = scroller.querySelectorAll(
         "#ss4 .ss-story-pg__card--1, #ss4 .ss-story-pg__card--2, #ss4 .ss-story-pg__card--3"
@@ -644,6 +657,46 @@
             opacity: 0, y: 12, duration: 0.55, ease: "power2.out", stagger: 0.08,
           }, i * 0.15 + 0.12);
         });
+      }
+
+      /* ④ TEAM PROCESS 배경 패럴랙스 (.ss-story-pg__photobg)
+       * ss1 .ss-overview__bg와 동일 패턴 — quickTo x/y/rotation, scale:1.1 확대 클립
+       * ─────────────────────────────────────────────────────────────────────
+       * · ss4는 매우 긴 섹션 → ss4El 전체에 pointermove 바인딩
+       *   (카드/텍스트 z-index:2 위에서도 발동되도록)
+       * · photobg의 getBoundingClientRect 기준으로 nx/ny 계산 + clamp(-0.5, 0.5)
+       *   → 커서가 photobg 밖(위쪽 열쇠 영역)일 때는 엣지값으로 부드럽게 고정
+       * · scroller scroll 시 pbRect null 초기화(레이지) → 다음 pointermove에서 재취득
+       *   (모달 overflow 스크롤로 viewport 내 위치 변동 보정)
+       * · .ss-sec overflow:hidden이 scale:1.1 가장자리 클립 담당
+       * · 기존 keyTL / 달칵 / 트레일 등 절대 건드리지 않음 — photobg만 신규 추가
+       */
+      const photoBg = ss4El && ss4El.querySelector(".ss-story-pg__photobg");
+      if (photoBg && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        /* 살짝 확대 → 흔들려도 가장자리 안 보임 */
+        gsap.set(photoBg, { scale: 1.1, transformOrigin: "50% 50%", willChange: "transform" });
+
+        const xTo = gsap.quickTo(photoBg, "x",        { duration: 0.7, ease: "power2" });
+        const yTo = gsap.quickTo(photoBg, "y",        { duration: 0.7, ease: "power2" });
+        const rTo = gsap.quickTo(photoBg, "rotation", { duration: 0.9, ease: "power2" });
+        const AMPX = 26, AMPY = 18, AMPR = 1.1; /* px / px / deg */
+        const clampNorm = gsap.utils.clamp(-0.5, 0.5);
+
+        let pbRect = null;
+        /* 스크롤마다 rect 무효화 → 다음 pointermove 시 재취득(레이지 갱신) */
+        scroller.addEventListener("scroll", () => { pbRect = null; }, { passive: true });
+
+        ss4El.addEventListener("pointerenter", () => { pbRect = photoBg.getBoundingClientRect(); });
+        ss4El.addEventListener("pointermove", (e) => {
+          if (!pbRect) pbRect = photoBg.getBoundingClientRect();
+          /* photobg rect 기준 정규화, 엣지에서 자연스럽게 고정 */
+          const nx = clampNorm((e.clientX - pbRect.left) / pbRect.width  - 0.5);
+          const ny = clampNorm((e.clientY - pbRect.top)  / pbRect.height - 0.5);
+          xTo(-nx * AMPX); /* 마우스 반대 방향 → 패럴랙스 원근감 */
+          yTo(-ny * AMPY);
+          rTo(nx * AMPR);  /* 좌우에 따라 미세 기울기 */
+        });
+        ss4El.addEventListener("pointerleave", () => { xTo(0); yTo(0); rTo(0); });
       }
     }
 
