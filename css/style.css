@@ -6130,15 +6130,15 @@ html.lb-open { overflow: hidden; }
 .about__skillgroup { margin-bottom: clamp(9px, 1.5vh, 16px); }
 .about__skillgroup:last-child { margin-bottom: 0; }
 .about__sub { margin: 0 0 clamp(6px, 1vh, 9px); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
-.about__sub--design { color: #e05899; }
-.about__sub--dev    { color: #59a2ee; }
-.about__sub--ai     { color: #9b6dc8; }
-.about__pills { display: flex; flex-wrap: wrap; gap: 7px; }
-.about__pill { display: inline-flex; align-items: center; padding: clamp(5px, 0.7vh, 7px) 14px; border-radius: 999px;
-  font-size: clamp(12px, 1vw, 14px); font-weight: 500; color: #3a3a3a; }
-.about__pill--pink   { background: #ffeaf7; border: 1px solid #f5c8e8; }
-.about__pill--blue   { background: #eef2ff; border: 1px solid #c7d6fa; }
-.about__pill--purple { background: #f5eaff; border: 1px solid #d9c3f5; }
+.about__sub--design,
+.about__sub--dev,
+.about__sub--ai     { color: #9a9a9a; }
+.about__pills { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.about__pill { display: inline-flex; align-items: center; padding: 0; border: 0; border-radius: 0; background: none;
+  font-size: clamp(13px, 1vw, 15px); font-weight: 500; color: #2a2a2a; }
+.about__pill--pink,
+.about__pill--blue,
+.about__pill--purple { background: none; border: 0; }
 
 .about__strength { display: grid; gap: clamp(14px, 2.2vh, 24px); }
 .about__str h5 { margin: 0 0 3px; font-size: clamp(14px, 1.1vw, 16px); font-weight: 600; }
