@@ -2856,7 +2856,8 @@ html.process-open { overflow: hidden; }
   white-space: nowrap; }
 .ss-outro__lesson--1 { top: 82.569cqw; }
 .ss-outro__lesson--2 { top: 88cqw; }
-.ss-outro__ri { position: absolute; top: 102.153cqw; text-align: center; width: 28cqw; }
+.ss-outro__ri { position: absolute; top: 102.153cqw; text-align: center; width: 28cqw;
+  text-decoration: none; color: inherit; cursor: pointer; }
 .ss-outro__ri--live     { left: 3cqw; }
 .ss-outro__ri--git      { left: 50%; transform: translateX(-50%); }
 .ss-outro__ri--proposal { left: auto; right: 3cqw; }

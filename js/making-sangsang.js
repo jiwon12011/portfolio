@@ -433,10 +433,10 @@
             trigger:    ss4,
             scroller,
             start:      "top top",
-            /* 명패 중앙이 뷰포트 중앙에 오는 순간 progress=1 →
-             * 그 시점에 달칵+스크롤 멈춤 발동. 이후 하단(TEAM PROCESS)은 자유 스크롤 */
+            /* 명패가 뷰포트 상단쪽(30%)까지 충분히 올라온 시점에 progress=1 → 달칵.
+             * (center center는 명패가 화면 하단에 있을 때 너무 일찍 터져서 늦춤) */
             endTrigger: plaque,
-            end:        "center center",
+            end:        "center 30%",
             scrub: 0.4,
             invalidateOnRefresh: true,
 
@@ -704,38 +704,34 @@
        마그네틱 골드 글로우 — ss5 링크카드(LIVE/GITHUB/PROPOSAL) + CTA
        · 포인터 따라 광원이 번짐(스크롤 무관 → 모달서 안정), quickTo 60fps
     ================================================================ */
-    /* hover 가능한 정밀 포인터(데스크톱)에서만 — 터치기기는 mouseleave 미발생 → 글로우 잔존 버그 회피 */
+    /* hover 가능한 정밀 포인터(데스크톱)에서만 — 터치기기 제외 */
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      const magnetics = [...scroller.querySelectorAll("#ss5 .ss-outro__ri")];
+      /* CTA: 마그네틱 골드 글로우(포인터 추적) */
       const ctaEl = document.querySelector("#process-sangsang .process__cta");
-      if (ctaEl) magnetics.push(ctaEl);
-
-      const clamp = gsap.utils.clamp(0, 100);
-      magnetics.forEach((el) => {
-        el.classList.add("ss-mag");
+      if (ctaEl) {
+        ctaEl.classList.add("ss-mag");
         const flair = document.createElement("span");
         flair.className = "ss-mag__flair";
         flair.setAttribute("aria-hidden", "true");
-        el.appendChild(flair);
-
+        ctaEl.appendChild(flair);
+        const clamp = gsap.utils.clamp(0, 100);
         const xTo = gsap.quickTo(flair, "xPercent", { duration: 0.4, ease: "power2" });
         const yTo = gsap.quickTo(flair, "yPercent", { duration: 0.4, ease: "power2" });
-        let rect = null; /* mouseenter에서 1회 캐싱 → mousemove hot path에서 강제 reflow 제거 */
+        let rect = null;
         const move = (e) => {
           if (!rect) return;
           xTo(clamp(((e.clientX - rect.left) / rect.width) * 100));
           yTo(clamp(((e.clientY - rect.top) / rect.height) * 100));
         };
+        ctaEl.addEventListener("mouseenter", (e) => { rect = ctaEl.getBoundingClientRect(); move(e); gsap.to(flair, { scale: 1, duration: 0.4, ease: "power2.out" }); });
+        ctaEl.addEventListener("mousemove", move);
+        ctaEl.addEventListener("mouseleave", () => { gsap.to(flair, { scale: 0, duration: 0.3, ease: "power2.out" }); });
+      }
 
-        el.addEventListener("mouseenter", (e) => {
-          rect = el.getBoundingClientRect();
-          move(e);
-          gsap.to(flair, { scale: 1, duration: 0.4, ease: "power2.out" });
-        });
-        el.addEventListener("mousemove", move);
-        el.addEventListener("mouseleave", () => {
-          gsap.to(flair, { scale: 0, duration: 0.3, ease: "power2.out" });
-        });
+      /* ss5 링크(LIVE/GITHUB/PROPOSAL): 글로우박스 대신 마우스오버 확대 */
+      scroller.querySelectorAll("#ss5 .ss-outro__ri").forEach((ri) => {
+        ri.addEventListener("mouseenter", () => gsap.to(ri, { scale: 1.08, duration: 0.3, ease: "power2.out" }));
+        ri.addEventListener("mouseleave", () => gsap.to(ri, { scale: 1.0, duration: 0.3, ease: "power2.out" }));
       });
     }
 
