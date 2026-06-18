@@ -433,10 +433,10 @@
             trigger:    ss4,
             scroller,
             start:      "top top",
-            /* 명패가 뷰포트 상단쪽(30%)까지 충분히 올라온 시점에 progress=1 → 달칵.
-             * (center center는 명패가 화면 하단에 있을 때 너무 일찍 터져서 늦춤) */
+            /* 명패 카드 중앙이 뷰포트 중앙에 올 때 progress=1 → 달칵.
+             * (사용자: 카드가 화면 정중앙에 왔을 때 꽂혀야 함) */
             endTrigger: plaque,
-            end:        "center 30%",
+            end:        "center center",
             scrub: 0.4,
             invalidateOnRefresh: true,
 
