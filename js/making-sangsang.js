@@ -306,7 +306,7 @@
             ".ss-key-trail{position:absolute;pointer-events:none;opacity:0;z-index:5;}" +
             ".ss-key-trail__dot{position:absolute;border-radius:50%;" +
             "transform:translate(-50%,-50%);" +
-            "box-shadow:0 0 0.55cqw 0.1cqw rgba(255,214,150,.85),0 0 1.2cqw 0.3cqw rgba(255,180,90,.45);}";
+            "box-shadow:0 0 0.35cqw 0.06cqw rgba(255,235,160,.95),0 0 0.8cqw 0.15cqw rgba(255,195,80,.60),0 0 1.6cqw 0.25cqw rgba(255,155,40,.25);}";
           document.head.appendChild(st);
         }
 
@@ -345,31 +345,50 @@
           [   9.0,  0.8,  1.00,   FX,              720,  "power2.out"  ],  /* 착지 (720°=0° 시각) */
         ];
 
-        /* ── 트레일 도트 생성 (WP 0~5 경로 지점, 각 2개 = 총 12개) ──
-         * .ss-sec에 container-type:inline-size 이므로 1% = 1cqw
+        /* ── 트레일 노드 생성 — WP 도착 anchor를 보간해 경로 전체 촘촘하게 ──
+         * anchor 6개(WP[0]~WP[5] 도착) + 구간별 중간 2개 = 총 16노드 × 4dots = 64별
          * leftCqw = 50 + xCqw  (xPercent:-50 기준, 중앙=50cqw)
          * topCqw  = keyTop.top(8.889) + height÷2(4.444) + FY*yR
          */
         const KEY_CY = 8.889 + 4.444; /* keyTop 수직 중심 시작점 */
 
-        /* [xCqw, yR, [[dx_cqw, dy_cqw, size_px, color], ...]]
-         * 별빛 강화: 지점당 도트 2 → 5개(큰 별 + 작은 잔별), 사이즈 변주 + box-shadow 글로우 */
-        const TRAIL_CFG = [
-          [ AMP,         0.10, [[-0.8,-1.5,6,"#ffffff"],[ 1.2, 1.0,4,"#ffc284"],[ 0.3,-0.4,2,"#fff3e8"],[-1.8, 0.6,3,"#ffd9a0"],[ 2.1,-1.4,2,"#ffffff"]] ],
-          [-AMP,         0.25, [[ 1.0,-0.8,6,"#ffc284"],[-1.4, 1.5,4,"#ffffff"],[-0.2,-0.5,2,"#fff3e8"],[ 1.9, 0.7,3,"#ffd9a0"],[-2.2,-1.2,2,"#ffffff"]] ],
-          [ AMP * 0.80,  0.42, [[-0.7,-1.8,7,"#ffffff"],[ 1.5, 0.9,4,"#ffc284"],[ 0.4,-0.3,2,"#fff3e8"],[-1.9, 0.5,3,"#ffd9a0"],[ 2.0,-1.5,2,"#ffffff"]] ],
-          [-AMP * 0.60,  0.59, [[ 1.2,-1.0,6,"#ffc284"],[-1.0, 1.6,4,"#ffffff"],[-0.3,-0.4,2,"#fff3e8"],[ 1.8, 0.8,3,"#ffd9a0"],[-2.1,-1.3,2,"#ffffff"]] ],
-          [ AMP * 0.35,  0.75, [[-1.0,-1.4,6,"#ffffff"],[ 1.4, 0.7,4,"#ffc284"],[ 0.2,-0.5,2,"#fff3e8"],[-1.7, 0.6,3,"#ffd9a0"],[ 1.9,-1.4,2,"#ffffff"]] ],
-          [ FX * 0.40,   0.90, [[ 0.9,-1.2,6,"#ffffff"],[-1.2, 1.4,4,"#ffc284"],[ 0.3,-0.4,2,"#fff3e8"],[-1.8, 0.7,3,"#ffd9a0"],[ 1.9,-1.3,2,"#ffffff"]] ],
+        /* WP[0]~WP[5] 도착 지점을 anchor로 추출: [arriveT, yR, xCqw] */
+        const ANCHORS = WP.slice(0, 6).map(([pos, dur, yR, xCqw]) => [pos + dur, yR, xCqw]);
+
+        /* anchor 사이 선형보간 (구간당 2개 중간 노드 = 1/3, 2/3 지점) */
+        const trailNodes = [];
+        for (let i = 0; i < ANCHORS.length; i++) {
+          const [t0, y0, x0] = ANCHORS[i];
+          trailNodes.push({ t: t0, yR: y0, xCqw: x0 });
+          if (i < ANCHORS.length - 1) {
+            const [t1, y1, x1] = ANCHORS[i + 1];
+            for (let k = 1; k <= 2; k++) {
+              const f = k / 3;
+              trailNodes.push({
+                t:    t0 + (t1 - t0) * f,
+                yR:   y0 + (y1 - y0) * f,
+                xCqw: x0 + (x1 - x0) * f,
+              });
+            }
+          }
+        }
+
+        /* 노드별 dot 패턴 4종 순환 — 작고 자글자글, warm gold/white 계열
+         * [dx_cqw, dy_cqw, size_px, color] */
+        const DOT_PATTERNS = [
+          [[-0.7,-1.4,5,"#fff9ee"],[ 1.1, 0.9,3,"#ffd080"],[ 0.2,-0.5,2,"#ffffff"],[-1.6, 0.5,2,"#ffca80"]],
+          [[ 0.9,-0.8,4,"#ffd080"],[-1.3, 1.3,5,"#ffffff"],[-0.4,-0.6,2,"#fff9ee"],[ 1.7, 0.5,2,"#ffca80"]],
+          [[-0.5,-1.8,6,"#ffffff"],[ 1.3, 0.7,3,"#ffd080"],[ 0.3,-0.3,2,"#fff9ee"],[-1.9, 0.4,2,"#ffca80"]],
+          [[ 1.2,-1.0,4,"#ffd080"],[-0.8, 1.6,5,"#ffffff"],[ 0.5,-0.5,2,"#fff9ee"],[-1.5, 0.8,2,"#ffca80"]],
         ];
 
-        const trailWraps = TRAIL_CFG.map(([xCqw, yR, dots]) => {
+        const trailWraps = trailNodes.map(({ yR, xCqw }, idx) => {
           const wrap = document.createElement("span");
           wrap.className  = "ss-key-trail";
           wrap.style.left = `${(50 + xCqw).toFixed(3)}cqw`;
           wrap.style.top  = `${(KEY_CY + FY * yR).toFixed(3)}cqw`;
 
-          dots.forEach(([dx, dy, sz, clr]) => {
+          DOT_PATTERNS[idx % DOT_PATTERNS.length].forEach(([dx, dy, sz, clr]) => {
             const dot = document.createElement("span");
             dot.className        = "ss-key-trail__dot";
             dot.style.left       = `${dx}cqw`;
@@ -440,35 +459,30 @@
           },
         });
 
-        /* WP → keyTL 트윈 + 트레일 bloom/fadeout */
-        WP.forEach(([pos, dur, yR, xCqw, rot, ease], idx) => {
-          /* 키 이동·회전
-           * y: per-property ease "none" → 스크롤 대비 하강 속도 균일 (중반 늘어짐 제거)
+        /* WP → keyTL 트윈 (열쇠 이동·회전, 트레일 bloom은 아래 별도 루프) */
+        WP.forEach(([pos, dur, yR, xCqw, rot]) => {
+          /* y: ease:"none" → 스크롤 대비 하강 속도 균일 (중반 늘어짐 제거)
            * x·rotate: WP별 ease 유지 → 진자 감속/진입 리듬 보존 */
           keyTL.to(keyTop, {
             y: cp(FY * yR),
             x: cp(xCqw), rotate: rot,
             ease: "none", duration: dur,
           }, pos);
+        });
 
-          /* 트레일 bloom→fadeout (착지 WP[6] 제외) */
-          if (idx < trailWraps.length) {
-            const arriveT    = pos + dur;
-            /* 다음 WP 도착 시간 (마지막 트레일 WP[5]은 keyTL 종료=9.8을 기준) */
-            const nextArrive = idx < WP.length - 2
-              ? WP[idx + 1][0] + WP[idx + 1][1]
-              : 9.8;
-            const fadeDur    = Math.min(1.4, nextArrive - arriveT - 0.1);
-
-            /* 도착 → 반짝 */
-            keyTL.to(trailWraps[idx], {
-              opacity: 0.9, duration: 0.22, ease: "power1.out",
-            }, arriveT);
-            /* 잔광 → 소멸 */
-            keyTL.to(trailWraps[idx], {
-              opacity: 0, duration: fadeDur, ease: "power1.in",
-            }, arriveT + 0.27);
-          }
+        /* 트레일 노드 bloom→fadeout
+         * bloomStart: 도착 0.18s 전부터 피어오름 → 열쇠가 지나가는 자리에 자글자글 남는 느낌
+         * fadeDur: 다음 노드까지 시간의 65% → 연속성 있게 겹쳐 소멸 (촤라락 흐름) */
+        trailNodes.forEach(({ t }, idx) => {
+          const bloomStart = Math.max(0, t - 0.18);
+          keyTL.to(trailWraps[idx], {
+            opacity: 0.88, duration: 0.22, ease: "power2.out",
+          }, bloomStart);
+          const nextT   = idx < trailNodes.length - 1 ? trailNodes[idx + 1].t : 9.8;
+          const fadeDur = Math.min(1.4, Math.max(0.28, (nextT - t) * 0.65));
+          keyTL.to(trailWraps[idx], {
+            opacity: 0, duration: fadeDur, ease: "power1.in",
+          }, t + 0.18);
         });
       }
     }
