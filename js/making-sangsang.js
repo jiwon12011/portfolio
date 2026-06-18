@@ -669,10 +669,8 @@
       [
         ["#ss4 .ss-story-pg__caption--main",  { x:  40 }],
         ["#ss4 .ss-story-pg__mainbg",         { y:  60, scale: 1.04 }],
-        ["#ss4 .ss-story-pg__main",           { y:  50 }],
         ["#ss4 .ss-story-pg__label--theme",   { x: -30 }],
         ["#ss4 .ss-story-pg__desc--theme",    { x:  40 }],
-        ["#ss4 .ss-story-pg__cap--theme",     { y:  50, scale: 1.04 }],
         ["#ss4 .ss-story-pg__label--reserve", { x: -30 }],
         ["#ss4 .ss-story-pg__desc--reserve",  { x:  40 }],
       ].forEach(([sel, vars]) => {
@@ -685,15 +683,16 @@
         ));
       });
 
-      /* 예약 페이지 캡처만 — 위→아래 클립 와이프(촤르르), photobg 리빌과 통일 */
-      {
-        const reserveCap = scroller.querySelector("#ss4 .ss-story-pg__cap--reserve");
-        if (reserveCap) gsap.fromTo(reserveCap,
+      /* 페이지 캡처 3장(메인·테마·예약) — 위→아래 클립 와이프(촤르르), photobg 리빌과 통일 */
+      ["#ss4 .ss-story-pg__main", "#ss4 .ss-story-pg__cap--theme", "#ss4 .ss-story-pg__cap--reserve"].forEach((sel) => {
+        const el = scroller.querySelector(sel);
+        if (!el) return;
+        gsap.fromTo(el,
           { clipPath: "inset(0 0 100% 0)", opacity: 0 },
           { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 1.15, ease: "power2.out",
-            scrollTrigger: ST("#ss4 .ss-story-pg__cap--reserve", "top 84%") }
+            scrollTrigger: ST(sel, "top 84%") }
         );
-      }
+      });
 
       /* 중앙 헤드라인 보조(sub)·MAIN 라벨 — gsap 센터링(translateX 제거) */
       riseCenter("#ss4 .ss-story-pg__sub",         { y: 18, scrollTrigger: ST("#ss4 .ss-story-pg__sub", "top 88%") });
