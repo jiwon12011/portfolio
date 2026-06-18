@@ -88,7 +88,7 @@
     const ovBg = scroller.querySelector("#ss1 .ss-overview__bg");
     if (ovBg) {
       gsap.from(ovBg, {
-        filter: "brightness(0.3)", duration: 1.6, ease: "power2.out",
+        filter: "brightness(0.62)", duration: 1.2, ease: "power2.out",
         scrollTrigger: ST("#ss1", "top 90%"),
       });
     }
