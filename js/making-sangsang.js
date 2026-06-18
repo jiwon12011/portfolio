@@ -304,10 +304,13 @@
       const keyTop  = ss4 ? ss4.querySelector(".ss-story-pg__key--top")    : null;
       const keyLock = ss4 ? ss4.querySelector(".ss-story-pg__key--lock")   : null;
       const plaque  = ss4 ? ss4.querySelector(".ss-story-pg__plaque")      : null;
+      const photobg = ss4 ? ss4.querySelector(".ss-story-pg__photobg")     : null;
 
       if (ss4 && keyTop && keyLock && plaque) {
         /* --lock: 달칵까지 숨김 */
         gsap.set(keyLock, { opacity: 0 });
+        /* 하단 팀 프로세스 배경 사진: 달칵 전까지 위에서 잘라 숨김 → 달칵 때 위→아래로 펼침 */
+        if (photobg) gsap.set(photobg, { clipPath: "inset(0 0 100% 0)" });
 
         /* CSS translateX(-50%) → GSAP xPercent 관리
          * GSAP이 xPercent를 관장해야 x/y 추가 transform과 충돌 없음 */
@@ -480,7 +483,9 @@
                   .to(keyTop, { rotate: 0, duration: 0.1, ease: "sine.inOut" })
                   /* 4단계: top 페이드아웃 + lock 페이드인 */
                   .to(keyTop,  { opacity: 0, duration: 0.18, ease: "power1.in"  }, "+=0.08")
-                  .to(keyLock, { opacity: 1, duration: 0.18, ease: "power1.out" }, "<");
+                  .to(keyLock, { opacity: 1, duration: 0.18, ease: "power1.out" }, "<")
+                  /* 5단계: 잠금과 동시에 하단 배경 사진 위→아래로 촤르르 펼침 */
+                  .to(photobg ? photobg : {}, { clipPath: "inset(0 0 0% 0)", duration: 0.8, ease: "power3.out" }, "<");
               }
             },
 
@@ -492,6 +497,8 @@
               /* keyTop 초기 상태 복원 — WP 트윈 kill 후 scrub이 복원 못 하므로 명시 리셋 */
               gsap.set(keyTop,  { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1 });
               gsap.set(keyLock, { opacity: 0 });
+              /* 하단 배경 사진 다시 접기 → 재스크롤 시 펼침 재생 */
+              if (photobg) gsap.set(photobg, { clipPath: "inset(0 0 100% 0)" });
               /* keyTop WP 트윈 재구축 — kill됐으므로 재스크롤 시 낙하 재생을 위해 복원 */
               if (keyTopTweens.length === 0) {
                 WP.forEach(([pos, dur, yR, xCqw, rot]) => {
