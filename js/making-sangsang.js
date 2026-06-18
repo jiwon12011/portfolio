@@ -112,7 +112,7 @@
     scroller.querySelectorAll(".ss-em").forEach((em) => {
       gsap.set(em, { display: "inline-block" });
       gsap.from(em, {
-        yPercent: 100, opacity: 0, duration: 0.7, ease: "power3.out",
+        yPercent: 100, opacity: 0, duration: 1.0, ease: "power3.out",
         scrollTrigger: ST(em, "top 85%"),
       });
     });
