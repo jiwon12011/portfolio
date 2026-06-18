@@ -340,28 +340,33 @@
          */
         const FX  = -18.204;
         const FY  =  330.43;
-        const AMP =  40;     /* 스윙 진폭: 이미지(20~79cqw) 바깥 + 키 완전 노출 */
+        /* AMP(이전 진자 진폭 40cqw)는 v3 경로에서 미사용 */
 
         /*
          * WP: [타임라인_pos, 지속, y비율, x(cqw), rotate(deg), ease]
          * 달칵 제거됨 — onUpdate progress≥0.98 시 시간기반 재생
-         * 총 duration = 9.8
-         */
-        /*
-         * WP rot: 진자 기울기 → 누적 스핀 720°(2바퀴)
-         * rotate는 ease:"none" 으로 스크롤에 정비례 → "휠리릭" 느낌
-         * 속도: 초반 120°/unit → 후반 37.5°/unit 자연 감속
-         * 좌우 경로(x)는 각 구간 ease 유지 → 진자 리듬 보존
+         * 총 duration = 9.8 (WP[6] pos 7.8 + dur 2.0)
+         *
+         * v3 경로 재설계:
+         *   초반 오른쪽 이동 → off-screen 완전 퇴장(xCqw 65 → 50+65=115cqw, 키 좌측단 106.25cqw > 100) →
+         *   화면 밖 y 하강 유지(xCqw 70) → 예약 높이(yR≈0.74≈247cqw)에서
+         *   우측 반쯤 바깥 재등장(xCqw 44 → 중심 94cqw) →
+         *   왼쪽 수렴 → FX·FY·720° 착지
+         *
+         * WP rot: ease:"none" 스크롤 정비례 누적 720°(2바퀴)
+         *   속도: 71°/u(초반) → 90°/u(퇴장) → 67°/u(off-screen) → 92°/u(재등장)
+         *         → 86°/u → 100°/u → 40°/u(착지 감속)
+         * 퇴장/재등장 opacity 트윈은 WP 루프 직후 keyTopTweens에 별도 추가
          */
         const WP = [
-          /* pos    dur   yR      xCqw            rot(누적)  ease(경로)    */
-          [   0,    1.0,  0.10,   AMP,             120,  "sine.inOut"  ],  /* →우 */
-          [   1.0,  1.8,  0.25,  -AMP,             270,  "sine.inOut"  ],  /* ←좌 */
-          [   2.8,  1.8,  0.42,   AMP * 0.80,      420,  "sine.inOut"  ],  /* →우 */
-          [   4.6,  1.8,  0.59,  -AMP * 0.60,      540,  "sine.inOut"  ],  /* ←좌 */
-          [   6.4,  1.4,  0.75,   AMP * 0.35,      630,  "sine.inOut"  ],  /* →우 */
-          [   7.8,  1.2,  0.90,   FX * 0.40,       690,  "power1.out"  ],  /* ←수렴 */
-          [   9.0,  0.8,  1.00,   FX,              720,  "power2.out"  ],  /* 착지 (720°=0° 시각) */
+          /* pos    dur   yR      xCqw            rot(누적)  ease(경로)                          의미                          */
+          [   0,    1.4,  0.08,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동(중심 78cqw, visible)             */
+          [   1.4,  1.0,  0.18,   65,             190,  "power2.in"   ],  /* →우: off-screen 완전 퇴장(중심 115cqw > 100)    */
+          [   2.4,  1.8,  0.48,   70,             310,  "none"        ],  /* 화면 밖 유지, y 하강(중심 120cqw)               */
+          [   4.2,  1.2,  0.74,   44,             420,  "power2.out"  ],  /* ←좌: 예약 높이 재등장(중심 94cqw, 반쯤 보임)   */
+          [   5.4,  1.4,  0.84,   -2,             540,  "sine.inOut"  ],  /* ←좌: 중앙 지나 스윙 수렴                       */
+          [   6.8,  1.0,  0.93,   FX * 0.5,       640,  "power1.out"  ],  /* ←좌: 착지 근접 수렴                           */
+          [   7.8,  2.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합                         */
         ];
 
         /* ── 트레일 노드 생성 — WP 도착 anchor를 보간해 경로 전체 촘촘하게 ──
@@ -518,6 +523,13 @@
                     }, pos)
                   );
                 });
+                /* 퇴장/재등장 opacity 트윈 재구축 */
+                keyTopTweens.push(
+                  keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.8)
+                );
+                keyTopTweens.push(
+                  keyTL.to(keyTop, { opacity: 1, duration: 0.7, ease: "power2.out" }, 4.5)
+                );
               }
             },
           },
@@ -526,8 +538,7 @@
         /* WP → keyTL 트윈 (열쇠 이동·회전, 트레일 bloom은 아래 별도 루프)
          * keyTopTweens에 레퍼런스 저장 → 달칵 시 kill, onLeaveBack 시 재구축 */
         WP.forEach(([pos, dur, yR, xCqw, rot]) => {
-          /* y: ease:"none" → 스크롤 대비 하강 속도 균일 (중반 늘어짐 제거)
-           * x·rotate: WP별 ease 유지 → 진자 감속/진입 리듬 보존 */
+          /* ease:"none" → scrub 스크롤 대비 균일 이동(x·y·rotate 전부 선형) */
           keyTopTweens.push(
             keyTL.to(keyTop, {
               y: cp(FY * yR),
@@ -536,6 +547,17 @@
             }, pos)
           );
         });
+
+        /* 퇴장 페이드아웃: off-screen 진입 직전 미세 소멸 → glow 가장자리 번짐 방지
+         * t=1.8~2.3: WP[1] 진행 중(xCqw≈43→57), 키 좌측단이 화면 밖으로 나가기 직전 */
+        keyTopTweens.push(
+          keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.8)
+        );
+        /* 재등장 페이드인: 예약 높이(yR≈0.74) 우측에서 부드럽게 나타남
+         * t=4.5~5.2: WP[3] 진행 중(xCqw≈59.7→52.2), 키 좌측단이 화면 안으로 진입 중 */
+        keyTopTweens.push(
+          keyTL.to(keyTop, { opacity: 1, duration: 0.7, ease: "power2.out" }, 4.5)
+        );
 
         /* 트레일 노드 bloom→fadeout
          * bloomStart: 도착 0.18s 전부터 피어오름 → 열쇠가 지나가는 자리에 자글자글 남는 느낌
