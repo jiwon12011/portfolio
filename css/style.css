@@ -2963,27 +2963,12 @@ html.process-open { overflow: hidden; }
   100% { opacity: 0;                 transform: translate(var(--df-dx, 8px), var(--df-dy, -180px)); }
 }
 
-/* ── ss4 비네팅 호흡 (JS 생성) — 좌우 가장자리가 살짝 어두워졌다 밝아졌다, 중앙 열쇠 통로에 시선 집중 ── */
-.ss-vignette {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(90deg,
-    rgba(2,4,6,.55) 0%, rgba(2,4,6,0) 24%,
-    rgba(2,4,6,0) 76%, rgba(2,4,6,.55) 100%);
-  opacity: .5;
-  animation: ss-vignette-breath 7s ease-in-out infinite alternate;
-}
-@keyframes ss-vignette-breath {
-  from { opacity: .36; }
-  to   { opacity: .60; }
-}
-
 /* ── reduced-motion: ss4 분위기 요소 정적 처리 ── */
 @media (prefers-reduced-motion: reduce) {
   .ss-god-ray { animation: none; opacity: .07; }
   .ss-bg-star { animation: none; opacity: .06; }
   .ss-dust    { display: none; }
   .ss-mist--3, .ss-mist--4 { animation: none; opacity: .45; }
-  .ss-vignette { animation: none; opacity: .42; }
 }
 
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */

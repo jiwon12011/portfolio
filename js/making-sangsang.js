@@ -757,18 +757,12 @@
        · z-index: 0 (이미지·키·트레일 뒤) — 순수 배경 레이어
        · transform/opacity only — 60fps, 레이아웃 속성 무간섭
        · 키 scrub·트레일·달칵·기존 ScrollTrigger 절대 미간섭
-       · 총 요소: 비네팅 1 + god ray 2 + 먼지 18 + 별 25 + 안개 2 = 48개
+       · 총 요소: god ray 2 + 먼지 18 + 별 25 + 안개 2 = 47개
     ================================================================ */
     {
       const ss4Bg = scroller.querySelector("#ss4");
       if (ss4Bg) {
         const rnd = (a, b) => a + Math.random() * (b - a);
-
-        /* ⓪ 비네팅 호흡 1개 — 좌우 가장자리가 은은하게 어두워졌다 밝아졌다, 열쇠에 시선 집중(CSS opacity만) */
-        const vignette = document.createElement("span");
-        vignette.className = "ss-vignette";
-        vignette.setAttribute("aria-hidden", "true");
-        ss4Bg.appendChild(vignette);
 
         /* ① 빛줄기 god ray 2개
          * transform-origin: 50% 0% → 상단 중심 기준 사선 회전
