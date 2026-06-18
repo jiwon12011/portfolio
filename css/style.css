@@ -2779,7 +2779,7 @@ html.process-open { overflow: hidden; }
 /* 명패 + 명패 안 텍스트 + 명패 옆 열쇠 */
 .ss-story-pg__plaque { position: absolute; left: 50%; transform: translateX(-50%); top: 336.042cqw;
   width: 27.96cqw; height: 17.847cqw; object-fit: contain; display: block; z-index: 1; }
-.ss-story-pg__plaque-text { position: absolute; left: 50%; transform: translateX(-50%); top: 342.083cqw; margin: 0;
+.ss-story-pg__plaque-text { position: absolute; left: 50%; top: 342.083cqw; margin: 0;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.528cqw; line-height: 1.29;
   letter-spacing: .1em; color: #efd6a7; text-align: center; white-space: nowrap; z-index: 2; }
 .ss-story-pg__key--lock { left: 24.5cqw; top: 341.319cqw; width: 14.592cqw; height: 7.43cqw; z-index: 3; }
@@ -2838,7 +2838,7 @@ html.process-open { overflow: hidden; }
 .ss-outro__ri-label { margin: 0 0 0.7cqw; font-family: "Cormorant Garamond", serif; font-size: 1.389cqw; color: #fff3e8; }
 .ss-outro__ri-desc { margin: 0; font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.111cqw; color: #fff; }
 .ss-outro__bg { position: absolute; left: 0; top: 122.569cqw; width: 100cqw; height: 50.972cqw; object-fit: cover; display: block; }
-.ss-outro__thanks { position: absolute; left: 50%; transform: translateX(-50%); top: 147.153cqw; margin: 0;
+.ss-outro__thanks { position: absolute; left: 50%; top: 147.153cqw; margin: 0;
   font-family: "Cormorant Garamond", serif; font-size: 1.389cqw; color: #fff3e8; }
 
 /* ── 마그네틱 골드 글로우 (상상의 문 전용) — 포인터 따라 광원 ── */

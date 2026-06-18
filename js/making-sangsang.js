@@ -478,7 +478,15 @@
         opacity: 0, y: 20, duration: 0.85, ease: "power3.out", stagger: 0.12,
         scrollTrigger: ST("#ss5 .ss-outro__lesson--1", "top 86%"),
       });
-      rise("#ss5 .ss-outro__thanks", { y: 18, scrollTrigger: ST("#ss5 .ss-outro__thanks", "top 90%") });
+      /* Thank you — gsap 관리 센터링(xPercent:-50). CSS translateX 제거됨 → 어긋남 방지 */
+      const thanks = scroller.querySelector("#ss5 .ss-outro__thanks");
+      if (thanks) {
+        gsap.set(thanks, { xPercent: -50 });
+        gsap.from(thanks, {
+          opacity: 0, y: 18, duration: 0.85, ease: "power3.out",
+          scrollTrigger: ST("#ss5 .ss-outro__thanks", "top 90%"),
+        });
+      }
 
       /* 제안서 캡처 3장 — 오른쪽에서 왼쪽으로 촤라라 순차 슬라이드 */
       const shots = scroller.querySelectorAll("#ss5 .ss-outro__shot");
@@ -554,7 +562,6 @@
         ["#ss4 .ss-story-pg__label--reserve", { x: -30 }],
         ["#ss4 .ss-story-pg__desc--reserve",  { x:  40 }],
         ["#ss4 .ss-story-pg__cap--reserve",   { y:  50, scale: 1.04 }],
-        ["#ss4 .ss-story-pg__plaque-text",    { x: -40 }],
       ].forEach(([sel, vars]) => {
         const el = scroller.querySelector(sel);
         if (!el) return;
@@ -564,6 +571,16 @@
           { scrollTrigger: ST(sel, "top 86%") }
         ));
       });
+
+      /* 명패 텍스트 — gsap 관리 센터링(xPercent:-50)으로 페이드+업. CSS translateX 제거됨 */
+      const plaqueText = scroller.querySelector("#ss4 .ss-story-pg__plaque-text");
+      if (plaqueText) {
+        gsap.set(plaqueText, { xPercent: -50 });
+        gsap.from(plaqueText, {
+          opacity: 0, y: 16, duration: 0.9, ease: "power3.out",
+          scrollTrigger: ST("#ss4 .ss-story-pg__plaque-text", "top 86%"),
+        });
+      }
 
       /* ③ 팀 프로세스 카드 01/02/03 — 순차 진입 + 내부 텍스트 스태거 */
       const teamCards = scroller.querySelectorAll(
