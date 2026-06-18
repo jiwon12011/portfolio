@@ -106,13 +106,14 @@
       scrollTrigger: ST("#ss1 .ss-overview__lead", "top 84%"),
     });
 
-    // .ss-em 강조어 전체: 밑에 숨어 있다가 스크롤 도착 시 위로 올라오며 등장
-    // (CSS에서 이미 주황 #ffc284 — 색은 유지, 위치/투명도만 스크럽)
+    // .ss-em 강조어 전체: 밑에 숨어 있다가 화면 진입 시 위로 올라오며 등장
+    // (CSS에 이미 주황 #ffc284 — 색은 유지, 위치/투명도만 모션)
+    // ※ 이 모달은 scrub 불안정 → once 진입 트리거 사용
     scroller.querySelectorAll(".ss-em").forEach((em) => {
       gsap.set(em, { display: "inline-block" });
       gsap.from(em, {
-        yPercent: 100, opacity: 0, ease: "none",
-        scrollTrigger: { trigger: em, scroller, start: "top 92%", end: "top 66%", scrub: true },
+        yPercent: 100, opacity: 0, duration: 0.7, ease: "power3.out",
+        scrollTrigger: ST(em, "top 85%"),
       });
     });
 
