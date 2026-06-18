@@ -27,14 +27,13 @@
     let target = scroller.scrollTop;
     let current = scroller.scrollTop;
     let active = false;           // 모달 열렸을 때만 휠 가로채기
-    let frozen = false;           // 외부에서 일시 차단(달칵 hold 등)
 
     const maxScroll = () => scroller.scrollHeight - scroller.clientHeight;
     const clamp = (v) => Math.max(0, Math.min(v, maxScroll()));
 
     /* 매 프레임 보간 */
     const onTick = () => {
-      if (!active || frozen) return; // frozen 중엔 lerp 정지
+      if (!active) return;
       const diff = target - current;
       if (Math.abs(diff) < 0.5) {
         /* 유휴: 스크롤바/키보드 등 외부 변화에 목표 동기화 */
@@ -60,7 +59,6 @@
       /* 가장자리에서 더 밀면 네이티브에 양보(오버스크롤 종료 제스처 등) */
       if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) return;
       e.preventDefault();
-      if (frozen) return;          // 차단 중 — target 누적 금지(preventDefault는 유지)
       let d = e.deltaY;
       if (e.deltaMode === 1) d *= 16;              // 라인 단위
       else if (e.deltaMode === 2) d *= scroller.clientHeight; // 페이지 단위
@@ -72,11 +70,7 @@
       target = clamp(top);
       if (opt && opt.immediate) { current = target; scroller.scrollTop = target; }
     };
-    /* freeze/unfreeze — 달칵 hold 등 외부 차단 협조용
-     * freeze(): 진행 중인 lerp도 즉시 정지, target을 현재 위치로 스냅 */
-    const freeze   = () => { frozen = true;  current = target = scroller.scrollTop; };
-    const unfreeze = () => { frozen = false; };
-    if (modal.dataset.project) window.__processLenis[modal.dataset.project] = { scrollTo, freeze, unfreeze };
+    if (modal.dataset.project) window.__processLenis[modal.dataset.project] = { scrollTo };
     else if (modal.id === "about") window.__aboutLenis = { scrollTo };
 
     /* 모달 열림/닫힘 동기화 */
@@ -102,10 +96,4 @@
   /* About 은 페이지가 길고 트랙패드 관성에 확 쏠려 → 감도(mult)↓ + 더 미끄럽게(ease↓) */
   const aboutModal = document.querySelector("#about");
   if (aboutModal) setup(aboutModal, ".about__scroll", 0.09, 0.5);
-
-  /* 상상의 문: 기본(0.14)보다 더 미끄럽게 → ease 0.10.
-   * freeze/unfreeze API를 window.__processLenis.sangsang 에 노출해
-   * making-sangsang.js 달칵 hold 구간과 협조한다. */
-  const sangsangModal = document.querySelector("#process-sangsang");
-  if (sangsangModal) setup(sangsangModal, ".process__content", 0.10, 1);
 })();
