@@ -41,6 +41,17 @@
         opacity: 0, y: 26, duration: 0.85, ease: "power3.out",
       }, opt));
 
+    /* 중앙정렬 요소 전용 진입 헬퍼 — CSS translateX(-50%) 대신 gsap xPercent:-50로
+     * 센터링을 gsap이 관장(트랜스폼 충돌로 중앙이 어긋나는 버그 방지). CSS에서 translateX 제거 필수 */
+    const riseCenter = (sel, opt = {}) => {
+      const el = scroller.querySelector(sel);
+      if (!el) return;
+      gsap.set(el, { xPercent: -50 });
+      gsap.from(el, Object.assign({
+        opacity: 0, y: 22, duration: 0.85, ease: "power3.out",
+      }, opt));
+    };
+
     /* ================================================================
        SECTION · 히어로 (#ss-hero)
        배경: scale 1.06→1 은은한 줌-세틀
@@ -471,13 +482,16 @@
       rise("#ss5 .ss-outro__kicker--proposal", { y: 18, scrollTrigger: ST("#ss5 .ss-outro__kicker--proposal", "top 88%") });
       rise("#ss5 .ss-outro__title", { y: 28, duration: 0.95, delay: 0.06, scrollTrigger: ST("#ss5 .ss-outro__title", "top 86%") });
 
-      rise("#ss5 .ss-outro__desc--proposal", { y: 20, scrollTrigger: ST("#ss5 .ss-outro__desc--proposal", "top 86%") });
-      rise("#ss5 .ss-outro__kicker--result", { y: 16, scrollTrigger: ST("#ss5 .ss-outro__kicker--result", "top 88%") });
+      riseCenter("#ss5 .ss-outro__desc--proposal", { y: 20, scrollTrigger: ST("#ss5 .ss-outro__desc--proposal", "top 86%") });
+      riseCenter("#ss5 .ss-outro__kicker--result", { y: 16, scrollTrigger: ST("#ss5 .ss-outro__kicker--result", "top 88%") });
       const lessons = scroller.querySelectorAll("#ss5 .ss-outro__lesson");
-      if (lessons.length) gsap.from(lessons, {
-        opacity: 0, y: 20, duration: 0.85, ease: "power3.out", stagger: 0.12,
-        scrollTrigger: ST("#ss5 .ss-outro__lesson--1", "top 86%"),
-      });
+      if (lessons.length) {
+        gsap.set(lessons, { xPercent: -50 }); /* CSS translateX 제거 → gsap 센터링 */
+        gsap.from(lessons, {
+          opacity: 0, y: 20, duration: 0.85, ease: "power3.out", stagger: 0.12,
+          scrollTrigger: ST("#ss5 .ss-outro__lesson--1", "top 86%"),
+        });
+      }
       /* Thank you — gsap 관리 센터링(xPercent:-50). CSS translateX 제거됨 → 어긋남 방지 */
       const thanks = scroller.querySelector("#ss5 .ss-outro__thanks");
       if (thanks) {
@@ -551,8 +565,6 @@
       /* ② 페이지 쇼케이스 — 이미지 솟기 + 텍스트 좌우 슬라이드
          (caption--team은 .ss-em 전용 핸들러와 겹쳐 제외 / plaque 이미지는 endTrigger라 제외) */
       [
-        ["#ss4 .ss-story-pg__sub",            { x: -36 }],
-        ["#ss4 .ss-story-pg__label--main",    { x: -30 }],
         ["#ss4 .ss-story-pg__caption--main",  { x:  40 }],
         ["#ss4 .ss-story-pg__mainbg",         { y:  60, scale: 1.04 }],
         ["#ss4 .ss-story-pg__main",           { y:  50 }],
@@ -571,6 +583,10 @@
           { scrollTrigger: ST(sel, "top 86%") }
         ));
       });
+
+      /* 중앙 헤드라인 보조(sub)·MAIN 라벨 — gsap 센터링(translateX 제거) */
+      riseCenter("#ss4 .ss-story-pg__sub",         { y: 18, scrollTrigger: ST("#ss4 .ss-story-pg__sub", "top 88%") });
+      riseCenter("#ss4 .ss-story-pg__label--main", { y: 14, scrollTrigger: ST("#ss4 .ss-story-pg__label--main", "top 88%") });
 
       /* 명패 텍스트 — gsap 관리 센터링(xPercent:-50)으로 페이드+업. CSS translateX 제거됨 */
       const plaqueText = scroller.querySelector("#ss4 .ss-story-pg__plaque-text");

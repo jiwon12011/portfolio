@@ -2744,7 +2744,7 @@ html.process-open { overflow: hidden; }
 .ss-story-pg__head { position: absolute; left: 50%; transform: translateX(-50%); top: 11.667cqw; margin: 0;
   font-family: "Cormorant Garamond", serif; font-weight: 400; font-size: 3.333cqw; color: #fff3e8;
   text-align: center; white-space: nowrap; letter-spacing: .04em; z-index: 2; }
-.ss-story-pg__sub { position: absolute; left: 50%; transform: translateX(-50%); top: 16.389cqw; margin: 0;
+.ss-story-pg__sub { position: absolute; left: 50%; top: 16.389cqw; margin: 0;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.389cqw; color: #fff3e8;
   text-align: center; white-space: nowrap; }
 /* 본문 캡션 (Pretendard 40px) — 흰색 + 골드 강조 */
@@ -2752,7 +2752,7 @@ html.process-open { overflow: hidden; }
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 2.778cqw; line-height: 1.4; color: #fff; }
 .ss-story-pg .ss-em { color: #ffc284; }
 /* MAIN PAGE */
-.ss-story-pg__label--main { left: 50%; transform: translateX(-50%); top: 28.472cqw; text-align: center; }
+.ss-story-pg__label--main { left: 50%; top: 28.472cqw; text-align: center; }
 .ss-story-pg__caption--main { left: 29.375cqw; top: 31.528cqw; text-align: center; }
 /* 메인 흐릿한 배경 */
 .ss-story-pg__mainbg { position: absolute; left: 0; top: 92.5cqw; width: 100cqw; height: 108.056cqw;
@@ -2809,7 +2809,7 @@ html.process-open { overflow: hidden; }
 .ss-outro__kicker { position: absolute; margin: 0; font-family: "Cormorant Garamond", serif;
   font-weight: 400; font-size: 1.389cqw; color: #fff3e8; }
 .ss-outro__kicker--proposal { left: 7.014cqw; top: 6.944cqw; }
-.ss-outro__kicker--result { left: 50%; transform: translateX(-50%); top: 78.125cqw; }
+.ss-outro__kicker--result { left: 50%; top: 78.125cqw; }
 .ss-outro__title { position: absolute; left: 7.014cqw; top: 10.556cqw; margin: 0;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 2.778cqw; line-height: 1.35; color: #fff; }
 .ss-outro__title .ss-em { color: #ffc284; }
@@ -2818,7 +2818,7 @@ html.process-open { overflow: hidden; }
 .ss-outro__shot--1 { left: 2.5cqw; }
 .ss-outro__shot--2 { left: 35cqw; }
 .ss-outro__shot--3 { left: auto; right: 2.5cqw; }
-.ss-outro__desc { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-align: center;
+.ss-outro__desc { position: absolute; left: 50%; margin: 0; text-align: center;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.389cqw; line-height: 1.6; color: #fff; }
 .ss-outro__desc--proposal { top: 50cqw; }
 .ss-outro__rule { position: absolute; top: 71.736cqw; height: 0; border-top: 1px solid #494c4e; }
@@ -2826,7 +2826,7 @@ html.process-open { overflow: hidden; }
 .ss-outro__rule--r { left: 53.472cqw; width: 39.653cqw; }
 .ss-outro__sparkle { position: absolute; display: block; left: 50%; top: 71.736cqw;
   margin-left: -0.833cqw; margin-top: -0.833cqw; width: 1.667cqw; height: 1.667cqw; }
-.ss-outro__lesson { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-align: center;
+.ss-outro__lesson { position: absolute; left: 50%; margin: 0; text-align: center;
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1.389cqw; line-height: 1.6; color: #fff;
   max-width: 90cqw; }
 .ss-outro__lesson--1 { top: 82.569cqw; }
