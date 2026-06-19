@@ -2720,6 +2720,19 @@ html.process-open { overflow: hidden; }
 
 /* SECTION 4 · STORY 포스터 (story.html 포스터 포팅) — 흰 배경 위에 포스터 */
 .ss-story { background: #ffffff; }
+/* M4 — ss3(흰)→ss4(다크) 하드컷 완화: ss3 하단에 #fff→#080d11 그라데이션 오버레이
+ * · .ss-sec position:relative 상속 → ::after bottom:0 은 ss3 바닥에 고정
+ * · height:8cqw ≈ 포스터 하단 마진(6cqw) + 살짝 겹침 → 경계 완전히 블렌드
+ * · overflow:hidden(.ss-sec)으로 ss4 영역 절대 침범 없음 */
+.ss-story::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 8cqw;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #080d11 100%);
+  pointer-events: none;
+  z-index: 2;
+}
 .ss-story__poster {
   position: relative; width: 80%; margin: 6% auto;
   aspect-ratio: 1312 / 2137;
@@ -4748,6 +4761,9 @@ html.process-open { overflow: hidden; }
 /* ── 유미 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--yumi { background: #eaf4ff; box-shadow: 0 24px 60px -32px rgba(110,135,180,0.42); }
 .ym-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf4ff; }
+/* SECTION 2.5 · 캐릭터 러닝 영상 배너 (와이드 밴드) */
+.ym-band { aspect-ratio: 1440 / 600; }
+.ym-band__vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 /* SECTION · 히어로 (디자인 1440×896) — 풀커버 키 비주얼 */
 .ym-hero { aspect-ratio: 1440 / 896; }
 .ym-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -5060,6 +5076,44 @@ html.process-open { overflow: hidden; }
 /* ── SECTION 7 · OUTRO (풀블리드 마무리 이미지) ── */
 .ym-outro { aspect-ratio: 1920 / 1081; background: #1a1430; }
 .ym-outro__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── v2 모션 전용 추가 CSS (making-yumi.js v2) ─────────────────────────── */
+
+/* ym-r1 카드 테두리 draw-on SVG */
+
+/* ym-r2 감정 색번짐 bleed */
+.ym-r2__bleed {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 55%,
+    rgba(255,107,157,0.52) 0%,
+    rgba(255,179,71,0.22) 48%,
+    transparent 72%);
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  /* GSAP이 scale·opacity 제어 — 초기값은 JS에서 set */
+}
+
+/* ym-r2 타이틀 char-split 스팬 */
+.ym-char { display: inline; }
+
+/* ym-r6 pink/purple inline-block (clip-path 동작을 위해 필요) */
+.ym-r6__qtext .ym-r6__pink,
+.ym-r6__qtext .ym-r6__purple { display: inline-block; }
+
+/* ym-r6 감정 입자 컨테이너 */
+.ym-r6__particles {
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden;
+}
+/* 입자 개별 — left·--pc는 JS에서 설정 */
+.ym-r6__particle {
+  position: absolute; bottom: 6%;
+  width: 1.2cqw; height: 1.2cqw;
+  min-width: 7px; min-height: 7px;
+  border-radius: 50%;
+  background: var(--pc, #ffb3cc);
+  opacity: 0; /* GSAP 제어 */
+}
 
 /* ── 감정 날씨 히어로 (글래스) ── */
 .ym-weather { position: relative; display: flex; gap: clamp(14px,1.6vw,30px);

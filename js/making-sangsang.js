@@ -108,6 +108,8 @@
       const AMPX = 26, AMPY = 18, AMPR = 1.1; /* px / px / deg */
       let rect = null; /* pointerenter에서 캐싱 → mousemove 강제 reflow 제거 */
       ss1El.addEventListener("pointerenter", () => { rect = ss1El.getBoundingClientRect(); });
+      /* M2: 스크롤 시 rect 무효화 → 레이지 재취득(ss4 photobg와 동일 패턴) */
+      scroller.addEventListener("scroll", () => { rect = null; }, { passive: true });
       ss1El.addEventListener("pointermove", (e) => {
         if (!rect) rect = ss1El.getBoundingClientRect();
         const nx = (e.clientX - rect.left) / rect.width  - 0.5; /* -0.5 ~ 0.5 */
@@ -441,17 +443,23 @@
         /* ── 달칵 스크롤 차단 핸들러 (progress≥0.999 시 임팩트+반동 구간만 차단) ──
          * passive:false 리스너를 상시 붙이면 미발동 시에도 브라우저가 JS 실행 대기.
          * 달칵 직전에만 add, 임팩트+반동 완료 즉시 remove → 평소 스크롤 지연 0 */
-        let clackPlayed = false;
-        let clackTL     = null;
+        let clackPlayed       = false;
+        let clackTL           = null;
+        let scrollBlockActive = false; /* M1: 달칵 차단 리스너 중복 부착 방지 플래그 */
         /* keyTop WP 트윈 레퍼런스 — 달칵 시 kill, onLeaveBack 시 재구축 */
         const keyTopTweens = [];
 
         const onWheelBlock = (e) => { e.preventDefault(); };
+        /* M1: 가드 플래그로 중복 add/remove 방지 — passive:false 리스너는 한 번만 연결 */
         const addScrollBlock = () => {
+          if (scrollBlockActive) return;
+          scrollBlockActive = true;
           scroller.addEventListener("wheel",     onWheelBlock, { passive: false });
           scroller.addEventListener("touchmove", onWheelBlock, { passive: false });
         };
         const removeScrollBlock = () => {
+          if (!scrollBlockActive) return;
+          scrollBlockActive = false;
           scroller.removeEventListener("wheel",     onWheelBlock);
           scroller.removeEventListener("touchmove", onWheelBlock);
         };
@@ -526,6 +534,8 @@
               gsap.set(keyLock, { opacity: 0 });
               /* 하단 배경 사진 다시 접기 → 재스크롤 시 펼침 재생 */
               if (photobg) gsap.set(photobg, { clipPath: "inset(0 0 100% 0)" });
+              /* M1: 트레일 wraps 강제 초기화 — gsap inline opacity 잔류 방지 */
+              gsap.set(trailWraps, { opacity: 0 });
               /* keyTop WP 트윈 재구축 — kill됐으므로 재스크롤 시 낙하 재생을 위해 복원 */
               if (keyTopTweens.length === 0) {
                 WP.forEach(([pos, dur, yR, xCqw, rot]) => {
@@ -545,6 +555,8 @@
                   keyTL.to(keyTop, { opacity: 1, duration: 1.6, ease: "power2.out" }, 3.4)
                 );
               }
+              /* M1: 타임라인 캐시 무효화 + 처음으로 리셋 → 재진입 시 progress 매핑 안정 */
+              keyTL.invalidate().progress(0);
             },
           },
         });
@@ -642,18 +654,41 @@
           scrollTrigger: ST("#ss5 .ss-outro__shots", "top 84%") }
       );
 
-      /* sparkle — 팝인(back.out) 후 은은한 반짝(scale·opacity yoyo) */
-      const sparkle5 = scroller.querySelector("#ss5 .ss-outro__sparkle");
-      if (sparkle5) gsap.fromTo(sparkle5,
-        { opacity: 0, scale: 0.3, rotate: -40, transformOrigin: "50% 50%" },
-        { opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "back.out(2.5)",
-          scrollTrigger: ST("#ss5 .ss-outro__sparkle", "top 90%"),
-          onComplete() {
+      /* M3: 구분선(rule) 와이프 + 스파클 팝 — ss2 2-C 패턴 동일 적용
+       * rule-l: 오른쪽(스파클 방향)에서 바깥→안 전개 (transformOrigin "100% 50%")
+       * rule-r: 왼쪽(스파클 방향)에서 바깥→안 전개 (transformOrigin "0% 50%")
+       * sparkle: 중심에서 팝인(0.12s 지연) → 3회 yoyo 후 정착 */
+      const ss5RuleL    = scroller.querySelector("#ss5 .ss-outro__rule--l");
+      const ss5RuleR    = scroller.querySelector("#ss5 .ss-outro__rule--r");
+      const sparkle5    = scroller.querySelector("#ss5 .ss-outro__sparkle");
+      const ss5RuleTrig = sparkle5 || ss5RuleL;
+      if (ss5RuleTrig) {
+        const ss5RuleTL = gsap.timeline({
+          scrollTrigger: { trigger: ss5RuleTrig, scroller, start: "top 90%", once: true },
+        });
+        if (ss5RuleL) {
+          ss5RuleTL.from(ss5RuleL, {
+            scaleX: 0, transformOrigin: "100% 50%",
+            duration: 0.75, ease: "power2.inOut",
+          }, 0);
+        }
+        if (ss5RuleR) {
+          ss5RuleTL.from(ss5RuleR, {
+            scaleX: 0, transformOrigin: "0% 50%",
+            duration: 0.75, ease: "power2.inOut",
+          }, 0);
+        }
+        if (sparkle5) {
+          ss5RuleTL.fromTo(sparkle5,
+            { opacity: 0, scale: 0.3, rotate: -40, transformOrigin: "50% 50%" },
+            { opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "back.out(2.5)" },
+            0.12
+          ).call(() => {
             /* 3회 yoyo 후 opacity:1·scale:1로 정착 — 무한 반짝임이 마무리 집중 흐트러뜨리는 것 방지 */
             gsap.to(sparkle5, { opacity: 0.55, scale: 0.87, duration: 1.6, ease: "sine.inOut", repeat: 3, yoyo: true });
-          },
+          });
         }
-      );
+      }
 
       /* LIVE → GITHUB → PROPOSAL 오른쪽에서 왼쪽으로 샤악 흘러 들어옴 */
       const ris = scroller.querySelectorAll("#ss5 .ss-outro__ri");
@@ -1079,10 +1114,11 @@
         ctaEl.addEventListener("mouseleave", () => { gsap.to(flair, { scale: 0, duration: 0.3, ease: "power2.out" }); });
       }
 
-      /* ss5 링크(LIVE/GITHUB/PROPOSAL): 글로우박스 대신 마우스오버 확대 */
+      /* ss5 링크(LIVE/GITHUB/PROPOSAL): 글로우박스 대신 마우스오버 확대
+       * M5: overwrite:"auto" — 빠른 enter→leave 반복 시 트윈 누적 방지 */
       scroller.querySelectorAll("#ss5 .ss-outro__ri").forEach((ri) => {
-        ri.addEventListener("mouseenter", () => gsap.to(ri, { scale: 1.08, duration: 0.3, ease: "power2.out" }));
-        ri.addEventListener("mouseleave", () => gsap.to(ri, { scale: 1.0, duration: 0.3, ease: "power2.out" }));
+        ri.addEventListener("mouseenter", () => gsap.to(ri, { scale: 1.08, duration: 0.3, ease: "power2.out", overwrite: "auto" }));
+        ri.addEventListener("mouseleave", () => gsap.to(ri, { scale: 1.0,  duration: 0.3, ease: "power2.out", overwrite: "auto" }));
       });
     }
 
