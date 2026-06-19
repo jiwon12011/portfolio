@@ -4698,6 +4698,53 @@ html.process-open { overflow: hidden; }
   height: auto;
 }
 
+/* ── 플레디스 v2 추가 요소 ── */
+
+/* 별빛 파티클 어셈블 (Pleiades 컨셉) — pd-hero */
+.pd-hero__stars {
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 2;
+  filter: drop-shadow(0 0 0.3cqw rgba(255, 140, 70, 0.5));  /* 글로우를 래퍼 1개로 통합(레이어 절감) */
+}
+.pd-hero__star {
+  position: absolute;
+  width: 0.28cqw; height: 0.28cqw;
+  min-width: 3px; min-height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 210, 170, 0.95);
+}
+/* 12개 별 위치 — 히어로 이미지 위 산포 */
+.pd-hero__star--1  { left: 12%; top: 18%; }
+.pd-hero__star--2  { left: 24%; top: 62%; }
+.pd-hero__star--3  { left: 38%; top: 12%; }
+.pd-hero__star--4  { left: 52%; top: 38%; }
+.pd-hero__star--5  { left: 67%; top: 22%; }
+.pd-hero__star--6  { left: 79%; top: 55%; }
+.pd-hero__star--7  { left: 88%; top: 32%; }
+.pd-hero__star--8  { left: 31%; top: 78%; }
+.pd-hero__star--9  { left: 60%; top: 72%; }
+.pd-hero__star--10 { left: 8%;  top: 48%; }
+.pd-hero__star--11 { left: 74%; top: 82%; }
+.pd-hero__star--12 { left: 45%; top: 50%; }
+
+/* pd5 SVG 연결선 (MIDJOURNEY ↔ CLAUDE CODE) */
+.pd-r5__connector {
+  position: absolute;
+  /* 프롬프트 카드 우측 끝(48.333cqw)~코드 카드 좌측(52cqw) 중간 */
+  left: 48.2cqw; top: 58cqw;
+  width: 3.6cqw; height: 0.5cqw;
+  overflow: visible;
+  z-index: 2; pointer-events: none;
+}
+.pd-r5__connector-line {
+  stroke: rgba(255, 70, 0, 0.5);
+  stroke-width: 1; fill: none;
+  /* dasharray/offset은 JS에서 설정 */
+}
+.pd-r5__connector-dot {
+  fill: #ff4600;
+}
+
 /* ── 유미 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--yumi { background: #eaf4ff; box-shadow: 0 24px 60px -32px rgba(110,135,180,0.42); }
 .ym-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf4ff; }
