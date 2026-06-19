@@ -3062,22 +3062,6 @@ html.process-open { overflow: hidden; }
 .gw-flame { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2;
   pointer-events: none; display: block; }
 
-/* ── 기승전결 챕터 마크 (起承轉結) — 좌하단 골드 인장 ── */
-.gw-chapter { position: absolute; left: 4cqw; bottom: 3.4cqw; z-index: 3;
-  display: flex; align-items: flex-end; gap: 1.1cqw; pointer-events: none;
-  font-family: inherit; line-height: 1; }
-.gw-chapter__han { font-size: 6.4cqw; font-weight: 700; color: #e8ba4d;
-  text-shadow: 0 0 1.6cqw rgba(232,186,77,.45); opacity: .92; }
-.gw-chapter__cap { font-size: 1.05cqw; letter-spacing: .28em; font-weight: 600;
-  color: rgba(244,237,223,.82); padding-bottom: .9cqw; white-space: nowrap; }
-/* 밝은(영상/이미지) 위 — 대비용 미세 그림자 */
-.gw-chapter--light .gw-chapter__cap { text-shadow: 0 .1cqw .4cqw rgba(0,0,0,.6); }
-/* 배너(영상 밝기 가변) — 한자·캡션 모두 대비 보강 */
-.gw-chapter--band .gw-chapter__han { text-shadow: 0 0 1.6cqw rgba(232,186,77,.5), 0 .2cqw .7cqw rgba(0,0,0,.55); }
-.gw-chapter--band .gw-chapter__cap { text-shadow: 0 .1cqw .5cqw rgba(0,0,0,.7); }
-.gw-band .gw-chapter { left: 6.5cqw; bottom: 5.2cqw; }
-#gw-band-2 .gw-chapter { left: 9.5cqw; }
-
 /* ── gw5 세로 연결선 (노드들을 잇는 타임라인 척추) — 노드 좌표 54.86cqw / top 38.1~143.9 ── */
 .gw-r5__line { position: absolute; z-index: 0; left: 54.86cqw; margin-left: -1px;
   top: 38.1cqw; height: 105.8cqw; width: 2px; transform-origin: top center;

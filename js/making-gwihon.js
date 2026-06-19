@@ -84,26 +84,36 @@
       duration: 0.9, ease: "power3.out", stagger: 0.08,
       scrollTrigger: ST("#gw2 .gw-r2__center", "top 78%"),
     });
-    /* 4 원형 이미지 — 팝 인 */
-    gsap.from("#gw2 .gw-r2__circ", {
-      opacity: 0, scale: 0.7, transformOrigin: "50% 50%",
-      duration: 0.7, ease: "back.out(1.6)", stagger: 0.1,
-      scrollTrigger: ST("#gw2 .gw-r2__center", "top 70%"),
+    /* 4 원형 이미지 — 스크롤 따라 중심축으로 회전해 들어와 섹션 중앙쯤서 제자리 안착(scrub).
+       각 원의 transform-origin을 메달리온 중심(50cqw, 52.847cqw)으로 두고 함께 회전 */
+    const circOrigins = {
+      "--tl": "30.764cqw 23.125cqw", "--tr": "-14.861cqw 23.125cqw",
+      "--bl": "30.764cqw -7.292cqw", "--br": "-14.861cqw -7.292cqw",
+    };
+    Object.entries(circOrigins).forEach(([k, origin]) => {
+      const el = scroller.querySelector("#gw2 .gw-r2__circ" + k);
+      if (!el) return;
+      gsap.set(el, { transformOrigin: origin });
+      gsap.fromTo(el,
+        { rotation: -52, opacity: 0 },
+        { rotation: 0, opacity: 1, ease: "none",
+          scrollTrigger: { trigger: "#gw2", scroller, start: "top 64%", end: "center center", scrub: 0.6 } });
     });
     gsap.from("#gw2 .gw-r2__cap", {
       opacity: 0, y: 16, duration: 0.7, ease: "power2.out", stagger: 0.08,
       scrollTrigger: ST("#gw2 .gw-r2__center", "top 64%"),
     });
-    /* 메달리온 앰비언트 회전 — 동심원이 살아있게(게임 HUD 무드).
-       translate(-50%,-50%) 중앙정렬 → xPercent/yPercent 선점 후 회전(이중변환 방지) */
-    const spin = (sel, dur, dir = 1) => {
+    /* 동심원 링 — 스크롤 진입 시 살짝 회전해 들어와 중앙서 안착(scrub). 무한 회전 아님.
+       translate(-50%,-50%) 중앙정렬 → xPercent/yPercent 선점(이중변환 방지) */
+    const ringSettle = (sel, from) => {
       const el = scroller.querySelector(sel);
       if (!el) return;
       gsap.set(el, { xPercent: -50, yPercent: -50, x: 0, y: 0, transformOrigin: "50% 50%" });
-      gsap.to(el, { rotation: 360 * dir, duration: dur, repeat: -1, ease: "none" });
+      gsap.fromTo(el, { rotation: from }, { rotation: 0, ease: "none",
+        scrollTrigger: { trigger: "#gw2", scroller, start: "top 64%", end: "center center", scrub: 0.6 } });
     };
-    spin("#gw2 .gw-r2__orbit", 60, 1);
-    spin("#gw2 .gw-r2__ring--out", 46, -1);
+    ringSettle("#gw2 .gw-r2__orbit", 40);
+    ringSettle("#gw2 .gw-r2__ring--out", -34);
 
     /* ================================================================
        SECTION 3 · EXPERIMENT (#gw3) — 3 시안 목업
@@ -250,15 +260,6 @@
         { yPercent: 4 },
         { yPercent: -4, ease: "none",
           scrollTrigger: { trigger: band, scroller, start: "top bottom", end: "bottom top", scrub: 0.6 } });
-      const chap = band.querySelector(".gw-chapter");
-      if (chap) gsap.from(chap, { opacity: 0, y: 18, duration: 0.9, ease: "power3.out",
-        scrollTrigger: ST(band, "top 70%") });
-    });
-    /* hero·outro 챕터 마크 페이드 인 */
-    ["#gw-hero .gw-chapter", "#gw-outro .gw-chapter"].forEach((sel) => {
-      const el = scroller.querySelector(sel);
-      if (el) gsap.from(el, { opacity: 0, y: 18, duration: 0.9, delay: 0.2, ease: "power3.out",
-        scrollTrigger: ST(el.closest(".gw-sec"), "top 72%") });
     });
 
     /* gw5 세로 연결선 드로우(scaleY 0→1, scrub) */
