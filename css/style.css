@@ -3038,6 +3038,16 @@ html.process-open { overflow: hidden; }
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--gwihon { background: #1a1410; box-shadow: 0 24px 60px -32px rgba(20,12,6,0.55); }
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
+/* 분위기 영상 배너 (양옆 여백 인셋 + 둥근 모서리) */
+.gw-band { background: #1a1410; display: flex; align-items: center; justify-content: center; }
+.gw-band__vid { position: static; display: block; width: 100%; height: auto; object-fit: cover;
+  border-radius: 1.1cqw; box-shadow: 0 1.4cqw 3cqw rgba(0,0,0,.45); }
+/* 위 배너: 거의 원본 16:9, 여백 약간 — 아래 gw1(#12110d)에 맞춤 */
+#gw-band-1 { padding: 2.6cqw 4cqw; background: #12110d; }
+#gw-band-1 .gw-band__vid { aspect-ratio: 16 / 9; }
+/* 아래 배너: 더 가로로 길게(살짝 크롭), 여백 더 크게 — 위 gw3(#16130f)→아래 gw4(#172022) 그라데이션 */
+#gw-band-2 { padding: 2.6cqw 7.5cqw; background: linear-gradient(#16130f, #172022); }
+#gw-band-2 .gw-band__vid { aspect-ratio: 22 / 10; }
 
 /* SECTION 1 · 히어로 (디자인 1440×810, 16:9) — bg 풀커버 + 귀혼M 로고 상단 중앙 */
 .gw-hero { aspect-ratio: 1440 / 810; }
