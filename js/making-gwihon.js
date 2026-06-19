@@ -94,6 +94,16 @@
       opacity: 0, y: 16, duration: 0.7, ease: "power2.out", stagger: 0.08,
       scrollTrigger: ST("#gw2 .gw-r2__center", "top 64%"),
     });
+    /* 메달리온 앰비언트 회전 — 동심원이 살아있게(게임 HUD 무드).
+       translate(-50%,-50%) 중앙정렬 → xPercent/yPercent 선점 후 회전(이중변환 방지) */
+    const spin = (sel, dur, dir = 1) => {
+      const el = scroller.querySelector(sel);
+      if (!el) return;
+      gsap.set(el, { xPercent: -50, yPercent: -50, x: 0, y: 0, transformOrigin: "50% 50%" });
+      gsap.to(el, { rotation: 360 * dir, duration: dur, repeat: -1, ease: "none" });
+    };
+    spin("#gw2 .gw-r2__orbit", 60, 1);
+    spin("#gw2 .gw-r2__ring--out", 46, -1);
 
     /* ================================================================
        SECTION 3 · EXPERIMENT (#gw3) — 3 시안 목업
@@ -121,13 +131,14 @@
     rise("#gw4 .gw-r4__label", { y: 20, scrollTrigger: ST("#gw4 .gw-r4__label", "top 84%") });
     rise("#gw4 .gw-r4__title", { y: 28, duration: 0.95, scrollTrigger: ST("#gw4 .gw-r4__title", "top 84%") });
     rise("#gw4 .gw-r4__desc", { y: 22, delay: 0.08, scrollTrigger: ST("#gw4 .gw-r4__desc", "top 84%") });
-    /* 스와치 — 위로 슬라이드(쌓이는 느낌) */
+    /* 스와치 — 왼쪽에서 팬인(팔레트가 펼쳐지는 느낌) */
     gsap.from("#gw4 .gw-r4__sw", {
-      opacity: 0, y: 34, duration: 0.85, ease: "power3.out", stagger: 0.12,
+      opacity: 0, x: -46, duration: 0.85, ease: "power3.out", stagger: 0.12,
       scrollTrigger: ST("#gw4 .gw-r4__sw--main", "top 84%"),
     });
+    /* 컬러명/HEX — 오른쪽에서 진입(좌우 맞물림) */
     gsap.from("#gw4 .gw-r4__col", {
-      opacity: 0, y: 16, duration: 0.7, ease: "power2.out", stagger: 0.12,
+      opacity: 0, x: 28, duration: 0.7, ease: "power2.out", stagger: 0.12,
       scrollTrigger: ST("#gw4 .gw-r4__sw--main", "top 82%"),
     });
     /* 무드 이미지 — 팝 인 */
@@ -220,6 +231,74 @@
       scrollTrigger: ST("#gw-outro", "top 86%"),
     });
 
+    /* ================================================================
+       NEW · 시그니처 모션 (기존 진입 모션 위에 얹음)
+    ================================================================ */
+
+    /* 배너 씬컷 리빌(스크림 디졸브 + 스케일 착지) + 세로 패닝(scrub object-position) */
+    ["#gw-band-1", "#gw-band-2"].forEach((bandSel) => {
+      const band = scroller.querySelector(bandSel);
+      if (!band) return;
+      const vid = band.querySelector(".gw-band__vid");
+      const scrim = band.querySelector(".gw-band__scrim");
+      const tl = gsap.timeline({ scrollTrigger: ST(band, "top 88%") });
+      if (vid) tl.from(vid, { scale: 1.12, duration: 1.1, ease: "power3.out" }, 0);
+      if (scrim) tl.to(scrim, { opacity: 0, duration: 1.0, ease: "power2.out" }, 0.05);
+      /* 카메라 패닝 — 래퍼(overflow:hidden) 안에서 영상 translateY(compositor only, paint 없음).
+         영상 height 110% 헤드룸 → y 0%~-8% 범위에서 항상 커버 유지 */
+      if (vid) gsap.fromTo(vid,
+        { yPercent: 4 },
+        { yPercent: -4, ease: "none",
+          scrollTrigger: { trigger: band, scroller, start: "top bottom", end: "bottom top", scrub: 0.6 } });
+      const chap = band.querySelector(".gw-chapter");
+      if (chap) gsap.from(chap, { opacity: 0, y: 18, duration: 0.9, ease: "power3.out",
+        scrollTrigger: ST(band, "top 70%") });
+    });
+    /* hero·outro 챕터 마크 페이드 인 */
+    ["#gw-hero .gw-chapter", "#gw-outro .gw-chapter"].forEach((sel) => {
+      const el = scroller.querySelector(sel);
+      if (el) gsap.from(el, { opacity: 0, y: 18, duration: 0.9, delay: 0.2, ease: "power3.out",
+        scrollTrigger: ST(el.closest(".gw-sec"), "top 72%") });
+    });
+
+    /* gw5 세로 연결선 드로우(scaleY 0→1, scrub) */
+    if (scroller.querySelector("#gw5 .gw-r5__line")) {
+      gsap.fromTo("#gw5 .gw-r5__line", { scaleY: 0 }, {
+        scaleY: 1, ease: "none",
+        scrollTrigger: { trigger: "#gw5 .gw-r5__node--1", scroller, start: "top 80%",
+          endTrigger: "#gw5 .gw-r5__node--5", end: "top 60%", scrub: 0.5 },
+      });
+    }
+
+    /* gw5 노드 펄스 — 섹션 화면 안일 때만 가동(밖이면 정지, idle CPU 보호) */
+    const gw5 = scroller.querySelector("#gw5");
+    if (gw5) {
+      ScrollTrigger.create({ trigger: gw5, scroller, start: "top bottom", end: "bottom top",
+        onToggle: (self) => gw5.classList.toggle("is-pulsing", self.isActive) });
+    }
+
+    /* gw6 인터랙션 아이콘 활성화 링 — 행 진입 시 1회 ping */
+    scroller.querySelectorAll("#gw6 .gw-r6__row").forEach((row) => {
+      ScrollTrigger.create({ trigger: row, scroller, start: "top 80%", once: true,
+        onEnter: () => row.classList.add("is-pinged") });
+    });
+
+    /* gw-band-2 진입 시 모달 골드 틴트(리서치→완성 무드 전환) */
+    const panel = document.querySelector("#process-gwihon .process__panel") || document.querySelector("#process-gwihon");
+    if (panel) {
+      const tint = document.createElement("span");
+      tint.className = "gw-tint";
+      tint.setAttribute("aria-hidden", "true");
+      panel.appendChild(tint);
+      ScrollTrigger.create({ trigger: "#gw-band-2", scroller, start: "top 60%",
+        onEnter: () => gsap.to(tint, { opacity: 1, duration: 1.4, ease: "power2.out" }),
+        onLeaveBack: () => gsap.to(tint, { opacity: 0, duration: 1.0, ease: "power2.out" }) });
+    }
+
+    /* 혼불 파티클(hero · band-1 · outro) + CTA 골드 마그네틱 플레어 */
+    initSoulFlames(scroller.querySelectorAll(".gw-flame"), scroller);
+    initCtaFlare(document.querySelector("#process-gwihon .gw-cta"));
+
     /* ── 이미지 로드 후 위치 재계산(레이아웃 점프 보정) ── */
     scroller.querySelectorAll(".process__making--gwihon img").forEach((img) => {
       if (!img.complete) {
@@ -231,6 +310,109 @@
 
     return true;
   };
+
+  /* ===== 혼불 파티클 (Canvas2D) — 골드 입자가 아래→위 부유하며 소멸 =====
+     · IntersectionObserver(root: scroller)로 보이는 캔버스만 렌더
+     · 모달 닫히거나 화면 밖이면 rAF 정지 → 모바일 60fps 보호 */
+  function initSoulFlames(canvases, scroller) {
+    canvases = [...(canvases || [])];
+    if (!canvases.length || !window.gsap) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const spawn = (initial) => ({
+      x: Math.random(),
+      y: initial ? Math.random() : 1.06,
+      r: 1.4 + Math.random() * 1.8,
+      spd: 0.0011 + Math.random() * 0.0017,
+      amp: 0.002 + Math.random() * 0.006,
+      ph: Math.random() * Math.PI * 2,
+    });
+    const systems = [];
+    canvases.forEach((cv) => {
+      const ctx = cv.getContext("2d");
+      if (!ctx) return;
+      const sys = { cv, ctx, parts: [], visible: false, w: 0, h: 0,
+        dpr: Math.min(2, window.devicePixelRatio || 1) };
+      sys.resize = () => {
+        const r = cv.getBoundingClientRect();
+        if (!r.width) return;
+        sys.w = r.width; sys.h = r.height;
+        cv.width = Math.round(r.width * sys.dpr);
+        cv.height = Math.round(r.height * sys.dpr);
+        ctx.setTransform(sys.dpr, 0, 0, sys.dpr, 0, 0);
+      };
+      for (let i = 0; i < 16; i++) sys.parts.push(spawn(true));
+      systems.push(sys);
+    });
+    if (!systems.length) return;
+
+    /* 글로우 스프라이트 1회 프리렌더 → drawImage 재사용(ctx.shadowBlur 금지: 모바일 GPU 가속 해제 방지) */
+    const sprite = document.createElement("canvas");
+    sprite.width = sprite.height = 24;
+    const sc = sprite.getContext("2d");
+    const grad = sc.createRadialGradient(12, 12, 0, 12, 12, 12);
+    grad.addColorStop(0,   "rgba(255,205,110,.95)");
+    grad.addColorStop(0.45,"rgba(255,165,45,.5)");
+    grad.addColorStop(1,   "rgba(255,130,20,0)");
+    sc.fillStyle = grad;
+    sc.fillRect(0, 0, 24, 24);
+
+    const isOpen = () => {
+      const m = document.querySelector("#process-gwihon");
+      return m && m.classList.contains("is-open");
+    };
+    let running = false;
+    const tick = () => {
+      let any = false;
+      for (const sys of systems) {
+        if (!sys.visible || !sys.w) continue;
+        any = true;
+        const { ctx, w, h } = sys;
+        ctx.clearRect(0, 0, w, h);
+        for (const p of sys.parts) {
+          p.y -= p.spd; p.ph += 0.03;
+          if (p.y < -0.06) Object.assign(p, spawn(false));
+          const px = (p.x + Math.sin(p.ph) * p.amp) * w;
+          const py = p.y * h;
+          const fade = p.y < 0.15 ? Math.max(0, p.y / 0.15)
+            : (p.y > 0.85 ? Math.max(0, (1.06 - p.y) / 0.21) : 1);
+          const s = p.r * 6;
+          ctx.globalAlpha = 0.6 * fade;
+          ctx.drawImage(sprite, px - s / 2, py - s / 2, s, s);
+        }
+        ctx.globalAlpha = 1;
+      }
+      if (any && isOpen()) requestAnimationFrame(tick);
+      else running = false;
+    };
+    const start = () => { if (!running) { running = true; requestAnimationFrame(tick); } };
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const sys = systems.find((s) => s.cv === e.target);
+        if (!sys) return;
+        sys.visible = e.isIntersecting;
+        if (e.isIntersecting) { sys.resize(); start(); }
+      });
+    }, { root: scroller, rootMargin: "20% 0px", threshold: 0 });
+    systems.forEach((s) => io.observe(s.cv));
+    window.addEventListener("resize", () => systems.forEach((s) => s.visible && s.resize()));
+  }
+
+  /* ===== CTA 골드 마그네틱 플레어 — 포인터 따라 광원 이동(스크롤 무관) ===== */
+  function initCtaFlare(cta) {
+    if (!cta || !window.gsap) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const flare = cta.querySelector(".gw-cta__flare");
+    if (!flare) return;
+    const xTo = gsap.quickSetter(flare, "x", "px");
+    const yTo = gsap.quickSetter(flare, "y", "px");
+    cta.addEventListener("pointermove", (e) => {
+      const r = cta.getBoundingClientRect();
+      xTo(e.clientX - r.left);
+      yTo(e.clientY - r.top);
+    });
+  }
 
   /* defer 순서상 보통 준비되지만 CDN 지연 시 폴링 */
   if (!init()) {

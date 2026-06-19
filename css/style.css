@@ -3040,14 +3040,89 @@ html.process-open { overflow: hidden; }
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
 /* 분위기 영상 배너 (양옆 여백 인셋 + 둥근 모서리) */
 .gw-band { background: #1a1410; display: flex; align-items: center; justify-content: center; }
-.gw-band__vid { position: static; display: block; width: 100%; height: auto; object-fit: cover;
+/* 래퍼: 비율·라운드·그림자 담당 + overflow hidden(영상 패닝 헤드룸 클립) */
+.gw-band__vid-wrap { position: relative; z-index: 1; width: 100%; overflow: hidden;
+  display: flex; align-items: center;   /* 영상 세로 중앙정렬(헤드룸 균등 → 패닝해도 커버 유지) */
   border-radius: 1.1cqw; box-shadow: 0 1.4cqw 3cqw rgba(0,0,0,.45); }
+.gw-band__vid { display: block; flex: none; width: 100%; height: 114%; object-fit: cover; }
 /* 위 배너: 거의 원본 16:9, 여백 약간 — 아래 gw1(#12110d)에 맞춤 */
 #gw-band-1 { padding: 2.6cqw 4cqw; background: #12110d; }
-#gw-band-1 .gw-band__vid { aspect-ratio: 16 / 9; }
+#gw-band-1 .gw-band__vid-wrap { aspect-ratio: 16 / 9; }
 /* 아래 배너: 더 가로로 길게(살짝 크롭), 여백 더 크게 — 위 gw3(#16130f)→아래 gw4(#172022) 그라데이션 */
 #gw-band-2 { padding: 2.6cqw 7.5cqw; background: linear-gradient(#16130f, #172022); }
-#gw-band-2 .gw-band__vid { aspect-ratio: 22 / 10; }
+#gw-band-2 .gw-band__vid-wrap { aspect-ratio: 22 / 10; }
+
+/* ── 배너 씬컷 스크림 (영상 위 어두운 막 → 진입 시 걷힘) ── */
+.gw-band__scrim { position: absolute; inset: 2.6cqw 4cqw; z-index: 2; border-radius: 1.1cqw;
+  background: radial-gradient(120% 120% at 50% 50%, rgba(8,6,4,.45) 0%, rgba(8,6,4,.92) 100%);
+  pointer-events: none; }
+#gw-band-2 .gw-band__scrim { inset: 2.6cqw 7.5cqw; }
+
+/* ── 혼불 파티클 캔버스 (hero · band-1 · outro) ── */
+.gw-flame { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2;
+  pointer-events: none; display: block; }
+
+/* ── 기승전결 챕터 마크 (起承轉結) — 좌하단 골드 인장 ── */
+.gw-chapter { position: absolute; left: 4cqw; bottom: 3.4cqw; z-index: 3;
+  display: flex; align-items: flex-end; gap: 1.1cqw; pointer-events: none;
+  font-family: inherit; line-height: 1; }
+.gw-chapter__han { font-size: 6.4cqw; font-weight: 700; color: #e8ba4d;
+  text-shadow: 0 0 1.6cqw rgba(232,186,77,.45); opacity: .92; }
+.gw-chapter__cap { font-size: 1.05cqw; letter-spacing: .28em; font-weight: 600;
+  color: rgba(244,237,223,.82); padding-bottom: .9cqw; white-space: nowrap; }
+/* 밝은(영상/이미지) 위 — 대비용 미세 그림자 */
+.gw-chapter--light .gw-chapter__cap { text-shadow: 0 .1cqw .4cqw rgba(0,0,0,.6); }
+/* 배너(영상 밝기 가변) — 한자·캡션 모두 대비 보강 */
+.gw-chapter--band .gw-chapter__han { text-shadow: 0 0 1.6cqw rgba(232,186,77,.5), 0 .2cqw .7cqw rgba(0,0,0,.55); }
+.gw-chapter--band .gw-chapter__cap { text-shadow: 0 .1cqw .5cqw rgba(0,0,0,.7); }
+.gw-band .gw-chapter { left: 6.5cqw; bottom: 5.2cqw; }
+#gw-band-2 .gw-chapter { left: 9.5cqw; }
+
+/* ── gw5 세로 연결선 (노드들을 잇는 타임라인 척추) — 노드 좌표 54.86cqw / top 38.1~143.9 ── */
+.gw-r5__line { position: absolute; z-index: 0; left: 54.86cqw; margin-left: -1px;
+  top: 38.1cqw; height: 105.8cqw; width: 2px; transform-origin: top center;
+  background: linear-gradient(180deg, rgba(232,186,77,0) 0%, rgba(232,186,77,.55) 8%, rgba(232,186,77,.55) 92%, rgba(232,186,77,0) 100%); }
+
+/* ── gw5 노드 골드 펄스 (다음 장면이 열린다) — 점(::before) box-shadow에 확장 링 추가.
+   gw5 화면 밖이면 정지(idle CPU/배터리 보호) → #gw5.is-pulsing 일 때만 running ── */
+.gw-r5__node::before { animation: gwNodePulse 2.6s ease-out infinite; animation-play-state: paused; }
+#gw5.is-pulsing .gw-r5__node::before { animation-play-state: running; }
+@keyframes gwNodePulse {
+  0%   { box-shadow: 0 0 0 0.3cqw rgba(232,186,77,.18), 0 0 1cqw rgba(232,186,77,.55), 0 0 0 0 rgba(232,186,77,.5); }
+  70%  { box-shadow: 0 0 0 0.3cqw rgba(232,186,77,.18), 0 0 1cqw rgba(232,186,77,.55), 0 0 0 9px rgba(232,186,77,0); }
+  100% { box-shadow: 0 0 0 0.3cqw rgba(232,186,77,.18), 0 0 1cqw rgba(232,186,77,.55), 0 0 0 0 rgba(232,186,77,0); }
+}
+
+/* ── gw6 인터랙션 아이콘 활성화 링 (진입 시 1회 방출) ── */
+.gw-r6__icon { position: relative; }
+.gw-r6__icon::after { content: ""; position: absolute; inset: 0; border-radius: 18%;
+  border: 1.5px solid rgba(232,186,77,.7); opacity: 0; transform: scale(1);
+  pointer-events: none; }
+.gw-r6__row.is-pinged .gw-r6__icon::after { animation: gwIconRing .9s ease-out 1 both; }
+@keyframes gwIconRing {
+  0%   { opacity: .8; transform: scale(1); }
+  100% { opacity: 0;  transform: scale(1.55); }
+}
+
+/* ── 귀혼 CTA 골드 마그네틱 플레어 ── */
+.gw-cta { position: relative; overflow: hidden; }
+.gw-cta__flare { position: absolute; top: 0; left: 0; width: 120px; height: 120px;
+  margin: -60px 0 0 -60px; border-radius: 50%; pointer-events: none; z-index: 0;
+  background: radial-gradient(circle, rgba(232,186,77,.55) 0%, rgba(232,186,77,0) 70%);
+  opacity: 0; transition: opacity .3s ease; }
+.gw-cta:hover .gw-cta__flare { opacity: 1; will-change: transform; }
+.gw-cta > span:not(.gw-cta__flare), .gw-cta > svg { position: relative; z-index: 1; }
+
+/* ── 챕터 무드 골드 틴트 오버레이 (JS가 패널에 주입) ── */
+.gw-tint { position: absolute; inset: 0; z-index: 6; pointer-events: none; opacity: 0;
+  background: radial-gradient(140% 100% at 50% 0%, rgba(255,200,60,.06) 0%, rgba(255,200,60,0) 60%); }
+
+/* reduced-motion: 펄스/링 정지 */
+@media (prefers-reduced-motion: reduce) {
+  .gw-r5__node::before, .gw-r6__row.is-pinged .gw-r6__icon::after { animation: none; }
+  .gw-band__scrim { opacity: 0; }   /* 모션 없을 때 스크림이 영상 가리지 않게 */
+  .gw-cta__flare { display: none; }  /* 포인터 추적 미바인딩 → 정적 글로우 숨김 */
+}
 
 /* SECTION 1 · 히어로 (디자인 1440×810, 16:9) — bg 풀커버 + 귀혼M 로고 상단 중앙 */
 .gw-hero { aspect-ratio: 1440 / 810; }
