@@ -59,7 +59,10 @@
       const o = { v: 0 }; el.textContent = "0" + suf;
       ScrollTrigger.create({ trigger: el, scroller, start: "top 90%", once: true,
         onEnter: () => gsap.to(o, { v: to, duration: 1.3, ease: "power2.out",
-          onUpdate: () => { el.textContent = o.v.toFixed(dec) + suf; } }) });
+          onUpdate: () => { el.textContent = o.v.toFixed(dec) + suf; },
+          /* ⑥ 도착 펄스 — 목표 도달 순간 살짝 튀어오름(grid/block 요소라 scale 적용) */
+          onComplete: () => gsap.fromTo(el, { scale: 1 },
+            { scale: 1.14, duration: 0.14, yoyo: true, repeat: 1, ease: "power2.out", transformOrigin: "50% 50%" }) }) });
     });
 
     /* ── SECTION 3 ── */
@@ -121,6 +124,98 @@
 
     /* ── SECTION 15 (마무리 영상 페이드인) ── */
     gsap.from(".s15-video", { opacity: 0, duration: 1.1, ease: "power2.out", scrollTrigger: ST(".s15-video", "top 90%") });
+
+    /* ===================================================================
+       시그니처 모션 (자린고비 전용) — reduced-motion 시 상단 early-return 으로 전부 비실행.
+       무한 루프(굴비·화살표)는 그 덕에 모션 최소화 환경에서 아예 생성되지 않음.
+    =================================================================== */
+
+    /* ① 섹션 배경 온도 전환(여정 페이싱) — .mk-sec 가 불투명 흰색이라 섹션 자체 배경을
+       near-white 단계 틴트로. 웜크림 → 브랜드그린 옅게 → 웜베이지 → 쿨. once 아님(왕복 반영). */
+    const tintMap = {
+      sec1: "#FBF8F1", sec2: "#FBF8F1", sec3: "#FBF8F1", sec4: "#FBF8F1", sec5: "#FBF8F1",
+      sec6: "#F4F8F1", sec7: "#F4F8F1", sec8: "#F4F8F1",
+      sec9: "#FAF7F0", sec10: "#FAF7F0", sec11: "#FAF7F0", sec12: "#FAF7F0", sec13: "#FAF7F0",
+      sec14: "#F1F5F0", sec15: "#F1F5F0",
+    };
+    Object.entries(tintMap).forEach(([id, tint]) => {
+      const sec = document.getElementById(id);
+      if (!sec) return;
+      const apply = () => gsap.to(sec, { backgroundColor: tint, duration: 1.0, ease: "power1.out", overwrite: "auto" });
+      ScrollTrigger.create({ trigger: sec, scroller, start: "top 80%", onEnter: apply, onEnterBack: apply });
+    });
+
+    /* ② sec14 적립 게이지 — s2 도넛과 동일 패턴, 진입 시 100%(strokeDashoffset 0) 까지 */
+    const gauge = scroller.querySelector(".s14-gauge__fill");
+    if (gauge) {
+      const Cg = 2 * Math.PI * 50;   // r=50
+      gsap.set(gauge, { strokeDashoffset: Cg });
+      ScrollTrigger.create({ trigger: ".s14-gauge", scroller, start: "top 88%", once: true,
+        onEnter: () => gsap.to(gauge, { strokeDashoffset: 0, duration: 1.3, ease: "power2.out" }) });
+    }
+
+    /* ③ 굴비 펜듈럼 스윙 — 천장에 매달린 듯 상단 고정 회전(±5°). 두 마리 다른 주기로 자연스럽게 */
+    const fishDurs = [2.2, 2.5];
+    scroller.querySelectorAll("#sec6 .s6-objbox img").forEach((img, i) => {
+      gsap.set(img, { transformOrigin: "50% 0%" });
+      const swing = gsap.fromTo(img, { rotation: -5 },
+        { rotation: 5, duration: fishDurs[i % fishDurs.length], repeat: -1, yoyo: true,
+          ease: "sine.inOut", paused: true });
+      ScrollTrigger.create({ trigger: img, scroller, start: "top bottom", end: "bottom top",
+        onToggle: (self) => swing.paused(!self.isActive) });
+    });
+
+    /* ④ 동전 낙하 파티클(절약 클라이맥스) — sec14 진입 시 동전 8개 생성→낙하→제거. transform 만 */
+    const coinSec = document.getElementById("sec14");
+    if (coinSec) {
+      ScrollTrigger.create({ trigger: coinSec, scroller, start: "top 70%", once: true,
+        onEnter: () => {
+          const h = coinSec.offsetHeight || 400;
+          for (let i = 0; i < 8; i++) {
+            const c = document.createElement("div");
+            c.className = "jg-coin";
+            c.textContent = i % 2 ? "₩" : "";
+            c.style.left = gsap.utils.random(6, 90) + "%";
+            coinSec.appendChild(c);
+            gsap.fromTo(c, { y: -40, opacity: 1, rotation: 0 },
+              { y: h * 0.6, rotation: gsap.utils.random(360, 720), opacity: 0,
+                duration: gsap.utils.random(1.1, 1.6), ease: "power1.in", delay: i * 0.08,
+                onComplete: () => c.remove() });
+          }
+        } });
+    }
+
+    /* ⑧ sec4 선순환 화살표 자전 — 화면 밖이면 정지(idle 보호) */
+    const arrow = scroller.querySelector("#sec4 .s4-loop__arrow");
+    if (arrow) {
+      const spin = gsap.to(arrow, { rotation: 360, duration: 6, ease: "none", repeat: -1,
+        transformOrigin: "50% 50%", paused: true });
+      ScrollTrigger.create({ trigger: "#sec4", scroller, start: "top bottom", end: "bottom top",
+        onToggle: (self) => spin.paused(!self.isActive) });
+    }
+
+    /* ⑨ sec13 통이미지 패럴랙스 — scale 로 여유 두고 transform yPercent scrub(object-position 미사용) */
+    const s13 = scroller.querySelector("#sec13 .s13-hero");
+    if (s13) {
+      gsap.set(s13, { scale: 1.12 });
+      gsap.fromTo(s13, { yPercent: -6 }, { yPercent: 6, ease: "none",
+        scrollTrigger: { trigger: "#sec13", scroller, start: "top bottom", end: "bottom top", scrub: true } });
+    }
+
+    /* ⑩ CTA 마그네틱 플레어 — 데스크톱 정밀 포인터에서만 추적(quickSetter). reduced-motion 은 미바인딩 */
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      const cta = document.querySelector("#process .jg-cta");
+      const flare = cta && cta.querySelector(".jg-cta__flare");
+      if (cta && flare) {
+        const xTo = gsap.quickSetter(flare, "x", "px");
+        const yTo = gsap.quickSetter(flare, "y", "px");
+        cta.addEventListener("pointermove", (e) => {
+          const r = cta.getBoundingClientRect();
+          xTo(e.clientX - r.left);
+          yTo(e.clientY - r.top);
+        });
+      }
+    }
 
     /* 본문 이미지 로드되면 위치 재계산(레이아웃 점프 보정) */
     scroller.querySelectorAll(".process__making img").forEach((img) => {
