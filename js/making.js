@@ -145,14 +145,6 @@
       ScrollTrigger.create({ trigger: sec, scroller, start: "top 80%", onEnter: apply, onEnterBack: apply });
     });
 
-    /* ② sec14 적립 게이지 — s2 도넛과 동일 패턴, 진입 시 100%(strokeDashoffset 0) 까지 */
-    const gauge = scroller.querySelector(".s14-gauge__fill");
-    if (gauge) {
-      const Cg = 2 * Math.PI * 50;   // r=50
-      gsap.set(gauge, { strokeDashoffset: Cg });
-      ScrollTrigger.create({ trigger: ".s14-gauge", scroller, start: "top 88%", once: true,
-        onEnter: () => gsap.to(gauge, { strokeDashoffset: 0, duration: 1.3, ease: "power2.out" }) });
-    }
 
     /* ③ 굴비 펜듈럼 스윙 — 천장에 매달린 듯 상단 고정 회전(±5°). 두 마리 다른 주기로 자연스럽게 */
     const fishDurs = [2.2, 2.5];
@@ -194,13 +186,7 @@
         onToggle: (self) => spin.paused(!self.isActive) });
     }
 
-    /* ⑨ sec13 통이미지 패럴랙스 — scale 로 여유 두고 transform yPercent scrub(object-position 미사용) */
-    const s13 = scroller.querySelector("#sec13 .s13-hero");
-    if (s13) {
-      gsap.set(s13, { scale: 1.12 });
-      gsap.fromTo(s13, { yPercent: -6 }, { yPercent: 6, ease: "none",
-        scrollTrigger: { trigger: "#sec13", scroller, start: "top bottom", end: "bottom top", scrub: true } });
-    }
+    /* ⑨ 제거 — sec13 은 내용이 담긴 통이미지라 scale 패럴랙스가 위아래를 크롭함. 기존 fade(line 116)만 유지. */
 
     /* ⑩ CTA 마그네틱 플레어 — 데스크톱 정밀 포인터에서만 추적(quickSetter). reduced-motion 은 미바인딩 */
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {

@@ -5861,7 +5861,7 @@ html.process-open { overflow: hidden; }
 /* ── SECTION 13 (WORK FLOW — 긴 통 이미지) ── */
 /* ⑨ 패럴랙스: 이미지를 살짝 키워(scale, JS) 위아래 여유를 두고 transform translateY scrub.
    부모 overflow:hidden 으로 키운 영역을 클립(커버 유지). object-position 미사용. */
-#sec13 { padding: 0; overflow: hidden; }
+#sec13 { padding: 0; }
 .s13-hero { display: block; width: 100%; height: auto; }
 
 /* ── SECTION 14 (TOOLS / ROLE / TIME — 크레딧) ── */
@@ -5919,29 +5919,12 @@ html.process-open { overflow: hidden; }
 }
 .s14-time span { color: var(--mk-sub); }
 
-/* ② 적립 게이지 — s2 도넛 패턴 재사용. 진입 시 strokeDashoffset 0(=100%) 까지 채움 */
-.s14-gauge-wrap { display: flex; flex-direction: column; align-items: center;
-  gap: clamp(8px, 1vw, 12px); margin-top: clamp(20px, 2.4vw, 34px); }
-.s14-gauge-ring { position: relative; display: grid; place-items: center; }
-.s14-gauge { width: clamp(82px, 6.8vw, 104px); height: auto; transform: rotate(-90deg); }
-.s14-gauge__track { fill: none; stroke: #e7ddc6; stroke-width: 11; }
-.s14-gauge__fill { fill: none; stroke: url(#s14gaugeGrad); stroke-width: 11; stroke-linecap: round;
-  stroke-dasharray: 314.159; stroke-dashoffset: 314.159; }   /* JS: 0 까지 채움(폴백 = 빈 게이지) */
-.s14-gauge__num { position: absolute; inset: 0; display: grid; place-items: center;
-  font-size: clamp(17px, 1.5vw, 21px); font-weight: 800; color: var(--mk-green); }
-.s14-gauge__num i { font-style: normal; font-size: .62em; margin-left: 1px; }
-.s14-gauge__label { margin: 0; font-size: clamp(10px, 0.9vw, 12px); font-weight: 800;
-  letter-spacing: .12em; color: var(--mk-sub); }
-
 /* ④ 동전 낙하 파티클 — div + transform 만(canvas/shadowBlur 금지) */
 .jg-coin { position: absolute; top: 0; width: 22px; height: 22px; border-radius: 50%;
   display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #946610;
   background: radial-gradient(circle at 38% 32%, #FFE9A8 0%, #E8B84D 70%, #c79530 100%);
   box-shadow: 0 1px 2px rgba(120,80,10,.35); pointer-events: none; z-index: 3;
   will-change: transform, opacity; }
-
-/* 게이지 폴백 — 모션 최소화 시 가득 찬 상태로 정적 표시 */
-@media (prefers-reduced-motion: reduce) { .s14-gauge__fill { stroke-dashoffset: 0; } }
 
 /* ── SECTION 15 (마무리 — 제작 과정 영상, 풀블리드) ── */
 #sec15 { padding: 0; background: #000; }
