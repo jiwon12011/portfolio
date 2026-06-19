@@ -2446,6 +2446,41 @@ html.process-open { overflow: hidden; }
 .mh-s7__hero { position: absolute; left: 0; top: 111.667cqw; width: 100cqw; height: 56.319cqw;
   object-fit: cover; display: block; }
 
+/* ────────────────────────────────────────────────────────────────────
+   MathHub 모션 8종 — 추가 마크업/스타일 (2026-06-19)
+   ─────────────────────────────────────────────────────────────────── */
+
+/* ── 검색 밴드 (#mh-search, 03~04 사이 독립 밴드) — 크게 키운 검색창 ── */
+.mh-search {
+  display: flex; align-items: center; justify-content: center;
+  padding: 7cqw 0; background: #f2f7fe;
+}
+.mh-search__bar {
+  display: flex; align-items: center; gap: 1.4cqw;
+  width: 64cqw;
+  background: #fff; border: 1px solid #d6e2f2; border-radius: 1.4cqw;
+  padding: 1.5cqw 2cqw;
+  box-shadow: 0 1.4cqw 3.4cqw rgba(49,110,250,0.12);
+}
+.mh-search__ico { width: 2.2cqw; height: 2.2cqw; color: #316efa; flex: none; display: block; }
+.mh-search__text {
+  font-family: "Pretendard", sans-serif; font-size: 1.9cqw; font-weight: 500;
+  color: #1d2b48; white-space: nowrap; line-height: 1;
+}
+.mh-search__cursor {
+  width: max(1px, 0.18cqw); height: 2.2cqw; background: #316efa; flex: none;
+  animation: mh-cursor-blink 0.9s step-end infinite;
+}
+.mh-search__chips { margin-left: auto; display: flex; gap: 0.9cqw; }
+.mh-search__chip {
+  font-family: "Pretendard", sans-serif; font-size: 1.3cqw; font-weight: 600;
+  padding: 0.7cqw 1.7cqw; border-radius: 5cqw;
+  background: #eef3ff; color: #316efa; border: 1px solid #cfddfa; white-space: nowrap;
+}
+.mh-search__chip.is-active { background: #316efa; color: #fff; border-color: #316efa; }
+@keyframes mh-cursor-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .mh-search__cursor { animation: none; } }
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.

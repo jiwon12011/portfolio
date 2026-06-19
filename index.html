@@ -588,6 +588,17 @@
         <p class="intro-info__sub">Team Project · Interactive Web</p>
         <span class="intro-info__rule" aria-hidden="true"></span>
         <p class="intro-info__desc">문 너머, 또 다른 세계.<br /><br />방탈출의 몰입을 그대로 옮긴<br />시네마틱 브랜드 웹 경험</p>
+
+        <div class="intro-index intro-index--gap">
+          <p class="intro-index__label">PROCESS INDEX</p>
+          <ul>
+            <li class="is-current"><span>01</span> Overview</li>
+            <li><span>02</span> Team Research</li>
+            <li><span>03</span> Brand Story</li>
+            <li><span>04</span> Main Page</li>
+            <li><span>05</span> Result</li>
+          </ul>
+        </div>
       </div>
       <div class="intro-pager"><span>07 / 09</span><div class="intro-pager__bar"><i style="--p:77%"></i></div></div>
       <div class="intro-hints">
@@ -3442,19 +3453,19 @@
             <!-- 문제 카드 3 -->
             <article class="mh-s1__pcard mh-s1__pcard--1">
               <img class="mh-s1__pcard-shot" src="img/mathhub/section1_img3.webp" alt="정체성이 불분명한 플랫폼 화면" loading="lazy" />
-              <span class="mh-s1__pcard-no">01</span>
+              <span class="mh-s1__pcard-no" data-count="1">01</span>
               <h4 class="mh-s1__pcard-title">정체성이 불분명한 플랫폼</h4>
               <p class="mh-s1__pcard-desc">중등 · 고등 · 대학 · 해외 과정이<br>한 화면에 혼합되어 사이트의<br>목적과 대상을 직관적으로 파악하기 어려웠습니다.</p>
             </article>
             <article class="mh-s1__pcard mh-s1__pcard--2">
               <img class="mh-s1__pcard-shot" src="img/mathhub/section1_img4.webp" alt="탐색이 어려운 자료 구조 화면" loading="lazy" />
-              <span class="mh-s1__pcard-no">02</span>
+              <span class="mh-s1__pcard-no" data-count="2">02</span>
               <h4 class="mh-s1__pcard-title">탐색이 어려운 자료 구조</h4>
               <p class="mh-s1__pcard-desc">검색과 필터 기능이 부족해<br>원하는 기출문제나 학습자료까지<br>도달하는 과정이 길었습니다.</p>
             </article>
             <article class="mh-s1__pcard mh-s1__pcard--3">
               <img class="mh-s1__pcard-shot" src="img/mathhub/section1_img5.webp" alt="학습 흐름이 끊기는 UX 화면" loading="lazy" />
-              <span class="mh-s1__pcard-no">03</span>
+              <span class="mh-s1__pcard-no" data-count="3">03</span>
               <h4 class="mh-s1__pcard-title">학습 흐름이 끊기는 UX</h4>
               <p class="mh-s1__pcard-desc">정답 · 해설 · 등급컷 · 오답률 정보가<br>맥락 없이 노출되어 자료 확인 이후<br>실제 학습으로 이어지기 어려웠습니다.</p>
             </article>
@@ -3530,9 +3541,27 @@
               <h4 class="mh-s2__cat-title">국가별 과정</h4>
               <p class="mh-s2__cat-desc">SAT · AP · AMC 등<br>해외정보 탐색하는 공간</p>
             </article>
+
           </section>
 
           <!-- SECTION 03 · SEARCH & FILTER UX (디자인 1440×1043 → cqw = px/14.4) -->
+          <!-- 검색 밴드 (03~04 사이) — 크게 키운 검색창 타이핑 데모 -->
+          <section class="mh-sec mh-search" id="mh-search" aria-hidden="true">
+            <div class="mh-search__bar">
+              <svg class="mh-search__ico" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10.5 10.5l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="mh-search__text"></span>
+              <span class="mh-search__cursor"></span>
+              <span class="mh-search__chips">
+                <span class="mh-search__chip">SAT</span>
+                <span class="mh-search__chip">AP</span>
+                <span class="mh-search__chip">AMC</span>
+              </span>
+            </div>
+          </section>
+
           <section class="mh-sec mh-s3" id="mh3">
 
             <!-- 라벨 / 헤딩 / 리드 -->
@@ -3786,10 +3815,10 @@
         </p>
         <ol class="process__tracks">
           <li><a href="#ss1" data-track="ss1"><b>01</b><span><h4>브랜드 소개</h4><i>OVERVIEW</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
-          <li><a href="#ss2" data-track="ss2"><b>02</b><span><h4>비주얼 무드</h4><i>VISUAL DIRECTION</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
-          <li><a href="#ss3" data-track="ss3"><b>03</b><span><h4>사용자 경험</h4><i>EXPERIENCE</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
-          <li><a href="#ss4" data-track="ss4"><b>04</b><span><h4>리빌드 과정</h4><i>REBUILD</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
-          <li><a href="#ss5" data-track="ss5"><b>05</b><span><h4>결과 및 마무리</h4><i>OUTCOME</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss2" data-track="ss2"><b>02</b><span><h4>사용자 리서치</h4><i>TEAM RESEARCH</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss3" data-track="ss3"><b>03</b><span><h4>브랜드 스토리</h4><i>STORY</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss4" data-track="ss4"><b>04</b><span><h4>주요 화면</h4><i>MAIN PAGE</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
+          <li><a href="#ss5" data-track="ss5"><b>05</b><span><h4>결과 · 제안</h4><i>RESULT</i></span><svg class="process__tplay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></a></li>
         </ol>
         <!-- TODO: href에 실제 링크 연결 -->
         <a class="process__cta" href="https://doorlove1234-coder.github.io/sangsangDoor/" target="_blank" rel="noopener" aria-label="상상의 문 바로가기">
