@@ -3875,7 +3875,8 @@ html.process-open { overflow: hidden; }
 .pl-ts__tag--s, .pl-ts__row--s { top: 16.597cqw; }
 .pl-ts__tag--r, .pl-ts__row--r { top: 21.319cqw; }
 
-/* 클로징 밴드 */
+/* 클로징 밴드 — 장식 배경 글로우 (making-playlist.js에서 clipPath 리빌) */
+
 .pl-close__title { position: absolute; left: 50%; transform: translateX(-50%); top: 72.083cqw; margin: 0;
   width: max-content; text-align: center; font-size: 3.611cqw; font-weight: 500; line-height: 1.12; }
 .pl-close__title em { font-style: normal; color: #e67889; }
