@@ -3,7 +3,7 @@
    -----------------------------------------------------------------------
    · 네이티브 스크롤(smooth-process 미포함) → scrub/pin 금지, once 진입만
    · centered 요소(left:50%; translateX(-50%)) 처리 규칙:
-       - gsap.set(el, { xPercent: -50 }) 으로 먼저 선점
+       - gsap.set(el, { xPercent: -50, x: 0 }) 으로 먼저 선점
        - 이후 opacity / y / scale 만 애니메이션
        - clearProps:"transform" 절대 금지 (xPercent 날아가 정렬 깨짐)
    · .pl-tl-ms 컨테이너는 xPercent:-50 선점만 → 자식 요소(dot/d/m/cg)만 애니
@@ -41,10 +41,10 @@
       '#pl7 .pl-close__p1',
       '#pl7 .pl-close__p2',
     ].forEach(sel => {
-      scroller.querySelectorAll(sel).forEach(el => gsap.set(el, { xPercent: -50 }));
+      scroller.querySelectorAll(sel).forEach(el => gsap.set(el, { xPercent: -50, x: 0 }));
     });
     /* pl6 마일스톤 컨테이너 — xPercent 선점만, 자체 애니 없음 */
-    scroller.querySelectorAll('#pl6 .pl-tl-ms').forEach(el => gsap.set(el, { xPercent: -50 }));
+    scroller.querySelectorAll('#pl6 .pl-tl-ms').forEach(el => gsap.set(el, { xPercent: -50, x: 0 }));
 
 
     /* ================================================================
@@ -365,15 +365,17 @@
           if (!m.dataset.charSplit) {
             m.dataset.charSplit = '1';
             if (!m.getAttribute('aria-label')) m.setAttribute('aria-label', orig);
-            const chars = [...orig].map(ch => {
+            m.textContent = '';
+            const chars = [];
+            [...orig].forEach(ch => {
+              if (ch === ' ') { m.appendChild(document.createTextNode(' ')); return; }
               const s = document.createElement('span');
               s.textContent = ch;
               s.style.display = 'inline-block';
               s.setAttribute('aria-hidden', 'true');
-              return s;
+              m.appendChild(s);
+              chars.push(s);
             });
-            m.textContent = '';
-            chars.forEach(s => m.appendChild(s));
             const typeDuration = Math.max(0.28, chars.length * 0.032);
             msTl.from(chars, {
               opacity: 0, y: 7, duration: 0.22, ease: 'power2.out', stagger: 0.032,
@@ -465,6 +467,10 @@
       textNodes.forEach(textNode => {
         const frag = document.createDocumentFragment();
         [...textNode.textContent].forEach(ch => {
+          if (ch === ' ') {            /* 공백은 일반 텍스트로 유지(inline-block이면 폭 붕괴) */
+            frag.appendChild(document.createTextNode(' '));
+            return;
+          }
           const s = document.createElement('span');
           s.textContent = ch;
           s.style.display = 'inline-block';
