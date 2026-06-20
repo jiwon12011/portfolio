@@ -5922,8 +5922,8 @@ html.process-open { overflow: hidden; }
 /* ④ 동전 낙하 파티클 — div + transform 만(canvas/shadowBlur 금지) */
 #sec3 { position: relative; }   /* 동전 낙하 기준 */
 /* 반투명 글래시 동전 — 브랜드 톤(연노랑·세이지·크림)에 녹아드는 부드러운 디스크 */
-.jg-coin { position: absolute; top: 0; width: 26px; height: 26px; border-radius: 50%;
-  display: grid; place-items: center; font-size: 11px; font-weight: 700;
+.jg-coin { position: absolute; top: 0; width: 38px; height: 38px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 16px; font-weight: 700;
   color: rgba(97, 124, 83, 0.5);                       /* Point green ₩, 은은하게 */
   background: radial-gradient(circle at 36% 30%,
     rgba(255,255,255,0.62) 0%, rgba(255,248,190,0.42) 48%, rgba(166,188,162,0.22) 100%);
