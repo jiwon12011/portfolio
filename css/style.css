@@ -5413,9 +5413,22 @@ html.process-open { overflow: hidden; }
 }
 
 /* 섹션5 — 풀블리드 에디토리얼 이미지 한 장 */
-.pz-sec--full { background: #241a13; }
+.pz-sec--full { background: #241a13; }   /* .pz-sec 가 position:relative + overflow:hidden 제공 → 글로우/캡션 오버레이 기준 */
 .pz-full-img { display: block; width: 100%; height: auto; }
 .pz-full-vid { object-fit: cover; }   /* 영상 교체분 — 슬롯 비율 채움 */
+
+/* 섹션5 글로우 + 캡션 (장식 · aria-hidden, 모션으로만 등장 — JS 미동작/reduced-motion 시 숨김 유지) */
+.pz-glow {                              /* 영상 위 은은한 라디얼 글로우 — blur/shadow/backdrop 없이 그라데이션만 */
+  position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 70%, rgba(249, 244, 240, 0.6) 0%, transparent 68%);
+}
+.pz-cap {                              /* 영상 하단 중앙 세리프 캡션 */
+  position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%);
+  margin: 0; z-index: 2; pointer-events: none; opacity: 0; white-space: nowrap;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif; font-weight: 400;
+  font-size: 1.6cqw; letter-spacing: 0.2em; color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 10px rgba(30, 20, 14, 0.5);
+}
 
 /* lazy 이미지 공간 예약(aspect-ratio) — 로드 전에도 섹션 높이가 정확해야
    네비 클릭 스크롤 목표가 안 밀리고(내려가다 마는 문제 해결), 로드 시 레이아웃

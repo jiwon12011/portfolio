@@ -89,10 +89,12 @@
 
     const quote = scroller.querySelector(".pz-quote");
     if (quote) {
+      /* ① 자간 호흡 — 넓은 자간(0.28em)에서 정상값으로 수렴 (단일 <p> once라 레이아웃 OK) */
       gsap.from(quote, {
         opacity: 0,
         y: 28,
-        duration: 0.95,
+        letterSpacing: "0.28em",
+        duration: 1.6,
         delay: 0.12,
         ease: "power3.out",
         scrollTrigger: ST("#pz-s2", "top 84%"),
@@ -192,6 +194,23 @@
           },
         });
       });
+
+      /* ⑤ 구분선 드로잉 — 각 블록 등장 직후(+0.1s) 좌→우로 1px 라인이 그어짐 */
+      scroller.querySelectorAll("#pz2 .pz-flow__line").forEach((line, i) => {
+        gsap.from(line, {
+          scaleX: 0,
+          transformOrigin: "left center",
+          duration: 0.6,
+          delay: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: flowSection,
+            scroller,
+            start: bStarts[i] || "top 36%",
+            once: true,
+          },
+        });
+      });
     }
 
     /* ================================================================
@@ -231,6 +250,27 @@
           scrollTrigger: ST("#pz-s4", "top 64%"),
         });
       }
+
+      /* ⑦ 로고 마우스 틸트 — fine 포인터 + hover 가능 기기에서만(터치 제외).
+         quickTo 로 커서를 부드럽게(0.5s) 따라가는 ±5° 틸트, 벗어나면 천천히 복귀. */
+      if (lImg && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        gsap.set(lImg, { transformPerspective: 900, transformOrigin: "50% 50%" });
+        const rX = gsap.quickTo(lImg, "rotationX", { duration: 0.5, ease: "power2.out" });
+        const rY = gsap.quickTo(lImg, "rotationY", { duration: 0.5, ease: "power2.out" });
+        let lRect = null;   /* enter 시 1회 캐시 → mousemove 마다 getBoundingClientRect(강제 reflow) 방지 */
+        lImg.addEventListener("mouseenter", () => { lRect = lImg.getBoundingClientRect(); });
+        lImg.addEventListener("mousemove", (e) => {
+          if (!lRect) return;
+          const px = (e.clientX - lRect.left) / lRect.width - 0.5;   /* -0.5 ~ 0.5 */
+          const py = (e.clientY - lRect.top) / lRect.height - 0.5;
+          rY(px * 10);    /* ±5° */
+          rX(-py * 10);   /* ±5° (위로 갈수록 윗변이 앞으로) */
+        });
+        lImg.addEventListener("mouseleave", () => {
+          lRect = null;
+          gsap.to(lImg, { rotationX: 0, rotationY: 0, duration: 0.6, ease: "power2.out" });
+        });
+      }
     }
 
     /* ================================================================
@@ -249,6 +289,52 @@
     });
 
     /* ================================================================
+       ② #pz-s5 — 책 영상 소프트포커스 + 글로우 + 캡션
+       소프트포커스: blur(7px)→0 (will-change는 tween 동안만, 끝나면 clearProps)
+       글로우: opacity 0→0.6 / 캡션: 선명해진 뒤 delay 0.4 로 페이드+업
+    ================================================================ */
+    const s5Vid = scroller.querySelector("#pz-s5 .pz-full-vid");
+    if (s5Vid) {
+      const s5Blur = matchMedia("(max-width: 768px)").matches ? 0 : 7;   /* 모바일은 영상 blur 생략(디코드+blur 부담) */
+      gsap.fromTo(s5Vid,
+        { filter: `blur(${s5Blur}px)` },
+        { filter: "blur(0px)", duration: 1.3, ease: "power3.out",
+          onStart() { s5Vid.style.willChange = "filter"; },
+          onComplete() { s5Vid.style.willChange = ""; gsap.set(s5Vid, { clearProps: "filter" }); },
+          scrollTrigger: ST("#pz-s5", "top 82%") });
+    }
+    const s5Glow = scroller.querySelector("#pz-s5 .pz-glow");
+    if (s5Glow) {
+      gsap.to(s5Glow, {
+        opacity: 0.6, duration: 1.6, ease: "power2.out",
+        scrollTrigger: ST("#pz-s5", "top 82%"),
+      });
+    }
+    const s5Cap = scroller.querySelector("#pz-s5 .pz-cap");
+    if (s5Cap) {
+      gsap.set(s5Cap, { xPercent: -50, x: 0 });   /* 중앙정렬 선점 (CSS translateX 대체) */
+      gsap.fromTo(s5Cap,
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 1.0, delay: 0.4, ease: "power3.out",
+          scrollTrigger: ST("#pz-s5", "top 82%") });
+    }
+
+    /* ================================================================
+       ⑥ #pz-s10 — 클로징 패럴랙스 (줌-세틀 once 와 별개의 scrub)
+       transform y 만 0→-26 (scale/opacity 와 충돌 없음). .pz-sec overflow:hidden 으로 클립.
+    ================================================================ */
+    const s10Img = scroller.querySelector("#pz-s10 .pz-full-img");
+    if (s10Img) {
+      gsap.to(s10Img, {
+        y: -26, ease: "none",
+        scrollTrigger: {
+          trigger: "#pz-s10", scroller,
+          start: "top bottom", end: "bottom top", scrub: 1,
+        },
+      });
+    }
+
+    /* ================================================================
        SECTION 6 — #pz-s6 (REBUILT FOR IMMERSION, split)
        좌측 이미지 x:-40 슬라이드+페이드 / 우측 제목·서브 순차 페이드+업.
     ================================================================ */
@@ -262,8 +348,10 @@
       });
     }
     if (rbTitle) {
-      gsap.from(rbTitle, {
-        opacity: 0, y: 22, duration: 0.95, ease: "power3.out",
+      /* ③ 마스크 와이프 — 아래에서 위로 드러남 (clip 초기값은 set 으로만 → GSAP 미로드 폴백) */
+      gsap.set(rbTitle, { clipPath: "inset(100% 0 0 0)", opacity: 0 });
+      gsap.to(rbTitle, {
+        clipPath: "inset(0% 0 0 0)", opacity: 1, duration: 1.0, ease: "power3.out",
         scrollTrigger: ST("#pz-s6", "top 78%"),
       });
     }
@@ -370,12 +458,43 @@
       phoneDevice.addEventListener("focus", phoneIn);   /* 키보드 접근성 */
       phoneDevice.addEventListener("blur", phoneOut);
 
-      /* 핸드폰 등장 페이드+업 */
-      gsap.from(phoneDevice, {
-        opacity: 0, y: 36, duration: 1.05, ease: "power3.out",
-        scrollTrigger: ST("#pz-s9", "top 80%"),
-      });
+      /* ⑧ 핸드폰 등장 — 소프트포커스 blur(9px)→0 + 페이드+업.
+         모바일(≤768px)은 filter 부담 커서 blur 생략(0). will-change 는 tween 동안만. */
+      const phoneBlur = matchMedia("(max-width: 768px)").matches ? 0 : 9;
+      gsap.fromTo(phoneDevice,
+        { opacity: 0, y: 36, filter: `blur(${phoneBlur}px)` },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, ease: "power3.out",
+          onStart() { phoneDevice.style.willChange = "filter"; },
+          onComplete() { phoneDevice.style.willChange = ""; gsap.set(phoneDevice, { clearProps: "filter" }); },
+          scrollTrigger: ST("#pz-s9", "top 80%") });
     }
+
+    /* ================================================================
+       ④ 섹션 배경톤 느린 전환 — "미세한 톤 드리프트"
+       각 pz 섹션은 이미 의도적으로 다른 불투명 배경(크림/토프/다크/그라데)을
+       갖고 텍스트 대비도 섹션별로 맞춰져 있다. → 컨테이너 한 장 크로스페이드는
+       섹션에 가려 안 보이고, 섹션 배경을 통째로 바꾸면 Figma 팔레트·대비가 깨진다.
+       그래서 각 섹션 '자신의' 배경을 캐논값과 거의 같은 톤에서 출발해 진입 시
+       1.4s 동안 캐논값으로 수렴(거의 안 보이는 정착감). 대비 영향 없음.
+       (풀블리드 pz-s5/s10 은 영상·이미지가 배경을 덮어 드리프트가 안 보여 제외,
+        pz-s9 는 그라데이션 배경이라 제외.)
+    ================================================================ */
+    [
+      ["#pz1",   "#f4efe9"],   /* 크림 #efe9e2 ← 살짝 밝게 */
+      ["#pz-s2", "#e7ddd6"],   /* 토프 #e0d6cf ← 살짝 따뜻하게 */
+      ["#pz2",   "#2c2018"],   /* 다크 #251a13 ← 살짝 들어올려 */
+      ["#pz-s4", "#e7ddd6"],
+      ["#pz-s6", "#e7ddd6"],
+      ["#pz-s7", "#e7ddd6"],
+      ["#pz-s8", "#e7ddd6"],
+    ].forEach(([sel, fromTone]) => {
+      const el = scroller.querySelector(sel);
+      if (!el) return;
+      gsap.from(el, {
+        backgroundColor: fromTone, duration: 1.4, ease: "power2.out",
+        scrollTrigger: ST(sel, "top 90%"),
+      });
+    });
 
     /* ── 이미지 로드 후 위치 재계산 ─────────────────────────────── */
     scroller.querySelectorAll(".process__making--poze img").forEach((img) => {
