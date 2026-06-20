@@ -121,25 +121,15 @@
       /* 곡선 초기 clip-path 설정 (JS에서만) */
       gsap.set(pathImg, { clipPath: "inset(0 0 100% 0)" });
 
-      /* 곡선 scrub — 섹션이 화면에 들어와 framed 될 때쯤 완성되도록.
-         (기존 end:"bottom 30%"는 섹션이 화면 위로 거의 빠져나가야 100% →
-          자연스러운 읽기 위치에서 곡선이 중간에 멈춰 보였음 = "나오다 말아")
-         start: 섹션 상단이 80% 진입 → end: 섹션 중심이 상단 58% 도달(거의
-         framed)되는 시점에 곡선 완성. QIET INTERACTION 점까지 다 그려짐. */
-      ScrollTrigger.create({
-        trigger: flowSection,
-        scroller,
-        start: "top 80%",
-        end: "center 58%",
-        scrub: 1,            /* 부드럽게 따라오는 scrub */
-        onUpdate: (self) => {
-          /* progress 0→1 : inset bottom 100%→0% */
-          const pct = (1 - self.progress) * 100;
-          gsap.set(pathImg, { clipPath: `inset(0 0 ${pct.toFixed(2)}% 0)` });
-        },
-        /* 완성 지점을 지나 더 스크롤해도 곡선은 완전히 그려진 채 고정 */
-        onLeave: () => gsap.set(pathImg, { clipPath: "inset(0 0 0% 0)" }),
-        onLeaveBack: () => gsap.set(pathImg, { clipPath: "inset(0 0 100% 0)" }),
+      /* 곡선 드로잉 — 진입 시 1회 위→아래로 그려짐(clip-path inset bottom 100%→0%).
+         scrub 대신 once 트윈 → nav 점프/빠른 스크롤/모달 재오픈 어떤 경로로 와도
+         pz2가 화면에 들어오면 곡선이 확실히 끝까지 그려진다(이전 scrub은 진입 경로에
+         따라 중간에 멈춰 안 보이는 경우가 있었음). */
+      gsap.to(pathImg, {
+        clipPath: "inset(0 0 0% 0)",
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: ST(flowSection, "top 78%"),   // once
       });
 
       /* ── 중앙 라벨 c1/c2/c3 — 곡선 진행에 맞춰 순차 페이드 ── */
