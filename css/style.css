@@ -5921,11 +5921,15 @@ html.process-open { overflow: hidden; }
 
 /* ④ 동전 낙하 파티클 — div + transform 만(canvas/shadowBlur 금지) */
 #sec3 { position: relative; }   /* 동전 낙하 기준 */
-.jg-coin { position: absolute; top: 0; width: 30px; height: 30px; border-radius: 50%;
-  display: grid; place-items: center; font-size: 15px; font-weight: 800; color: #946610;
-  background: radial-gradient(circle at 38% 32%, #FFE9A8 0%, #E8B84D 70%, #c79530 100%);
-  box-shadow: 0 1px 2px rgba(120,80,10,.35); pointer-events: none; z-index: 3;
-  will-change: transform, opacity; }
+/* 반투명 글래시 동전 — 브랜드 톤(연노랑·세이지·크림)에 녹아드는 부드러운 디스크 */
+.jg-coin { position: absolute; top: 0; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 11px; font-weight: 700;
+  color: rgba(97, 124, 83, 0.5);                       /* Point green ₩, 은은하게 */
+  background: radial-gradient(circle at 36% 30%,
+    rgba(255,255,255,0.62) 0%, rgba(255,248,190,0.42) 48%, rgba(166,188,162,0.22) 100%);
+  border: 1px solid rgba(255,255,255,0.55);
+  box-shadow: 0 3px 9px rgba(120,110,60,0.12), inset 0 1px 3px rgba(255,255,255,0.55);
+  pointer-events: none; z-index: 3; will-change: transform, opacity; }
 
 /* ── SECTION 15 (마무리 — 제작 과정 영상, 풀블리드) ── */
 #sec15 { padding: 0; background: #000; }
