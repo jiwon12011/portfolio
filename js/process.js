@@ -25,7 +25,7 @@
     const anchors = tracks.map((li) => li.querySelector("a"));
     const heroVid = modal.querySelector(".process__hero-media");
     const doorVid = modal.querySelector(".ss-story-pg__door");   /* 상상의문 메인 문 영상 (open 에서 src 주입) */
-    const bandVids = [...modal.querySelectorAll(".ym-band__vid, .gw-band__vid")];  /* 분위기 배너 영상 (유미 러닝 · 귀혼 분위기) */
+    const bandVids = [...modal.querySelectorAll(".ym-band__vid, .gw-band__vid, .pz-full-vid")];  /* 분위기 배너 영상 (유미 러닝 · 귀혼 분위기 · POZE 책) */
 
     /* 이미지 디코딩을 메인 스레드 밖에서 → 스크롤 중 디코딩 블로킹/freeze 완화 */
     modal.querySelectorAll("img").forEach((i) => { i.decoding = "async"; });

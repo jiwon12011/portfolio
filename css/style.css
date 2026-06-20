@@ -5415,6 +5415,7 @@ html.process-open { overflow: hidden; }
 /* 섹션5 — 풀블리드 에디토리얼 이미지 한 장 */
 .pz-sec--full { background: #241a13; }
 .pz-full-img { display: block; width: 100%; height: auto; }
+.pz-full-vid { object-fit: cover; }   /* 영상 교체분 — 슬롯 비율 채움 */
 
 /* lazy 이미지 공간 예약(aspect-ratio) — 로드 전에도 섹션 높이가 정확해야
    네비 클릭 스크롤 목표가 안 밀리고(내려가다 마는 문제 해결), 로드 시 레이아웃
