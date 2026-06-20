@@ -31,6 +31,18 @@
       once: true,
     });
 
+    /* ScrollTrigger 헬퍼 (scrub — 스크롤 진행률 1:1 추종)
+       scrub:true = 추가 lerp 없이 스크롤 위치에 즉시 추종(숫자 scrub 이중지연 금지).
+       smooth-process의 lerp만 남아 자연스럽게 따라온다.
+       요소가 화면 하단 근처(start)→중상단(end)을 지나는 동안 0→100%. */
+    const STS = (trigger, start = "top 90%", end = "top 55%") => ({
+      trigger,
+      scroller,
+      start,
+      end,
+      scrub: true,
+    });
+
     /* ================================================================
        SECTION 1 — #pz1
        .pz-band 3장 stagger 페이드+업
@@ -41,10 +53,9 @@
       gsap.from(bands, {
         opacity: 0,
         y: 36,
-        duration: 1.0,
-        ease: "power3.out",
+        ease: "none",
         stagger: 0.15,
-        scrollTrigger: ST("#pz1", "top 88%"),
+        scrollTrigger: STS("#pz1", "top 90%", "top 50%"),
       });
     }
 
@@ -55,19 +66,16 @@
       gsap.from(serifPoze, {
         opacity: 0,
         y: 22,
-        duration: 1.0,
-        ease: "power2.out",
-        scrollTrigger: ST(".pz-serif--poze", "top 90%"),
+        ease: "none",
+        scrollTrigger: STS(".pz-serif--poze", "top 90%", "top 55%"),
       });
     }
     if (serifEveryday) {
       gsap.from(serifEveryday, {
         opacity: 0,
         y: 18,
-        duration: 1.0,
-        delay: 0.18,
-        ease: "power2.out",
-        scrollTrigger: ST(".pz-serif--everyday", "top 90%"),
+        ease: "none",
+        scrollTrigger: STS(".pz-serif--everyday", "top 88%", "top 53%"),
       });
     }
 
@@ -81,23 +89,20 @@
       gsap.from(splitImg, {
         opacity: 0,
         x: 44,
-        duration: 1.0,
-        ease: "power3.out",
-        scrollTrigger: ST("#pz-s2", "top 84%"),
+        ease: "none",
+        scrollTrigger: STS("#pz-s2", "top 88%", "top 52%"),
       });
     }
 
     const quote = scroller.querySelector(".pz-quote");
     if (quote) {
-      /* ① 자간 호흡 — 넓은 자간(0.28em)에서 정상값으로 수렴 (단일 <p> once라 레이아웃 OK) */
+      /* ① 자간 호흡 — 넓은 자간(0.28em)에서 정상값으로 스크롤 따라 수렴 */
       gsap.from(quote, {
         opacity: 0,
         y: 28,
         letterSpacing: "0.28em",
-        duration: 1.6,
-        delay: 0.12,
-        ease: "power3.out",
-        scrollTrigger: ST("#pz-s2", "top 84%"),
+        ease: "none",
+        scrollTrigger: STS("#pz-s2", "top 86%", "top 48%"),
       });
     }
 
@@ -112,25 +117,21 @@
        clip-path가 없어 요소가 정상 표시됨.
 
        라벨(.pz-flow__c1/c2/c3)과 블록(.pz-flow__b1/b2/b3)은
-       곡선이 그 지점에 닿을 때쯤 once 페이드+업 (scrub 아님).
+       곡선이 그 지점에 닿을 때 scrub 페이드+업.
     ================================================================ */
     const flowSection = scroller.querySelector("#pz2");
     const pathImg = scroller.querySelector(".pz-flow__path");
 
     if (flowSection && pathImg) {
-      /* 곡선 초기 clip-path 설정 (JS에서만) */
+      /* 곡선 초기 clip-path 설정 (JS에서만 → GSAP 미로드 시 폴백) */
       gsap.set(pathImg, { clipPath: "inset(0 0 100% 0)" });
 
-      /* 곡선 드로잉 — 진입 시 1회 위→아래로 그려짐(clip-path inset bottom 100%→0%).
-         scrub 대신 once 트윈 → nav 점프/빠른 스크롤/모달 재오픈 어떤 경로로 와도
-         pz2가 화면에 들어오면 곡선이 확실히 끝까지 그려진다(이전 scrub은 진입 경로에
-         따라 중간에 멈춰 안 보이는 경우가 있었음). */
-      gsap.to(pathImg, {
-        clipPath: "inset(0 0 0% 0)",
-        duration: 1.5,
-        ease: "power2.out",
-        scrollTrigger: ST(flowSection, "top 78%"),   // once
-      });
+      /* 곡선 드로잉 — 스크롤 진행에 맞춰 위→아래로 그려짐(clip-path inset bottom 100%→0%).
+         섹션이 화면 중앙쯤 올 때 완성. ease:"none" 으로 스크롤과 선형 일치. */
+      gsap.fromTo(pathImg,
+        { clipPath: "inset(0 0 100% 0)" },
+        { clipPath: "inset(0 0 0% 0)", ease: "none",
+          scrollTrigger: STS(flowSection, "top 80%", "center 60%") });
 
       /* ── 중앙 라벨 c1/c2/c3 — 곡선 진행에 맞춰 순차 페이드 ── */
       /* 섹션 높이 기준으로 각 라벨이 나타날 진입 지점을 분산 */
@@ -139,22 +140,17 @@
         scroller.querySelector(".pz-flow__c2"),
         scroller.querySelector(".pz-flow__c3"),
       ];
-      /* 각 라벨: 섹션 상단 진입 후 25% / 50% / 75% 진행 시점에 등장 */
+      /* 각 라벨: 섹션 상단 진입 후 25% / 50% / 75% 진행 시점에 등장(scrub 스팬) */
       const cStarts = ["top 78%", "top 52%", "top 26%"];
+      const cEnds   = ["top 56%", "top 30%", "top 4%"];
 
       cLabels.forEach((el, i) => {
         if (!el) return;
         gsap.from(el, {
           opacity: 0,
           y: 14,
-          duration: 0.75,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: flowSection,
-            scroller,
-            start: cStarts[i],
-            once: true,
-          },
+          ease: "none",
+          scrollTrigger: STS(flowSection, cStarts[i], cEnds[i]),
         });
       });
 
@@ -165,6 +161,7 @@
         scroller.querySelector(".pz-flow__b3"),
       ];
       const bStarts = ["top 80%", "top 58%", "top 36%"];
+      const bEnds   = ["top 58%", "top 36%", "top 14%"];
 
       blocks.forEach((el, i) => {
         if (!el) return;
@@ -174,31 +171,18 @@
           opacity: 0,
           x: xDir,
           y: 16,
-          duration: 0.85,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: flowSection,
-            scroller,
-            start: bStarts[i],
-            once: true,
-          },
+          ease: "none",
+          scrollTrigger: STS(flowSection, bStarts[i], bEnds[i]),
         });
       });
 
-      /* ⑤ 구분선 드로잉 — 각 블록 등장 직후(+0.1s) 좌→우로 1px 라인이 그어짐 */
+      /* ⑤ 구분선 드로잉 — 각 블록 위치에서 좌→우로 1px 라인이 그어짐(scrub) */
       scroller.querySelectorAll("#pz2 .pz-flow__line").forEach((line, i) => {
         gsap.from(line, {
           scaleX: 0,
           transformOrigin: "left center",
-          duration: 0.6,
-          delay: 0.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: flowSection,
-            scroller,
-            start: bStarts[i] || "top 36%",
-            once: true,
-          },
+          ease: "none",
+          scrollTrigger: STS(flowSection, bStarts[i] || "top 36%", bEnds[i] || "top 14%"),
         });
       });
     }
@@ -217,27 +201,28 @@
 
       if (lTitle) {
         gsap.from(lTitle, {
-          opacity: 0, y: 20, duration: 0.9, ease: "power2.out",
-          scrollTrigger: ST("#pz-s4", "top 82%"),
+          opacity: 0, y: 20, ease: "none",
+          scrollTrigger: STS("#pz-s4", "top 84%", "top 52%"),
         });
       }
       if (lIdItems.length) {
         gsap.from(lIdItems, {
-          opacity: 0, y: 16, duration: 0.7, ease: "power2.out", stagger: 0.1,
-          scrollTrigger: ST("#pz-s4", "top 78%"),
+          opacity: 0, y: 16, ease: "none", stagger: 0.1,
+          scrollTrigger: STS("#pz-s4", "top 80%", "top 46%"),
         });
       }
       if (lImg) {
+        /* 줌-세틀: 살짝 확대된 채 페이드 → 1.0으로 정착(scrub) */
         gsap.from(lImg, {
           opacity: 0, y: 24, scale: 0.965, transformOrigin: "50% 50%",
-          duration: 1.05, ease: "power3.out",
-          scrollTrigger: ST("#pz-s4", "top 72%"),
+          ease: "none",
+          scrollTrigger: STS("#pz-s4", "top 76%", "top 42%"),
         });
       }
       if (lDesc) {
         gsap.from(lDesc, {
-          opacity: 0, y: 18, duration: 0.95, delay: 0.1, ease: "power3.out",
-          scrollTrigger: ST("#pz-s4", "top 64%"),
+          opacity: 0, y: 18, ease: "none",
+          scrollTrigger: STS("#pz-s4", "top 70%", "top 38%"),
         });
       }
 
@@ -270,10 +255,11 @@
     ["#pz-s5", "#pz-s10"].forEach((sel) => {
       const fullImg = scroller.querySelector(`${sel} .pz-full-img`);
       if (fullImg) {
+        /* 줌-세틀: 1.045 확대 + 페이드 → 1.0 정착(scrub) */
         gsap.from(fullImg, {
           opacity: 0, scale: 1.045, transformOrigin: "50% 50%",
-          duration: 1.3, ease: "power3.out",
-          scrollTrigger: ST(sel, "top 82%"),
+          ease: "none",
+          scrollTrigger: STS(sel, "top 88%", "top 48%"),
         });
       }
     });
@@ -296,8 +282,8 @@
     const s5Glow = scroller.querySelector("#pz-s5 .pz-glow");
     if (s5Glow) {
       gsap.to(s5Glow, {
-        opacity: 0.6, duration: 1.6, ease: "power2.out",
-        scrollTrigger: ST("#pz-s5", "top 82%"),
+        opacity: 0.6, ease: "none",
+        scrollTrigger: STS("#pz-s5", "top 86%", "top 48%"),
       });
     }
     const s5Cap = scroller.querySelector("#pz-s5 .pz-cap");
@@ -305,8 +291,8 @@
       gsap.set(s5Cap, { xPercent: -50, x: 0 });   /* 중앙정렬 선점 (CSS translateX 대체) */
       gsap.fromTo(s5Cap,
         { opacity: 0, y: 8 },
-        { opacity: 1, y: 0, duration: 1.0, delay: 0.4, ease: "power3.out",
-          scrollTrigger: ST("#pz-s5", "top 82%") });
+        { opacity: 1, y: 0, ease: "none",
+          scrollTrigger: STS("#pz-s5", "top 78%", "top 44%") });
     }
 
     /* ================================================================
@@ -333,22 +319,22 @@
     const rbSub = scroller.querySelector("#pz-s6 .pz-rebuilt__sub");
     if (rbImg) {
       gsap.from(rbImg, {
-        opacity: 0, x: -40, duration: 1.05, ease: "power3.out",
-        scrollTrigger: ST("#pz-s6", "top 84%"),
+        opacity: 0, x: -40, ease: "none",
+        scrollTrigger: STS("#pz-s6", "top 88%", "top 50%"),
       });
     }
     if (rbTitle) {
-      /* ③ 마스크 와이프 — 아래에서 위로 드러남 (clip 초기값은 set 으로만 → GSAP 미로드 폴백) */
+      /* ③ 마스크 와이프 — 아래에서 위로 드러남(scrub). clip 초기값은 set 으로만 → GSAP 미로드 폴백 */
       gsap.set(rbTitle, { clipPath: "inset(100% 0 0 0)", opacity: 0 });
       gsap.to(rbTitle, {
-        clipPath: "inset(0% 0 0 0)", opacity: 1, duration: 1.0, ease: "power3.out",
-        scrollTrigger: ST("#pz-s6", "top 78%"),
+        clipPath: "inset(0% 0 0 0)", opacity: 1, ease: "none",
+        scrollTrigger: STS("#pz-s6", "top 82%", "top 46%"),
       });
     }
     if (rbSub) {
       gsap.from(rbSub, {
-        opacity: 0, y: 18, duration: 0.9, delay: 0.12, ease: "power3.out",
-        scrollTrigger: ST("#pz-s6", "top 78%"),
+        opacity: 0, y: 18, ease: "none",
+        scrollTrigger: STS("#pz-s6", "top 78%", "top 42%"),
       });
     }
 
@@ -360,14 +346,14 @@
     const colorCards = scroller.querySelectorAll("#pz-s7 .pz-color__card");
     if (colorTitle) {
       gsap.from(colorTitle, {
-        opacity: 0, y: 20, duration: 0.9, ease: "power3.out",
-        scrollTrigger: ST("#pz-s7", "top 82%"),
+        opacity: 0, y: 20, ease: "none",
+        scrollTrigger: STS("#pz-s7", "top 86%", "top 50%"),
       });
     }
     if (colorCards.length) {
       gsap.from(colorCards, {
-        opacity: 0, y: 30, duration: 0.9, ease: "power3.out", stagger: 0.12,
-        scrollTrigger: ST("#pz-s7", "top 78%"),
+        opacity: 0, y: 30, ease: "none", stagger: 0.12,
+        scrollTrigger: STS("#pz-s7", "top 82%", "top 44%"),
       });
     }
 
@@ -384,18 +370,18 @@
 
     if (shopTop) {
       gsap.from(shopTop, {
-        opacity: 0, y: 28, duration: 1.0, ease: "power3.out",
-        scrollTrigger: ST("#pz-s8 .pz-shop__top", "top 84%"),
+        opacity: 0, y: 28, ease: "none",
+        scrollTrigger: STS("#pz-s8 .pz-shop__top", "top 88%", "top 52%"),
       });
     }
     if (shopRow && shopLong && shopSticky) {
       gsap.from(shopLong, {
-        opacity: 0, y: 30, duration: 1.0, ease: "power3.out",
-        scrollTrigger: ST("#pz-s8 .pz-shop__row", "top 82%"),
+        opacity: 0, y: 30, ease: "none",
+        scrollTrigger: STS("#pz-s8 .pz-shop__row", "top 86%", "top 50%"),
       });
       gsap.from(shopSticky, {
-        opacity: 0, duration: 1.0, ease: "power2.out",
-        scrollTrigger: ST("#pz-s8 .pz-shop__row", "top 82%"),
+        opacity: 0, ease: "none",
+        scrollTrigger: STS("#pz-s8 .pz-shop__row", "top 86%", "top 50%"),
       });
 
       /* 우측 사진을 모달 뷰포트 높이로 꽉 채움 → CSS position:sticky가 고정 담당.
@@ -448,15 +434,23 @@
       phoneDevice.addEventListener("focus", phoneIn);   /* 키보드 접근성 */
       phoneDevice.addEventListener("blur", phoneOut);
 
-      /* ⑧ 핸드폰 등장 — 소프트포커스 blur(9px)→0 + 페이드+업.
-         모바일(≤768px)은 filter 부담 커서 blur 생략(0). will-change 는 tween 동안만. */
-      const phoneBlur = matchMedia("(max-width: 768px)").matches ? 0 : 9;
+      /* ⑧ 핸드폰 등장 — fade+업(transform/opacity)은 scrub로 스크롤 따라.
+         소프트포커스 blur 는 매 스크롤프레임 재계산 부담이라 scrub 금지 → once 유지(분리). */
       gsap.fromTo(phoneDevice,
-        { opacity: 0, y: 36, filter: `blur(${phoneBlur}px)` },
-        { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, ease: "power3.out",
-          onStart() { phoneDevice.style.willChange = "filter"; },
-          onComplete() { phoneDevice.style.willChange = ""; gsap.set(phoneDevice, { clearProps: "filter" }); },
-          scrollTrigger: ST("#pz-s9", "top 80%") });
+        { opacity: 0, y: 36 },
+        { opacity: 1, y: 0, ease: "none",
+          scrollTrigger: STS("#pz-s9", "top 84%", "top 50%") });
+
+      /* 모바일(≤768px)은 filter 부담 커서 blur 생략(0). will-change 는 tween 동안만. */
+      const phoneBlur = matchMedia("(max-width: 768px)").matches ? 0 : 9;
+      if (phoneBlur) {
+        gsap.fromTo(phoneDevice,
+          { filter: `blur(${phoneBlur}px)` },
+          { filter: "blur(0px)", duration: 1.1, ease: "power3.out",
+            onStart() { phoneDevice.style.willChange = "filter"; },
+            onComplete() { phoneDevice.style.willChange = ""; gsap.set(phoneDevice, { clearProps: "filter" }); },
+            scrollTrigger: ST("#pz-s9", "top 80%") });
+      }
     }
 
     /* ================================================================
