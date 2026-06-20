@@ -147,31 +147,31 @@
 
 
     /* ③ 굴비 펜듈럼 스윙 — 천장에 매달린 듯 상단 고정 회전(±5°). 두 마리 다른 주기로 자연스럽게 */
-    const fishDurs = [2.2, 2.5];
+    const fishDurs = [2.0, 2.3];
     scroller.querySelectorAll("#sec6 .s6-objbox img").forEach((img, i) => {
-      gsap.set(img, { transformOrigin: "50% 0%" });
-      const swing = gsap.fromTo(img, { rotation: -5 },
-        { rotation: 5, duration: fishDurs[i % fishDurs.length], repeat: -1, yoyo: true,
+      gsap.set(img, { transformOrigin: "50% 0%" });   // 줄에 매달린 듯 상단 고정
+      const swing = gsap.fromTo(img, { rotation: -11 },
+        { rotation: 11, duration: fishDurs[i % fishDurs.length], repeat: -1, yoyo: true,
           ease: "sine.inOut", paused: true });
       ScrollTrigger.create({ trigger: img, scroller, start: "top bottom", end: "bottom top",
         onToggle: (self) => swing.paused(!self.isActive) });
     });
 
-    /* ④ 동전 낙하 파티클(절약 클라이맥스) — sec14 진입 시 동전 8개 생성→낙하→제거. transform 만 */
+    /* ④ 동전 낙하 파티클(절약 클라이맥스) — sec14 진입 시 동전 비처럼 쏟아짐→제거. transform 만 */
     const coinSec = document.getElementById("sec14");
     if (coinSec) {
-      ScrollTrigger.create({ trigger: coinSec, scroller, start: "top 70%", once: true,
+      ScrollTrigger.create({ trigger: coinSec, scroller, start: "top 82%", once: true,
         onEnter: () => {
           const h = coinSec.offsetHeight || 400;
-          for (let i = 0; i < 8; i++) {
+          for (let i = 0; i < 16; i++) {
             const c = document.createElement("div");
             c.className = "jg-coin";
-            c.textContent = i % 2 ? "₩" : "";
-            c.style.left = gsap.utils.random(6, 90) + "%";
+            c.textContent = "₩";
+            c.style.left = gsap.utils.random(5, 92) + "%";
             coinSec.appendChild(c);
-            gsap.fromTo(c, { y: -40, opacity: 1, rotation: 0 },
-              { y: h * 0.6, rotation: gsap.utils.random(360, 720), opacity: 0,
-                duration: gsap.utils.random(1.1, 1.6), ease: "power1.in", delay: i * 0.08,
+            gsap.fromTo(c, { y: -60, opacity: 1, rotation: 0 },
+              { y: h * 0.92, rotation: gsap.utils.random(360, 900), opacity: 0,
+                duration: gsap.utils.random(1.7, 2.5), ease: "power1.in", delay: i * 0.1,
                 onComplete: () => c.remove() });
           }
         } });
