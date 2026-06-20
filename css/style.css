@@ -5920,7 +5920,7 @@ html.process-open { overflow: hidden; }
 .s14-time span { color: var(--mk-sub); }
 
 /* ④ 동전 낙하 파티클 — div + transform 만(canvas/shadowBlur 금지) */
-#sec1 { position: relative; }   /* 동전 낙하 기준 */
+#sec3 { position: relative; }   /* 동전 낙하 기준 */
 .jg-coin { position: absolute; top: 0; width: 30px; height: 30px; border-radius: 50%;
   display: grid; place-items: center; font-size: 15px; font-weight: 800; color: #946610;
   background: radial-gradient(circle at 38% 32%, #FFE9A8 0%, #E8B84D 70%, #c79530 100%);

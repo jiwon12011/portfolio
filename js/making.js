@@ -163,21 +163,21 @@
       box.addEventListener("mouseenter", swing);
     });
 
-    /* ④ 동전 낙하 파티클 — sec1 상단 여백("돈은 모아야 하는데" 위)로 비처럼 쏟아짐.
+    /* ④ 동전 낙하 파티클 — sec3(PROJECT GOAL) 오른쪽 위 빈 여백으로 쏟아짐.
        진입(아래로/위로) 할 때마다 재생, transform 만, 떨어진 뒤 제거 */
-    const coinSec = document.getElementById("sec1");
+    const coinSec = document.getElementById("sec3");
     if (coinSec) {
       const rainCoins = () => {
-        const h = coinSec.offsetHeight || 600;
-        for (let i = 0; i < 16; i++) {
+        const h = coinSec.offsetHeight || 800;
+        for (let i = 0; i < 14; i++) {
           const c = document.createElement("div");
           c.className = "jg-coin";
           c.textContent = "₩";
-          c.style.left = gsap.utils.random(6, 92) + "%";
+          c.style.left = gsap.utils.random(60, 93) + "%";   // 오른쪽 영역
           coinSec.appendChild(c);
           gsap.fromTo(c, { y: -50, opacity: 1, rotation: 0 },
-            { y: h * 0.6, rotation: gsap.utils.random(360, 900), opacity: 0,
-              duration: gsap.utils.random(1.6, 2.4), ease: "power1.in", delay: i * 0.09,
+            { y: h * 0.34, rotation: gsap.utils.random(360, 900), opacity: 0,
+              duration: gsap.utils.random(1.6, 2.4), ease: "power1.in", delay: i * 0.1,
               onComplete: () => c.remove() });
         }
       };
