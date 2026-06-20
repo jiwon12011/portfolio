@@ -147,34 +147,42 @@
 
 
     /* ③ 굴비 펜듈럼 스윙 — 천장에 매달린 듯 상단 고정 회전(±5°). 두 마리 다른 주기로 자연스럽게 */
-    const fishDurs = [2.0, 2.3];
     scroller.querySelectorAll("#sec6 .s6-objbox img").forEach((img, i) => {
       gsap.set(img, { transformOrigin: "50% 0%" });   // 줄에 매달린 듯 상단 고정
-      const swing = gsap.fromTo(img, { rotation: -11 },
-        { rotation: 11, duration: fishDurs[i % fishDurs.length], repeat: -1, yoyo: true,
-          ease: "sine.inOut", paused: true });
-      ScrollTrigger.create({ trigger: img, scroller, start: "top bottom", end: "bottom top",
-        onToggle: (self) => swing.paused(!self.isActive) });
+      /* 흔들리다 멈춤: 진폭이 점점 줄며 0° 로 확실히 안착(키프레임 감쇠) */
+      const swing = () => gsap.to(img, {
+        keyframes: { rotation: [-13, 9, -6, 4, -2, 0] },
+        duration: 2.4, ease: "sine.inOut", overwrite: true,
+      });
+      /* 진입 시 1회(두 마리 살짝 시차) */
+      ScrollTrigger.create({ trigger: img, scroller, start: "top 86%", once: true,
+        onEnter: () => gsap.delayedCall(0.1 + i * 0.12, swing) });
+      /* 멈춘 뒤 hover 하면 다시 흔들림 */
+      const box = img.closest(".s6-objbox") || img;
+      box.style.cursor = "pointer";
+      box.addEventListener("mouseenter", swing);
     });
 
-    /* ④ 동전 낙하 파티클(절약 클라이맥스) — sec14 진입 시 동전 비처럼 쏟아짐→제거. transform 만 */
-    const coinSec = document.getElementById("sec14");
+    /* ④ 동전 낙하 파티클 — sec1 상단 여백("돈은 모아야 하는데" 위)로 비처럼 쏟아짐.
+       진입(아래로/위로) 할 때마다 재생, transform 만, 떨어진 뒤 제거 */
+    const coinSec = document.getElementById("sec1");
     if (coinSec) {
-      ScrollTrigger.create({ trigger: coinSec, scroller, start: "top 82%", once: true,
-        onEnter: () => {
-          const h = coinSec.offsetHeight || 400;
-          for (let i = 0; i < 16; i++) {
-            const c = document.createElement("div");
-            c.className = "jg-coin";
-            c.textContent = "₩";
-            c.style.left = gsap.utils.random(5, 92) + "%";
-            coinSec.appendChild(c);
-            gsap.fromTo(c, { y: -60, opacity: 1, rotation: 0 },
-              { y: h * 0.92, rotation: gsap.utils.random(360, 900), opacity: 0,
-                duration: gsap.utils.random(1.7, 2.5), ease: "power1.in", delay: i * 0.1,
-                onComplete: () => c.remove() });
-          }
-        } });
+      const rainCoins = () => {
+        const h = coinSec.offsetHeight || 600;
+        for (let i = 0; i < 16; i++) {
+          const c = document.createElement("div");
+          c.className = "jg-coin";
+          c.textContent = "₩";
+          c.style.left = gsap.utils.random(6, 92) + "%";
+          coinSec.appendChild(c);
+          gsap.fromTo(c, { y: -50, opacity: 1, rotation: 0 },
+            { y: h * 0.6, rotation: gsap.utils.random(360, 900), opacity: 0,
+              duration: gsap.utils.random(1.6, 2.4), ease: "power1.in", delay: i * 0.09,
+              onComplete: () => c.remove() });
+        }
+      };
+      ScrollTrigger.create({ trigger: coinSec, scroller, start: "top 80%",
+        onEnter: rainCoins, onEnterBack: rainCoins });
     }
 
     /* ⑧ sec4 선순환 화살표 자전 — 화면 밖이면 정지(idle 보호) */
