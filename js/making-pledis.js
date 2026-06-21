@@ -527,6 +527,33 @@
       });
     }, { passive: true });
 
+    /* ================================================================
+       타이틀 색강조 — 글로우 점화 (데모: 사용자 확인용)
+       어두운 burnt 색에서 시작 → 진입 시 #ff4600 으로 점화 + 글로우 플레어→정착.
+       대상: pd-r1/r2 __hl + pd-r3~r7 h1/h2 강조 span (전 7곳). once(top 85%).
+       color 는 getComputedStyle 로 읽어 dim/glow 자동 산출. reduced-motion 시 init early-return.
+    ================================================================ */
+    const _pdEmph = [
+      "#pd-r1 .pd-r1__hl", "#pd2 .pd-r2__hl",
+      "#pd3 .pd-r3__h1 span", "#pd4 .pd-r4__h2 span", "#pd5 .pd-r5__h2 span",
+      "#pd6 .pd-r6__h2 span", "#pd7 .pd-r7__h2 span",
+    ];
+    const _rgb = (c) => (c.match(/\d+/g) || [255, 70, 0]).slice(0, 3).map(Number);
+    _pdEmph.forEach((sel) => {
+      const el = scroller.querySelector(sel);
+      if (!el) return;
+      const [r, g, b] = _rgb(getComputedStyle(el).color);
+      const lit = `rgb(${r}, ${g}, ${b})`;
+      const dim = `rgb(${Math.round(r * 0.34)}, ${Math.round(g * 0.34)}, ${Math.round(b * 0.34)})`; /* 꺼진 burnt */
+      const glow = (a) => `rgba(${r}, ${g}, ${b}, ${a})`;
+      gsap.set(el, { color: dim, willChange: "color" });
+      gsap.timeline({ scrollTrigger: ST(el, "top 85%") })
+        .to(el, { color: lit, duration: 0.5, ease: "power2.out" }, 0)
+        .fromTo(el, { textShadow: "0 0 0px " + glow(0) },
+                    { textShadow: "0 0 9px " + glow(0.45), duration: 0.4, ease: "power2.out" }, 0.05)
+        .to(el, { textShadow: "0 0 3px " + glow(0.14), duration: 0.7, ease: "power2.out" }, 0.45);
+    });
+
     /* ── 이미지 로드 후 위치 재계산(레이아웃 점프 보정) ── */
     scroller.querySelectorAll(".process__making--pledis img").forEach((img) => {
       if (!img.complete) {
