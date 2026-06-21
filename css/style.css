@@ -2026,9 +2026,12 @@ html.process-open { overflow: hidden; }
 /* mh4 CONTENT NAVIGATION: 섹션이 뷰포트보다 큼(≈1.62×) → 적응형 A형(다이어그램 프레이밍), 커넥터 드로우+노드 팝 */
 #mh4-pin { height: 280svh; }
 #mh4 { position: sticky; top: 0; }  /* top = setMh4Top (다이어그램 중앙 프레이밍, 헤딩 진입 노출) */
+/* mh7 TROUBLESHOOTING: 섹션 매우 큼(≈2.80×) → 커밋로그+코드 영역만 프레이밍(setMh7Top), outro/hero 는 핀 뒤 노출 */
+#mh7-pin { height: 400svh; }
+#mh7 { position: sticky; top: 0; }  /* top = setMh7Top (커밋로그 영역 중앙 프레이밍) */
 @media (prefers-reduced-motion: reduce) {
   .mh-pin { height: auto; }
-  #mh2, #mh4 { position: static; }
+  #mh2, #mh4, #mh7 { position: static; }
 }
 .mh-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf2fd; }
 

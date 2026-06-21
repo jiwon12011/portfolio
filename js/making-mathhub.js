@@ -363,30 +363,65 @@
     });
 
     /* ================================================================
-       SECTION 7 · TROUBLESHOOTING + OUTRO (#mh7)
-       [기존] 헤더·log·gh·log-title·log-divider·dot·code·outro 유지
-       [교체] group(".mh-s7__commit") →
-              row별 타임라인: ctype x:-28 / cmsg x:28 (gw7 패턴)
+       SECTION 7 · TROUBLESHOOTING + OUTRO (#mh7) — 커밋로그 부분 핀 (적응형 A형)
+       섹션이 매우 큼(≈2.80×) → 커밋로그+코드 영역(24~66cqw, 뷰포트 내)만 setMh7Top 으로 화면 중앙 프레이밍.
+       #mh7-pin scrub: 헤더→로그카드/깃아이콘/타이틀/구분선→코드→세로 타임라인 위→아래 드로우(scaleY)+
+       닷 팝+커밋(feat/fix/fix/refactor) ctype←/cmsg→ 순차 캐스케이드.
+       outro·hero 는 핀 뒤 자연 노출(아래 once-reveal 유지). 기존 once(헤더~코드) 교체. fromTo+명시값(refresh 안전).
     ================================================================ */
-    header("#mh7");
-    up("#mh7 .mh-s7__log", "top 82%", { x: -36, y: 0, duration: 0.95 });
-    up("#mh7 .mh-s7__gh, #mh7 .mh-s7__log-title, #mh7 .mh-s7__log-divider", "top 82%", {
-      y: 18, duration: 0.7,
-    });
+    const mh7Pin = scroller.querySelector("#mh7-pin");
+    const mh7El  = scroller.querySelector("#mh7");
+    if (mh7Pin && mh7El) {
+      const q7  = (s) => scroller.querySelector(s);
+      const qa7 = (s) => Array.from(scroller.querySelectorAll(s));
+      const m7No = q7("#mh7 .mh-s7__no"), m7Cat = q7("#mh7 .mh-s7__cat");
+      const m7Title = q7("#mh7 .mh-s7__title"), m7Lead = q7("#mh7 .mh-s7__lead");
+      const logBox = q7("#mh7 .mh-s7__log"), code = q7("#mh7 .mh-s7__code");
+      const logBits = qa7("#mh7 .mh-s7__gh, #mh7 .mh-s7__log-title, #mh7 .mh-s7__log-divider");
+      const timeline = q7("#mh7 .mh-s7__timeline");
+      const dots = [1, 2, 3, 4].map((n) => q7(`#mh7 .mh-s7__dot--${n}`));
+      const commits = [1, 2, 3, 4].map((n) => q7(`#mh7 .mh-s7__commit--${n}`));
 
-    /* commit 좌우 reveal — gw7 패턴 이식 */
-    scroller.querySelectorAll("#mh7 .mh-s7__commit").forEach((commit) => {
-      const ctype = commit.querySelector(".mh-s7__ctype");
-      const cmsg  = commit.querySelector(".mh-s7__cmsg");
-      const tl = gsap.timeline({ scrollTrigger: ST(commit, "top 88%") });
-      if (ctype) tl.from(ctype, { opacity: 0, x: -28, duration: 0.68, ease: "power3.out" }, 0);
-      if (cmsg)  tl.from(cmsg,  { opacity: 0, x: 28,  duration: 0.68, ease: "power3.out" }, 0.24);
-    });
+      const setMh7Top = () => {
+        const els = [logBox, code].filter(Boolean);
+        if (!els.length) return;
+        let top = Infinity, bot = -Infinity;
+        els.forEach((el) => { top = Math.min(top, el.offsetTop); bot = Math.max(bot, el.offsetTop + el.offsetHeight); });
+        const center = (top + bot) / 2;
+        const vp = scroller.clientHeight, secH = mh7El.offsetHeight;
+        let t = Math.round(vp / 2 - center);
+        t = Math.max(-(secH - vp), Math.min(0, t));
+        mh7El.style.top = t + "px";
+      };
 
-    up("#mh7 .mh-s7__dot", "top 80%", {
-      y: 0, scale: 0, transformOrigin: "50% 50%", duration: 0.45, ease: "back.out(2.2)",
-    });
-    up("#mh7 .mh-s7__code", "top 78%", { x: 44, y: 0, duration: 1.0 });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: mh7Pin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, onRefreshInit: setMh7Top,
+        },
+      });
+      if (m7No && m7Cat) tl.fromTo([m7No, m7Cat], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }, 0);
+      if (m7Title) tl.fromTo(m7Title, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.5, ease: "power4.out" }, 0.06);
+      if (m7Lead)  tl.fromTo(m7Lead,  { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.16);
+      if (logBox)  tl.fromTo(logBox,  { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.28);
+      if (logBits.length) tl.fromTo(logBits, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }, 0.38);
+      if (code) tl.fromTo(code, { opacity: 0, x: 36 }, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" }, 0.4);
+      /* 세로 타임라인 위→아래 드로우 */
+      if (timeline) tl.fromTo(timeline, { scaleY: 0 }, { scaleY: 1, transformOrigin: "50% 0%", duration: 0.8, ease: "none" }, 0.5);
+      /* 닷 팝 + 커밋 ctype←/cmsg→ 캐스케이드 (드로우와 동기) */
+      [0, 1, 2, 3].forEach((i) => {
+        const dot = dots[i], commit = commits[i];
+        const ctype = commit && commit.querySelector(".mh-s7__ctype");
+        const cmsg  = commit && commit.querySelector(".mh-s7__cmsg");
+        const at = 0.54 + i * 0.16;
+        if (dot)   tl.fromTo(dot,   { opacity: 0, scale: 0, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.2)" }, at);
+        if (ctype) tl.fromTo(ctype, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, at);
+        if (cmsg)  tl.fromTo(cmsg,  { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, at + 0.08);
+      });
+      setMh7Top();
+      window.addEventListener("resize", setMh7Top);
+    }
     /* outro: translateX(-50%) 중앙정렬 → clearProps로 완료 후 CSS 복원 */
     up("#mh7 .mh-s7__outro", "top 84%", { y: 28, duration: 0.95, clearProps: "transform" });
     up("#mh7 .mh-s7__outro-1, #mh7 .mh-s7__outro-2", "top 86%", { y: 22, clearProps: "transform" });
