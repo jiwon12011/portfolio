@@ -151,10 +151,37 @@
       window.addEventListener("resize", setSs1Top);
     }
 
-    // .ss-em 강조어 (ss1 제외 — ss1 은 위 핀 타임라인에서 title째 진입) 진입 시 페이드인
+    /* ── 타이틀 강조어(.ss-em) — 잉크 와이프 (base 타이틀색 → 강조 주황 왼→오 채움) ──
+       대상: ss1·ss2·ss5 타이틀 .ss-em. base+color 2겹, color clipPath 왼→오. once(top 85%).
+       나머지 .ss-em(캡션 등)은 아래 기존 페이드 유지. */
+    const _ssEsc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const SS_TITLE_SELS = [".ss-overview__title", ".ss-tr__title", ".ss-outro__title"];
+    const inkWipe = (titleSel) => {
+      const title = scroller.querySelector(titleSel);
+      const em = title && title.querySelector(".ss-em");
+      if (!em) return;
+      const text = em.textContent || "";
+      if (!text.trim()) return;
+      const emphColor = getComputedStyle(em).color;     /* 강조색(주황) */
+      const inkColor  = getComputedStyle(title).color;   /* 타이틀 본문색 */
+      em.classList.add("ss-emfx");
+      em.innerHTML = '<span class="ss-emfx__sr">' + _ssEsc(text) + "</span>"
+        + '<span class="ss-emfx__base" aria-hidden="true">' + _ssEsc(text) + "</span>"
+        + '<span class="ss-emfx__color" aria-hidden="true">' + _ssEsc(text) + "</span>";
+      const base = em.querySelector(".ss-emfx__base");
+      const color = em.querySelector(".ss-emfx__color");
+      base.style.color = inkColor;
+      color.style.color = emphColor;
+      gsap.set(color, { clipPath: "inset(0 100% 0 0)" });
+      gsap.to(color, { clipPath: "inset(0 0% 0 0)", duration: 0.85, ease: "power2.inOut", scrollTrigger: ST(em, "top 85%") });
+    };
+    SS_TITLE_SELS.forEach(inkWipe);
+
+    // 나머지 .ss-em(캡션 등) 진입 페이드 — ss1 + 잉크와이프 타이틀 제외
     // ※ display/transform 변경 금지 — 문장 중간 인라인 em의 줄바꿈·순서 깨짐 방지(이전 yPercent 버그)
     scroller.querySelectorAll(".ss-em").forEach((em) => {
       if (em.closest("#ss1")) return;
+      if (em.closest(SS_TITLE_SELS.join(","))) return;
       gsap.from(em, {
         opacity: 0, duration: 0.9, ease: "power2.out",
         scrollTrigger: ST(em, "top 85%"),
