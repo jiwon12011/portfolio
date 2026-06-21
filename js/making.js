@@ -228,9 +228,41 @@
     gsap.from(".s9-extra", { opacity: 0, y: 30, delay: .22, duration: .9, ease: "power3.out", scrollTrigger: ST(".s9-board", "top 80%") });
 
     /* ── SECTION 10 ── */
-    gsap.from(".s10-ov--text > *", { opacity: 0, y: 22, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST(".s10-board", "top 80%") });
-    gsap.from(".s10-phone", { opacity: 0, y: 38, stagger: .12, duration: .85, ease: "power3.out", scrollTrigger: ST(".s10-board", "top 78%") });
-    gsap.from(".s10-char", { opacity: 0, scale: .8, duration: .8, delay: .3, ease: "back.out(1.5)", scrollTrigger: ST(".s10-board", "top 78%") });
+    /* ── SECTION 10 — 캐릭터 성장 진입 시퀀스(핀 아님) ──
+       헤딩 → 폰 3대 좌·우·좌 교차 슬라이드 → 자린이 scale 팝 + 동전 반짝
+       ("절약 행동 → 코인 → 자린이 성장" 루프의 감정 정점). */
+    gsap.from(".s10-ov--text > *", { opacity: 0, y: 22, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST(".s10-ov--text", "top 86%") });
+    /* 폰: 자기 위치가 화면에 들어올 때 좌·우·좌 교차 슬라이드(섹션이 화면보다 길어 보드-상단 트리거면 화면 밖에서 끝남) */
+    scroller.querySelectorAll(".s10-phone").forEach((ph, i) => {
+      gsap.from(ph, { opacity: 0, x: i % 2 === 0 ? -54 : 54, y: 18, duration: 0.9, ease: "power3.out",
+        delay: i * 0.12, scrollTrigger: ST(".s10-phone--1", "top 84%") });
+    });
+    const s10Char = scroller.querySelector(".s10-char");
+    const s10Board = scroller.querySelector(".s10-board");
+    /* 자린이 주변 동전 반짝 — 캐릭터 중심에서 방사형으로 튀어 사라짐 */
+    const sparkleCoins = () => {
+      if (!s10Char || !s10Board) return;
+      const cx = s10Char.offsetLeft + s10Char.offsetWidth / 2;
+      const cy = s10Char.offsetTop + s10Char.offsetHeight * 0.42;
+      for (let i = 0; i < 9; i++) {
+        const c = document.createElement("div");
+        c.className = "jg-coin jg-coin--spark"; c.textContent = "₩";
+        c.setAttribute("aria-hidden", "true");
+        c.style.left = (cx - 12) + "px"; c.style.top = (cy - 12) + "px";
+        s10Board.appendChild(c);
+        const ang = (Math.PI * 2 * i) / 9 + gsap.utils.random(-0.25, 0.25);
+        const dist = gsap.utils.random(54, 116);
+        gsap.fromTo(c, { x: 0, y: 0, opacity: 1, scale: 0.4 },
+          { x: Math.cos(ang) * dist, y: Math.sin(ang) * dist - 18, opacity: 0, scale: 1,
+            rotation: gsap.utils.random(-120, 120), duration: gsap.utils.random(0.5, 0.8),
+            ease: "power2.out", onComplete: () => c.remove() });
+      }
+    };
+    if (s10Char) {
+      /* 자린이는 섹션 하단 → 캐릭터 자체가 화면에 들어올 때 팝 + 동전 반짝(감정 정점이 보이도록) */
+      gsap.from(s10Char, { opacity: 0, scale: 0.5, transformOrigin: "50% 80%", duration: 0.7, ease: "back.out(2)",
+        scrollTrigger: ST(".s10-char", "top 88%"), onComplete: sparkleCoins });
+    }
 
     /* ── SECTION 11 ── */
     gsap.from(".s11-hero", { opacity: 0, y: 36, duration: 1, ease: "power3.out", scrollTrigger: ST(".s11-hero", "top 88%") });
