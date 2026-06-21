@@ -357,7 +357,7 @@
 
         /* CSS translateX(-50%) → GSAP xPercent 관리
          * GSAP이 xPercent를 관장해야 x/y 추가 transform과 충돌 없음 */
-        gsap.set(keyTop, { xPercent: -50, willChange: "transform" });
+        gsap.set(keyTop, { xPercent: -50, opacity: 0, willChange: "transform" });  /* v9: 여정 내내 숨김 — 끝(명패)에서만 페이드인 */
 
         /* ── 트레일 CSS 삽입 (중복 방지) ── */
         if (!document.getElementById("ss-key-trail-style")) {
@@ -543,6 +543,7 @@
                   x:      cp(FX)(),          /* WP[6] xCqw=FX 착지 */
                   rotate: 720,               /* WP[6] 720°=0° 시각 */
                   scale:  1,
+                  opacity: 1,                /* v9: 빠른 스크롤로 페이드 미완 시에도 달칵 땐 또렷 */
                 });
 
                 clackTL = gsap.timeline({ onComplete() { clackTL=null; } })
@@ -568,8 +569,8 @@
               clackPlayed = false;
               removeScrollBlock(); /* clackTL 중단 전 혹시 남은 차단 해제 */
               if (clackTL) { clackTL.kill(); clackTL = null; }
-              /* keyTop 초기 상태 복원 — WP 트윈 kill 후 scrub이 복원 못 하므로 명시 리셋 */
-              gsap.set(keyTop,  { opacity: 1, y: 0, x: 0, rotate: 0, scale: 1 });
+              /* keyTop 초기 상태 복원 — WP 트윈 kill 후 scrub이 복원 못 하므로 명시 리셋 (v9: 숨김) */
+              gsap.set(keyTop,  { opacity: 0, y: 0, x: 0, rotate: 0, scale: 1 });
               gsap.set(keyLock, { opacity: 0 });
               /* 하단 배경 사진 다시 접기 → 재스크롤 시 펼침 재생 */
               if (photobg) gsap.set(photobg, { clipPath: "inset(0 0 100% 0)" });
@@ -586,12 +587,9 @@
                     }, pos)
                   );
                 });
-                /* 퇴장/재등장 opacity 트윈 재구축 */
+                /* v9: 끝(명패 접근)에서만 페이드인 — 재구축 */
                 keyTopTweens.push(
-                  keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
-                );
-                keyTopTweens.push(
-                  keyTL.to(keyTop, { opacity: 1, duration: 1.6, ease: "power2.out" }, 3.4)
+                  keyTL.to(keyTop, { opacity: 1, duration: 0.5, ease: "power2.out" }, 9.2)
                 );
               }
               /* M1: 타임라인 캐시 무효화 + 처음으로 리셋 → 재진입 시 progress 매핑 안정 */
@@ -613,32 +611,14 @@
           );
         });
 
-        /* 퇴장 페이드아웃: off-screen 진입 직전 소멸 → glow 가장자리 번짐 방지
-         * t=1.5~2.0: WP[1] 진행 중, 키가 화면 밖으로 나가기 직전 */
+        /* v9: 열쇠는 콘텐츠 구간(테마·예약) 내내 숨김(opacity 0) → 명패 접근(스크럽 끝, t=9.2~9.7)에서만 페이드인.
+         * 길/시작 노출을 없애 본문 읽는 동안 시선 분산 제거. 등장은 마지막 달칵 직전 명패 위에서만. */
         keyTopTweens.push(
-          keyTL.to(keyTop, { opacity: 0, duration: 0.5, ease: "power1.in" }, 1.5)
-        );
-        /* 재등장 페이드인: 우→좌 횡단(숨김) 끝나고 왼쪽에서 화면 안으로 들어오기 전 또렷해지도록
-         * t=3.4~5.0: WP[3] 진입(왼쪽에서 등장) */
-        keyTopTweens.push(
-          keyTL.to(keyTop, { opacity: 1, duration: 1.6, ease: "power2.out" }, 3.4)
+          keyTL.to(keyTop, { opacity: 1, duration: 0.5, ease: "power2.out" }, 9.2)
         );
 
-        /* 트레일 노드 bloom→fadeout
-         * bloomStart: 도착 0.18s 전부터 피어오름 → 열쇠가 지나가는 자리에 자글자글 남는 느낌
-         * fadeDur: 다음 노드까지 시간의 65% → 연속성 있게 겹쳐 소멸 (촤라락 흐름) */
-        trailNodes.forEach(({ t }, idx) => {
-          const bloomStart = Math.max(0, t - 0.18);
-          /* bloom 최대 opacity 0.88→0.62: 트레일 도트 자체가 이미 글로우를 포함하므로 절제 */
-          keyTL.to(trailWraps[idx], {
-            opacity: 0.62, duration: 0.22, ease: "power2.out",
-          }, bloomStart);
-          const nextT   = idx < trailNodes.length - 1 ? trailNodes[idx + 1].t : 9.8;
-          const fadeDur = Math.min(1.4, Math.max(0.28, (nextT - t) * 0.65));
-          keyTL.to(trailWraps[idx], {
-            opacity: 0, duration: fadeDur, ease: "power1.in",
-          }, t + 0.18);
-        });
+        /* v9: 트레일(별 자취) 제거 — 열쇠가 콘텐츠 위를 지나가지 않으므로 자취 불필요(시선 분산 제거).
+         * trailWraps 는 생성돼 있으나 bloom 안 함 → CSS opacity:0 그대로 비표시. */
       }
     }
 
