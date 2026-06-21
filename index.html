@@ -2682,7 +2682,12 @@
             <img class="gw-r4__mood gw-r4__mood--4" src="img/hon/process/s4_4.webp" alt="귀혼M 무드 레퍼런스" loading="lazy" />
           </section>
 
-          <!-- SECTION 5 · SECTION DESIGN · 웹 구성 — 디자인 1440×2502 (다크, 5행 타임라인) -->
+          <!-- SECTION 5 · SECTION DESIGN · 웹 구성 — 디자인 1440×2502 (다크, 5행 타임라인)
+               · 필름스트립 핀: .gw5-stage(뷰포트 높이, sticky, overflow hidden) 프레임 안에서
+                 #gw5(전체 타임라인)가 위로 translateY 되며, 각 행이 프레임 하단으로 들어올 때 점등.
+                 #gw5-pin 높이가 스크롤 길이를 제공. -->
+          <div class="gw-pin" id="gw5-pin">
+          <div class="gw5-stage" id="gw5-stage">
           <section class="gw-sec gw-r5" id="gw5">
             <img class="gw-r5__bg" src="img/hon/process/bg5.webp" alt="" aria-hidden="true" loading="lazy" />
 
@@ -2751,6 +2756,8 @@
               </div>
             </div>
           </section>
+          </div><!-- /.gw5-stage -->
+          </div><!-- /#gw5-pin -->
 
           <!-- SECTION 6 · INTERACTION DESIGN · 기능 구조 — 디자인 1440×1328 (다크, 5행 리스트) -->
           <section class="gw-sec gw-r6" id="gw6">

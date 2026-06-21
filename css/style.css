@@ -3060,6 +3060,13 @@ html.process-open { overflow: hidden; }
 #gw2-pin { height: 260svh; }
 #gw3-pin { height: 260svh; }
 
+/* gw5 필름스트립 핀: 뷰포트 높이 프레임(.gw5-stage)을 sticky 고정,
+   그 안에서 #gw5(전체 5행 타임라인 1899px)가 위로 translateY 되며 행별 점등.
+   stage 높이는 making-gwihon.js 가 스크롤러 clientHeight 로 정확히 맞춤(아래 svh 는 폴백). */
+#gw5-pin { height: 420svh; }
+.gw5-stage { position: sticky; top: 0; height: 88svh; overflow: hidden; }
+#gw5 { will-change: transform; }
+
 /* 핀 섹션 sticky 고정 — position:relative(.gw-sec)를 ID 특이도로 덮음.
    top 음수 cqw → 핀 멈춤 framing 을 위로 보정(진입 시 헤딩 노출, 고정 시 비주얼 중앙).
    · #gw2 top:-16.65cqw → desc 상단·메달리온 중앙·4원 모두 화면 안
@@ -3075,6 +3082,9 @@ html.process-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .gw-pin { height: auto; }
   #gw1, #gw2, #gw3 { position: static; }
+  /* gw5 필름스트립 해제: 프레임 클리핑/고정 제거, 타임라인 자연 배치 */
+  .gw5-stage { position: static; height: auto; overflow: visible; }
+  #gw5 { transform: none; will-change: auto; }
 }
 
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }

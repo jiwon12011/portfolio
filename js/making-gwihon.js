@@ -206,26 +206,54 @@
     /* ================================================================
        SECTION 5 · SECTION DESIGN (#gw5) — 5행 타임라인 (행별 진입)
     ================================================================ */
+    /* 헤딩 — 핀 진입 단계에서 자연 스크롤되며 rise(고정 후 필름스트립으로 위로 흐름) */
     rise("#gw5 .gw-r5__label", { y: 20, scrollTrigger: ST("#gw5 .gw-r5__label", "top 86%") });
     rise("#gw5 .gw-r5__title", { y: 28, duration: 0.95, scrollTrigger: ST("#gw5 .gw-r5__title", "top 86%") });
     rise("#gw5 .gw-r5__desc", { y: 22, delay: 0.08, scrollTrigger: ST("#gw5 .gw-r5__desc", "top 86%") });
-    for (let i = 1; i <= 5; i++) {
-      const shot = scroller.querySelector(`#gw5 .gw-r5__shot--${i}`);
-      const tx = scroller.querySelector(`#gw5 .gw-r5__tx--${i}`);
-      const node = scroller.querySelector(`#gw5 .gw-r5__node--${i}`);
-      if (shot) gsap.from(shot, {
-        opacity: 0, x: -36, duration: 0.9, ease: "power3.out",
-        scrollTrigger: ST(shot, "top 82%"),
+
+    /* ── 필름스트립 핀 ──
+       .gw5-stage(뷰포트 높이, sticky, overflow hidden) 프레임을 고정하고,
+       #gw5(1899px 타임라인 전체)를 위로 translateY 하며 5행이 차례로 프레임에 진입.
+       각 행은 프레임 하단으로 들어오는 시점(progress)에 점등(shot 좌→ / tx 우← / node 팝). */
+    const gw5El = scroller.querySelector("#gw5");
+    const gw5Stage = document.querySelector("#gw5-stage");
+    if (gw5El && gw5Stage) {
+      /* stage 높이 = 스크롤러 가시 높이(모달 뷰포트). refresh 마다 재동기화 */
+      /* 모달 닫힘(clientHeight 0) 때 0px 고정 방지 — CSS 폴백(88svh) 유지, open 시 refresh 가 교정 */
+      const syncStageH = () => { if (scroller.clientHeight) gw5Stage.style.height = scroller.clientHeight + "px"; };
+      syncStageH();
+      const getTravel = () => Math.max(0, gw5El.offsetHeight - gw5Stage.clientHeight);
+
+      const pinTl5 = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: "#gw5-pin", scroller, start: "top top", end: "bottom bottom",
+          scrub: true, invalidateOnRefresh: true, onRefreshInit: syncStageH,
+        },
       });
-      if (tx) gsap.from(tx, {
-        opacity: 0, x: 30, duration: 0.9, delay: 0.08, ease: "power3.out",
-        scrollTrigger: ST(shot || tx, "top 82%"),
-      });
-      if (node) gsap.from(node, {
-        opacity: 0, scale: 0.4, transformOrigin: "0% 50%",
-        duration: 0.5, delay: 0.18, ease: "back.out(2)",
-        scrollTrigger: ST(shot || node, "top 80%"),
-      });
+      /* 연속 translate: 0 → -travel (함수값 + invalidateOnRefresh 로 반응형) */
+      pinTl5.fromTo(gw5El, { y: 0 }, { y: () => -getTravel(), duration: 1 }, 0);
+
+      /* 행별 점등 progress — 각 행이 프레임 하단(stageH*0.75)으로 진입하는 지점(설계 1899px 기준) */
+      const revealAt = [0.01, 0.15, 0.38, 0.61, 0.84];
+      for (let i = 1; i <= 5; i++) {
+        const shot = scroller.querySelector(`#gw5 .gw-r5__shot--${i}`);
+        const tx = scroller.querySelector(`#gw5 .gw-r5__tx--${i}`);
+        const node = scroller.querySelector(`#gw5 .gw-r5__node--${i}`);
+        const p = revealAt[i - 1];
+        /* fromTo(명시적 end) — invalidateOnRefresh 가 from 의 end 값을 현재값(0)으로
+           재캡처해 0→0 으로 망가뜨리는 GSAP 함정 회피 */
+        if (shot) pinTl5.fromTo(shot, { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: 0.07 }, p);
+        if (tx) pinTl5.fromTo(tx, { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.07 }, p + 0.02);
+        if (node) pinTl5.fromTo(node, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, transformOrigin: "0% 50%", duration: 0.05 }, p + 0.035);
+      }
+
+      /* 세로 연결선 — 필름스트립 진행에 맞춰 위→아래로 그려짐(행 점등 구간과 동기) */
+      const gw5Line = scroller.querySelector("#gw5 .gw-r5__line");
+      if (gw5Line) {
+        gsap.set(gw5Line, { transformOrigin: "50% 0%" });
+        pinTl5.fromTo(gw5Line, { scaleY: 0 }, { scaleY: 1, duration: 0.83 }, 0.01);
+      }
     }
 
     /* ================================================================
@@ -307,14 +335,7 @@
           scrollTrigger: { trigger: band, scroller, start: "top bottom", end: "bottom top", scrub: 0.6 } });
     });
 
-    /* gw5 세로 연결선 드로우(scaleY 0→1, scrub) */
-    if (scroller.querySelector("#gw5 .gw-r5__line")) {
-      gsap.fromTo("#gw5 .gw-r5__line", { scaleY: 0 }, {
-        scaleY: 1, ease: "none",
-        scrollTrigger: { trigger: "#gw5 .gw-r5__node--1", scroller, start: "top 80%",
-          endTrigger: "#gw5 .gw-r5__node--5", end: "top 60%", scrub: 0.5 },
-      });
-    }
+    /* gw5 세로 연결선 드로우는 필름스트립 타임라인(pinTl5)에 통합됨 — 위 SECTION 5 블록 참조 */
 
     /* gw5 노드 펄스 — 섹션 화면 안일 때만 가동(밖이면 정지, idle CPU 보호) */
     const gw5 = scroller.querySelector("#gw5");
