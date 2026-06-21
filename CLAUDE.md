@@ -15,7 +15,7 @@
 | POZE | `#process-poze` | ✅ 완성 (5개 nav: pz1~pz-s10) |
 | 귀혼 | `#process-gwihon` | ✅ 완성 (7개 nav: gw1~gw7, making-gwihon.js, smooth-process 적용) |
 | 유미의 세포들 | `#process-yumi` | ✅ 완성 (making-yumi.js, smooth-process 적용) |
-| MathHub | `#process-mathhub` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 |
+| MathHub | `#process-mathhub` | ✅ 완성 — 본문 mh1~mh7(개요·IA재설계·탐색필터·콘텐츠탐색·페이지UI·컬러·시행착오) + nav 7개 + making-mathhub.js, smooth-process 적용. 스크롤 핀 3곳(mh2 카오스→구조 4카드, mh4 다이어그램 커넥터 드로우, mh7 커밋로그 타임라인) |
 | 상상의 문 | `#process-sangsang` | ✅ 완성 — `making-sangsang.js`, 이미지 30장, mp4 영상 포함. nav·본문 추가 완료 |
 | 우리 사이의 음표 | `#process-playlist` | ✅ 본문 7섹션 완성 — pl1 개요·pl2 컨셉·pl3 랜딩디자인·pl4 게임시스템(멀티루트,하트미터 CSS)·pl5 구현구조·pl6 내러티브(타임라인+캐릭터6)·pl7 트러블슈팅+클로징. Figma → cqw 포팅, `pl-*` 클래스, 에셋 `img/playlist_game/process/`(50개,1.9MB), 원본 `raw/`(gitignore). nav 7개(측정상 720px+ 오버플로 없음). 남은 일: 상단 인트로 셸(plsec-01) POZE식 교체. pl3·pl6 배경은 전용 이미지 없어 그라데이션 대체 |
 | 플레디스 | `#process-pledis` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 (영상: pledis_process.mp4) |
