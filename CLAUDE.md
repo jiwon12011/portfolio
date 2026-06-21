@@ -12,7 +12,7 @@
 | 프로젝트 | 패널 ID | 상태 |
 |---------|--------|------|
 | 자린고비 | `#process` | ✅ 완성 (6개 nav: sec1~sec8~sec14 제외) |
-| POZE | `#process-poze` | ✅ 완성 (5개 nav: pz1~pz-s10) |
+| POZE | `#process-poze` | ✅ 완성 (미니멀 뷰티 브랜드. 본문 ~10섹션, nav 5: OVERVIEW·VISUAL DIRECTION·REBUILD·EXPERIENCE·OUTCOME, making-poze.js). 스크롤 핀 pz-s7(COLOR DIRECTION 색카드 페인트-필). 디스플레이 타이틀(영문, 색강조 단어 없음) 아래 룰 드로우 액센트(#8b695f Dusty Rose) |
 | 귀혼 | `#process-gwihon` | ✅ 완성 (7개 nav: gw1~gw7, making-gwihon.js, smooth-process 적용) |
 | 유미의 세포들 | `#process-yumi` | ✅ 완성 (making-yumi.js, smooth-process 적용) |
 | MathHub | `#process-mathhub` | ✅ 완성 — 본문 mh1~mh7(개요·IA재설계·탐색필터·콘텐츠탐색·페이지UI·컬러·시행착오) + nav 7개 + making-mathhub.js, smooth-process 적용. 스크롤 핀: **mh2(카오스→구조 4카드)만 유지**(mh4·mh7 핀은 사용자 요청으로 원복=once 진입). 전 타이틀 강조어(`<b>`)에 **밑줄 드로우+색 점등** 효과(.mh-emph) |
