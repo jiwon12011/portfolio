@@ -3114,29 +3114,6 @@ html.process-open { overflow: hidden; }
   #sec3 .s3-goal { position: static; }
 }
 
-/* ── 유미의 세포들(#process-yumi) 스크롤 핀 ──
-   making 래퍼 overflow:hidden 이 sticky 차단 → 모달 한정 visible(바깥 클립은 .process__panel). */
-#process-yumi .process__making--yumi { overflow: visible; }
-.ym-pin { container-type: inline-size; }
-#ym1-pin { height: 260svh; }
-#ym3-pin { height: 280svh; }
-/* #ym1·#ym3: sticky 고정, top 은 making-yumi.js(setYm*Top) 뷰포트 적응 계산. top:0 폴백 */
-#ym1 { position: sticky; top: 0; }
-#ym3 { position: sticky; top: 0; }
-
-/* ym4 필름스트립: 카드 3장이 세로 분산 → 뷰포트 높이 프레임(.ym-stage) 안에서 #ym4 translateY.
-   stage 높이는 making-yumi.js 가 스크롤러 clientHeight 로 맞춤(아래 svh 폴백). */
-#ym4-pin { height: 240svh; }
-.ym-stage { position: sticky; top: 0; height: 88svh; overflow: hidden; }
-#ym4 { will-change: transform; }
-
-@media (prefers-reduced-motion: reduce) {
-  .ym-pin { height: auto; }
-  #ym1, #ym3 { position: static; }
-  .ym-stage { position: static; height: auto; overflow: visible; }
-  #ym4 { transform: none; will-change: auto; }
-}
-
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
 /* 분위기 영상 배너 (양옆 여백 인셋 + 둥근 모서리) */
 .gw-band { background: #1a1410; display: flex; align-items: center; justify-content: center; }

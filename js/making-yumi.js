@@ -16,9 +16,9 @@
              + 팔레트 chip scale 팝 stagger [추가]
              + 캐릭터 squash&stretch elastic [교체]
    · ym-band : clipPath inset(0 0 100% 0)→0 와이프 [추가]
-   · ym1     : 스크롤 핀(A형) — 카드 중앙→사방 조립 [핀]
-   · ym3     : 스크롤 핀(A형) — 설계포인트·그룹 → 메뉴카드6 순차 reveal [핀]
-   · ym4     : 필름스트립 핀 — 카드3(HERO/MOTION/CURSOR) 통과 reveal(기존 hero 패럴랙스 대체) [핀]
+   · ym3     : 메뉴 카드별 TL (아이콘→라벨→캐릭터) [교체]
+   · ym4     : pill stagger scale back.out 팝 [추가]
+             + .ym-r4__hero scrub 패럴랙스 yPercent [추가]
    · ym5     : q 카드 좌/우 split reveal + 내부 solve/result 분리 TL [교체]
    · ym6     : .ym-r6__pink/.ym-r6__purple clipPath 와이프 [추가]
              + 감정 입자 플로트 (once, 무한루프 없음) [추가]
@@ -97,39 +97,14 @@
        기존: 카드 팝 — 유지
        [추가] 카드 테두리 SVG strokeDashoffset draw-on (좌소→메인→우소→하단 순)
     ================================================================ */
-    /* 헤더 — 진입 단계 페이드(고정 후 위로 잘림) */
     header("#ym1");
 
-    /* 스크롤 핀(A형) — 진입 헤딩 → 고정 후 카드 조립(메인 중앙 먼저 → 소카드 사방 팝).
-       카드 5장이 한 화면에 들어옴. framing 은 뷰포트 적응(전체 들어오면 전체, 아니면 카드만 중앙). */
-    const ym1El = scroller.querySelector("#ym1");
-    const setYm1Top = () => {
-      if (!ym1El) return;
-      const vp = scroller.clientHeight; if (!vp) return;
-      const base = ym1El.getBoundingClientRect().top;
-      const cards = [...ym1El.querySelectorAll(".ym-r1__card")];
-      if (!cards.length) return;
-      const titleEl = ym1El.querySelector(".ym-r1__title");
-      const cTop = titleEl ? titleEl.getBoundingClientRect().top - base : 0;
-      const cardsTop = Math.min(...cards.map((c) => c.getBoundingClientRect().top - base));
-      const cardsBot = Math.max(...cards.map((c) => c.getBoundingClientRect().bottom - base));
-      const top = (cardsBot - cTop) <= vp
-        ? (vp - (cardsBot - cTop)) / 2 - cTop
-        : (vp - (cardsBot - cardsTop)) / 2 - cardsTop;
-      ym1El.style.top = Math.round(top) + "px";
-    };
-
-    const pinTl_ym1 = gsap.timeline({
-      defaults: { ease: "none" },
-      scrollTrigger: { trigger: "#ym1-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setYm1Top },
-    });
-    pinTl_ym1
-      .from("#ym1 .ym-r1__card--main", { opacity: 0, scale: 0.92, y: 24, transformOrigin: "50% 50%", duration: 0.18 }, 0.12)
-      .from(["#ym1 .ym-r1__card--c1", "#ym1 .ym-r1__card--c2"], { opacity: 0, scale: 0.9, y: 28, transformOrigin: "50% 50%", stagger: 0.08, duration: 0.16 }, 0.36)
-      .from(["#ym1 .ym-r1__card--c3", "#ym1 .ym-r1__card--c4"], { opacity: 0, scale: 0.9, y: 28, transformOrigin: "50% 50%", stagger: 0.08, duration: 0.16 }, 0.6);
-
-    setYm1Top();
-    window.addEventListener("resize", setYm1Top);
+    /* 기존: 카드 팝 */
+    stagger(
+      "#ym1 .ym-r1__card",
+      scroller.querySelector("#ym1 .ym-r1__card--c1"),
+      { y: 32, scale: 0.96, transformOrigin: "50% 50%", ease: "back.out(1.3)", stagger: 0.09 }
+    );
 
     /* ================================================================
        SECTION 2 · VISUAL CONCEPT (#ym2)
@@ -263,70 +238,86 @@
        기존: header + points + group 유지
        [교체] 메뉴 카드 bulk x → 카드별 TL (아이콘 scale팝 → 라벨 x → 캐릭터 팝)
     ================================================================ */
-    /* 헤더 — 진입 단계 페이드(고정 후 위로 잘림) */
     header("#ym3");
 
-    /* 스크롤 핀(A형) — 진입 헤딩 → 고정 후 설계포인트·그룹이 먼저 자리잡고
-       우측 메뉴카드 6개(HOME→CHARACTER→SEASON→WEBTOON→NEWS→GALLERY)가 위→아래 순차 reveal
-       ("감정을 따라 탐험하는 구조"를 스크롤로 직접 그려나가는 느낌). framing 뷰포트 적응. */
-    const ym3El = scroller.querySelector("#ym3");
-    const setYm3Top = () => {
-      if (!ym3El) return;
-      const vp = scroller.clientHeight; if (!vp) return;
-      const base = ym3El.getBoundingClientRect().top;
-      const titleEl = ym3El.querySelector(".ym-r3__title");
-      const cTop = titleEl ? titleEl.getBoundingClientRect().top - base : 0;
-      const items = [...ym3El.querySelectorAll(".ym-r3__points, .ym-r3__group, .ym-r3__menu")];
-      if (!items.length) return;
-      const contentTop = Math.min(...items.map((e) => e.getBoundingClientRect().top - base));
-      const contentBot = Math.max(...items.map((e) => e.getBoundingClientRect().bottom - base));
-      const top = (contentBot - cTop) <= vp
-        ? (vp - (contentBot - cTop)) / 2 - cTop
-        : (vp - (contentBot - contentTop)) / 2 - contentTop;
-      ym3El.style.top = Math.round(top) + "px";
-    };
-
-    const pinTl_ym3 = gsap.timeline({
-      defaults: { ease: "none" },
-      scrollTrigger: { trigger: "#ym3-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setYm3Top },
+    gsap.from(scroller.querySelector("#ym3 .ym-r3__points"), {
+      opacity: 0, x: -36, duration: 0.9, ease: "power3.out",
+      scrollTrigger: ST(scroller.querySelector("#ym3 .ym-r3__points"), "top 84%"),
     });
-    pinTl_ym3
-      .from("#ym3 .ym-r3__points", { opacity: 0, x: -36, duration: 0.14 }, 0.08)
-      .from("#ym3 .ym-r3__group", { opacity: 0, y: 30, scale: 0.94, transformOrigin: "50% 100%", duration: 0.16 }, 0.14)
-      .from("#ym3 .ym-r3__menu", { opacity: 0, y: 26, duration: 0.12, stagger: 0.075 }, 0.34)
-      .from("#ym3 .ym-r3__micon", { scale: 0, transformOrigin: "50% 50%", duration: 0.08, stagger: 0.075 }, 0.42);
 
-    setYm3Top();
-    window.addEventListener("resize", setYm3Top);
+    const groupEl = scroller.querySelector("#ym3 .ym-r3__group");
+    if (groupEl) {
+      gsap.from(groupEl, {
+        opacity: 0, y: 30, scale: 0.94, transformOrigin: "50% 100%",
+        duration: 0.95, ease: "back.out(1.4)",
+        scrollTrigger: ST(groupEl, "top 84%"),
+      });
+    }
+
+    /* [교체] 메뉴 카드별 TL */
+    scroller.querySelectorAll("#ym3 .ym-r3__menu").forEach((menu) => {
+      const icon  = menu.querySelector(".ym-r3__micon");
+      const label = menu.querySelector(".ym-r3__mlabel");
+      const desc  = menu.querySelector(".ym-r3__mdesc");
+      const cha   = menu.querySelector(".ym-r3__mcha");
+
+      const tl = gsap.timeline({ scrollTrigger: ST(menu, "top 92%") });
+      /* 카드 전체 진입 */
+      tl.from(menu, { opacity: 0, y: 26, duration: 0.82, ease: "power3.out" }, 0);
+      /* 아이콘 scale 팝 */
+      if (icon)  tl.from(icon,  { scale: 0, transformOrigin: "50% 50%",
+        duration: 0.46, ease: "back.out(2.2)" }, 0.24);
+      /* 라벨 x 슬라이드 */
+      if (label) tl.from(label, { opacity: 0, x: 18, duration: 0.44, ease: "power3.out" }, 0.35);
+      /* 설명 x 슬라이드 */
+      if (desc)  tl.from(desc,  { opacity: 0, x: 18, duration: 0.44, ease: "power3.out" }, 0.43);
+      /* 캐릭터 팝 */
+      if (cha)   tl.from(cha,   { scale: 0, opacity: 0, transformOrigin: "50% 100%",
+        duration: 0.52, ease: "back.out(1.8)" }, 0.5);
+    });
 
     /* ================================================================
-       SECTION 4 · INTERACTION DESIGN (#ym4) — 필름스트립 핀
-       카드 3장이 세로 분산 → .ym-stage 프레임 안에서 #ym4 translateY, 카드 통과 reveal.
-       (기존 카드 stagger·pill once·hero 패럴랙스는 핀 타임라인으로 대체)
+       SECTION 4 · INTERACTION DESIGN (#ym4)
+       기존: 카드 stagger 유지
+       [추가] pill stagger scale back.out 팝
+       [추가] .ym-r4__hero scrub 패럴랙스 yPercent
     ================================================================ */
-    /* 헤더 — 진입 단계 페이드 */
     header("#ym4");
 
-    /* 스크롤 핀(필름스트립) — 인터랙션 카드 3장(HERO/MOTION/CURSOR)이 세로로 분산돼
-       한 화면에 안 들어옴 → 고정 프레임(.ym-stage) 안에서 #ym4 를 위로 translateY 하며
-       카드를 차례로 보여줌. 각 카드는 프레임 통과 시점에 reveal. 기존 hero 패럴랙스는 translate 로 대체. */
-    const ym4El = scroller.querySelector("#ym4");
-    const ym4Stage = document.querySelector("#ym4-stage");
-    if (ym4El && ym4Stage) {
-      const syncYm4H = () => { if (scroller.clientHeight) ym4Stage.style.height = scroller.clientHeight + "px"; };
-      syncYm4H();
-      const getYm4Travel = () => Math.max(0, ym4El.offsetHeight - ym4Stage.clientHeight);
-      const pinTl_ym4 = gsap.timeline({
-        defaults: { ease: "none" },
-        scrollTrigger: { trigger: "#ym4-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, invalidateOnRefresh: true, onRefreshInit: syncYm4H },
+    stagger(
+      "#ym4 .ym-r4__card",
+      scroller.querySelector("#ym4 .ym-r4__card--1"),
+      { y: 34, stagger: 0.12 }
+    );
+
+    /* [추가] pill 하나씩 scale 팝 */
+    const pills = scroller.querySelectorAll("#ym4 .ym-r4__pill");
+    if (pills.length) {
+      const pillTrigger = scroller.querySelector("#ym4 .ym-r4__pill--1");
+      if (pillTrigger) {
+        gsap.from(pills, {
+          scale: 0, opacity: 0, transformOrigin: "0% 50%",
+          duration: 0.52, ease: "back.out(2.0)", stagger: 0.1,
+          scrollTrigger: ST(pillTrigger, "top 88%"),
+        });
+      }
+    }
+
+    /* [추가] 히어로 레이어 이미지 미세 scrub 패럴랙스 */
+    const heroLayer = scroller.querySelector("#ym4 .ym-r4__hero");
+    if (heroLayer) {
+      gsap.to(heroLayer, {
+        yPercent: -10,
+        ease: "none",
+        scrollTrigger: {
+          trigger: scroller.querySelector("#ym4"),
+          scroller,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.8,
+          invalidateOnRefresh: true,
+        },
       });
-      pinTl_ym4.fromTo(ym4El, { y: 0 }, { y: () => -getYm4Travel(), duration: 1 }, 0);
-      ["--1", "--2", "--3"].forEach((k, i) => {
-        const card = scroller.querySelector("#ym4 .ym-r4__card" + k);
-        if (card) pinTl_ym4.fromTo(card, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.14 }, 0.06 + i * 0.3);
-      });
-      const ym4Pills = scroller.querySelectorAll("#ym4 .ym-r4__pill");
-      if (ym4Pills.length) pinTl_ym4.fromTo(ym4Pills, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, transformOrigin: "0% 50%", stagger: 0.04, duration: 0.08 }, 0.16);
     }
 
     /* ================================================================
