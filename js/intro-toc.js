@@ -27,7 +27,7 @@
      preview = 호버 미리보기용 경량 클립(없으면 정적 썸네일만) */
   const PROJECTS = [
     { key: "gwihon",    num: "01", title: "귀혼",          sub: "UXUI / 2025",     thumb: "img/main/main_hon.webp",       preview: "img/hon/hon_thumb.mp4" },
-    { key: "jaringobi", num: "02", title: "자린고비",      sub: "Branding / 2025", thumb: "img/main/main_jaringobi.webp", preview: "img/jaringobi/jaringobi_thumb.mp4" },
+    { key: "jaringobi", num: "02", title: "자린고비",      sub: "Branding / 2025", thumb: "img/main/main_jaringobi.webp", preview: "img/jaringobi/jaringobi_intro.mp4?v=3" },
     { key: "yumi",      num: "03", title: "유미의 세포들", sub: "Branding / 2024", thumb: "img/main/main_yumi.webp",      preview: "img/yumi_cell/yumicell_intro2.mp4" },
     { key: "sangsang",  num: "04", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp",      preview: "img/sangsangdoor/sangsangdoor_intro.mp4" },
     { key: "mathhub",   num: "05", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp",   preview: "img/mathhub/mathhub_intro.mp4" },
