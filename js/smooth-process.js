@@ -17,7 +17,8 @@
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   window.__processLenis = window.__processLenis || {};
-  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis", "#process-mathhub", "#process-sangsang", "#process-playlist"];
+  /* 상상의문·playlist는 모달 scale+scrub 컨텍스트라 lerp 적용 시 스크롤 멈춤/프리즈 → 제외(native 유지) */
+  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis", "#process-mathhub"];
   const EASE = 0.11;            // 0~1, 클수록 더 즉각적(작을수록 더 미끄럽게). 천천히 보기용 0.11
   const DEFAULT_MULT = 0.8;     // 휠 한 번에 이동량(작을수록 천천히 탐색)
 
