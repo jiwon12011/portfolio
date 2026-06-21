@@ -401,13 +401,9 @@
         .to(ul,    { scaleX: 1, duration: 0.6, ease: "power2.out" }, 0)
         .to(color, { clipPath: "inset(0 0% 0 0)", duration: 0.62, ease: "power2.out" }, 0.04);
     };
-    /* 전 타이틀(__title, mh1 의 --2 포함) + 마무리 타이틀(outro) + 밴드 풀쿼트(band-title) — 색 <b> 전수 */
-    const _emTargets = [
-      ...scroller.querySelectorAll('[class*="__title"]'),
-      scroller.querySelector(".mh-s7__outro"),
-      scroller.querySelector(".mh-s1__band-title"),
-    ].filter(Boolean);
-    _emTargets.forEach(emphUnderline);
+    /* 섹션 타이틀(__title, mh1 의 --2 포함)에만 적용 — 색 <b> 전수.
+       (outro '정보 구조를 정리' / band-title 'learning flow' 는 사용자 요청으로 제외 = 평범한 색 글자) */
+    scroller.querySelectorAll('[class*="__title"]').forEach(emphUnderline);
 
     /* ── 이미지 로드 후 위치 재계산(레이아웃 점프 보정) ── */
     scroller.querySelectorAll(".process__making--mathhub img").forEach((img) => {
