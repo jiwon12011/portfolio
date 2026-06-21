@@ -84,19 +84,24 @@
     };
 
     /* 동전 낙하 — GOAL 박스 위로 쏟아져 "절약이 쌓이는" 순간. 스티키 프레임(.s3-goal)에 부착 */
+    let coinsActive = false;   // scrub 왕복 시 .call() 반복 발화로 동전 중복 생성 방지
     const dropGoalCoins = () => {
+      if (coinsActive) return;
       const box = scroller.querySelector("#sec3 .s3-goalbox");
       if (!s3goalEl || !box) return;
+      coinsActive = true;
       const land = box.offsetTop + box.offsetHeight * 0.35;
+      let remaining = 12;
       for (let i = 0; i < 12; i++) {
         const c = document.createElement("div");
         c.className = "jg-coin"; c.textContent = "₩";
+        c.setAttribute("aria-hidden", "true");   // 장식 — AT가 "₩" 반복해서 읽지 않게
         c.style.left = gsap.utils.random(34, 66) + "%";
         s3goalEl.appendChild(c);
         gsap.fromTo(c, { y: -40, opacity: 1, rotation: 0 },
           { y: land, rotation: gsap.utils.random(300, 680), opacity: 0,
             duration: gsap.utils.random(1.2, 1.9), ease: "power1.in", delay: i * 0.07,
-            onComplete: () => c.remove() });
+            onComplete: () => { c.remove(); if (--remaining === 0) coinsActive = false; } });
       }
     };
 
