@@ -490,18 +490,24 @@
         const keyTopTweens = [];
 
         const onWheelBlock = (e) => { e.preventDefault(); };
+        /* v10: 달칵 동안 스크롤 위치 하드핀 — preventDefault 를 빠져나간 입력(키보드·스크롤바·모멘텀)도 되돌림 */
+        let scrollLockY = 0;
+        const onScrollLock = () => { if (scroller.scrollTop !== scrollLockY) scroller.scrollTop = scrollLockY; };
         /* M1: 가드 플래그로 중복 add/remove 방지 — passive:false 리스너는 한 번만 연결 */
         const addScrollBlock = () => {
           if (scrollBlockActive) return;
           scrollBlockActive = true;
+          scrollLockY = scroller.scrollTop;          /* 달칵 발동 지점에 고정 */
           scroller.addEventListener("wheel",     onWheelBlock, { passive: false });
           scroller.addEventListener("touchmove", onWheelBlock, { passive: false });
+          scroller.addEventListener("scroll",    onScrollLock, { passive: true });
         };
         const removeScrollBlock = () => {
           if (!scrollBlockActive) return;
           scrollBlockActive = false;
           scroller.removeEventListener("wheel",     onWheelBlock);
           scroller.removeEventListener("touchmove", onWheelBlock);
+          scroller.removeEventListener("scroll",    onScrollLock);
         };
 
         /* ── keyTL: scrub으로 낙하 전체 제어 ── */
@@ -551,15 +557,15 @@
                   .to(keyTop, { y: finalY + 13, rotate: -8, scale: 0.96, duration: 0.18, ease: "power2.in", overwrite: "auto" })
                   /* 2단계: 탄성 복귀 — v8: back.out(3)→back.out(1.5) 묵직하게, 0.35→0.48s 느긋한 안착 */
                   .to(keyTop, { y: finalY, rotate: 0, scale: 1.0, duration: 0.48, ease: "back.out(1.5)" })
-                  /* 임팩트+반동(~0.66s) 완료 즉시 리스너 제거 */
-                  .call(() => { removeScrollBlock(); })
                   /* 3단계: settle — v8: 떨림 진폭·속도 완화(3°/0.1s → 1.5°/느리게)로 허겁지겁 제거 */
                   .to(keyTop, { rotate: 1.5, duration: 0.18, ease: "sine.inOut" })
                   .to(keyTop, { rotate: 0, duration: 0.24, ease: "sine.inOut" })
                   /* 4단계: top 페이드아웃 + lock 페이드인 */
                   .to(keyTop,  { opacity: 0, duration: 0.18, ease: "power1.in"  }, "+=0.08")
                   .to(keyLock, { opacity: 1, duration: 0.18, ease: "power1.out" }, "<")
-                  /* 5단계: 잠금 후 살짝 늦게, 천천히 하단 배경 사진 위→아래로 촤르르 펼침 */
+                  /* v10: 달칵+잠금 완료까지 스크롤 핀 유지 후 해제 (사용자: 달칵 동안 밑으로 못 내려가게) */
+                  .call(() => { removeScrollBlock(); })
+                  /* 5단계: 잠금 후 살짝 늦게, 천천히 하단 배경 사진 위→아래로 촤르르 펼침 (핀 해제 후 진행) */
                   .to(photobg ? photobg : {}, { clipPath: "inset(0 0 0% 0)", duration: 1.5, ease: "power2.out" }, "+=0.2");
               }
             },
