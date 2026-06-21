@@ -73,19 +73,39 @@
     gsap.from(".s3-pcard",   { opacity: 0, y: 42, stagger: .16, duration: .85, ease: "power3.out", scrollTrigger: ST(".s3-pcards", "top 82%") });
 
     /* ── SECTION 4 ── */
-    /* 스크롤 핀(A형) — 콘텐츠 전체(헤딩+5스텝+루프 ≈590px<655)가 한 화면에 들어와
-       #sec4 sticky top:0 으로 고정하고, 고정된 프레임에서 순차 조립:
-         0~     헤딩(eyebrow/title/rule/sub) 등장
-         0.22~  5스텝 좌→우 순차 등장(선순환 흐름)
-         0.84~  루프 화살표 등장(원이 닫힘) */
+    /* 스크롤 핀(A형) — 반응형 프레이밍.
+       헤딩은 진입 단계에서 rise(고정 전), 고정 후 프레임에서 5스텝 좌→우 + 루프 조립.
+       sticky top 은 뷰포트에 맞춰 JS 로 계산(종횡비에 따라 콘텐츠 높이 vs 뷰포트가 달라짐):
+         · 전체(헤딩~루프)가 뷰포트에 들어오면 → 전체를 세로 중앙
+         · 안 들어오면 → flow+루프만 중앙(헤딩은 진입 시 이미 노출됨) */
+    const sec4El = scroller.querySelector("#sec4");
+    const setSec4Top = () => {
+      if (!sec4El) return;
+      const vp = scroller.clientHeight; if (!vp) return;
+      const base = sec4El.getBoundingClientRect().top;
+      const relT = (sel) => { const e = sec4El.querySelector(sel); return e ? e.getBoundingClientRect().top - base : 0; };
+      const relB = (sel) => { const e = sec4El.querySelector(sel); return e ? e.getBoundingClientRect().bottom - base : 0; };
+      const cTop = relT(".mk-eyebrow"), cBot = relB(".s4-loop");
+      const fTop = relT(".s4-flow"), fBot = relB(".s4-loop");
+      const top = (cBot - cTop) <= vp
+        ? (vp - (cBot - cTop)) / 2 - cTop      // 전체가 들어옴 → 전체 중앙
+        : (vp - (fBot - fTop)) / 2 - fTop;     // 안 들어옴 → flow+루프 중앙
+      sec4El.style.top = Math.round(top) + "px";
+    };
+
+    /* 헤딩 — 진입 단계에서 rise(고정 후 잘릴 수 있으므로 진입 시 1회 노출) */
+    gsap.from("#sec4 > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec4", "top 84%") });
+
     const pinTl_s4 = gsap.timeline({
       defaults: { ease: "none" },
-      scrollTrigger: { trigger: "#sec4-pin", scroller, start: "top top", end: "bottom bottom", scrub: true },
+      scrollTrigger: { trigger: "#sec4-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec4Top },
     });
     pinTl_s4
-      .from("#sec4 > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: 0.035, duration: 0.1 }, 0.0)
-      .from(".s4-step", { opacity: 0, y: 32, stagger: 0.1, duration: 0.13 }, 0.22)
-      .from(".s4-loop", { opacity: 0, duration: 0.12 }, 0.84);
+      .from(".s4-step", { opacity: 0, y: 32, stagger: 0.12, duration: 0.14 }, 0.15)
+      .from(".s4-loop", { opacity: 0, duration: 0.12 }, 0.85);
+
+    setSec4Top();
+    window.addEventListener("resize", setSec4Top);
 
     /* ── SECTION 5 ── */
     gsap.from("#sec5 .s5-intro .mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec5 .s5-intro", "top 84%") });

@@ -3088,11 +3088,17 @@ html.process-open { overflow: hidden; }
 }
 
 /* ── 자린고비(#process) 스크롤 핀 ──
-   .mk-pin: 핀 래퍼 공통(container-type → 자식 섹션 top 의 cqw 반응형).
+   process__making 공통이 overflow:hidden 이어서 sticky 차단됨 → #process(자린고비) 한정 해제.
+   (바깥 라운드/클립은 .process__panel(overflow:hidden)이 담당하므로 안전) */
+#process .process__making { overflow: visible; }
+
+/* .mk-pin: 핀 래퍼 공통(container-type → 자식 섹션 top 의 cqw 반응형).
    높이(scrub 스크롤 길이)는 섹션별 개별 지정. */
 .mk-pin { container-type: inline-size; }
 #sec4-pin { height: 260svh; }
-/* #sec4: 콘텐츠 전체가 한 화면에 들어와 top:0 으로 고정(헤딩+5스텝+루프 동시 프레이밍) */
+/* #sec4: sticky 고정. top 값은 making.js(setSec4Top)가 뷰포트에 맞춰 동적 계산
+   (종횡비에 따라 콘텐츠가 한 화면에 들어오면 전체 중앙, 아니면 flow+루프 중앙).
+   아래 top:0 은 JS 미동작(GSAP 미로드) 시 폴백. */
 #sec4 { position: sticky; top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
