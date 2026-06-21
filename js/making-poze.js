@@ -372,19 +372,6 @@
     }
 
     /* ================================================================
-       디스플레이 타이틀 룰 라인 드로우 (에디토리얼 액센트, Dusty Rose)
-       background-size 0%→100% 로 타이틀 아래 가는 선이 왼→오 그어짐. once.
-    ================================================================ */
-    ["#pz-s4 .pz-logo__title", "#pz-s6 .pz-rebuilt__title", "#pz-s7 .pz-color__title"].forEach((sel) => {
-      const t = scroller.querySelector(sel);
-      if (!t) return;
-      gsap.fromTo(t,
-        { backgroundSize: "0% 2px" },
-        { backgroundSize: "100% 2px", duration: 0.7, ease: "power2.out", scrollTrigger: ST(t, "top 84%") }
-      );
-    });
-
-    /* ================================================================
        SECTION 8 — #pz-s8 (POZE 웹사이트 목업)
        · 상단 목업/좌측 긴 컬럼 = 일반 페이드인
        · 오른쪽 짧은 사진(.pz-shop__sticky) = 좌측 긴 컬럼이 스크롤되는

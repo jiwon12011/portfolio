@@ -5488,13 +5488,6 @@ html.process-open { overflow: hidden; }
   .pz-pin { height: auto; }
   #pz-s7 { position: static; }
 }
-
-/* 디스플레이 타이틀 룰 라인 드로우 액센트 (Dusty Rose #8b695f, 에디토리얼) — background-size 로 그림 */
-.pz-logo__title, .pz-rebuilt__title, .pz-color__title {
-  background-image: linear-gradient(#8b695f, #8b695f);
-  background-repeat: no-repeat; background-position: left bottom;
-  background-size: 0% 2px; padding-bottom: 0.85cqw;
-}
 .pz-sec .pz-band { display: block; width: 100%; height: auto; }
 .pz-serif {
   position: absolute; left: 50%; transform: translateX(-50%);
