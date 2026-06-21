@@ -87,9 +87,10 @@
       const colorEl = b.querySelector(".ym-emph__color");
       baseEl.style.color = inkColor;
       colorEl.style.color = emphColor;
-      gsap.timeline({ scrollTrigger: ST(b, "top 86%") })
-        .fromTo(colorEl, { yPercent: 110 }, { yPercent: 0, duration: 0.62, ease: "back.out(1.6)" }, 0)
-        .to(baseEl, { yPercent: -110, duration: 0.62, ease: "back.out(1.6)" }, 0);
+      /* 천천히 — 색 올라오는 게 또렷이 보이게. 약간 늦게 시작(타이틀이 화면에 들어온 뒤) + 짧은 delay */
+      gsap.timeline({ scrollTrigger: ST(b, "top 80%"), delay: 0.15 })
+        .fromTo(colorEl, { yPercent: 110 }, { yPercent: 0, duration: 1.25, ease: "back.out(1.3)" }, 0)
+        .to(baseEl, { yPercent: -110, duration: 1.25, ease: "back.out(1.3)" }, 0);
     });
 
     /* ================================================================
