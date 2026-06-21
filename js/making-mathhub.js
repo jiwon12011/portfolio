@@ -119,28 +119,60 @@
     });
 
     /* ================================================================
-       SECTION 2 · IA REBUILD (#mh2)
-       [기존] 헤더·quote·panel·pill·cat-card 유지
-       [추가] after 패널 파란 틴트 fromTo(backgroundColor)
+       SECTION 2 · IA REBUILD (#mh2) — 스크롤 핀 (A형)
+       섹션을 화면 중앙 sticky 고정(setMh2Top, ≈1.02× 라 거의 딱) + #mh2-pin 범위 scrub:
+       헤더→인용→BEFORE→AFTER(파란틴트)→4 카테고리 카드 흩어져→정렬 조립(시그니처: 카오스→구조).
+       기존 once 트리거 전부 교체. fromTo+명시값 → refresh 안전. reduced-motion: init early-return + CSS 폴백.
     ================================================================ */
-    header("#mh2");
-    fade("#mh2 .mh-s2__quote", "top 80%", { duration: 1.1 });   /* static 래퍼 → opacity만 */
-    up("#mh2 .mh-s2__panel", "top 84%", { y: 30 });
-    up("#mh2 .mh-s2__pill, #mh2 .mh-s2__panel-title, #mh2 .mh-s2__panel-desc, #mh2 .mh-s2__before-shot",
-       "top 82%", { y: 22 });
-    group("#mh2 .mh-s2__cat-card", "top 84%", { y: 26, stagger: 0.1, ease: "back.out(1.3)" });
+    const mh2Pin = scroller.querySelector("#mh2-pin");
+    const mh2El  = scroller.querySelector("#mh2");
+    if (mh2Pin && mh2El) {
+      const setMh2Top = () => {
+        mh2El.style.top = Math.round((scroller.clientHeight - mh2El.offsetHeight) / 2) + "px";
+      };
+      const q  = (s) => scroller.querySelector(s);
+      const qa = (s) => Array.from(scroller.querySelectorAll(s));
+      const mh2No = q("#mh2 .mh-s2__no"), mh2Cat = q("#mh2 .mh-s2__cat");
+      const mh2Title = q("#mh2 .mh-s2__title"), mh2Lead = q("#mh2 .mh-s2__lead");
+      const mh2Quote = q("#mh2 .mh-s2__quote");
+      const beforePanel = q("#mh2 .mh-s2__panel--before");
+      const afterPanel  = q("#mh2 .mh-s2__panel--after");
+      const beforeBits = qa("#mh2 .mh-s2__panel--before .mh-s2__pill, #mh2 .mh-s2__panel--before .mh-s2__panel-title, #mh2 .mh-s2__panel--before .mh-s2__panel-desc, #mh2 .mh-s2__before-shot");
+      const afterBits  = qa("#mh2 .mh-s2__panel--after .mh-s2__pill, #mh2 .mh-s2__panel--after .mh-s2__panel-title, #mh2 .mh-s2__panel--after .mh-s2__panel-desc");
+      const cards = qa("#mh2 .mh-s2__cat-card");
+      /* 카드별 흩어진 출발점(px) — 좌우 바깥 + 아래에서 살짝 회전하며 모여듦 */
+      const CARD_FROM = [
+        { x: -54, y: 30, rotate: -9 },
+        { x: -18, y: 52, rotate:  6 },
+        { x:  18, y: 52, rotate: -6 },
+        { x:  54, y: 30, rotate:  9 },
+      ];
 
-    /* After 패널 파란 틴트 (Before 대비 강화) */
-    const afterPanel2 = scroller.querySelector("#mh2 .mh-s2__panel--after");
-    if (afterPanel2) {
-      gsap.fromTo(afterPanel2,
-        { backgroundColor: "rgba(49,110,250,0)" },
-        {
-          backgroundColor: "rgba(49,110,250,0.05)",
-          duration: 1.1, ease: "power1.out",
-          scrollTrigger: ST(afterPanel2, "top 78%"),
-        }
-      );
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: mh2Pin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, onRefreshInit: setMh2Top,
+        },
+      });
+      if (mh2No && mh2Cat) tl.fromTo([mh2No, mh2Cat], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }, 0);
+      if (mh2Title) tl.fromTo(mh2Title, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.5, ease: "power4.out" }, 0.06);
+      if (mh2Lead)  tl.fromTo(mh2Lead,  { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.16);
+      if (mh2Quote) tl.fromTo(mh2Quote, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.26);
+      if (beforePanel) tl.fromTo(beforePanel, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.34);
+      if (beforeBits.length) tl.fromTo(beforeBits, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.05 }, 0.44);
+      if (afterPanel) {
+        tl.fromTo(afterPanel, { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.54);
+        tl.fromTo(afterPanel, { backgroundColor: "rgba(49,110,250,0)" }, { backgroundColor: "rgba(49,110,250,0.05)", duration: 0.5, ease: "power1.out" }, 0.6);
+      }
+      if (afterBits.length) tl.fromTo(afterBits, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.05 }, 0.66);
+      /* 시그니처: 4 카테고리 카드 흩어져 → 그리드 정렬 (카오스→구조) */
+      if (cards.length) tl.fromTo(cards,
+        { opacity: 0, scale: 0.78, x: (i) => CARD_FROM[i].x, y: (i) => CARD_FROM[i].y, rotate: (i) => CARD_FROM[i].rotate },
+        { opacity: 1, scale: 1, x: 0, y: 0, rotate: 0, duration: 0.6, ease: "back.out(1.5)", stagger: 0.12 },
+        0.78);
+      setMh2Top();
+      window.addEventListener("resize", setMh2Top);
     }
 
     /* ================================================================

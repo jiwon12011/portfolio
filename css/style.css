@@ -2015,6 +2015,18 @@ html.process-open { overflow: hidden; }
 
 /* ── MathHub 제작 과정 본문 (한 섹션씩 추가) — 소프트블루 ── */
 .process__making--mathhub { background: #eaf2fd; box-shadow: 0 24px 60px -32px rgba(110,140,200,0.42); }
+
+/* ── MathHub(#process-mathhub) 스크롤 핀 ──
+   process__making 공통 overflow:hidden 이 sticky 차단 → 한정 해제(바깥 클립은 .process__panel). */
+#process-mathhub .process__making--mathhub { overflow: visible; }
+.mh-pin { container-type: inline-size; }
+/* mh2 IA REBUILD: 섹션이 뷰포트에 거의 들어옴(≈1.02×) → A형 핀, 4 카테고리 카드 흩어져→정렬 조립 */
+#mh2-pin { height: 240svh; }
+#mh2 { position: sticky; top: 0; }  /* top 은 making-mathhub.js setMh2Top 가 중앙정렬로 덮음 */
+@media (prefers-reduced-motion: reduce) {
+  .mh-pin { height: auto; }
+  #mh2 { position: static; }
+}
 .mh-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf2fd; }
 
 /* SECTION · 히어로 (디자인 1920×1081, 16:9) — 키 비주얼 풀커버 */
