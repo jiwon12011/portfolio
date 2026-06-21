@@ -46,6 +46,22 @@
     /* pl6 마일스톤 컨테이너 — xPercent 선점만, 자체 애니 없음 */
     scroller.querySelectorAll('#pl6 .pl-tl-ms').forEach(el => gsap.set(el, { xPercent: -50, x: 0 }));
 
+    /* ── 핑크 글로우 헬퍼(타이틀 em 점등) — 전역/필름스트립 양쪽에서 사용 ──
+       color 를 먼저 읽어 lit/dim/glow 산출 후 dim 선점, play() 로 점등 재생 */
+    const _plRgb = (c) => (c.match(/\d+/g) || [230, 120, 137]).slice(0, 3).map(Number);
+    const makeGlow = (el) => {
+      const [r, g, b] = _plRgb(getComputedStyle(el).color);
+      const lit = `rgb(${r}, ${g}, ${b})`;
+      const dim = `rgb(${Math.round(r * 0.42)}, ${Math.round(g * 0.42)}, ${Math.round(b * 0.42)})`;
+      const glow = (a) => `rgba(${r}, ${g}, ${b}, ${a})`;
+      gsap.set(el, { color: dim });
+      return () => gsap.timeline()
+        .to(el, { color: lit, duration: 0.6, ease: 'power2.out' }, 0)
+        .fromTo(el, { textShadow: '0 0 0px ' + glow(0) },
+                    { textShadow: '0 0 8px ' + glow(0.4), duration: 0.45, ease: 'power2.out' }, 0.08)
+        .to(el, { textShadow: '0 0 3px ' + glow(0.12), duration: 0.7, ease: 'power2.out' }, 0.5);
+    };
+
 
     /* ================================================================
        PL1 · PROJECT OVERVIEW
@@ -468,7 +484,7 @@
         const frag = document.createDocumentFragment();
         [...textNode.textContent].forEach(ch => {
           if (ch === ' ') {            /* 공백은 일반 텍스트로 유지(inline-block이면 폭 붕괴) */
-            frag.appendChild(document.createTextNode(' '));
+            frag.appendChild(document.createTextNode(' '));
             return;
           }
           const s = document.createElement('span');
@@ -529,20 +545,11 @@
     /* ================================================================
        타이틀 색강조(em #e67889) — 핑크 글로우 (소프트, 로맨스/음악 무드)
        어두운 톤에서 #e67889 로 부드럽게 점등 + 은은한 글로우 플레어→정착.
-       대상: 섹션 타이틀 내 em 8곳. once(top 85%). color 는 getComputedStyle 로 읽어 자동 산출.
+       once(top 85%). color 는 getComputedStyle 로 읽어 자동 산출.
     ================================================================ */
-    const _plRgb = (c) => (c.match(/\d+/g) || [230, 120, 137]).slice(0, 3).map(Number);
     [...scroller.querySelectorAll('[class*="__title"] em')].forEach((el) => {
-      const [r, g, b] = _plRgb(getComputedStyle(el).color);
-      const lit = `rgb(${r}, ${g}, ${b})`;
-      const dim = `rgb(${Math.round(r * 0.42)}, ${Math.round(g * 0.42)}, ${Math.round(b * 0.42)})`;
-      const glow = (a) => `rgba(${r}, ${g}, ${b}, ${a})`;
-      gsap.set(el, { color: dim });
-      gsap.timeline({ scrollTrigger: ST(el, 'top 85%') })
-        .to(el, { color: lit, duration: 0.6, ease: 'power2.out' }, 0)
-        .fromTo(el, { textShadow: '0 0 0px ' + glow(0) },
-                    { textShadow: '0 0 8px ' + glow(0.4), duration: 0.45, ease: 'power2.out' }, 0.08)
-        .to(el, { textShadow: '0 0 3px ' + glow(0.12), duration: 0.7, ease: 'power2.out' }, 0.5);
+      const play = makeGlow(el);
+      ScrollTrigger.create({ trigger: el, scroller, start: 'top 85%', once: true, onEnter: play });
     });
 
     /* ── 이미지 로드 후 트리거 위치 재계산 (debounce로 묶어 jank 방지) ── */
