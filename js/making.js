@@ -115,9 +115,11 @@
     });
     pinTl_s3
       .from("#sec3 .s3-sol", { opacity: 0, y: 34, stagger: 0.1, duration: 0.13 }, 0.16)
-      .from("#sec3 .s3-link i", { opacity: 0, scale: 0.3, transformOrigin: "50% 50%", stagger: 0.06, duration: 0.06 }, 0.52)
-      .fromTo("#sec3 .s3-goalbox", { opacity: 0, scale: 0.94, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.12 }, 0.66)
-      .call(dropGoalCoins, null, 0.72);
+      /* 연결선(::before/::after 포함 컨테이너)도 솔루션 다 뜬 뒤 등장 → 도트 순차 팝 */
+      .fromTo("#sec3 .s3-link", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.5)
+      .from("#sec3 .s3-link i", { scale: 0.3, transformOrigin: "50% 50%", stagger: 0.06, duration: 0.06 }, 0.54)
+      .fromTo("#sec3 .s3-goalbox", { opacity: 0, scale: 0.94, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.12 }, 0.68)
+      .call(dropGoalCoins, null, 0.74);
 
     setSec3Top();
     window.addEventListener("resize", setSec3Top);

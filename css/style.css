@@ -5717,7 +5717,7 @@ html.process-open { overflow: hidden; }
 .s3-link { position: relative; height: 46px; margin: 4px auto 0; max-width: 70%; }
 .s3-link::before { content: ""; position: absolute; left: 16.6%; right: 16.6%; top: 14px; height: 2px; background: #cdd6c6; }
 .s3-link::after { content: ""; position: absolute; left: 50%; top: 14px; bottom: 0; width: 2px; background: #cdd6c6; transform: translateX(-50%); }
-.s3-link i { position: absolute; top: 9px; width: 9px; height: 9px; border-radius: 50%; background: var(--mk-green); }
+.s3-link i { position: absolute; top: 9px; width: 9px; height: 9px; border-radius: 50%; background: var(--mk-green); z-index: 1; }
 .s3-link i:nth-child(1) { left: calc(16.6% - 4px); }
 .s3-link i:nth-child(2) { left: calc(50% - 4px); }
 .s3-link i:nth-child(3) { right: calc(16.6% - 4px); }
