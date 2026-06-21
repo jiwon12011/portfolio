@@ -16,9 +16,9 @@
              + 팔레트 chip scale 팝 stagger [추가]
              + 캐릭터 squash&stretch elastic [교체]
    · ym-band : clipPath inset(0 0 100% 0)→0 와이프 [추가]
-   · ym3     : 메뉴 카드별 TL (아이콘→라벨→캐릭터) [교체]
-   · ym4     : pill stagger scale back.out 팝 [추가]
-             + .ym-r4__hero scrub 패럴랙스 yPercent [추가]
+   · ym1     : 스크롤 핀(A형) — 카드 중앙→사방 조립 [핀]
+   · ym3     : 스크롤 핀(A형) — 설계포인트·그룹 → 메뉴카드6 순차 reveal [핀]
+   · ym4     : 필름스트립 핀 — 카드3(HERO/MOTION/CURSOR) 통과 reveal(기존 hero 패럴랙스 대체) [핀]
    · ym5     : q 카드 좌/우 split reveal + 내부 solve/result 분리 TL [교체]
    · ym6     : .ym-r6__pink/.ym-r6__purple clipPath 와이프 [추가]
              + 감정 입자 플로트 (once, 무한루프 없음) [추가]
@@ -300,10 +300,9 @@
     window.addEventListener("resize", setYm3Top);
 
     /* ================================================================
-       SECTION 4 · INTERACTION DESIGN (#ym4)
-       기존: 카드 stagger 유지
-       [추가] pill stagger scale back.out 팝
-       [추가] .ym-r4__hero scrub 패럴랙스 yPercent
+       SECTION 4 · INTERACTION DESIGN (#ym4) — 필름스트립 핀
+       카드 3장이 세로 분산 → .ym-stage 프레임 안에서 #ym4 translateY, 카드 통과 reveal.
+       (기존 카드 stagger·pill once·hero 패럴랙스는 핀 타임라인으로 대체)
     ================================================================ */
     /* 헤더 — 진입 단계 페이드 */
     header("#ym4");
