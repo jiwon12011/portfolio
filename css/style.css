@@ -4093,9 +4093,12 @@ html.process-open { overflow: hidden; }
 /* pd6 TROUBLE & SOLUTION: 뷰포트에 들어옴(≈0.91×) → A형 핀, 3카드 순차 조립 */
 #pd6-pin { height: 240svh; }
 #pd6 { position: sticky; top: 0; }  /* top 은 making-pledis.js setPd6Top 가 중앙정렬로 덮음 */
+/* pd-hero: 뷰포트에 들어옴(≈0.94×) → A형 핀, Pleiades 별 어셈블+로고/타이틀 리빌 */
+#pd-hero-pin { height: 260svh; }
+#pd-hero { position: sticky; top: 0; }  /* top 은 setHeroTop 가 중앙정렬로 덮음 */
 @media (prefers-reduced-motion: reduce) {
   .pd-pin { height: auto; }
-  #pd6 { position: static; }
+  #pd6, #pd-hero { position: static; }
 }
 
 .pd-sec { position: relative; container-type: inline-size; overflow: hidden; background: #0f1320; }

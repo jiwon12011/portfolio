@@ -58,71 +58,45 @@
     };
 
     /* ================================================================
-       SECTION · 히어로 (#pd-hero) — 시네마틱 진입
+       SECTION · 히어로 (#pd-hero) — 스크롤 핀 (A형)
+       섹션이 뷰포트에 들어옴(≈0.94×) → setHeroTop 중앙 sticky 고정, #pd-hero-pin scrub:
+       bg 줌-세틀 → 로고 → 타이틀/메타 clipPath 리빌 → Pleiades 별 12개 어셈블.
+       (기존 once + bg 패럴랙스 교체 — 핀과 패럴랙스 공존 불가) fromTo+명시값(refresh 안전).
+       히어로는 인트로(pd1) 아래라 스크롤 진입 시 조립 — 열자마자 빈 화면 아님.
     ================================================================ */
-    const heroBg = scroller.querySelector("#pd-hero .pd-hero__img");
-    if (heroBg) {
-      /* 기존: bg 줌-세틀 (once) */
-      gsap.from(heroBg, {
-        opacity: 0.15, scale: 1.14, transformOrigin: "50% 50%",
-        duration: 1.9, ease: "power3.out",
-        scrollTrigger: ST("#pd-hero", "top 92%"),
-      });
-      /* [추가] bg scrub 패럴랙스 — once 진입과 별개 트리거, y만 건드림 */
-      gsap.to(heroBg, {
-        yPercent: 22,
-        ease: "none",
+    const heroPin = scroller.querySelector("#pd-hero-pin");
+    const heroEl  = scroller.querySelector("#pd-hero");
+    if (heroPin && heroEl) {
+      const setHeroTop = () => {
+        heroEl.style.top = Math.round((scroller.clientHeight - heroEl.offsetHeight) / 2) + "px";
+      };
+      const bg    = scroller.querySelector("#pd-hero .pd-hero__img");
+      const logo  = scroller.querySelector("#pd-hero .pd-hero__logo");
+      const title = scroller.querySelector("#pd-hero .pd-hero__title");
+      const meta  = scroller.querySelector("#pd-hero .pd-hero__meta");
+      const dots  = [...scroller.querySelectorAll("#pd-hero .pd-hero__star")];
+      const rnd   = gsap.utils.random;
+
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: scroller.querySelector("#pd-hero"),
-          scroller,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1.4,
-          invalidateOnRefresh: true,
+          trigger: heroPin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, onRefreshInit: setHeroTop,
         },
       });
-    }
-
-    const heroLogo = scroller.querySelector("#pd-hero .pd-hero__logo");
-    if (heroLogo) gsap.from(heroLogo, {
-      opacity: 0, y: 44, scale: 0.86, transformOrigin: "50% 50%",
-      duration: 1.15, delay: 0.2, ease: "expo.out",
-      scrollTrigger: ST("#pd-hero", "top 90%"),
-    });
-
-    /* [교체] 타이틀/메타 y 페이드 → clipPath 마스크 리빌 */
-    [".pd-hero__title", ".pd-hero__meta"].forEach((sel, i) => {
-      const el = scroller.querySelector(`#pd-hero ${sel}`);
-      if (!el) return;
-      gsap.from(el, {
-        clipPath: "inset(0 0 100% 0)",
-        opacity: 0,
-        duration: 0.82, ease: "expo.out",
-        delay: 0.44 + i * 0.14,
-        scrollTrigger: ST("#pd-hero", "top 90%"),
-        clearProps: "clip-path,opacity",
+      if (bg)    tl.fromTo(bg,    { opacity: 0.2, scale: 1.14, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.55, ease: "power3.out" }, 0);
+      if (logo)  tl.fromTo(logo,  { opacity: 0, y: 44, scale: 0.86, transformOrigin: "50% 50%" }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 0.22);
+      if (title) tl.fromTo(title, { clipPath: "inset(0 0 100% 0)", opacity: 0 }, { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 0.45, ease: "power3.out" }, 0.38);
+      if (meta)  tl.fromTo(meta,  { clipPath: "inset(0 0 100% 0)", opacity: 0 }, { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 0.45, ease: "power3.out" }, 0.5);
+      /* Pleiades 별 12개 — 화면 밖 무작위에서 날아와 안착 */
+      dots.forEach((dot, i) => {
+        tl.fromTo(dot,
+          { x: rnd(-150, 150, 1), y: rnd(-130, -50, 1), opacity: 0, scale: rnd(0.15, 0.65, 0.01) },
+          { x: 0, y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
+          0.42 + i * 0.04);
       });
-    });
-
-    /* [추가] ⭐ 별빛 파티클 어셈블 (Pleiades 컨셉)
-       12개 star dot이 화면 밖 무작위에서 날아와 안착 — 모달 close 후 kill은 safetyNet/ScrollTrigger.getAll()에서 처리 */
-    const starsWrap = scroller.querySelector("#pd-hero .pd-hero__stars");
-    if (starsWrap) {
-      const dots = starsWrap.querySelectorAll(".pd-hero__star");
-      if (dots.length) {
-        const rnd = gsap.utils.random;
-        const starTL = gsap.timeline({ scrollTrigger: ST(starsWrap, "top 92%") });
-        dots.forEach((dot, i) => {
-          starTL.from(dot, {
-            x: rnd(-150, 150, 1),
-            y: rnd(-130, -50, 1),
-            opacity: 0,
-            scale: rnd(0.15, 0.65, 0.01),
-            duration: rnd(0.85, 1.45, 0.01),
-            ease: "back.out(1.7)",
-          }, i * 0.055);
-        });
-      }
+      setHeroTop();
+      window.addEventListener("resize", setHeroTop);
     }
 
     /* ================================================================
