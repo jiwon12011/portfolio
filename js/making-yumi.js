@@ -88,13 +88,12 @@
       const colorEl = b.querySelector(".ym-emph__color");
       baseEl.style.color = inkColor;
       colorEl.style.color = emphColor;
-      /* 느린 자동(once) + 뾰옹 — 변환은 color span 에만(b 변환 시 DOM 재정렬 이슈 회피):
-         핑크가 아래서 천천히 올라오며(yPercent, back.out 으로 살짝 튕김=뾰옹) + scale 살짝 팝 + fade in,
-         동시에 검정 base 는 fade out. overflow 없으니 튕김/팝이 안 잘림. */
-      gsap.timeline({ scrollTrigger: ST(b, "top 80%"), delay: 0.15 })
-        .fromTo(colorEl, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, 0)
-        .fromTo(colorEl, { yPercent: 60, scale: 0.85 }, { yPercent: 0, scale: 1, duration: 1.5, ease: "back.out(2.4)", transformOrigin: "50% 100%" }, 0)
-        .to(baseEl, { opacity: 0, duration: 0.45, ease: "power1.out" }, 0);
+      /* 자동(once) — 크기 변화 없이 같은 크기로 핑크가 아래서 샥 올라오며 색 바뀜(slide up).
+         변환은 color span 에만(b 변환 시 DOM 재정렬 이슈 회피). scale 없음, 부드러운 power3(오버슛 X). */
+      gsap.timeline({ scrollTrigger: ST(b, "top 80%"), delay: 0.1 })
+        .fromTo(colorEl, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 0)
+        .fromTo(colorEl, { yPercent: 100 }, { yPercent: 0, duration: 0.9, ease: "power3.out" }, 0)
+        .to(baseEl, { opacity: 0, duration: 0.4, ease: "power1.out" }, 0);
     });
 
     /* ================================================================
