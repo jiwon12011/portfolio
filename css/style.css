@@ -3087,6 +3087,19 @@ html.process-open { overflow: hidden; }
   #gw5 { transform: none; will-change: auto; }
 }
 
+/* ── 자린고비(#process) 스크롤 핀 ──
+   .mk-pin: 핀 래퍼 공통(container-type → 자식 섹션 top 의 cqw 반응형).
+   높이(scrub 스크롤 길이)는 섹션별 개별 지정. */
+.mk-pin { container-type: inline-size; }
+#sec4-pin { height: 260svh; }
+/* #sec4: 콘텐츠 전체가 한 화면에 들어와 top:0 으로 고정(헤딩+5스텝+루프 동시 프레이밍) */
+#sec4 { position: sticky; top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-pin { height: auto; }
+  #sec4 { position: static; }
+}
+
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
 /* 분위기 영상 배너 (양옆 여백 인셋 + 둥근 모서리) */
 .gw-band { background: #1a1410; display: flex; align-items: center; justify-content: center; }

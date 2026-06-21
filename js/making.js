@@ -73,9 +73,19 @@
     gsap.from(".s3-pcard",   { opacity: 0, y: 42, stagger: .16, duration: .85, ease: "power3.out", scrollTrigger: ST(".s3-pcards", "top 82%") });
 
     /* ── SECTION 4 ── */
-    gsap.from("#sec4 > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec4", "top 84%") });
-    gsap.from(".s4-step", { opacity: 0, y: 32, stagger: .1, duration: .75, ease: "power3.out", scrollTrigger: ST(".s4-flow", "top 84%") });
-    gsap.from(".s4-loop", { opacity: 0, duration: .7, ease: "power2.out", scrollTrigger: ST(".s4-loop", "top 94%") });
+    /* 스크롤 핀(A형) — 콘텐츠 전체(헤딩+5스텝+루프 ≈590px<655)가 한 화면에 들어와
+       #sec4 sticky top:0 으로 고정하고, 고정된 프레임에서 순차 조립:
+         0~     헤딩(eyebrow/title/rule/sub) 등장
+         0.22~  5스텝 좌→우 순차 등장(선순환 흐름)
+         0.84~  루프 화살표 등장(원이 닫힘) */
+    const pinTl_s4 = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#sec4-pin", scroller, start: "top top", end: "bottom bottom", scrub: true },
+    });
+    pinTl_s4
+      .from("#sec4 > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: 0.035, duration: 0.1 }, 0.0)
+      .from(".s4-step", { opacity: 0, y: 32, stagger: 0.1, duration: 0.13 }, 0.22)
+      .from(".s4-loop", { opacity: 0, duration: 0.12 }, 0.84);
 
     /* ── SECTION 5 ── */
     gsap.from("#sec5 .s5-intro .mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec5 .s5-intro", "top 84%") });
