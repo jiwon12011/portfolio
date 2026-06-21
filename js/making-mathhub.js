@@ -378,14 +378,13 @@
        · sr-only 로 a11y 텍스트 보존. header() 타이틀 페이드업과 공존.
     ================================================================ */
     const _esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const emphUnderline = (titleSel) => {
-      const title = scroller.querySelector(titleSel);
-      const b = title && title.querySelector("b");
-      if (!b) return;
+    const emphUnderline = (titleEl) => {
+      const b = titleEl && titleEl.querySelector("b");
+      if (!b || b.classList.contains("mh-emph")) return;   /* <b> 없거나 이미 처리됨 → skip */
       const text = b.textContent || "";
       if (!text.trim()) return;
       const emphColor = getComputedStyle(b).color;      /* 강조색(파랑) */
-      const inkColor  = getComputedStyle(title).color;   /* 본문 잉크색(다크) */
+      const inkColor  = getComputedStyle(titleEl).color; /* 본문 잉크색 */
       b.classList.add("mh-emph");
       b.innerHTML = '<span class="mh-emph__sr">' + _esc(text) + "</span>"
         + '<span class="mh-emph__base" aria-hidden="true">' + _esc(text) + "</span>"
@@ -402,8 +401,13 @@
         .to(ul,    { scaleX: 1, duration: 0.6, ease: "power2.out" }, 0)
         .to(color, { clipPath: "inset(0 0% 0 0)", duration: 0.62, ease: "power2.out" }, 0.04);
     };
-    ["#mh1 .mh-s1__title", "#mh2 .mh-s2__title", "#mh3 .mh-s3__title", "#mh4 .mh-s4__title",
-     "#mh5 .mh-s5__title", "#mh6 .mh-s6__title", "#mh7 .mh-s7__title"].forEach(emphUnderline);
+    /* 전 타이틀(__title, mh1 의 --2 포함) + 마무리 타이틀(outro) + 밴드 풀쿼트(band-title) — 색 <b> 전수 */
+    const _emTargets = [
+      ...scroller.querySelectorAll('[class*="__title"]'),
+      scroller.querySelector(".mh-s7__outro"),
+      scroller.querySelector(".mh-s1__band-title"),
+    ].filter(Boolean);
+    _emTargets.forEach(emphUnderline);
 
     /* ── 이미지 로드 후 위치 재계산(레이아웃 점프 보정) ── */
     scroller.querySelectorAll(".process__making--mathhub img").forEach((img) => {
