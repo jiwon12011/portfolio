@@ -73,47 +73,85 @@
     });
 
     /* ================================================================
-       SECTION 2 · GAME RESEARCH (#gw2) — 중앙 메달리온 + 원형 4
+       SECTION 2 · GAME RESEARCH (#gw2) — CSS sticky 핀 + 단일 scrub 타임라인
+       · 래퍼 #gw2-pin(height:260svh) 이 스크롤 길이를 확보
+       · #gw2 { position:sticky; top:0 } CSS 규칙이 화면 고정을 담당
+       · 스크롤 진행도(0→1)를 4단계로 배분:
+           0~0.15  label/title/desc 등장
+           0.15~0.4  메달리온 스케일 인 + 링 회전 안착
+           0.4~0.85  4 원형 이미지 빙글 돌며 조립
+           0.85~1    캡션 등장
+       · transform/opacity only — 60fps 사수
     ================================================================ */
-    rise("#gw2 .gw-r2__label", { y: 20, scrollTrigger: ST("#gw2 .gw-r2__label", "top 84%") });
-    rise("#gw2 .gw-r2__title", { y: 28, duration: 0.95, scrollTrigger: ST("#gw2 .gw-r2__title", "top 84%") });
-    rise("#gw2 .gw-r2__desc", { y: 22, delay: 0.08, scrollTrigger: ST("#gw2 .gw-r2__desc", "top 84%") });
-    /* 동심원/디스크/로고 — 중앙에서 스케일 인 (translate(-50%,-50%) 보존) */
-    gsap.from("#gw2 .gw-r2__center > *", {
-      opacity: 0, scale: 0.6, transformOrigin: "50% 50%",
-      duration: 0.9, ease: "power3.out", stagger: 0.08,
-      scrollTrigger: ST("#gw2 .gw-r2__center", "top 78%"),
+    const pinTl = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: {
+        trigger: "#gw2-pin",
+        scroller,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+      },
     });
-    /* 4 원형 이미지 — 스크롤 따라 중심축으로 회전해 들어와 섹션 중앙쯤서 제자리 안착(scrub).
-       각 원의 transform-origin을 메달리온 중심(50cqw, 52.847cqw)으로 두고 함께 회전 */
+
+    /* ── 0~0.15 : 텍스트 등장 ── */
+    pinTl
+      .from("#gw2 .gw-r2__label", { opacity: 0, y: 20, duration: 0.12 }, 0)
+      .from("#gw2 .gw-r2__title", { opacity: 0, y: 28, duration: 0.12 }, 0.03)
+      .from("#gw2 .gw-r2__desc",  { opacity: 0, y: 22, duration: 0.10 }, 0.05);
+
+    /* ── 0.15~0.4 : 중앙 메달리온 스케일 인 + 링 회전 안착 ──
+       orbit / ring--out : CSS translate(-50%,-50%) → xPercent/yPercent 선점(이중변환 방지).
+       기존 ringSettle 패턴 유지.
+       ring--mid / disc / logo : GSAP 가 현재 CSS transform 을 읽어 scale 보간. */
+    const orbitEl   = scroller.querySelector("#gw2 .gw-r2__orbit");
+    const ringOutEl = scroller.querySelector("#gw2 .gw-r2__ring--out");
+
+    [orbitEl, ringOutEl].forEach((el) => {
+      if (el) gsap.set(el, { xPercent: -50, yPercent: -50, x: 0, y: 0, transformOrigin: "50% 50%" });
+    });
+
+    /* orbit: scale + rotation 결합(단일 tween 으로 transform 충돌 방지) */
+    if (orbitEl) {
+      pinTl.fromTo(orbitEl,
+        { opacity: 0, scale: 0.6, rotation:  40 },
+        { opacity: 1, scale: 1,   rotation:   0, duration: 0.25 }, 0.15);
+    }
+    /* ring--out: 같은 패턴, 반대 방향 */
+    if (ringOutEl) {
+      pinTl.fromTo(ringOutEl,
+        { opacity: 0, scale: 0.6, rotation: -34 },
+        { opacity: 1, scale: 1,   rotation:   0, duration: 0.25 }, 0.15);
+    }
+    /* ring--mid / disc / logo — scale 인만, 0.17 에 시작해 stagger 로 순차 팝 인 */
+    const otherCenterEls = Array.from(
+      scroller.querySelectorAll("#gw2 .gw-r2__center > *")
+    ).filter((el) => el !== orbitEl && el !== ringOutEl);
+    if (otherCenterEls.length) {
+      pinTl.from(otherCenterEls,
+        { opacity: 0, scale: 0.6, transformOrigin: "50% 50%", stagger: 0.025, duration: 0.22 }, 0.17);
+    }
+
+    /* ── 0.4~0.85 : 4 원형 이미지 — 메달리온 중심축 기준 rotation -52→0 + opacity ──
+       transform-origin 값(기존 circOrigins 유지): 각 원→메달리온 중심까지의 오프셋 벡터 */
     const circOrigins = {
       "--tl": "30.764cqw 23.125cqw", "--tr": "-14.861cqw 23.125cqw",
       "--bl": "30.764cqw -7.292cqw", "--br": "-14.861cqw -7.292cqw",
     };
-    Object.entries(circOrigins).forEach(([k, origin]) => {
+    Object.entries(circOrigins).forEach(([k, origin], i) => {
       const el = scroller.querySelector("#gw2 .gw-r2__circ" + k);
       if (!el) return;
       gsap.set(el, { transformOrigin: origin });
-      gsap.fromTo(el,
+      /* 0.01 미세 stagger — 4원이 동시에 조립되되 찰나의 순차감 */
+      pinTl.fromTo(el,
         { rotation: -52, opacity: 0 },
-        { rotation: 0, opacity: 1, ease: "none",
-          scrollTrigger: { trigger: "#gw2", scroller, start: "top 64%", end: "center center", scrub: 0.6 } });
+        { rotation:   0, opacity: 1, duration: 0.43 }, 0.40 + i * 0.01);
     });
-    gsap.from("#gw2 .gw-r2__cap", {
-      opacity: 0, y: 16, duration: 0.7, ease: "power2.out", stagger: 0.08,
-      scrollTrigger: ST("#gw2 .gw-r2__center", "top 64%"),
+
+    /* ── 0.85~1 : 캡션 페이드+업 등장 ── */
+    scroller.querySelectorAll("#gw2 .gw-r2__cap").forEach((cap, i) => {
+      pinTl.from(cap, { opacity: 0, y: 16, duration: 0.12 }, 0.86 + i * 0.025);
     });
-    /* 동심원 링 — 스크롤 진입 시 살짝 회전해 들어와 중앙서 안착(scrub). 무한 회전 아님.
-       translate(-50%,-50%) 중앙정렬 → xPercent/yPercent 선점(이중변환 방지) */
-    const ringSettle = (sel, from) => {
-      const el = scroller.querySelector(sel);
-      if (!el) return;
-      gsap.set(el, { xPercent: -50, yPercent: -50, x: 0, y: 0, transformOrigin: "50% 50%" });
-      gsap.fromTo(el, { rotation: from }, { rotation: 0, ease: "none",
-        scrollTrigger: { trigger: "#gw2", scroller, start: "top 64%", end: "center center", scrub: 0.6 } });
-    };
-    ringSettle("#gw2 .gw-r2__orbit", 40);
-    ringSettle("#gw2 .gw-r2__ring--out", -34);
 
     /* ================================================================
        SECTION 3 · EXPERIMENT (#gw3) — 3 시안 목업

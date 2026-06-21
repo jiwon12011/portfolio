@@ -2539,42 +2539,47 @@
             </div>
           </section>
 
-          <!-- SECTION 2 · GAME RESEARCH · 게임 리서치 — 디자인 1440×1261 (밝은 섹션) -->
-          <section class="gw-sec gw-r2" id="gw2">
-            <!-- 라벨 -->
-            <div class="gw-r2__label">
-              <span class="gw-r2__num">02</span>
-              <span class="gw-r2__cat">GAME RESEARCH · 게임 리서치</span>
-            </div>
-            <!-- 헤딩 -->
-            <h3 class="gw-r2__title"><span>귀혼은 </span><b>어떤 게임</b><span>인가?</span></h3>
-            <!-- 서브카피 -->
-            <div class="gw-r2__desc">
-              <p>‘동양 판타지 게임’으로만 보면 방향이 틀어집니다.</p>
-              <p>귀혼의 매력은 무협 세계관 뿐 아니라, 귀여운 캐릭터와 요괴, 캐주얼한 온라인 RPG 감성에 있었습니다.</p>
-            </div>
+          <!-- SECTION 2 · GAME RESEARCH · 게임 리서치 — CSS sticky 핀 래퍼(PoC)
+               · .gw-pin { height:260svh } 로 스크롤 길이 확보
+               · #gw2 { position:sticky; top:0 } 로 화면에 고정
+               · #gw2-pin 이 ScrollTrigger trigger — scrub 타임라인 구동 -->
+          <div class="gw-pin" id="gw2-pin">
+            <section class="gw-sec gw-r2" id="gw2">
+              <!-- 라벨 -->
+              <div class="gw-r2__label">
+                <span class="gw-r2__num">02</span>
+                <span class="gw-r2__cat">GAME RESEARCH · 게임 리서치</span>
+              </div>
+              <!-- 헤딩 -->
+              <h3 class="gw-r2__title"><span>귀혼은 </span><b>어떤 게임</b><span>인가?</span></h3>
+              <!-- 서브카피 -->
+              <div class="gw-r2__desc">
+                <p>’동양 판타지 게임’으로만 보면 방향이 틀어집니다.</p>
+                <p>귀혼의 매력은 무협 세계관 뿐 아니라, 귀여운 캐릭터와 요괴, 캐주얼한 온라인 RPG 감성에 있었습니다.</p>
+              </div>
 
-            <!-- 중앙 메달리온 -->
-            <div class="gw-r2__center" aria-hidden="true">
-              <span class="gw-r2__orbit"></span>
-              <span class="gw-r2__ring gw-r2__ring--out"></span>
-              <span class="gw-r2__ring gw-r2__ring--mid"></span>
-              <span class="gw-r2__disc"></span>
-              <img class="gw-r2__logo" src="img/hon/process/s2_logo.webp?v=2" alt="귀혼" />
-            </div>
+              <!-- 중앙 메달리온 -->
+              <div class="gw-r2__center" aria-hidden="true">
+                <span class="gw-r2__orbit"></span>
+                <span class="gw-r2__ring gw-r2__ring--out"></span>
+                <span class="gw-r2__ring gw-r2__ring--mid"></span>
+                <span class="gw-r2__disc"></span>
+                <img class="gw-r2__logo" src="img/hon/process/s2_logo.webp?v=2" alt="귀혼" />
+              </div>
 
-            <!-- 4 원형 이미지 -->
-            <img class="gw-r2__circ gw-r2__circ--tl" src="img/hon/process/s2_world.webp" alt="무협 세계관" loading="lazy" />
-            <img class="gw-r2__circ gw-r2__circ--tr" src="img/hon/process/s2_job.webp" alt="개성있는 직업" loading="lazy" />
-            <img class="gw-r2__circ gw-r2__circ--bl" src="img/hon/process/s2_collect.webp" alt="요괴 수집" loading="lazy" />
-            <img class="gw-r2__circ gw-r2__circ--br" src="img/hon/process/s2_ost.webp" alt="OST" loading="lazy" />
+              <!-- 4 원형 이미지 -->
+              <img class="gw-r2__circ gw-r2__circ--tl" src="img/hon/process/s2_world.webp" alt="무협 세계관" loading="lazy" />
+              <img class="gw-r2__circ gw-r2__circ--tr" src="img/hon/process/s2_job.webp" alt="개성있는 직업" loading="lazy" />
+              <img class="gw-r2__circ gw-r2__circ--bl" src="img/hon/process/s2_collect.webp" alt="요괴 수집" loading="lazy" />
+              <img class="gw-r2__circ gw-r2__circ--br" src="img/hon/process/s2_ost.webp" alt="OST" loading="lazy" />
 
-            <!-- 4 라벨 -->
-            <div class="gw-r2__cap gw-r2__cap--tl"><h4>무협 세계관</h4><p>혼과 요괴가 공존하는<br>동양 판타지</p></div>
-            <div class="gw-r2__cap gw-r2__cap--tr"><h4>개성있는 직업</h4><p>각기 다른 전투 스타일</p></div>
-            <div class="gw-r2__cap gw-r2__cap--bl"><h4>요괴 수집</h4><p>다양한 요괴를 수집하고<br>성장하는 재미</p></div>
-            <div class="gw-r2__cap gw-r2__cap--br"><h4>OST</h4><p>게임 감상을 완성하는<br>동양풍 사운드</p></div>
-          </section>
+              <!-- 4 라벨 -->
+              <div class="gw-r2__cap gw-r2__cap--tl"><h4>무협 세계관</h4><p>혼과 요괴가 공존하는<br>동양 판타지</p></div>
+              <div class="gw-r2__cap gw-r2__cap--tr"><h4>개성있는 직업</h4><p>각기 다른 전투 스타일</p></div>
+              <div class="gw-r2__cap gw-r2__cap--bl"><h4>요괴 수집</h4><p>다양한 요괴를 수집하고<br>성장하는 재미</p></div>
+              <div class="gw-r2__cap gw-r2__cap--br"><h4>OST</h4><p>게임 감상을 완성하는<br>동양풍 사운드</p></div>
+            </section>
+          </div>
 
           <!-- SECTION 3 · EXPERIMENT · 방향 탐색 — 디자인 1440×1588 (다크 + 시안 목업) -->
           <section class="gw-sec gw-r3" id="gw3">

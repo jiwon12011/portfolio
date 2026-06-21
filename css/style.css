@@ -3047,6 +3047,26 @@ html.process-open { overflow: hidden; }
 
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--gwihon { background: #1a1410; box-shadow: 0 24px 60px -32px rgba(20,12,6,0.55); }
+
+/* gw2 CSS sticky 핀 PoC — overflow:visible 로 sticky 활성화(POZE 동일 패턴)
+   · process__making 공통이 overflow:hidden 이어서 sticky 차단됨 → #process-gwihon 한정으로만 해제
+   · 개별 .gw-sec 은 여전히 overflow:hidden → 섹션 내부 클립은 유지됨 */
+#process-gwihon .process__making--gwihon { overflow: visible; }
+
+/* gw2-pin: 260svh 높이로 scrub 스크롤 길이 확보 */
+.gw-pin { height: 260svh; }
+
+/* gw2 섹션: sticky 고정 — position:relative(.gw-sec)를 ID 특이도로 덮음 */
+#gw2 { position: sticky; top: 0; }
+
+/* reduced-motion 폴백: 핀 해제 + 정적 표시
+   · making-gwihon.js 의 early-return 으로 scrub 미실행 → 요소 CSS 기본상태 그대로 노출
+   · height:auto + position:static 으로 스크롤 잠금 완전 해제 */
+@media (prefers-reduced-motion: reduce) {
+  .gw-pin { height: auto; }
+  #gw2 { position: static; }
+}
+
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
 /* 분위기 영상 배너 (양옆 여백 인셋 + 둥근 모서리) */
 .gw-band { background: #1a1410; display: flex; align-items: center; justify-content: center; }
