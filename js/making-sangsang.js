@@ -373,13 +373,13 @@
          */
         const WP = [
           /* pos    dur   yR      xCqw            rot(누적)  ease(경로)                          의미                          */
-          [   0,    1.0,  0.10,   28,             100,  "sine.inOut"  ],  /* →우: 초반 이동 (yR 0.05→0.10, 중앙 추종 보정) */
-          [   1.0,  0.9,  0.12,   66,             190,  "power2.in"   ],  /* →우: off-screen 퇴장                          */
-          [   1.9,  1.3,  0.34,  -70,             330,  "none"        ],  /* 화면 밖 상단에서 우→좌 횡단(숨김) → off-screen 좌측 */
-          [   3.2,  2.2,  0.56,   -8,             480,  "power2.out"  ],  /* ←왼쪽에서 재등장 (yR 0.60→0.56, 뷰포트 ~50%) */
-          [   5.4,  2.2,  0.79,   -6,             600,  "sine.inOut"  ],  /* 화면 안 하강 (yR 0.82→0.79, 중앙 추종)        */
-          [   7.6,  1.2,  0.91,   FX * 0.6,       670,  "power1.out"  ],  /* 명패 향해 수렴 (yR 0.93→0.91, 중앙 추종)     */
-          [   8.8,  1.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합                         */
+          [   0,    1.0,  0.10,   28,              90,  "sine.inOut"  ],  /* →우: 초반 이동 (회전 가볍게) */
+          [   1.0,  0.9,  0.12,   66,             220,  "power2.in"   ],  /* →우: off-screen 퇴장 */
+          [   1.9,  1.3,  0.34,   75,             560,  "none"        ],  /* 화면 밖 우측 대기(숨김) — v7: 오른쪽 재등장 셋업 + 회전 대부분 소화(안 보임) */
+          [   3.2,  2.2,  0.48,   28,             620,  "power2.out"  ],  /* ←재등장: 오른쪽 위(THEME PAGE 여백) — v7 (회전 +60° 차분) */
+          [   5.4,  2.2,  0.70,  -16,             665,  "sine.inOut"  ],  /* 하강: 오른쪽→왼쪽 대각 스윕(긴 구간서 완만) — v7.1 예약 들어서면 이미 왼쪽 */
+          [   7.6,  1.2,  0.86,   FX,             695,  "power1.out"  ],  /* 예약 구간: 왼쪽(RESERVATION 여백) 유지 — v7.1 (FX=좌측) */
+          [   8.8,  1.0,  1.00,   FX,             720,  "power2.out"  ],  /* 착지: FX·FY·720° 정합 */
         ];
 
         /* ── 트레일 노드 생성 — WP 도착 anchor를 보간해 경로 전체 촘촘하게 ──
@@ -506,16 +506,15 @@
                 });
 
                 clackTL = gsap.timeline({ onComplete() { clackTL=null; } })
-                  /* 1단계: 착지 좌표에서 바로 아래로 꽂기 — 예비 들어올림 없음
-                   * 절대값(finalY+18) 사용: kill 후 scrub 간섭 없으므로 안전 */
-                  .to(keyTop, { y: finalY + 18, rotate: -12, scale: 0.92, duration: 0.12, ease: "power3.in", overwrite: "auto" })
-                  /* 2단계: 탄성 복귀 — back.out으로 finalY까지 스프링(오버슈트→안착) */
-                  .to(keyTop, { y: finalY, rotate: 0, scale: 1.0, duration: 0.35, ease: "back.out(3)" })
-                  /* 임팩트+반동(~0.47s) 완료 즉시 리스너 제거 */
+                  /* 1단계: 착지 좌표에서 아래로 꽂기 — v8: 0.12→0.18s, power3→power2(덜 급함), 플런지·딥 완화 */
+                  .to(keyTop, { y: finalY + 13, rotate: -8, scale: 0.96, duration: 0.18, ease: "power2.in", overwrite: "auto" })
+                  /* 2단계: 탄성 복귀 — v8: back.out(3)→back.out(1.5) 묵직하게, 0.35→0.48s 느긋한 안착 */
+                  .to(keyTop, { y: finalY, rotate: 0, scale: 1.0, duration: 0.48, ease: "back.out(1.5)" })
+                  /* 임팩트+반동(~0.66s) 완료 즉시 리스너 제거 */
                   .call(() => { removeScrollBlock(); })
-                  /* 3단계: 미세 흔들림 settle */
-                  .to(keyTop, { rotate: 3, duration: 0.1, ease: "sine.inOut" })
-                  .to(keyTop, { rotate: 0, duration: 0.1, ease: "sine.inOut" })
+                  /* 3단계: settle — v8: 떨림 진폭·속도 완화(3°/0.1s → 1.5°/느리게)로 허겁지겁 제거 */
+                  .to(keyTop, { rotate: 1.5, duration: 0.18, ease: "sine.inOut" })
+                  .to(keyTop, { rotate: 0, duration: 0.24, ease: "sine.inOut" })
                   /* 4단계: top 페이드아웃 + lock 페이드인 */
                   .to(keyTop,  { opacity: 0, duration: 0.18, ease: "power1.in"  }, "+=0.08")
                   .to(keyLock, { opacity: 1, duration: 0.18, ease: "power1.out" }, "<")
