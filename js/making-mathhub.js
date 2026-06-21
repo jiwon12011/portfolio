@@ -371,6 +371,40 @@
       scrollTrigger: ST("#mh7 .mh-s7__hero", "top 88%"),
     });
 
+    /* ================================================================
+       타이틀 강조어(색 텍스트) — 밑줄 드로우 + 점등 (전 타이틀 통일, 사용자 선택)
+       · base(잉크 다크)+color(강조 파랑, 왼→오 clip 점등)+밑줄(왼→오 scaleX 드로우)
+       · 밑줄이 그어지며 그 자리 글자색이 파랑으로 점등. 진입 시 1회(once, top 85%).
+       · sr-only 로 a11y 텍스트 보존. header() 타이틀 페이드업과 공존.
+    ================================================================ */
+    const _esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const emphUnderline = (titleSel) => {
+      const title = scroller.querySelector(titleSel);
+      const b = title && title.querySelector("b");
+      if (!b) return;
+      const text = b.textContent || "";
+      if (!text.trim()) return;
+      const emphColor = getComputedStyle(b).color;      /* 강조색(파랑) */
+      const inkColor  = getComputedStyle(title).color;   /* 본문 잉크색(다크) */
+      b.classList.add("mh-emph");
+      b.innerHTML = '<span class="mh-emph__sr">' + _esc(text) + "</span>"
+        + '<span class="mh-emph__base" aria-hidden="true">' + _esc(text) + "</span>"
+        + '<span class="mh-emph__color" aria-hidden="true">' + _esc(text) + "</span>"
+        + '<span class="mh-emph__ul" aria-hidden="true"></span>';
+      const base = b.querySelector(".mh-emph__base");
+      const color = b.querySelector(".mh-emph__color");
+      const ul = b.querySelector(".mh-emph__ul");
+      base.style.color = inkColor;
+      color.style.color = emphColor;
+      ul.style.background = emphColor;
+      gsap.set(color, { clipPath: "inset(0 100% 0 0)" });
+      gsap.timeline({ scrollTrigger: { trigger: b, scroller, start: "top 85%", once: true } })
+        .to(ul,    { scaleX: 1, duration: 0.6, ease: "power2.out" }, 0)
+        .to(color, { clipPath: "inset(0 0% 0 0)", duration: 0.62, ease: "power2.out" }, 0.04);
+    };
+    ["#mh1 .mh-s1__title", "#mh2 .mh-s2__title", "#mh3 .mh-s3__title", "#mh4 .mh-s4__title",
+     "#mh5 .mh-s5__title", "#mh6 .mh-s6__title", "#mh7 .mh-s7__title"].forEach(emphUnderline);
+
     /* ── 이미지 로드 후 위치 재계산(레이아웃 점프 보정) ── */
     scroller.querySelectorAll(".process__making--mathhub img").forEach((img) => {
       if (!img.complete) {

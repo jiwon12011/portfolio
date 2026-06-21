@@ -2028,6 +2028,13 @@ html.process-open { overflow: hidden; }
   .mh-pin { height: auto; }
   #mh2 { position: static; }
 }
+
+/* ── 타이틀 강조어(색 텍스트) — 밑줄 드로우 + 점등 ── */
+.mh-emph { position: relative; display: inline-block; vertical-align: bottom; overflow: visible; }
+.mh-emph__sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+.mh-emph__base, .mh-emph__color { display: block; white-space: nowrap; }
+.mh-emph__color { position: absolute; left: 0; top: 0; }
+.mh-emph__ul { position: absolute; left: 0; bottom: -0.06em; height: 0.06em; width: 100%; transform: scaleX(0); transform-origin: left center; border-radius: 1px; }
 .mh-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf2fd; }
 
 /* SECTION · 히어로 (디자인 1920×1081, 16:9) — 키 비주얼 풀커버 */
