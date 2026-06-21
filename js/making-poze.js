@@ -352,11 +352,15 @@
       };
       const cTitle = scroller.querySelector("#pz-s7 .pz-color__title");
       const cCards = [...scroller.querySelectorAll("#pz-s7 .pz-color__card")];
+      const wc = (v) => [cTitle, ...cCards].forEach((el) => el && (el.style.willChange = v));
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: pzS7Pin, scroller,
           start: "top top", end: "bottom bottom",
           scrub: true, onRefreshInit: setPzS7Top,
+          /* clipPath scrub GPU offload — 핀 구간에서만 (perf 게이트) */
+          onEnter() { wc("clip-path"); }, onEnterBack() { wc("clip-path"); },
+          onLeave() { wc("auto"); }, onLeaveBack() { wc("auto"); },
         },
       });
       if (cTitle) tl.fromTo(cTitle, { clipPath: "inset(100% 0 0 0)", opacity: 0 }, { clipPath: "inset(0% 0 0 0)", opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
