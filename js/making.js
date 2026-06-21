@@ -112,11 +112,53 @@
     gsap.from(".s5-hero", { opacity: 0, scale: .9, y: 16, duration: .9, ease: "back.out(1.5)", scrollTrigger: ST("#sec5 .s5-intro", "top 84%") });
     gsap.from(".s5-row", { opacity: 0, x: -26, stagger: .12, duration: .75, ease: "power3.out", scrollTrigger: ST(".s5-table", "top 84%") });
 
-    /* ── SECTION 6 ── */
+    /* ── SECTION 6 — 스크롤 핀(A형, 브랜드) ──
+       헤딩은 진입 시 rise, 고정 후 프레임에서 브랜드 그리드(오브젝트/타이포/컬러) 조립.
+       굴비는 BRAND OBJECT 카드 등장 시점에 감쇠 스윙으로 "착지". 목업은 핀 해제 후 노출.
+       framing 은 뷰포트에 맞춰 적응(헤딩+그리드가 들어오면 전체, 아니면 그리드만 중앙). */
+    const sec6El = scroller.querySelector("#sec6");
+    const setSec6Top = () => {
+      if (!sec6El) return;
+      const vp = scroller.clientHeight; if (!vp) return;
+      const base = sec6El.getBoundingClientRect().top;
+      const relT = (s) => { const e = sec6El.querySelector(s); return e ? e.getBoundingClientRect().top - base : 0; };
+      const relB = (s) => { const e = sec6El.querySelector(s); return e ? e.getBoundingClientRect().bottom - base : 0; };
+      const cTop = relT(".mk-eyebrow"), gTop = relT(".s6-grid"), gBot = relB(".s6-grid");
+      const top = (gBot - cTop) <= vp
+        ? (vp - (gBot - cTop)) / 2 - cTop
+        : (vp - (gBot - gTop)) / 2 - gTop;
+      sec6El.style.top = Math.round(top) + "px";
+    };
+
+    /* 굴비 감쇠 스윙(천장에 매달린 조기가 흔들리다 안착) — 핀 조립 시 발화 + hover 재생 */
+    const fishSwings = [];
+    scroller.querySelectorAll("#sec6 .s6-objbox img").forEach((img) => {
+      gsap.set(img, { transformOrigin: "50% 0%" });
+      const swing = () => gsap.to(img, { keyframes: { rotation: [-13, 9, -6, 4, -2, 0] }, duration: 2.4, ease: "sine.inOut", overwrite: true });
+      fishSwings.push(swing);
+      const box = img.closest(".s6-objbox") || img;
+      box.style.cursor = "pointer";
+      box.addEventListener("mouseenter", swing);
+    });
+
+    /* 헤딩 — 진입 단계 rise */
     gsap.from("#sec6 > :is(p,h2).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec6", "top 84%") });
-    gsap.from("#sec6 .s6-card", { opacity: 0, y: 34, stagger: .12, duration: .8, ease: "power3.out", scrollTrigger: ST(".s6-grid", "top 84%") });
-    gsap.from(".s6-swatches figure", { opacity: 0, scale: .8, stagger: .08, duration: .5, ease: "back.out(1.6)", scrollTrigger: ST(".s6-swatches", "top 88%") });
+
+    /* 핀 scrub: 브랜드 카드 3개 순차 → 굴비 착지 → 컬러 스와치 팝 */
+    const pinTl_s6 = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#sec6-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec6Top },
+    });
+    pinTl_s6
+      .from("#sec6 .s6-card", { opacity: 0, y: 34, stagger: 0.12, duration: 0.14 }, 0.15)
+      .call(() => fishSwings.forEach((s, i) => gsap.delayedCall(i * 0.12, s)), null, 0.26)
+      .from("#sec6 .s6-swatches figure", { opacity: 0, scale: 0.8, stagger: 0.05, duration: 0.1 }, 0.5);
+
+    /* 목업 — 핀 해제 후 자연 스크롤로 등장 */
     gsap.from(".s6-mockup", { opacity: 0, y: 40, duration: .9, ease: "power3.out", scrollTrigger: ST(".s6-mockup", "top 88%") });
+
+    setSec6Top();
+    window.addEventListener("resize", setSec6Top);
 
     /* ── SECTION 7 ── */
     gsap.from(".s7-board", { opacity: 0, y: 34, duration: .9, ease: "power3.out", scrollTrigger: ST(".s7-board", "top 86%") });
@@ -164,7 +206,7 @@
        near-white 단계 틴트로. 웜크림 → 브랜드그린 옅게 → 웜베이지 → 쿨. once 아님(왕복 반영). */
     const tintMap = {
       sec1: "#FBF8F1", sec2: "#FBF8F1", sec3: "#FBF8F1", sec4: "#FBF8F1", sec5: "#FBF8F1",
-      sec6: "#F4F8F1", sec7: "#F4F8F1", sec8: "#F4F8F1",
+      sec6: "#F4F8F1", sec6b: "#F4F8F1", sec7: "#F4F8F1", sec8: "#F4F8F1",
       sec9: "#FAF7F0", sec10: "#FAF7F0", sec11: "#FAF7F0", sec12: "#FAF7F0", sec13: "#FAF7F0",
       sec14: "#F1F5F0", sec15: "#F1F5F0",
     };
@@ -176,22 +218,7 @@
     });
 
 
-    /* ③ 굴비 펜듈럼 스윙 — 천장에 매달린 듯 상단 고정 회전(±5°). 두 마리 다른 주기로 자연스럽게 */
-    scroller.querySelectorAll("#sec6 .s6-objbox img").forEach((img, i) => {
-      gsap.set(img, { transformOrigin: "50% 0%" });   // 줄에 매달린 듯 상단 고정
-      /* 흔들리다 멈춤: 진폭이 점점 줄며 0° 로 확실히 안착(키프레임 감쇠) */
-      const swing = () => gsap.to(img, {
-        keyframes: { rotation: [-13, 9, -6, 4, -2, 0] },
-        duration: 2.4, ease: "sine.inOut", overwrite: true,
-      });
-      /* 진입 시 1회(두 마리 살짝 시차) */
-      ScrollTrigger.create({ trigger: img, scroller, start: "top 86%", once: true,
-        onEnter: () => gsap.delayedCall(0.1 + i * 0.12, swing) });
-      /* 멈춘 뒤 hover 하면 다시 흔들림 */
-      const box = img.closest(".s6-objbox") || img;
-      box.style.cursor = "pointer";
-      box.addEventListener("mouseenter", swing);
-    });
+    /* ③ 굴비 스윙은 SECTION 6 핀 블록(위)으로 이동 — 핀 조립 시점에 착지 발화 + hover 재생 */
 
     /* ④ 동전 낙하 파티클 — sec3(PROJECT GOAL) 오른쪽 위 빈 여백으로 쏟아짐.
        진입(아래로/위로) 할 때마다 재생, transform 만, 떨어진 뒤 제거 */

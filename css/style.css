@@ -3096,14 +3096,17 @@ html.process-open { overflow: hidden; }
    높이(scrub 스크롤 길이)는 섹션별 개별 지정. */
 .mk-pin { container-type: inline-size; }
 #sec4-pin { height: 260svh; }
+#sec6-pin { height: 260svh; }
 /* #sec4: sticky 고정. top 값은 making.js(setSec4Top)가 뷰포트에 맞춰 동적 계산
    (종횡비에 따라 콘텐츠가 한 화면에 들어오면 전체 중앙, 아니면 flow+루프 중앙).
    아래 top:0 은 JS 미동작(GSAP 미로드) 시 폴백. */
 #sec4 { position: sticky; top: 0; }
+/* #sec6: sticky 고정. top 은 making.js(setSec6Top)가 뷰포트 적응 계산. top:0 은 폴백 */
+#sec6 { position: sticky; top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .mk-pin { height: auto; }
-  #sec4 { position: static; }
+  #sec4, #sec6 { position: static; }
 }
 
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
