@@ -230,38 +230,59 @@
     }
 
     /* ================================================================
-       SECTION 4 · CONTENT NAVIGATION (#mh4)
-       [기존] 헤더·main·shot·leg 유지
-       [교체] fade(conn) + up(node) →
-              conn clip-path inset(0 100% 0 0)→(0 0 0 0) 와이프 +
-              노드 팝 체이닝 타임라인
+       SECTION 4 · CONTENT NAVIGATION (#mh4) — 스크롤 핀 (적응형 A형)
+       섹션이 뷰포트보다 큼(≈1.62×) → setMh4Top 으로 다이어그램(메인 목업+콜아웃 샷+커넥터+레전드)을
+       화면 중앙 프레이밍(헤딩은 진입 시 노출 후 위로 잘림). #mh4-pin scrub:
+       헤더→메인 scale-in→콜아웃 샷→커넥터 왼→오 드로우+노드 팝(시그니처)→레전드 텍스트.
+       기존 once 트리거+connTl 교체. fromTo+명시값(refresh 안전).
     ================================================================ */
-    header("#mh4");
-    up("#mh4 .mh-s4__main", "top 78%", {
-      y: 0, scale: 0.97, opacity: 0, transformOrigin: "50% 50%", duration: 1.0, ease: "power3.out",
-    });
-    group("#mh4 .mh-s4__shot", "top 82%", { y: 26, stagger: 0.12 });
-    group("#mh4 .mh-s4__leg", "top 86%", { y: 22, stagger: 0.12 });
+    const mh4Pin = scroller.querySelector("#mh4-pin");
+    const mh4El  = scroller.querySelector("#mh4");
+    if (mh4Pin && mh4El) {
+      const q4  = (s) => scroller.querySelector(s);
+      const qa4 = (s) => Array.from(scroller.querySelectorAll(s));
+      const mh4Main  = q4("#mh4 .mh-s4__main");
+      const mh4Shots = qa4("#mh4 .mh-s4__shot");
+      const mh4Legs  = qa4("#mh4 .mh-s4__leg");
+      const mh4No = q4("#mh4 .mh-s4__no"), mh4Cat = q4("#mh4 .mh-s4__cat");
+      const mh4Title = q4("#mh4 .mh-s4__title"), mh4Lead = q4("#mh4 .mh-s4__lead");
+      const connEls = [1, 2, 3].map((n) => q4(`#mh4 .mh-s4__conn--${n}`));
+      const nodeEls = [1, 2, 3].map((n) => q4(`#mh4 .mh-s4__node--${n}`));
 
-    /* conn 클립 와이프 + 노드 팝 체이닝 */
-    const connEls = [1, 2, 3].map((n) => scroller.querySelector(`#mh4 .mh-s4__conn--${n}`));
-    const nodeEls = [1, 2, 3].map((n) => scroller.querySelector(`#mh4 .mh-s4__node--${n}`));
-    const firstConn = connEls.find(Boolean);
-    if (firstConn) {
-      const connTl = gsap.timeline({ scrollTrigger: ST(firstConn, "top 82%") });
-      connEls.forEach((conn, i) => {
-        if (!conn) return;
-        /* 연결선 왼→오른 클립 와이프 */
-        connTl.from(conn, {
-          clipPath: "inset(0 100% 0 0)", duration: 0.48, ease: "power2.inOut",
-        }, i * 0.24);
-        /* 노드: 와이프 완료 직후 팝 */
-        const node = nodeEls[i];
-        if (node) connTl.from(node, {
-          opacity: 0, scale: 0, transformOrigin: "50% 50%",
-          duration: 0.38, ease: "back.out(2.2)",
-        }, i * 0.24 + 0.42);
+      /* 다이어그램(메인+샷+레전드) bbox 를 뷰포트 중앙에 프레이밍 — 헤딩은 위로 잘림(진입 시 노출) */
+      const setMh4Top = () => {
+        const els = [mh4Main, ...mh4Shots, ...mh4Legs].filter(Boolean);
+        if (!els.length) return;
+        let top = Infinity, bot = -Infinity;
+        els.forEach((el) => { top = Math.min(top, el.offsetTop); bot = Math.max(bot, el.offsetTop + el.offsetHeight); });
+        const center = (top + bot) / 2;
+        const vp = scroller.clientHeight, secH = mh4El.offsetHeight;
+        let t = Math.round(vp / 2 - center);
+        t = Math.max(-(secH - vp), Math.min(0, t));
+        mh4El.style.top = t + "px";
+      };
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: mh4Pin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, onRefreshInit: setMh4Top,
+        },
       });
+      if (mh4No && mh4Cat) tl.fromTo([mh4No, mh4Cat], { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.06 }, 0);
+      if (mh4Title) tl.fromTo(mh4Title, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.5, ease: "power4.out" }, 0.06);
+      if (mh4Lead)  tl.fromTo(mh4Lead,  { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.16);
+      if (mh4Main)  tl.fromTo(mh4Main,  { opacity: 0, scale: 0.95, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 0.28);
+      if (mh4Shots.length) tl.fromTo(mh4Shots, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.1 }, 0.42);
+      /* 커넥터 왼→오 드로우 + 노드 팝 (체이닝) */
+      connEls.forEach((conn, i) => {
+        if (conn) tl.fromTo(conn, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.4, ease: "power2.inOut" }, 0.55 + i * 0.2);
+        const node = nodeEls[i];
+        if (node) tl.fromTo(node, { opacity: 0, scale: 0, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(2.2)" }, 0.55 + i * 0.2 + 0.34);
+      });
+      if (mh4Legs.length) tl.fromTo(mh4Legs, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.14 }, 0.6);
+      setMh4Top();
+      window.addEventListener("resize", setMh4Top);
     }
 
     /* ================================================================
