@@ -66,6 +66,33 @@
     };
 
     /* ================================================================
+       타이틀 강조어 컬러 롤업 — 강조(<b>) 단어가 "검정이었다가" 스크롤 진입 시
+       색있는 글자가 아래에서 올라와 그 자리로(뾰옹). ym2 는 기존 char-split 유지 → 제외.
+    ================================================================ */
+    const escHtml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    ["#ym1", "#ym3", "#ym4", "#ym5", "#ym6"].forEach((id) => {
+      const title = scroller.querySelector(id + " [class$='__title']");
+      const b = title && title.querySelector("b");
+      if (!b) return;
+      const text = b.textContent || "";
+      if (!text.trim()) return;
+      const emphColor = getComputedStyle(b).color;        // 강조색(핑크)
+      const inkColor = getComputedStyle(title).color;       // 타이틀 기본색(검정값)
+      b.classList.add("ym-emph");
+      b.setAttribute("aria-label", text);
+      b.innerHTML =
+        '<span class="ym-emph__base" aria-hidden="true">' + escHtml(text) + "</span>" +
+        '<span class="ym-emph__color" aria-hidden="true">' + escHtml(text) + "</span>";
+      const baseEl = b.querySelector(".ym-emph__base");
+      const colorEl = b.querySelector(".ym-emph__color");
+      baseEl.style.color = inkColor;
+      colorEl.style.color = emphColor;
+      gsap.timeline({ scrollTrigger: ST(b, "top 86%") })
+        .fromTo(colorEl, { yPercent: 110 }, { yPercent: 0, duration: 0.62, ease: "back.out(1.6)" }, 0)
+        .to(baseEl, { yPercent: -110, duration: 0.62, ease: "back.out(1.6)" }, 0);
+    });
+
+    /* ================================================================
        SECTION · 히어로 (#ym-hero)
        기존: zoom-settle once — 유지
        [추가] bg scrub 패럴랙스 yPercent
