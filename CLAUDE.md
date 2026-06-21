@@ -18,7 +18,7 @@
 | MathHub | `#process-mathhub` | ✅ 완성 — 본문 mh1~mh7(개요·IA재설계·탐색필터·콘텐츠탐색·페이지UI·컬러·시행착오) + nav 7개 + making-mathhub.js, smooth-process 적용. 스크롤 핀: **mh2(카오스→구조 4카드)만 유지**(mh4·mh7 핀은 사용자 요청으로 원복=once 진입). 전 타이틀 강조어(`<b>`)에 **밑줄 드로우+색 점등** 효과(.mh-emph) |
 | 상상의 문 | `#process-sangsang` | ✅ 완성 — `making-sangsang.js`, 이미지 30장, mp4 영상 포함. nav·본문 추가 완료 |
 | 우리 사이의 음표 | `#process-playlist` | ✅ 본문 7섹션 완성 — pl1 개요·pl2 컨셉·pl3 랜딩디자인·pl4 게임시스템(멀티루트,하트미터 CSS)·pl5 구현구조·pl6 내러티브(타임라인+캐릭터6)·pl7 트러블슈팅+클로징. Figma → cqw 포팅, `pl-*` 클래스, 에셋 `img/playlist_game/process/`(50개,1.9MB), 원본 `raw/`(gitignore). nav 7개(측정상 720px+ 오버플로 없음). 남은 일: 상단 인트로 셸(plsec-01) POZE식 교체. pl3·pl6 배경은 전용 이미지 없어 그라데이션 대체 |
-| 플레디스 | `#process-pledis` | ⏳ 셸만 있음 — nav 목차 + 본문 섹션 미추가 (영상: pledis_process.mp4) |
+| 플레디스 | `#process-pledis` | ✅ 완성 — 본문 pd-hero·pd-r1~r7·outro(9섹션) + nav 5개 + making-pledis.js, smooth-process 적용. 스크롤 핀 2곳(pd-hero Pleiades 별 어셈블, pd6 TROUBLE&SOLUTION 3카드). 타이틀 색강조(.pd-rN__hl / h1·h2 span, #ff4600) 7곳에 **글로우 점화** 효과 |
 
 ### 콘텐츠 추가할 때 할 일 (⏳ 프로젝트)
 1. `process__tracks` `<ol>` 안에 `<li>` nav 항목 추가
