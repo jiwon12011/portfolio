@@ -410,53 +410,43 @@
     })();
 
     /* ================================================================
-       SECTION 6 · TROUBLE & SOLUTION (#pd6)
-       [교체] 카드 bulk stagger → 카드별 TL
-       [추가] rule scaleX 드로잉 + problem/solution 순차 진입
+       SECTION 6 · TROUBLE & SOLUTION (#pd6) — 스크롤 핀 (A형)
+       섹션이 뷰포트에 들어옴(≈0.91×) → setPd6Top 으로 중앙 sticky 고정, #pd6-pin scrub:
+       헤더(num/eyebrow/h1/h2/lead) → 3카드 순차 조립(card 진입 → problem → rule scaleX 드로잉 → solution).
+       기존 once 트리거 교체. fromTo+명시값(refresh 안전). reduced-motion: init early-return + CSS 폴백.
     ================================================================ */
-    const pd6Heads = scroller.querySelectorAll(
-      "#pd6 .pd-r6__lead, #pd6 .pd-r6__h1, #pd6 .pd-r6__h2, #pd6 .pd-r6__num, #pd6 .pd-r6__eyebrow"
-    );
-    if (pd6Heads.length) gsap.from(pd6Heads, {
-      opacity: 0, y: 40, duration: 1.05, ease: "expo.out", stagger: 0.1,
-      scrollTrigger: ST("#pd6 .pd-r6__lead", "top 92%"),
-      clearProps: "transform",
-    });
+    const pd6Pin = scroller.querySelector("#pd6-pin");
+    const pd6El  = scroller.querySelector("#pd6");
+    if (pd6Pin && pd6El) {
+      const setPd6Top = () => {
+        pd6El.style.top = Math.round((scroller.clientHeight - pd6El.offsetHeight) / 2) + "px";
+      };
+      const pd6Heads = [...scroller.querySelectorAll(
+        "#pd6 .pd-r6__num, #pd6 .pd-r6__eyebrow, #pd6 .pd-r6__h1, #pd6 .pd-r6__h2, #pd6 .pd-r6__lead"
+      )];
+      const pd6Cards = [...scroller.querySelectorAll("#pd6 .pd-r6__card")];
 
-    /* [교체] 카드 bulk → 카드별 TL */
-    scroller.querySelectorAll("#pd6 .pd-r6__card").forEach((card) => {
-      const rule     = card.querySelector(".pd-r6__rule");
-      const problem  = card.querySelector(".pd-r6__problem");
-      const solution = card.querySelector(".pd-r6__solution");
-      const tl = gsap.timeline({ scrollTrigger: ST(card, "top 90%") });
-
-      /* 카드 전체 진입 */
-      tl.from(card, {
-        opacity: 0, y: 54, scale: 0.94, transformOrigin: "50% 50%",
-        duration: 1.0, ease: "power3.out",
-      }, 0);
-
-      /* [추가] problem 진입 */
-      if (problem) tl.from(problem, {
-        opacity: 0, y: 18, duration: 0.65, ease: "power3.out",
-      }, 0.28);
-
-      /* [추가] rule scaleX 드로잉
-         CSS: transform-origin:0 0; transform:rotate(90deg)
-         GSAP fromTo로 rotate 유지 + clearProps로 CSS 복원 */
-      if (rule) tl.fromTo(rule,
-        { scaleX: 0, rotate: 90, transformOrigin: "0% 0%" },
-        { scaleX: 1, rotate: 90, transformOrigin: "0% 0%",
-          duration: 0.52, ease: "expo.out",
-          clearProps: "transform" },
-        0.5
-      );
-
-      /* [추가] solution 진입 */
-      if (solution) tl.from(solution, {
-        opacity: 0, y: 14, duration: 0.6, ease: "power3.out",
-      }, 0.72);
-    });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: pd6Pin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, onRefreshInit: setPd6Top,
+        },
+      });
+      if (pd6Heads.length) tl.fromTo(pd6Heads, { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.06 }, 0);
+      pd6Cards.forEach((card, i) => {
+        const rule     = card.querySelector(".pd-r6__rule");
+        const problem  = card.querySelector(".pd-r6__problem");
+        const solution = card.querySelector(".pd-r6__solution");
+        const at = 0.3 + i * 0.22;
+        tl.fromTo(card, { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, transformOrigin: "50% 50%", duration: 0.5, ease: "power3.out" }, at);
+        if (problem)  tl.fromTo(problem,  { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, at + 0.14);
+        if (rule)     tl.fromTo(rule,     { scaleX: 0, rotate: 90, transformOrigin: "0% 0%" }, { scaleX: 1, rotate: 90, transformOrigin: "0% 0%", duration: 0.3, ease: "expo.out" }, at + 0.24);
+        if (solution) tl.fromTo(solution, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, at + 0.34);
+      });
+      setPd6Top();
+      window.addEventListener("resize", setPd6Top);
+    }
 
     /* ================================================================
        SECTION 7 · RESULT (#pd7)

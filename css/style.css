@@ -4085,6 +4085,19 @@ html.process-open { overflow: hidden; }
 .pl-ts__hero { position: absolute; left: 0; top: 101.042cqw; width: 100%; height: 56.042cqw; object-fit: cover; display: block; }
 
 .process__making--pledis { background: #0f1320; box-shadow: 0 24px 60px -32px rgba(30,40,80,0.5); }
+
+/* ── 플레디스(#process-pledis) 스크롤 핀 ──
+   process__making 공통 overflow:hidden 이 sticky 차단 → 한정 해제(바깥 클립은 .process__panel). */
+#process-pledis .process__making--pledis { overflow: visible; }
+.pd-pin { container-type: inline-size; }
+/* pd6 TROUBLE & SOLUTION: 뷰포트에 들어옴(≈0.91×) → A형 핀, 3카드 순차 조립 */
+#pd6-pin { height: 240svh; }
+#pd6 { position: sticky; top: 0; }  /* top 은 making-pledis.js setPd6Top 가 중앙정렬로 덮음 */
+@media (prefers-reduced-motion: reduce) {
+  .pd-pin { height: auto; }
+  #pd6 { position: static; }
+}
+
 .pd-sec { position: relative; container-type: inline-size; overflow: hidden; background: #0f1320; }
 .pd-r1::before,
 .pd-r2::before,
