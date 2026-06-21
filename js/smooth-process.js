@@ -17,10 +17,11 @@
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   window.__processLenis = window.__processLenis || {};
-  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis", "#process-mathhub"];
-  const EASE = 0.14;            // 0~1, 클수록 더 즉각적(작을수록 더 미끄럽게)
+  const SELECTORS = ["#process", "#process-poze", "#process-gwihon", "#process-yumi", "#process-pledis", "#process-mathhub", "#process-sangsang", "#process-playlist"];
+  const EASE = 0.11;            // 0~1, 클수록 더 즉각적(작을수록 더 미끄럽게). 천천히 보기용 0.11
+  const DEFAULT_MULT = 0.8;     // 휠 한 번에 이동량(작을수록 천천히 탐색)
 
-  const setup = (modal, scrollerSel = ".process__content", ease = EASE, mult = 1) => {
+  const setup = (modal, scrollerSel = ".process__content", ease = EASE, mult = DEFAULT_MULT) => {
     const scroller = modal.querySelector(scrollerSel);
     if (!scroller) return;
 
