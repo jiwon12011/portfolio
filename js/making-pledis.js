@@ -492,7 +492,7 @@
     }, { passive: true });
 
     /* ================================================================
-       타이틀 색강조 — 글로우 점화 (데모: 사용자 확인용)
+       타이틀 색강조 — 글로우 점화 (전 7곳 확정)
        어두운 burnt 색에서 시작 → 진입 시 #ff4600 으로 점화 + 글로우 플레어→정착.
        대상: pd-r1/r2 __hl + pd-r3~r7 h1/h2 강조 span (전 7곳). once(top 85%).
        color 는 getComputedStyle 로 읽어 dim/glow 자동 산출. reduced-motion 시 init early-return.
@@ -510,7 +510,7 @@
       const lit = `rgb(${r}, ${g}, ${b})`;
       const dim = `rgb(${Math.round(r * 0.34)}, ${Math.round(g * 0.34)}, ${Math.round(b * 0.34)})`; /* 꺼진 burnt */
       const glow = (a) => `rgba(${r}, ${g}, ${b}, ${a})`;
-      gsap.set(el, { color: dim, willChange: "color" });
+      gsap.set(el, { color: dim });
       gsap.timeline({ scrollTrigger: ST(el, "top 85%") })
         .to(el, { color: lit, duration: 0.5, ease: "power2.out" }, 0)
         .fromTo(el, { textShadow: "0 0 0px " + glow(0) },
