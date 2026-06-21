@@ -87,13 +87,13 @@
       const colorEl = b.querySelector(".ym-emph__color");
       baseEl.style.color = inkColor;
       colorEl.style.color = emphColor;
-      /* 스크롤에 묶음(scrub) — 타이틀이 90%→50% 구간을 지나는 동안 스크롤한 만큼 핑크가 차오름.
-         사용자가 직접 속도 조절하며 색 변화를 또렷이 봄(되감으면 다시 내려감). ease none(선형) */
-      gsap.timeline({
-        scrollTrigger: { trigger: b, scroller, start: "top 90%", end: "top 50%", scrub: true },
-      })
-        .fromTo(colorEl, { yPercent: 110 }, { yPercent: 0, ease: "none", duration: 1 }, 0)
-        .to(baseEl, { yPercent: -110, ease: "none", duration: 1 }, 0);
+      /* 느린 자동(once) + 뾰옹 — 변환은 color span 에만(b 변환 시 DOM 재정렬 이슈 회피):
+         핑크가 아래서 천천히 올라오며(yPercent, back.out 으로 살짝 튕김=뾰옹) + scale 살짝 팝 + fade in,
+         동시에 검정 base 는 fade out. overflow 없으니 튕김/팝이 안 잘림. */
+      gsap.timeline({ scrollTrigger: ST(b, "top 80%"), delay: 0.15 })
+        .fromTo(colorEl, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, 0)
+        .fromTo(colorEl, { yPercent: 60, scale: 0.85 }, { yPercent: 0, scale: 1, duration: 1.5, ease: "back.out(2.4)", transformOrigin: "50% 100%" }, 0)
+        .to(baseEl, { opacity: 0, duration: 0.45, ease: "power1.out" }, 0);
     });
 
     /* ================================================================
