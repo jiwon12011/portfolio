@@ -1354,10 +1354,17 @@
           </section>
 
           <!-- SECTION 13 · WORK FLOW (긴 통 이미지) -->
+          <!-- SECTION 13 · WORK FLOW — 필름스트립 핀: 고정 프레임(.mk-stage) 안에서
+               긴 스크린샷(4050px)을 위로 translateY 하며 카메라 패닝(위→아래로 훑음).
+               #sec13-pin 높이가 스크롤 길이, .mk-stage 가 뷰포트 높이 프레임 -->
+          <div class="mk-pin" id="sec13-pin">
+          <div class="mk-stage" id="sec13-stage">
           <section class="mk-sec" id="sec13">
             <img class="s13-hero mk-rise" src="img/jaringobi/process/section_13.webp"
                  alt="WORK FLOW — 작은 절약이 내일의 나를 바꿔요" loading="lazy" />
           </section>
+          </div><!-- /.mk-stage -->
+          </div><!-- /#sec13-pin -->
 
           <!-- SECTION 14 · TOOLS / ROLE / TIME (크레딧) -->
           <section class="mk-sec" id="sec14">
@@ -5104,7 +5111,7 @@
   <!-- GSAP (제작과정 스크롤 모션) -->
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="js/making.js?v=20260621f" defer></script>
+  <script src="js/making.js?v=20260621g" defer></script>
   <script src="js/making-poze.js" defer></script>
   <script src="js/making-gwihon.js" defer></script>
   <script src="js/making-yumi.js" defer></script>

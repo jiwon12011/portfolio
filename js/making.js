@@ -232,7 +232,23 @@
     gsap.from(".s12-hero", { opacity: 0, y: 36, duration: 1, ease: "power3.out", scrollTrigger: ST(".s12-hero", "top 88%") });
 
     /* ── SECTION 13 (긴 이미지 → 가벼운 페이드만) ── */
-    gsap.from(".s13-hero", { opacity: 0, duration: 1, ease: "power2.out", scrollTrigger: ST(".s13-hero", "top 92%") });
+    /* SECTION 13 · WORK FLOW — 필름스트립 핀.
+       .mk-stage(뷰포트 높이 sticky overflow:hidden) 프레임 안에서 #sec13(긴 이미지)을
+       위로 translateY 하며 카메라가 위→아래로 훑는 패닝. */
+    const s13El = scroller.querySelector("#sec13");
+    const s13Stage = document.querySelector("#sec13-stage");
+    if (s13El && s13Stage) {
+      const syncS13H = () => { if (scroller.clientHeight) s13Stage.style.height = scroller.clientHeight + "px"; };
+      syncS13H();
+      const getS13Travel = () => Math.max(0, s13El.offsetHeight - s13Stage.clientHeight);
+      const pinTl_s13 = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: { trigger: "#sec13-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, invalidateOnRefresh: true, onRefreshInit: syncS13H },
+      });
+      pinTl_s13
+        .fromTo(s13El, { y: 0 }, { y: () => -getS13Travel(), duration: 1 }, 0)
+        .fromTo(".s13-hero", { opacity: 0 }, { opacity: 1, duration: 0.04 }, 0);
+    }
 
     /* ── SECTION 14 (크레딧 — 컬럼별 스태거) ── */
     gsap.from("#sec14 .s14-label",     { opacity: 0, y: 22, stagger: .12, duration: .7, ease: "power3.out", scrollTrigger: ST(".s14-grid", "top 84%") });

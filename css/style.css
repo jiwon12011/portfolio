@@ -3098,6 +3098,12 @@ html.process-open { overflow: hidden; }
 #sec4-pin { height: 260svh; }
 #sec6-pin { height: 260svh; }
 #sec3-pin { height: 260svh; }
+
+/* sec13 필름스트립: 뷰포트 높이 프레임(.mk-stage) sticky 고정, 그 안에서 #sec13(긴 이미지) translateY.
+   stage 높이는 making.js 가 스크롤러 clientHeight 로 정확히 맞춤(아래 svh 는 폴백). */
+#sec13-pin { height: 520svh; }
+.mk-stage { position: sticky; top: 0; height: 88svh; overflow: hidden; }
+#sec13 { will-change: transform; }
 /* #sec4: sticky 고정. top 값은 making.js(setSec4Top)가 뷰포트에 맞춰 동적 계산
    (종횡비에 따라 콘텐츠가 한 화면에 들어오면 전체 중앙, 아니면 flow+루프 중앙).
    아래 top:0 은 JS 미동작(GSAP 미로드) 시 폴백. */
@@ -3111,6 +3117,9 @@ html.process-open { overflow: hidden; }
   .mk-pin { height: auto; }
   #sec4, #sec6 { position: static; }
   #sec3 .s3-goal { position: static; }
+  /* sec13 필름스트립 해제 */
+  .mk-stage { position: static; height: auto; overflow: visible; }
+  #sec13 { transform: none; will-change: auto; }
 }
 
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
