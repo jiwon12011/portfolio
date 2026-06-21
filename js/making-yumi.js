@@ -97,14 +97,39 @@
        기존: 카드 팝 — 유지
        [추가] 카드 테두리 SVG strokeDashoffset draw-on (좌소→메인→우소→하단 순)
     ================================================================ */
+    /* 헤더 — 진입 단계 페이드(고정 후 위로 잘림) */
     header("#ym1");
 
-    /* 기존: 카드 팝 */
-    stagger(
-      "#ym1 .ym-r1__card",
-      scroller.querySelector("#ym1 .ym-r1__card--c1"),
-      { y: 32, scale: 0.96, transformOrigin: "50% 50%", ease: "back.out(1.3)", stagger: 0.09 }
-    );
+    /* 스크롤 핀(A형) — 진입 헤딩 → 고정 후 카드 조립(메인 중앙 먼저 → 소카드 사방 팝).
+       카드 5장이 한 화면에 들어옴. framing 은 뷰포트 적응(전체 들어오면 전체, 아니면 카드만 중앙). */
+    const ym1El = scroller.querySelector("#ym1");
+    const setYm1Top = () => {
+      if (!ym1El) return;
+      const vp = scroller.clientHeight; if (!vp) return;
+      const base = ym1El.getBoundingClientRect().top;
+      const cards = [...ym1El.querySelectorAll(".ym-r1__card")];
+      if (!cards.length) return;
+      const titleEl = ym1El.querySelector(".ym-r1__title");
+      const cTop = titleEl ? titleEl.getBoundingClientRect().top - base : 0;
+      const cardsTop = Math.min(...cards.map((c) => c.getBoundingClientRect().top - base));
+      const cardsBot = Math.max(...cards.map((c) => c.getBoundingClientRect().bottom - base));
+      const top = (cardsBot - cTop) <= vp
+        ? (vp - (cardsBot - cTop)) / 2 - cTop
+        : (vp - (cardsBot - cardsTop)) / 2 - cardsTop;
+      ym1El.style.top = Math.round(top) + "px";
+    };
+
+    const pinTl_ym1 = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#ym1-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setYm1Top },
+    });
+    pinTl_ym1
+      .from("#ym1 .ym-r1__card--main", { opacity: 0, scale: 0.92, y: 24, transformOrigin: "50% 50%", duration: 0.18 }, 0.12)
+      .from(["#ym1 .ym-r1__card--c1", "#ym1 .ym-r1__card--c2"], { opacity: 0, scale: 0.9, y: 28, transformOrigin: "50% 50%", stagger: 0.08, duration: 0.16 }, 0.36)
+      .from(["#ym1 .ym-r1__card--c3", "#ym1 .ym-r1__card--c4"], { opacity: 0, scale: 0.9, y: 28, transformOrigin: "50% 50%", stagger: 0.08, duration: 0.16 }, 0.6);
+
+    setYm1Top();
+    window.addEventListener("resize", setYm1Top);
 
     /* ================================================================
        SECTION 2 · VISUAL CONCEPT (#ym2)
