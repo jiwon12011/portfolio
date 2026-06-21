@@ -4912,7 +4912,7 @@ html.process-open { overflow: hidden; }
 /* 타이틀 강조어 컬러 등장 — 검정 base 위로 핑크 글자가 아래서 올라오며 fade+팝(뾰옹).
    색은 making-yumi.js 가 타이틀 ink/강조색을 읽어 인라인 지정. 변환은 안쪽 span 에만(b 변환 시
    GSAP가 inline-block b 를 DOM 재정렬하는 이슈 회피). overflow 없음 → 팝/오버슛 안 잘림(rest 는 opacity 0 으로 숨김) */
-.ym-emph { position: relative; display: inline-block; vertical-align: bottom; }
+.ym-emph { position: relative; display: inline-block; vertical-align: bottom; overflow: hidden; }
 .ym-emph__base, .ym-emph__color { display: block; white-space: nowrap; }
 .ym-emph__color { position: absolute; left: 0; top: 0; }
 /* 낭독 전용(시각 숨김) — 강조어 원문을 스크린리더에 보존. 시각 2겹은 aria-hidden */

@@ -88,12 +88,12 @@
       const colorEl = b.querySelector(".ym-emph__color");
       baseEl.style.color = inkColor;
       colorEl.style.color = emphColor;
-      /* 자동(once) — 크기 변화 없이 같은 크기로 핑크가 아래서 샥 올라오며 색 바뀜(slide up).
-         변환은 color span 에만(b 변환 시 DOM 재정렬 이슈 회피). scale 없음, 부드러운 power3(오버슛 X). */
+      /* 자동(once) — fade 없는 물리 스왑: 핑크 글자가 아래(yPercent 110, overflow 로 가려짐)에서
+         올라와 그 자리에 착 붙고, 검정 base 는 위로(-110) 밀려 나감. 같은 크기·오버슛 없음(power4=착).
+         변환은 span 에만(b 변환 시 DOM 재정렬 이슈 회피). */
       gsap.timeline({ scrollTrigger: ST(b, "top 80%"), delay: 0.1 })
-        .fromTo(colorEl, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 0)
-        .fromTo(colorEl, { yPercent: 100 }, { yPercent: 0, duration: 0.9, ease: "power3.out" }, 0)
-        .to(baseEl, { opacity: 0, duration: 0.4, ease: "power1.out" }, 0);
+        .fromTo(colorEl, { yPercent: 110 }, { yPercent: 0, duration: 0.85, ease: "power4.out" }, 0)
+        .to(baseEl, { yPercent: -110, duration: 0.85, ease: "power4.out" }, 0);
     });
 
     /* ================================================================
