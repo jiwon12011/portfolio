@@ -5777,8 +5777,11 @@ html.process-open { overflow: hidden; }
 /* 순환 루프 화살표 (05 → 01) */
 .s4-loop { position: relative; height: 38px; margin: 12px 10% 0;
   border: 2px solid #a7c595; border-top: none; border-radius: 0 0 16px 16px; }
-.s4-loop__arrow { position: absolute; left: 0; top: 0; transform: translate(-50%, -100%);
-  width: 0; height: 0; border: 6px solid transparent; border-bottom-color: #a7c595; }
+/* 화살촉 — 좌측 세로선(2px) 중앙에 정렬, 01 방향(위)으로 고정. 라인 끝과 맞닿게 */
+.s4-loop__arrow { position: absolute; left: 1px; top: 0; transform: translate(-50%, -100%);
+  width: 0; height: 0;
+  border-left: 7px solid transparent; border-right: 7px solid transparent;
+  border-bottom: 10px solid #a7c595; }
 
 @media (max-width: 1080px) {
   .s4-flow { grid-template-columns: repeat(2, 1fr); }

@@ -215,14 +215,8 @@
         onEnter: rainCoins, onEnterBack: rainCoins });
     }
 
-    /* ⑧ sec4 선순환 화살표 자전 — 화면 밖이면 정지(idle 보호) */
-    const arrow = scroller.querySelector("#sec4 .s4-loop__arrow");
-    if (arrow) {
-      const spin = gsap.to(arrow, { rotation: 360, duration: 6, ease: "none", repeat: -1,
-        transformOrigin: "50% 50%", paused: true });
-      ScrollTrigger.create({ trigger: "#sec4", scroller, start: "top bottom", end: "bottom top",
-        onToggle: (self) => spin.paused(!self.isActive) });
-    }
+    /* ⑧ sec4 선순환 화살표 — 자전 제거(화살촉이 빙글 돌던 버그 + gsap rotation 이 CSS
+       translate 를 덮어 위치 틀어짐). 화살촉은 01 로 향해 고정. 등장은 핀 scrub(.s4-loop)이 담당. */
 
     /* ⑨ 제거 — sec13 은 내용이 담긴 통이미지라 scale 패럴랙스가 위아래를 크롭함. 기존 fade(line 116)만 유지. */
 
