@@ -46,7 +46,7 @@
   <noscript><link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=block" /></noscript>
 
-  <link rel="stylesheet" href="css/style.css?v=20260621d" />
+  <link rel="stylesheet" href="css/style.css?v=20260621h" />
 
   <!-- ── 로딩 스플래시: 좌상단 워드마크 타이핑 (즉시 페인트, 다 쳐지면 페이드 → 메인) ── -->
   <style>
@@ -4008,12 +4008,14 @@
           </section>
 
           <!-- SECTION 2 · OVERVIEW (브랜드 소개) — 디자인 1440×753 -->
+          <div class="ss-pin" id="ss1-pin">
           <section class="ss-sec ss-overview" id="ss1">
             <img class="ss-overview__bg" src="img/sangsangdoor/process/ss_overview_bg.webp" alt="상상의 문 — 방탈출 팀 플레이 장면" loading="eager" decoding="async" fetchpriority="high" />
             <p class="ss-overview__kicker">Overview</p>
             <h3 class="ss-overview__title">예약 사이트를 넘어,<br><span class="ss-em">세계관에 입장</span>하는 경험을 만들다</h3>
             <p class="ss-overview__lead">지점별 테마를 찾기 어려웠던 기존 구조를 탐색에서 예약까지<br>자연스럽게 이어지는 사용자 중심 흐름으로 다시 설계했습니다.</p>
           </section>
+          </div>
 
           <!-- SECTION 3 · TEAM RESEARCH (사용자 리서치) — 디자인 1440×1715 -->
           <section class="ss-sec ss-tr" id="ss2">
@@ -4073,6 +4075,9 @@
           </section>
 
           <!-- SECTION 4 · STORY 포스터 (브랜드 세계관) — story.html 포스터 포팅 -->
+          <!-- 필름스트립 핀: .ss3-stage(화면 고정) 안에서 #ss3 포스터가 위로 팬업하며 레이어 팝인 -->
+          <div id="ss3-pin">
+          <div class="ss3-stage">
           <section class="ss-sec ss-story" id="ss3">
             <div class="ss-story__poster">
               <!-- 반짝이는 별 -->
@@ -4124,6 +4129,8 @@
               <p class="ss-story__lyr ss-story__copyB ss-anim" data-anim="up">지금 당신만의 이야기를 시작해보세요</p>
             </div>
           </section>
+          </div>
+          </div>
 
           <!-- SECTION 5 · 페이지 디자인 (frame-395) -->
           <section class="ss-sec ss-story-pg" id="ss4">
@@ -5111,7 +5118,7 @@
   <script src="js/making-yumi.js?v=20260621p" defer></script>
   <script src="js/making-pledis.js" defer></script>
   <script src="js/making-mathhub.js" defer></script>
-  <script src="js/making-sangsang.js?v=20260621f" defer></script>
+  <script src="js/making-sangsang.js?v=20260621i" defer></script>
   <script src="js/making-playlist.js" defer></script>
   <script src="js/smooth-process.js" defer></script>
 </body>

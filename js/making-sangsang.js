@@ -121,23 +121,40 @@
       ss1El.addEventListener("pointerleave", () => { xTo(0); yTo(0); rTo(0); });
     }
 
-    rise("#ss1 .ss-overview__kicker", {
-      y: 18,
-      scrollTrigger: ST("#ss1 .ss-overview__kicker", "top 86%"),
-    });
-    /* 메인 타이틀 — ss-hero 클립와이프와 중복 해소, 차분한 상승 진입 */
-    rise("#ss1 .ss-overview__title", {
-      y: 34, duration: 1.0, ease: "power4.out", delay: 0.08,
-      scrollTrigger: ST("#ss1 .ss-overview__title", "top 84%"),
-    });
-    rise("#ss1 .ss-overview__lead", {
-      y: 20, delay: 0.14,
-      scrollTrigger: ST("#ss1 .ss-overview__lead", "top 84%"),
-    });
+    /* ── ss1 OVERVIEW 핀: "문 열리듯" 슬릿(clipPath) 오픈 → kicker/title/lead 진입 ──
+       · 섹션(가로형, 뷰포트보다 낮음)을 setSs1Top 으로 뷰포트 세로중앙 sticky 고정
+       · #ss1-pin 범위 동안 scrub — bg 가 중앙 세로슬릿(닫힘)에서 양쪽으로 열리며 장면 공개(상상의 '문')
+       · fromTo + 명시 from/to → invalidateOnRefresh 안전(.from 재캡처 버그 회피)
+       · reduced-motion 시 init early-return → 핀 CSS 폴백(static)으로 정상 표시 */
+    const ss1Pin    = scroller.querySelector("#ss1-pin");
+    const ss1Kicker = scroller.querySelector("#ss1 .ss-overview__kicker");
+    const ss1Title  = scroller.querySelector("#ss1 .ss-overview__title");
+    const ss1Lead   = scroller.querySelector("#ss1 .ss-overview__lead");
+    if (ss1Pin && ss1El && ovBg && ss1Title) {
+      const setSs1Top = () => {
+        const gap = scroller.clientHeight - ss1El.offsetHeight;
+        ss1El.style.top = Math.max(0, Math.round(gap / 2)) + "px";
+      };
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: ss1Pin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, invalidateOnRefresh: true,
+          onRefreshInit: setSs1Top,
+        },
+      })
+        .fromTo(ovBg,      { clipPath: "inset(0 49.5% 0 49.5%)" }, { clipPath: "inset(0 0% 0 0%)", ease: "power2.inOut", duration: 1.0 }, 0)
+        .fromTo(ss1Kicker, { opacity: 0, y: 26 }, { opacity: 1, y: 0, ease: "power3.out", duration: 0.5 }, 0.5)
+        .fromTo(ss1Title,  { opacity: 0, y: 30 }, { opacity: 1, y: 0, ease: "power4.out", duration: 0.6 }, 0.62)
+        .fromTo(ss1Lead,   { opacity: 0, y: 22 }, { opacity: 1, y: 0, ease: "power3.out", duration: 0.6 }, 0.8);
+      setSs1Top();
+      window.addEventListener("resize", setSs1Top);
+    }
 
-    // .ss-em 강조어 전체: 진입 시 부드럽게 페이드인 (주황 #ffc284는 CSS 유지)
+    // .ss-em 강조어 (ss1 제외 — ss1 은 위 핀 타임라인에서 title째 진입) 진입 시 페이드인
     // ※ display/transform 변경 금지 — 문장 중간 인라인 em의 줄바꿈·순서 깨짐 방지(이전 yPercent 버그)
     scroller.querySelectorAll(".ss-em").forEach((em) => {
+      if (em.closest("#ss1")) return;
       gsap.from(em, {
         opacity: 0, duration: 0.9, ease: "power2.out",
         scrollTrigger: ST(em, "top 85%"),
@@ -237,16 +254,19 @@
     }
 
     /* ================================================================
-       SECTION 3 · STORY 포스터 (#ss3)
-       · .ss-story__lyr[data-anim] 각각 개별 ScrollTrigger(once)
-       · data-anim → FROM 상태 매핑 (story.html 원본 재현)
-       · 핀 없음. 스크롤 진입 시 한 번만 등장(once:true, start 'top 70%')
-       · transform/opacity 만 건드림 — left/top 레이아웃 속성 보존
-       · 별(.ss-story__star)은 CSS twinkle 이 있으므로 건드리지 않음
+       SECTION 3 · STORY 포스터 (#ss3) — 필름스트립 핀
+       · .ss3-stage(화면 높이) sticky 고정, 그 안에서 #ss3 포스터가 위로 translateY 팬업
+       · 레이어 11개(.ss-story__lyr[data-anim])는 스테이지에 들어오는 순간 data-anim 별 팝인(1회)
+       · onLeaveBack 시 from-상태 리셋 → 재스크롤 시 조립 재생
+       · stage 높이/travel 은 onRefreshInit(measure)에서 스크롤러 clientHeight 기준 산출
+       · #ss3 translate 됨 → 레이어 개별 ScrollTrigger 금지(좌표 깨짐). 메인 scrub progress 로 구동
+       · 별(.ss-story__star)은 CSS twinkle — 건드리지 않음
     ================================================================ */
-    const ss3 = scroller.querySelector("#ss3");
-    if (ss3) {
-      /* data-anim 값 → GSAP fromTo FROM 상태 매핑 */
+    const ss3Pin   = scroller.querySelector("#ss3-pin");
+    const ss3Stage = scroller.querySelector("#ss3-pin .ss3-stage");
+    const ss3El    = scroller.querySelector("#ss3");
+    if (ss3Pin && ss3Stage && ss3El) {
+      /* data-anim → FROM 상태 매핑 (story.html 원본 재현) */
       const ANIM_FROM = {
         up:    { y: 48,   opacity: 0 },
         drop:  { y: -50,  opacity: 0, rotate: -5 },
@@ -256,32 +276,52 @@
         pop:   { scale: 0.55, opacity: 0, transformOrigin: "50% 100%" },
         swing: { rotate: -13, opacity: 0, transformOrigin: "50% 0%" },
       };
+      const layers = [...ss3El.querySelectorAll(".ss-story__lyr[data-anim]")]
+        .filter((el) => ANIM_FROM[el.dataset.anim]);
+      /* 초기 hidden 상태 (gsap.set → GSAP 미로드/reduced-motion 시 그대로 보임) */
+      const resetLayers = () => layers.forEach((el) => gsap.set(el, ANIM_FROM[el.dataset.anim]));
+      resetLayers();
 
-      /* TO 상태 공통 기저 — 자연 상태로 복귀 */
-      const TO_BASE = {
-        x: 0, y: 0, rotate: 0, scale: 1, opacity: 1,
-        duration: 1.4, ease: "power3.out",
-        clearProps: "transform,transformOrigin",  /* 인라인 transform 제거 → CSS 원복 */
+      let travel = 1;
+      const thresholds = new Map();
+      const measure = () => {
+        const stageH = scroller.clientHeight;
+        ss3Stage.style.height = stageH + "px";
+        travel = Math.max(1, ss3El.offsetHeight - stageH);
+        layers.forEach((el) => {
+          const cy = el.offsetTop + el.offsetHeight / 2;     /* #ss3 내 레이어 중심 Y */
+          /* 팬업 중 레이어 중심이 스테이지 하단 ~74% 지점에 닿을 때 등장 */
+          const t = (cy - 0.74 * stageH) / travel;
+          thresholds.set(el, Math.min(0.97, Math.max(0, t)));
+        });
       };
 
-      ss3.querySelectorAll(".ss-story__lyr[data-anim]").forEach((el) => {
-        const type = el.dataset.anim;
-        const fromVars = ANIM_FROM[type];
-        if (!fromVars) return;  /* 알 수 없는 data-anim 값 무시 */
+      const revealed = new Set();
+      const revealLayer = (el) => {
+        if (revealed.has(el)) return;
+        revealed.add(el);
+        gsap.to(el, {
+          x: 0, y: 0, rotate: 0, scale: 1, opacity: 1,
+          duration: 1.0, ease: "power3.out",
+          clearProps: "transform,transformOrigin",  /* 인라인 transform 제거 → CSS 원복 */
+        });
+      };
 
-        gsap.fromTo(
-          el,
-          fromVars,
-          Object.assign({}, TO_BASE, {
-            scrollTrigger: {
-              trigger: el,
-              scroller,
-              start: "top 70%",
-              once: true,
-            },
-          })
-        );
-      });
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: ss3Pin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, invalidateOnRefresh: true,
+          onRefreshInit: measure,
+          onUpdate: (self) => {
+            const p = self.progress;
+            for (const el of layers) if (p >= thresholds.get(el)) revealLayer(el);
+          },
+          onLeaveBack: () => { gsap.killTweensOf(layers); revealed.clear(); resetLayers(); },
+        },
+      }).fromTo(ss3El, { y: 0 }, { y: () => -travel, ease: "none", duration: 1 }, 0);
+      measure();
+      window.addEventListener("resize", measure);
     }
 
     /* ================================================================
