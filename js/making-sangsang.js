@@ -490,24 +490,33 @@
         const keyTopTweens = [];
 
         const onWheelBlock = (e) => { e.preventDefault(); };
-        /* v10: 달칵 동안 스크롤 위치 하드핀 — preventDefault 를 빠져나간 입력(키보드·스크롤바·모멘텀)도 되돌림 */
-        let scrollLockY = 0;
+        /* v10/11: 달칵 동안 스크롤 위치 하드핀 — preventDefault 를 빠져나간 입력(키보드·스크롤바·모멘텀)도 되돌림 */
+        let scrollLockY = 0, scrollLockOn = false;
         const onScrollLock = () => { if (scroller.scrollTop !== scrollLockY) scroller.scrollTop = scrollLockY; };
-        /* M1: 가드 플래그로 중복 add/remove 방지 — passive:false 리스너는 한 번만 연결 */
+        /* 휠/터치 입력 차단(즉시) — M1: 가드 플래그로 중복 부착 방지 */
         const addScrollBlock = () => {
           if (scrollBlockActive) return;
           scrollBlockActive = true;
-          scrollLockY = scroller.scrollTop;          /* 달칵 발동 지점에 고정 */
           scroller.addEventListener("wheel",     onWheelBlock, { passive: false });
           scroller.addEventListener("touchmove", onWheelBlock, { passive: false });
-          scroller.addEventListener("scroll",    onScrollLock, { passive: true });
+        };
+        /* v11: 위치 하드핀 — 명패 센터 스냅 완료 후 그 지점에 고정 */
+        const lockScrollAt = (y) => {
+          scrollLockY = y;
+          if (scrollLockOn) return;
+          scrollLockOn = true;
+          scroller.addEventListener("scroll", onScrollLock, { passive: true });
         };
         const removeScrollBlock = () => {
-          if (!scrollBlockActive) return;
-          scrollBlockActive = false;
-          scroller.removeEventListener("wheel",     onWheelBlock);
-          scroller.removeEventListener("touchmove", onWheelBlock);
-          scroller.removeEventListener("scroll",    onScrollLock);
+          if (scrollBlockActive) {
+            scrollBlockActive = false;
+            scroller.removeEventListener("wheel",     onWheelBlock);
+            scroller.removeEventListener("touchmove", onWheelBlock);
+          }
+          if (scrollLockOn) {
+            scrollLockOn = false;
+            scroller.removeEventListener("scroll", onScrollLock);
+          }
         };
 
         /* ── keyTL: scrub으로 낙하 전체 제어 ── */
@@ -550,6 +559,21 @@
                   rotate: 720,               /* WP[6] 720°=0° 시각 */
                   scale:  1,
                   opacity: 1,                /* v9: 빠른 스크롤로 페이드 미완 시에도 달칵 땐 또렷 */
+                });
+
+                /* v11: 달칵 멈춤 화면에서 명패가 뷰포트 정중앙에 오도록 부드럽게 스냅 → 완료 후 그 지점 하드핀.
+                 * self.end("center center")가 모달 스크롤러에선 명패를 중앙에 안 맞춰서, 명패 실측 geometry로
+                 * 중앙 정렬 scrollTop 직접 계산(현재 위치 + 중심 오프셋), maxScroll 로 클램프. */
+                const _scR = scroller.getBoundingClientRect();
+                const _pR  = plaque.getBoundingClientRect();
+                const _off = (_pR.top + _pR.height / 2 - _scR.top) - scroller.clientHeight / 2;
+                const _maxY = scroller.scrollHeight - scroller.clientHeight;
+                const centerY = Math.max(0, Math.min(_maxY, Math.round(scroller.scrollTop + _off)));
+                const sp = { y: scroller.scrollTop };
+                gsap.to(sp, {
+                  y: centerY, duration: 0.3, ease: "power2.out",
+                  onUpdate() { scroller.scrollTop = sp.y; },
+                  onComplete() { lockScrollAt(centerY); },
                 });
 
                 clackTL = gsap.timeline({ onComplete() { clackTL=null; } })
