@@ -66,9 +66,56 @@
     });
 
     /* ── SECTION 3 ── */
+    /* ── SECTION 3 GOAL — 스크롤 핀(A형, GOAL 선언 모먼트) ──
+       헤딩 진입 → 고정 후 솔루션 1·2·3 순차 → 연결 점선 → GOAL 박스 팝 + 동전 낙하.
+       페르소나 블록(.s3-persona)은 핀 밖에서 자연 스크롤. framing 은 뷰포트 적응. */
+    const s3goalEl = scroller.querySelector("#sec3 .s3-goal");
+    const setSec3Top = () => {
+      if (!s3goalEl) return;
+      const vp = scroller.clientHeight; if (!vp) return;
+      const base = s3goalEl.getBoundingClientRect().top;
+      const relT = (s) => { const e = s3goalEl.querySelector(s); return e ? e.getBoundingClientRect().top - base : 0; };
+      const relB = (s) => { const e = s3goalEl.querySelector(s); return e ? e.getBoundingClientRect().bottom - base : 0; };
+      const cTop = relT(".mk-eyebrow"), gBot = relB(".s3-goalbox"), fTop = relT(".s3-sols");
+      const top = (gBot - cTop) <= vp
+        ? (vp - (gBot - cTop)) / 2 - cTop
+        : (vp - (gBot - fTop)) / 2 - fTop;
+      s3goalEl.style.top = Math.round(top) + "px";
+    };
+
+    /* 동전 낙하 — GOAL 박스 위로 쏟아져 "절약이 쌓이는" 순간. 스티키 프레임(.s3-goal)에 부착 */
+    const dropGoalCoins = () => {
+      const box = scroller.querySelector("#sec3 .s3-goalbox");
+      if (!s3goalEl || !box) return;
+      const land = box.offsetTop + box.offsetHeight * 0.35;
+      for (let i = 0; i < 12; i++) {
+        const c = document.createElement("div");
+        c.className = "jg-coin"; c.textContent = "₩";
+        c.style.left = gsap.utils.random(34, 66) + "%";
+        s3goalEl.appendChild(c);
+        gsap.fromTo(c, { y: -40, opacity: 1, rotation: 0 },
+          { y: land, rotation: gsap.utils.random(300, 680), opacity: 0,
+            duration: gsap.utils.random(1.2, 1.9), ease: "power1.in", delay: i * 0.07,
+            onComplete: () => c.remove() });
+      }
+    };
+
+    /* 헤딩 — 진입 단계 rise(고정 후 잘릴 수 있으므로 진입 시 노출) */
     gsap.from("#sec3 .s3-goal > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec3 .s3-goal", "top 84%") });
-    gsap.from(".s3-sol",     { opacity: 0, y: 34, stagger: .12, duration: .8, ease: "power3.out", scrollTrigger: ST(".s3-sols", "top 84%") });
-    gsap.from(".s3-goalbox", { opacity: 0, scale: .94, y: 20, duration: .9, ease: "back.out(1.3)", scrollTrigger: ST(".s3-goalbox", "top 86%") });
+
+    /* 핀 scrub: 솔루션 1→2→3 → 연결 점선 → GOAL 박스 팝 → 동전 */
+    const pinTl_s3 = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#sec3-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec3Top },
+    });
+    pinTl_s3
+      .from("#sec3 .s3-sol", { opacity: 0, y: 34, stagger: 0.1, duration: 0.13 }, 0.16)
+      .from("#sec3 .s3-link i", { opacity: 0, scale: 0.3, transformOrigin: "50% 50%", stagger: 0.06, duration: 0.06 }, 0.52)
+      .fromTo("#sec3 .s3-goalbox", { opacity: 0, scale: 0.94, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.12 }, 0.66)
+      .call(dropGoalCoins, null, 0.72);
+
+    setSec3Top();
+    window.addEventListener("resize", setSec3Top);
     gsap.from("#sec3 .s3-persona > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST(".s3-persona", "top 80%") });
     gsap.from(".s3-pcard",   { opacity: 0, y: 42, stagger: .16, duration: .85, ease: "power3.out", scrollTrigger: ST(".s3-pcards", "top 82%") });
 
@@ -220,27 +267,7 @@
 
     /* ③ 굴비 스윙은 SECTION 6 핀 블록(위)으로 이동 — 핀 조립 시점에 착지 발화 + hover 재생 */
 
-    /* ④ 동전 낙하 파티클 — sec3(PROJECT GOAL) 오른쪽 위 빈 여백으로 쏟아짐.
-       진입(아래로/위로) 할 때마다 재생, transform 만, 떨어진 뒤 제거 */
-    const coinSec = document.getElementById("sec3");
-    if (coinSec) {
-      const rainCoins = () => {
-        const h = coinSec.offsetHeight || 800;
-        for (let i = 0; i < 14; i++) {
-          const c = document.createElement("div");
-          c.className = "jg-coin";
-          c.textContent = "₩";
-          c.style.left = gsap.utils.random(60, 93) + "%";   // 오른쪽 영역
-          coinSec.appendChild(c);
-          gsap.fromTo(c, { y: -50, opacity: 1, rotation: 0 },
-            { y: h * 0.34, rotation: gsap.utils.random(360, 900), opacity: 0,
-              duration: gsap.utils.random(1.6, 2.4), ease: "power1.in", delay: i * 0.1,
-              onComplete: () => c.remove() });
-        }
-      };
-      ScrollTrigger.create({ trigger: coinSec, scroller, start: "top 80%",
-        onEnter: rainCoins, onEnterBack: rainCoins });
-    }
+    /* ④ 동전 낙하 — SECTION 3 핀 블록(위)으로 이동: GOAL 박스 팝 시점에 박스 위로 쏟아짐 */
 
     /* ⑧ sec4 선순환 화살표 — 자전 제거(화살촉이 빙글 돌던 버그 + gsap rotation 이 CSS
        translate 를 덮어 위치 틀어짐). 화살촉은 01 로 향해 고정. 등장은 핀 scrub(.s4-loop)이 담당. */
