@@ -161,9 +161,9 @@
       if (mh2Quote) tl.fromTo(mh2Quote, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.26);
       if (beforePanel) tl.fromTo(beforePanel, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.34);
       if (beforeBits.length) tl.fromTo(beforeBits, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.05 }, 0.44);
+      /* afterPanel: x/opacity 진입만 (파란 틴트 backgroundColor scrub 는 매 틱 repaint+5% 알파로 비가시 → perf 게이트 제거) */
       if (afterPanel) {
         tl.fromTo(afterPanel, { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.54);
-        tl.fromTo(afterPanel, { backgroundColor: "rgba(49,110,250,0)" }, { backgroundColor: "rgba(49,110,250,0.05)", duration: 0.5, ease: "power1.out" }, 0.6);
       }
       if (afterBits.length) tl.fromTo(afterBits, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.05 }, 0.66);
       /* 시그니처: 4 카테고리 카드 흩어져 → 그리드 정렬 (카오스→구조) */
@@ -172,7 +172,8 @@
         { opacity: 1, scale: 1, x: 0, y: 0, rotate: 0, duration: 0.6, ease: "back.out(1.5)", stagger: 0.12 },
         0.78);
       setMh2Top();
-      window.addEventListener("resize", setMh2Top);
+      let _mh2Raf = 0;
+      window.addEventListener("resize", () => { cancelAnimationFrame(_mh2Raf); _mh2Raf = requestAnimationFrame(setMh2Top); });
     }
 
     /* ================================================================
@@ -282,7 +283,8 @@
       });
       if (mh4Legs.length) tl.fromTo(mh4Legs, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.14 }, 0.6);
       setMh4Top();
-      window.addEventListener("resize", setMh4Top);
+      let _mh4Raf = 0;
+      window.addEventListener("resize", () => { cancelAnimationFrame(_mh4Raf); _mh4Raf = requestAnimationFrame(setMh4Top); });
     }
 
     /* ================================================================
@@ -420,7 +422,8 @@
         if (cmsg)  tl.fromTo(cmsg,  { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, at + 0.08);
       });
       setMh7Top();
-      window.addEventListener("resize", setMh7Top);
+      let _mh7Raf = 0;
+      window.addEventListener("resize", () => { cancelAnimationFrame(_mh7Raf); _mh7Raf = requestAnimationFrame(setMh7Top); });
     }
     /* outro: translateX(-50%) 중앙정렬 → clearProps로 완료 후 CSS 복원 */
     up("#mh7 .mh-s7__outro", "top 84%", { y: 28, duration: 0.95, clearProps: "transform" });
