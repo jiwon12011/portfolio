@@ -70,7 +70,7 @@
        색있는 글자가 아래에서 올라와 그 자리로(뾰옹). ym2 는 기존 char-split 유지 → 제외.
     ================================================================ */
     const escHtml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    ["#ym1", "#ym3", "#ym4", "#ym5", "#ym6"].forEach((id) => {
+    ["#ym1", "#ym2", "#ym3", "#ym4", "#ym5", "#ym6"].forEach((id) => {
       const title = scroller.querySelector(id + " [class$='__title']");
       const b = title && title.querySelector("b");
       if (!b) return;
@@ -79,8 +79,9 @@
       const emphColor = getComputedStyle(b).color;        // 강조색(핑크)
       const inkColor = getComputedStyle(title).color;       // 타이틀 기본색(검정값)
       b.classList.add("ym-emph");
-      b.setAttribute("aria-label", text);
+      /* 낭독용 실제 텍스트(sr-only) + 시각용 2겹(aria-hidden) — <b> aria-label 은 AT 무시 가능하므로 실텍스트로 보존 */
       b.innerHTML =
+        '<span class="ym-sr">' + escHtml(text) + "</span>" +
         '<span class="ym-emph__base" aria-hidden="true">' + escHtml(text) + "</span>" +
         '<span class="ym-emph__color" aria-hidden="true">' + escHtml(text) + "</span>";
       const baseEl = b.querySelector(".ym-emph__base");
@@ -159,43 +160,7 @@
         .to(bleed, { scale: 3, opacity: 0, duration: 0.95, ease: "power2.in" });
     }
 
-    /* [추가] 타이틀 <b>색과 움직임</b> char-split 컬러 플래시
-       SplitText CDN 금지 → 수동 innerHTML 분해, aria-label 보존 */
-    (() => {
-      const titleEl = scroller.querySelector("#ym2 .ym-r2__title");
-      if (!titleEl) return;
-      const boldEl = titleEl.querySelector("b");
-      if (!boldEl) return;
-
-      const fullText = boldEl.textContent || "";
-      if (!fullText.length) return;
-
-      /* aria-label로 원문 보존 */
-      boldEl.setAttribute("aria-label", fullText);
-
-      /* 글자별 스팬으로 분해 */
-      const flashColors = ["#ff6b9d", "#4a90e2", "#ffb347"];
-      let rebuilt = "";
-      Array.from(fullText).forEach((ch, i) => {
-        const safe = ch === "<" ? "&lt;" : ch === ">" ? "&gt;" : ch === "&" ? "&amp;" : ch;
-        rebuilt += `<span class="ym-char" aria-hidden="true" data-col="${flashColors[i % flashColors.length]}">${safe}</span>`;
-      });
-      boldEl.innerHTML = rebuilt;
-
-      const chars = boldEl.querySelectorAll(".ym-char");
-      if (!chars.length) return;
-
-      /* fromTo: 각 색 플래시 → b 요소 CSS 색(#ff6b9d) 수렴 */
-      gsap.fromTo(chars,
-        { color: (i, el) => el.dataset.col || "#ff6b9d" },
-        {
-          color: "#ff6b9d",
-          duration: 0.5, ease: "power2.out", stagger: 0.06,
-          scrollTrigger: ST(titleEl, "top 84%"),
-          clearProps: "color",
-        }
-      );
-    })();
+    /* ym2 타이틀(색과 움직임)도 다른 섹션과 동일한 강조어 컬러 롤업으로 통일 — 위 타이틀 롤업 블록의 배열에 #ym2 포함 */
 
     /* 기존: palette y 페이드 유지 */
     const paletteEl = scroller.querySelector("#ym2 .ym-r2__palette");

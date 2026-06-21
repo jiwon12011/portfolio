@@ -4915,11 +4915,9 @@ html.process-open { overflow: hidden; }
 .ym-emph { position: relative; display: inline-block; vertical-align: bottom; }
 .ym-emph__base, .ym-emph__color { display: block; white-space: nowrap; }
 .ym-emph__color { position: absolute; left: 0; top: 0; }
-@media (prefers-reduced-motion: reduce) {
-  /* 폴백: 정적 — 강조어는 색만(핑크) 보이게(base 숨김) */
-  .ym-emph__base { display: none; }
-  .ym-emph__color { position: static; }
-}
+/* 낭독 전용(시각 숨김) — 강조어 원문을 스크린리더에 보존. 시각 2겹은 aria-hidden */
+.ym-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 /* SECTION 2.5 · 캐릭터 러닝 영상 배너 (와이드 밴드) */
 .ym-band { aspect-ratio: 1440 / 600; }
 .ym-band__vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
