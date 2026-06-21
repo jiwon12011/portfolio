@@ -53,24 +53,26 @@
     /* ================================================================
        SECTION 1 · BACKGROUND (#gw1)
     ================================================================ */
+    /* 헤딩(lead/label/title/desc) — 핀 진입 단계에서 자연 스크롤되며 rise.
+       핀 고정 후엔 화면 위로 잘리므로 진입 시 한 번 보여주는 역할. */
     rise("#gw1 .gw-bg__lead", { y: 20, stagger: 0.14, duration: 0.9,
       scrollTrigger: ST("#gw1 .gw-bg__lead--1", "top 86%") });
     rise("#gw1 .gw-bg__label", { y: 20, scrollTrigger: ST("#gw1 .gw-bg__label", "top 84%") });
     rise("#gw1 .gw-bg__title", { y: 28, duration: 0.95, scrollTrigger: ST("#gw1 .gw-bg__title", "top 84%") });
     rise("#gw1 .gw-bg__desc", { y: 22, delay: 0.08, scrollTrigger: ST("#gw1 .gw-bg__desc", "top 84%") });
-    gsap.from("#gw1 .gw-bg__shot", {
-      opacity: 0, x: 40, duration: 1.0, ease: "power3.out",
-      scrollTrigger: ST("#gw1 .gw-bg__shot", "top 80%"),
+
+    /* 핀 scrub 타임라인 — #gw1-pin(280svh) 기준.
+       진입 0~0.33: 헤딩 스크롤(위 rise 담당) → top:-55.7cqw 로 고정되는 지점
+       0.34~  : 고정된 프레임(shot+카드4+goal)에서 순차 조립 */
+    const pinTl1 = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#gw1-pin", scroller, start: "top top", end: "bottom bottom", scrub: true },
     });
-    gsap.from("#gw1 .gw-pcard", {
-      opacity: 0, y: 30, duration: 0.8, ease: "power3.out", stagger: 0.12,
-      scrollTrigger: ST("#gw1 .gw-pcard--1", "top 84%"),
-    });
-    gsap.from("#gw1 .gw-bg__goal", {
-      opacity: 0, y: 22, scale: 0.97, transformOrigin: "50% 50%",
-      duration: 0.9, ease: "back.out(1.3)",
-      scrollTrigger: ST("#gw1 .gw-bg__goal", "top 88%"),
-    });
+    pinTl1
+      .from("#gw1 .gw-bg__shot", { opacity: 0, x: 40, duration: 0.16 }, 0.34)
+      .from("#gw1 .gw-pcard", { opacity: 0, y: 30, duration: 0.16, stagger: 0.09 }, 0.42)
+      .from("#gw1 .gw-bg__goal",
+        { opacity: 0, y: 22, scale: 0.97, transformOrigin: "50% 50%", duration: 0.14 }, 0.86);
 
     /* ================================================================
        SECTION 2 · GAME RESEARCH (#gw2) — CSS sticky 핀 + 단일 scrub 타임라인
@@ -156,17 +158,22 @@
     /* ================================================================
        SECTION 3 · EXPERIMENT (#gw3) — 3 시안 목업
     ================================================================ */
+    /* 헤딩 — 핀 진입 단계에서 자연 스크롤되며 rise(고정 후엔 위로 잘림) */
     rise("#gw3 .gw-r3__label", { y: 20, scrollTrigger: ST("#gw3 .gw-r3__label", "top 84%") });
     rise("#gw3 .gw-r3__title", { y: 28, duration: 0.95, scrollTrigger: ST("#gw3 .gw-r3__title", "top 84%") });
     rise("#gw3 .gw-r3__desc", { y: 22, delay: 0.08, scrollTrigger: ST("#gw3 .gw-r3__desc", "top 84%") });
-    gsap.from("#gw3 .gw-r3__shot", {
-      opacity: 0, y: 40, duration: 0.95, ease: "power3.out", stagger: 0.14,
-      scrollTrigger: ST("#gw3 .gw-r3__shot--1", "top 82%"),
+
+    /* 핀 scrub — #gw3-pin(260svh). top:-33.4cqw 로 고정 시 3 시안 목업+설명이 한 화면.
+       0.28~ : EXP01→02→03 시안 순차 등장, 이어서 설명 텍스트 */
+    const pinTl3 = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#gw3-pin", scroller, start: "top top", end: "bottom bottom", scrub: true },
     });
-    gsap.from("#gw3 .gw-r3__exp", {
-      opacity: 0, y: 24, duration: 0.8, ease: "power3.out", stagger: 0.12,
-      scrollTrigger: ST("#gw3 .gw-r3__exp--1", "top 88%"),
-    });
+    pinTl3
+      .from("#gw3 .gw-r3__shot", { opacity: 0, y: 40, duration: 0.18, stagger: 0.12 }, 0.28)
+      .from("#gw3 .gw-r3__exp", { opacity: 0, y: 24, duration: 0.14, stagger: 0.08 }, 0.58);
+
+    /* goal — 핀 해제 후 자연 스크롤로 등장 */
     gsap.from("#gw3 .gw-r3__goal", {
       opacity: 0, y: 22, scale: 0.97, transformOrigin: "50% 50%",
       duration: 0.9, ease: "back.out(1.3)",

@@ -3053,22 +3053,28 @@ html.process-open { overflow: hidden; }
    · 개별 .gw-sec 은 여전히 overflow:hidden → 섹션 내부 클립은 유지됨 */
 #process-gwihon .process__making--gwihon { overflow: visible; }
 
-/* gw2-pin: 260svh 높이로 scrub 스크롤 길이 확보
-   · container-type:inline-size → 자식 #gw2 의 top 값에 cqw 사용 가능(반응형) */
-.gw-pin { height: 260svh; container-type: inline-size; }
+/* gw 핀 래퍼 공통: container-type:inline-size → 자식 섹션의 top 값에 cqw 사용 가능(반응형).
+   높이(scrub 스크롤 길이)는 섹션별로 개별 지정 */
+.gw-pin { container-type: inline-size; }
+#gw1-pin { height: 280svh; }
+#gw2-pin { height: 260svh; }
+#gw3-pin { height: 260svh; }
 
-/* gw2 섹션: sticky 고정 — position:relative(.gw-sec)를 ID 특이도로 덮음
-   · top:-16.65cqw → 핀 멈춤 framing 을 위로 보정:
-     desc(상단 텍스트)가 화면 최상단, 메달리온이 세로 중앙, 4개 원이 모두 화면 안에 들어오도록.
-     (cqw = .gw-pin 너비 기준 → 모달 크기에 비례 스케일) */
+/* 핀 섹션 sticky 고정 — position:relative(.gw-sec)를 ID 특이도로 덮음.
+   top 음수 cqw → 핀 멈춤 framing 을 위로 보정(진입 시 헤딩 노출, 고정 시 비주얼 중앙).
+   · #gw2 top:-16.65cqw → desc 상단·메달리온 중앙·4원 모두 화면 안
+   · #gw1 top:-55.7cqw → shot+카드4+goal 이 한 화면에(헤딩은 진입 시 노출 후 잘림) */
 #gw2 { position: sticky; top: -16.65cqw; }
+#gw1 { position: sticky; top: -55.7cqw; }
+/* #gw3 top:-33.4cqw → shot(3 시안)+exp 설명이 한 화면(헤딩 진입 노출, goal 은 해제 후) */
+#gw3 { position: sticky; top: -33.4cqw; }
 
 /* reduced-motion 폴백: 핀 해제 + 정적 표시
    · making-gwihon.js 의 early-return 으로 scrub 미실행 → 요소 CSS 기본상태 그대로 노출
    · height:auto + position:static 으로 스크롤 잠금 완전 해제 */
 @media (prefers-reduced-motion: reduce) {
   .gw-pin { height: auto; }
-  #gw2 { position: static; }
+  #gw1, #gw2, #gw3 { position: static; }
 }
 
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }

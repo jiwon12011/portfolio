@@ -2467,7 +2467,10 @@
             <span class="gw-band__scrim" aria-hidden="true"></span>
           </section>
 
-          <!-- SECTION 1 · BACKGROUND · 문제 정의 — 디자인 1440×1705 -->
+          <!-- SECTION 1 · BACKGROUND · 문제 정의 — 디자인 1440×1705
+               · CSS sticky 핀: 진입 시 헤딩 노출 → 고정 후 shot+카드4+goal scrub 조립
+               · #gw1-pin{height:280svh} 스크롤 길이, #gw1{sticky; top:-55.7cqw} 프레이밍 -->
+          <div class="gw-pin" id="gw1-pin">
           <section class="gw-sec gw-bg" id="gw1">
             <!-- 배경 레이어 -->
             <img class="gw-bg__tex" src="img/hon/process/bg1.webp" alt="" aria-hidden="true" loading="lazy" />
@@ -2538,6 +2541,7 @@
               <p>그래서 목표는 단순한 리디자인이 아니라, <b>귀혼의 정체성을 웹에서 다시 경험하게 만드는 것</b>이었습니다.</p>
             </div>
           </section>
+          </div><!-- /#gw1-pin -->
 
           <!-- SECTION 2 · GAME RESEARCH · 게임 리서치 — CSS sticky 핀 래퍼(PoC)
                · .gw-pin { height:260svh } 로 스크롤 길이 확보
@@ -2581,7 +2585,10 @@
             </section>
           </div>
 
-          <!-- SECTION 3 · EXPERIMENT · 방향 탐색 — 디자인 1440×1588 (다크 + 시안 목업) -->
+          <!-- SECTION 3 · EXPERIMENT · 방향 탐색 — 디자인 1440×1588 (다크 + 시안 목업)
+               · CSS sticky 핀: 진입 시 헤딩 → 고정 후 EXP01→02→03 시안 순차 조립
+               · #gw3-pin{height:260svh}, #gw3{sticky; top:-33.4cqw} -->
+          <div class="gw-pin" id="gw3-pin">
           <section class="gw-sec gw-r3" id="gw3">
             <img class="gw-r3__bg" src="img/hon/process/bg3.webp" alt="" aria-hidden="true" loading="lazy" />
             <span class="gw-r3__scrim" aria-hidden="true"></span>
@@ -2636,6 +2643,7 @@
               <p>귀혼M에 필요한 것은 웹사이트가 아니라, <b>게임을 시작하고 싶게 만드는 경험</b>이었다.</p>
             </div>
           </section>
+          </div><!-- /#gw3-pin -->
 
           <!-- 분위기 배너 (영상) · 방향 탐색 → 디자인 가이드 진입 -->
           <section class="gw-sec gw-band" id="gw-band-2" aria-hidden="true">
