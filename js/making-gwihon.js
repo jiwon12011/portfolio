@@ -77,7 +77,7 @@
     /* ================================================================
        SECTION 2 · GAME RESEARCH (#gw2) — CSS sticky 핀 + 단일 scrub 타임라인
        · 래퍼 #gw2-pin(height:260svh) 이 스크롤 길이를 확보
-       · #gw2 { position:sticky; top:0 } CSS 규칙이 화면 고정을 담당
+       · #gw2 { position:sticky; top:-16.65cqw } CSS 규칙이 화면 고정 + 멈춤 framing(메달리온 중앙) 담당
        · 스크롤 진행도(0→1)를 4단계로 배분:
            0~0.15  label/title/desc 등장
            0.15~0.4  메달리온 스케일 인 + 링 회전 안착
