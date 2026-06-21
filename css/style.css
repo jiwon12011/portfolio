@@ -5478,6 +5478,16 @@ html.process-open { overflow: hidden; }
   overflow: visible;                       /* 네이티브 position:sticky(섹션8) 허용 — overflow:hidden 조상이 있으면 sticky가 안 먹음 */
 }
 .pz-sec { position: relative; container-type: inline-size; background: #efe9e2; overflow: hidden; }
+
+/* ── POZE 스크롤 핀 (making 래퍼는 이미 overflow:visible) ── */
+.pz-pin { container-type: inline-size; }
+/* pz-s7 COLOR DIRECTION: 뷰포트에 들어옴(≈0.67×) → A형 핀, 색 카드 페인트-필 */
+#pz-s7-pin { height: 220svh; }
+#pz-s7 { position: sticky; top: 0; }  /* top 은 making-poze.js setPzS7Top 가 중앙정렬로 덮음 */
+@media (prefers-reduced-motion: reduce) {
+  .pz-pin { height: auto; }
+  #pz-s7 { position: static; }
+}
 .pz-sec .pz-band { display: block; width: 100%; height: auto; }
 .pz-serif {
   position: absolute; left: 50%; transform: translateX(-50%);

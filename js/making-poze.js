@@ -339,22 +339,32 @@
     }
 
     /* ================================================================
-       SECTION 7 — #pz-s7 (COLOR DIRECTION)
-       제목 페이드+업 / 카드 3장 좌→우 stagger 페이드+업.
+       SECTION 7 — #pz-s7 (COLOR DIRECTION) — 스크롤 핀 (A형)
+       섹션 뷰포트에 들어옴(≈0.67×) → setPzS7Top 중앙 sticky, #pz-s7-pin scrub:
+       타이틀 + 색 카드 3장 clipPath 페인트-업(아래서 색 차오름, 뷰티 팔레트 공개).
+       기존 STS 교체. fromTo+명시값(refresh 안전). reduced-motion: init early-return + CSS 폴백.
     ================================================================ */
-    const colorTitle = scroller.querySelector("#pz-s7 .pz-color__title");
-    const colorCards = scroller.querySelectorAll("#pz-s7 .pz-color__card");
-    if (colorTitle) {
-      gsap.from(colorTitle, {
-        opacity: 0, y: 20, ease: "none",
-        scrollTrigger: STS("#pz-s7", "top 86%", "top 50%"),
+    const pzS7Pin = scroller.querySelector("#pz-s7-pin");
+    const pzS7El  = scroller.querySelector("#pz-s7");
+    if (pzS7Pin && pzS7El) {
+      const setPzS7Top = () => {
+        pzS7El.style.top = Math.round((scroller.clientHeight - pzS7El.offsetHeight) / 2) + "px";
+      };
+      const cTitle = scroller.querySelector("#pz-s7 .pz-color__title");
+      const cCards = [...scroller.querySelectorAll("#pz-s7 .pz-color__card")];
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: pzS7Pin, scroller,
+          start: "top top", end: "bottom bottom",
+          scrub: true, onRefreshInit: setPzS7Top,
+        },
       });
-    }
-    if (colorCards.length) {
-      gsap.from(colorCards, {
-        opacity: 0, y: 30, ease: "none", stagger: 0.12,
-        scrollTrigger: STS("#pz-s7", "top 82%", "top 44%"),
+      if (cTitle) tl.fromTo(cTitle, { clipPath: "inset(100% 0 0 0)", opacity: 0 }, { clipPath: "inset(0% 0 0 0)", opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
+      cCards.forEach((card, i) => {
+        tl.fromTo(card, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.5, ease: "power2.out" }, 0.3 + i * 0.2);
       });
+      setPzS7Top();
+      window.addEventListener("resize", setPzS7Top);
     }
 
     /* ================================================================
