@@ -263,43 +263,41 @@
        기존: header + points + group 유지
        [교체] 메뉴 카드 bulk x → 카드별 TL (아이콘 scale팝 → 라벨 x → 캐릭터 팝)
     ================================================================ */
+    /* 헤더 — 진입 단계 페이드(고정 후 위로 잘림) */
     header("#ym3");
 
-    gsap.from(scroller.querySelector("#ym3 .ym-r3__points"), {
-      opacity: 0, x: -36, duration: 0.9, ease: "power3.out",
-      scrollTrigger: ST(scroller.querySelector("#ym3 .ym-r3__points"), "top 84%"),
+    /* 스크롤 핀(A형) — 진입 헤딩 → 고정 후 설계포인트·그룹이 먼저 자리잡고
+       우측 메뉴카드 6개(HOME→CHARACTER→SEASON→WEBTOON→NEWS→GALLERY)가 위→아래 순차 reveal
+       ("감정을 따라 탐험하는 구조"를 스크롤로 직접 그려나가는 느낌). framing 뷰포트 적응. */
+    const ym3El = scroller.querySelector("#ym3");
+    const setYm3Top = () => {
+      if (!ym3El) return;
+      const vp = scroller.clientHeight; if (!vp) return;
+      const base = ym3El.getBoundingClientRect().top;
+      const titleEl = ym3El.querySelector(".ym-r3__title");
+      const cTop = titleEl ? titleEl.getBoundingClientRect().top - base : 0;
+      const items = [...ym3El.querySelectorAll(".ym-r3__points, .ym-r3__group, .ym-r3__menu")];
+      if (!items.length) return;
+      const contentTop = Math.min(...items.map((e) => e.getBoundingClientRect().top - base));
+      const contentBot = Math.max(...items.map((e) => e.getBoundingClientRect().bottom - base));
+      const top = (contentBot - cTop) <= vp
+        ? (vp - (contentBot - cTop)) / 2 - cTop
+        : (vp - (contentBot - contentTop)) / 2 - contentTop;
+      ym3El.style.top = Math.round(top) + "px";
+    };
+
+    const pinTl_ym3 = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: "#ym3-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setYm3Top },
     });
+    pinTl_ym3
+      .from("#ym3 .ym-r3__points", { opacity: 0, x: -36, duration: 0.14 }, 0.08)
+      .from("#ym3 .ym-r3__group", { opacity: 0, y: 30, scale: 0.94, transformOrigin: "50% 100%", duration: 0.16 }, 0.14)
+      .from("#ym3 .ym-r3__menu", { opacity: 0, y: 26, duration: 0.12, stagger: 0.075 }, 0.34)
+      .from("#ym3 .ym-r3__micon", { scale: 0, transformOrigin: "50% 50%", duration: 0.08, stagger: 0.075 }, 0.42);
 
-    const groupEl = scroller.querySelector("#ym3 .ym-r3__group");
-    if (groupEl) {
-      gsap.from(groupEl, {
-        opacity: 0, y: 30, scale: 0.94, transformOrigin: "50% 100%",
-        duration: 0.95, ease: "back.out(1.4)",
-        scrollTrigger: ST(groupEl, "top 84%"),
-      });
-    }
-
-    /* [교체] 메뉴 카드별 TL */
-    scroller.querySelectorAll("#ym3 .ym-r3__menu").forEach((menu) => {
-      const icon  = menu.querySelector(".ym-r3__micon");
-      const label = menu.querySelector(".ym-r3__mlabel");
-      const desc  = menu.querySelector(".ym-r3__mdesc");
-      const cha   = menu.querySelector(".ym-r3__mcha");
-
-      const tl = gsap.timeline({ scrollTrigger: ST(menu, "top 92%") });
-      /* 카드 전체 진입 */
-      tl.from(menu, { opacity: 0, y: 26, duration: 0.82, ease: "power3.out" }, 0);
-      /* 아이콘 scale 팝 */
-      if (icon)  tl.from(icon,  { scale: 0, transformOrigin: "50% 50%",
-        duration: 0.46, ease: "back.out(2.2)" }, 0.24);
-      /* 라벨 x 슬라이드 */
-      if (label) tl.from(label, { opacity: 0, x: 18, duration: 0.44, ease: "power3.out" }, 0.35);
-      /* 설명 x 슬라이드 */
-      if (desc)  tl.from(desc,  { opacity: 0, x: 18, duration: 0.44, ease: "power3.out" }, 0.43);
-      /* 캐릭터 팝 */
-      if (cha)   tl.from(cha,   { scale: 0, opacity: 0, transformOrigin: "50% 100%",
-        duration: 0.52, ease: "back.out(1.8)" }, 0.5);
-    });
+    setYm3Top();
+    window.addEventListener("resize", setYm3Top);
 
     /* ================================================================
        SECTION 4 · INTERACTION DESIGN (#ym4)

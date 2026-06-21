@@ -3119,12 +3119,14 @@ html.process-open { overflow: hidden; }
 #process-yumi .process__making--yumi { overflow: visible; }
 .ym-pin { container-type: inline-size; }
 #ym1-pin { height: 260svh; }
-/* #ym1: sticky 고정, top 은 making-yumi.js(setYm1Top) 뷰포트 적응 계산. top:0 폴백 */
+#ym3-pin { height: 280svh; }
+/* #ym1·#ym3: sticky 고정, top 은 making-yumi.js(setYm*Top) 뷰포트 적응 계산. top:0 폴백 */
 #ym1 { position: sticky; top: 0; }
+#ym3 { position: sticky; top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .ym-pin { height: auto; }
-  #ym1 { position: static; }
+  #ym1, #ym3 { position: static; }
 }
 
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }
