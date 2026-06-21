@@ -58,45 +58,52 @@
     };
 
     /* ================================================================
-       SECTION · 히어로 (#pd-hero) — 스크롤 핀 (A형)
-       섹션이 뷰포트에 들어옴(≈0.94×) → setHeroTop 중앙 sticky 고정, #pd-hero-pin scrub:
-       bg 줌-세틀 → 로고 → 타이틀/메타 clipPath 리빌 → Pleiades 별 12개 어셈블.
-       (기존 once + bg 패럴랙스 교체 — 핀과 패럴랙스 공존 불가) fromTo+명시값(refresh 안전).
-       히어로는 인트로(pd1) 아래라 스크롤 진입 시 조립 — 열자마자 빈 화면 아님.
+       SECTION · 히어로 (#pd-hero) — 시네마틱 진입 (once, 핀은 사용자 요청으로 원복)
     ================================================================ */
-    const heroPin = scroller.querySelector("#pd-hero-pin");
-    const heroEl  = scroller.querySelector("#pd-hero");
-    if (heroPin && heroEl) {
-      const setHeroTop = () => {
-        heroEl.style.top = Math.round((scroller.clientHeight - heroEl.offsetHeight) / 2) + "px";
-      };
-      const bg    = scroller.querySelector("#pd-hero .pd-hero__img");
-      const logo  = scroller.querySelector("#pd-hero .pd-hero__logo");
-      const title = scroller.querySelector("#pd-hero .pd-hero__title");
-      const meta  = scroller.querySelector("#pd-hero .pd-hero__meta");
-      const dots  = [...scroller.querySelectorAll("#pd-hero .pd-hero__star")];
-      const rnd   = gsap.utils.random;
-
-      const tl = gsap.timeline({
+    const heroBg = scroller.querySelector("#pd-hero .pd-hero__img");
+    if (heroBg) {
+      gsap.from(heroBg, {
+        opacity: 0.15, scale: 1.14, transformOrigin: "50% 50%",
+        duration: 1.9, ease: "power3.out",
+        scrollTrigger: ST("#pd-hero", "top 92%"),
+      });
+      gsap.to(heroBg, {
+        yPercent: 22, ease: "none",
         scrollTrigger: {
-          trigger: heroPin, scroller,
-          start: "top top", end: "bottom bottom",
-          scrub: true, onRefreshInit: setHeroTop,
+          trigger: scroller.querySelector("#pd-hero"), scroller,
+          start: "top top", end: "bottom top", scrub: 1.4, invalidateOnRefresh: true,
         },
       });
-      if (bg)    tl.fromTo(bg,    { opacity: 0.2, scale: 1.14, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.55, ease: "power3.out" }, 0);
-      if (logo)  tl.fromTo(logo,  { opacity: 0, y: 44, scale: 0.86, transformOrigin: "50% 50%" }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 0.22);
-      if (title) tl.fromTo(title, { clipPath: "inset(0 0 100% 0)", opacity: 0 }, { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 0.45, ease: "power3.out" }, 0.38);
-      if (meta)  tl.fromTo(meta,  { clipPath: "inset(0 0 100% 0)", opacity: 0 }, { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 0.45, ease: "power3.out" }, 0.5);
-      /* Pleiades 별 12개 — 화면 밖 무작위에서 날아와 안착 */
-      dots.forEach((dot, i) => {
-        tl.fromTo(dot,
-          { x: rnd(-150, 150, 1), y: rnd(-130, -50, 1), opacity: 0, scale: rnd(0.15, 0.65, 0.01) },
-          { x: 0, y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" },
-          0.42 + i * 0.04);
+    }
+    const heroLogo = scroller.querySelector("#pd-hero .pd-hero__logo");
+    if (heroLogo) gsap.from(heroLogo, {
+      opacity: 0, y: 44, scale: 0.86, transformOrigin: "50% 50%",
+      duration: 1.15, delay: 0.2, ease: "expo.out",
+      scrollTrigger: ST("#pd-hero", "top 90%"),
+    });
+    [".pd-hero__title", ".pd-hero__meta"].forEach((sel, i) => {
+      const el = scroller.querySelector(`#pd-hero ${sel}`);
+      if (!el) return;
+      gsap.from(el, {
+        clipPath: "inset(0 0 100% 0)", opacity: 0,
+        duration: 0.82, ease: "expo.out", delay: 0.44 + i * 0.14,
+        scrollTrigger: ST("#pd-hero", "top 90%"),
+        clearProps: "clip-path,opacity",
       });
-      setHeroTop();
-      window.addEventListener("resize", setHeroTop);
+    });
+    const starsWrap = scroller.querySelector("#pd-hero .pd-hero__stars");
+    if (starsWrap) {
+      const dots = starsWrap.querySelectorAll(".pd-hero__star");
+      if (dots.length) {
+        const rnd = gsap.utils.random;
+        const starTL = gsap.timeline({ scrollTrigger: ST(starsWrap, "top 92%") });
+        dots.forEach((dot, i) => {
+          starTL.from(dot, {
+            x: rnd(-150, 150, 1), y: rnd(-130, -50, 1), opacity: 0,
+            scale: rnd(0.15, 0.65, 0.01), duration: rnd(0.85, 1.45, 0.01), ease: "back.out(1.7)",
+          }, i * 0.055);
+        });
+      }
     }
 
     /* ================================================================
@@ -384,43 +391,33 @@
     })();
 
     /* ================================================================
-       SECTION 6 · TROUBLE & SOLUTION (#pd6) — 스크롤 핀 (A형)
-       섹션이 뷰포트에 들어옴(≈0.91×) → setPd6Top 으로 중앙 sticky 고정, #pd6-pin scrub:
-       헤더(num/eyebrow/h1/h2/lead) → 3카드 순차 조립(card 진입 → problem → rule scaleX 드로잉 → solution).
-       기존 once 트리거 교체. fromTo+명시값(refresh 안전). reduced-motion: init early-return + CSS 폴백.
+       SECTION 6 · TROUBLE & SOLUTION (#pd6) — 카드별 TL (once, 핀은 사용자 요청으로 원복)
     ================================================================ */
-    const pd6Pin = scroller.querySelector("#pd6-pin");
-    const pd6El  = scroller.querySelector("#pd6");
-    if (pd6Pin && pd6El) {
-      const setPd6Top = () => {
-        pd6El.style.top = Math.round((scroller.clientHeight - pd6El.offsetHeight) / 2) + "px";
-      };
-      const pd6Heads = [...scroller.querySelectorAll(
-        "#pd6 .pd-r6__num, #pd6 .pd-r6__eyebrow, #pd6 .pd-r6__h1, #pd6 .pd-r6__h2, #pd6 .pd-r6__lead"
-      )];
-      const pd6Cards = [...scroller.querySelectorAll("#pd6 .pd-r6__card")];
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: pd6Pin, scroller,
-          start: "top top", end: "bottom bottom",
-          scrub: true, onRefreshInit: setPd6Top,
-        },
-      });
-      if (pd6Heads.length) tl.fromTo(pd6Heads, { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.06 }, 0);
-      pd6Cards.forEach((card, i) => {
-        const rule     = card.querySelector(".pd-r6__rule");
-        const problem  = card.querySelector(".pd-r6__problem");
-        const solution = card.querySelector(".pd-r6__solution");
-        const at = 0.3 + i * 0.22;
-        tl.fromTo(card, { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, transformOrigin: "50% 50%", duration: 0.5, ease: "power3.out" }, at);
-        if (problem)  tl.fromTo(problem,  { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, at + 0.14);
-        if (rule)     tl.fromTo(rule,     { scaleX: 0, rotate: 90, transformOrigin: "0% 0%" }, { scaleX: 1, rotate: 90, transformOrigin: "0% 0%", duration: 0.3, ease: "expo.out" }, at + 0.24);
-        if (solution) tl.fromTo(solution, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, at + 0.34);
-      });
-      setPd6Top();
-      window.addEventListener("resize", setPd6Top);
-    }
+    const pd6Heads = scroller.querySelectorAll(
+      "#pd6 .pd-r6__lead, #pd6 .pd-r6__h1, #pd6 .pd-r6__h2, #pd6 .pd-r6__num, #pd6 .pd-r6__eyebrow"
+    );
+    if (pd6Heads.length) gsap.from(pd6Heads, {
+      opacity: 0, y: 40, duration: 1.05, ease: "expo.out", stagger: 0.1,
+      scrollTrigger: ST("#pd6 .pd-r6__lead", "top 92%"),
+      clearProps: "transform",
+    });
+    scroller.querySelectorAll("#pd6 .pd-r6__card").forEach((card) => {
+      const rule     = card.querySelector(".pd-r6__rule");
+      const problem  = card.querySelector(".pd-r6__problem");
+      const solution = card.querySelector(".pd-r6__solution");
+      const tl = gsap.timeline({ scrollTrigger: ST(card, "top 90%") });
+      tl.from(card, {
+        opacity: 0, y: 54, scale: 0.94, transformOrigin: "50% 50%",
+        duration: 1.0, ease: "power3.out",
+      }, 0);
+      if (problem) tl.from(problem, { opacity: 0, y: 18, duration: 0.65, ease: "power3.out" }, 0.28);
+      if (rule) tl.fromTo(rule,
+        { scaleX: 0, rotate: 90, transformOrigin: "0% 0%" },
+        { scaleX: 1, rotate: 90, transformOrigin: "0% 0%", duration: 0.52, ease: "expo.out", clearProps: "transform" },
+        0.5
+      );
+      if (solution) tl.from(solution, { opacity: 0, y: 14, duration: 0.6, ease: "power3.out" }, 0.72);
+    });
 
     /* ================================================================
        SECTION 7 · RESULT (#pd7)
