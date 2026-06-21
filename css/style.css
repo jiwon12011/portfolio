@@ -3124,9 +3124,17 @@ html.process-open { overflow: hidden; }
 #ym1 { position: sticky; top: 0; }
 #ym3 { position: sticky; top: 0; }
 
+/* ym4 필름스트립: 카드 3장이 세로 분산 → 뷰포트 높이 프레임(.ym-stage) 안에서 #ym4 translateY.
+   stage 높이는 making-yumi.js 가 스크롤러 clientHeight 로 맞춤(아래 svh 폴백). */
+#ym4-pin { height: 240svh; }
+.ym-stage { position: sticky; top: 0; height: 88svh; overflow: hidden; }
+#ym4 { will-change: transform; }
+
 @media (prefers-reduced-motion: reduce) {
   .ym-pin { height: auto; }
   #ym1, #ym3 { position: static; }
+  .ym-stage { position: static; height: auto; overflow: visible; }
+  #ym4 { transform: none; will-change: auto; }
 }
 
 .gw-sec { position: relative; container-type: inline-size; overflow: hidden; background: #1a1410; }

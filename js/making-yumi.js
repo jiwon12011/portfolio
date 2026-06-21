@@ -305,42 +305,29 @@
        [추가] pill stagger scale back.out 팝
        [추가] .ym-r4__hero scrub 패럴랙스 yPercent
     ================================================================ */
+    /* 헤더 — 진입 단계 페이드 */
     header("#ym4");
 
-    stagger(
-      "#ym4 .ym-r4__card",
-      scroller.querySelector("#ym4 .ym-r4__card--1"),
-      { y: 34, stagger: 0.12 }
-    );
-
-    /* [추가] pill 하나씩 scale 팝 */
-    const pills = scroller.querySelectorAll("#ym4 .ym-r4__pill");
-    if (pills.length) {
-      const pillTrigger = scroller.querySelector("#ym4 .ym-r4__pill--1");
-      if (pillTrigger) {
-        gsap.from(pills, {
-          scale: 0, opacity: 0, transformOrigin: "0% 50%",
-          duration: 0.52, ease: "back.out(2.0)", stagger: 0.1,
-          scrollTrigger: ST(pillTrigger, "top 88%"),
-        });
-      }
-    }
-
-    /* [추가] 히어로 레이어 이미지 미세 scrub 패럴랙스 */
-    const heroLayer = scroller.querySelector("#ym4 .ym-r4__hero");
-    if (heroLayer) {
-      gsap.to(heroLayer, {
-        yPercent: -10,
-        ease: "none",
-        scrollTrigger: {
-          trigger: scroller.querySelector("#ym4"),
-          scroller,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.8,
-          invalidateOnRefresh: true,
-        },
+    /* 스크롤 핀(필름스트립) — 인터랙션 카드 3장(HERO/MOTION/CURSOR)이 세로로 분산돼
+       한 화면에 안 들어옴 → 고정 프레임(.ym-stage) 안에서 #ym4 를 위로 translateY 하며
+       카드를 차례로 보여줌. 각 카드는 프레임 통과 시점에 reveal. 기존 hero 패럴랙스는 translate 로 대체. */
+    const ym4El = scroller.querySelector("#ym4");
+    const ym4Stage = document.querySelector("#ym4-stage");
+    if (ym4El && ym4Stage) {
+      const syncYm4H = () => { if (scroller.clientHeight) ym4Stage.style.height = scroller.clientHeight + "px"; };
+      syncYm4H();
+      const getYm4Travel = () => Math.max(0, ym4El.offsetHeight - ym4Stage.clientHeight);
+      const pinTl_ym4 = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: { trigger: "#ym4-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, invalidateOnRefresh: true, onRefreshInit: syncYm4H },
       });
+      pinTl_ym4.fromTo(ym4El, { y: 0 }, { y: () => -getYm4Travel(), duration: 1 }, 0);
+      ["--1", "--2", "--3"].forEach((k, i) => {
+        const card = scroller.querySelector("#ym4 .ym-r4__card" + k);
+        if (card) pinTl_ym4.fromTo(card, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.14 }, 0.06 + i * 0.3);
+      });
+      const ym4Pills = scroller.querySelectorAll("#ym4 .ym-r4__pill");
+      if (ym4Pills.length) pinTl_ym4.fromTo(ym4Pills, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, transformOrigin: "0% 50%", stagger: 0.04, duration: 0.08 }, 0.16);
     }
 
     /* ================================================================
