@@ -92,29 +92,58 @@
     }
 
     /* ================================================================
-       SECTION · PROLOGUE 인트로 (#ss-intro)
-       eyebrow→타이틀→서브 페이드업 / 목차헤더 / 타임라인 골드 연결선 드로잉
-       + dot 5개 팝(back.out) + 라벨 페이드. once 진입.
-       · 중앙정렬은 CSS text-align(transform 무관) → xPercent 불필요
-       · 연결선은 ::before(가상요소) → --ss-line CSS 변수 scaleX 로 드로잉
-         (gsap이 0→1 보간. reduced-motion/미로드 시 CSS 기본 1=완성 폴백)
+       SECTION · PROLOGUE 인트로 (#ss-intro) — 시네마틱 강화 v2
+       어두운 배경에서 골드가 "떠오르듯" 들어오는 무드.
+       eyebrow(serif·골드) → 타이틀 → 서브 → TOC 헤더+룰 →
+       골드 연결선 드로잉 → dot 팝+글로우 → 라벨 페이드. once 진입.
+       · 트리거: DOM 직접 참조(selector 분해 없음), scroller 기준, once
+       · 연결선 --ss-line CSS 변수 scaleX(0→1) + dot stagger 보조 맞춤:
+         선이 각 dot 위치를 지나간 직후 dot이 팝 → "실마리 발견" 리듬
+       · dot box-shadow 골드 글로우: 팝과 동시 점등 후 정적 유지(GPU 합성)
+         clearProps:"transform" → back.out 오버슈트 후 CSS 상태로 원복
        · 타이틀 .ss-em 골드 잉크와이프는 SS_TITLE_SELS 에서 자동 적용(sangsang 시그니처)
     ================================================================ */
-    if (scroller.querySelector("#ss-intro")) {
-      const introTL = gsap.timeline({ scrollTrigger: ST("#ss-intro", "top 80%") });
+    const introEl = scroller.querySelector("#ss-intro");
+    if (introEl) {
+      const introTL = gsap.timeline({
+        scrollTrigger: { trigger: introEl, scroller, start: "top 80%", once: true },
+      });
       introTL
-        .from("#ss-intro .ss-intro__eyebrow", { opacity: 0, y: 18, duration: 0.7, ease: "power3.out" })
-        .from("#ss-intro .ss-intro__title",   { opacity: 0, y: 26, duration: 0.9, ease: "power3.out" }, "-=0.42")
-        .from("#ss-intro .ss-intro__sub",      { opacity: 0, y: 22, duration: 0.8, ease: "power3.out" }, "-=0.5")
-        .from(["#ss-intro .ss-intro__toc-title", "#ss-intro .ss-intro__toc-rule"],
-              { opacity: 0, y: 14, duration: 0.6, ease: "power3.out", stagger: 0.08 }, "-=0.38")
-        .fromTo("#ss-intro .ss-intro__steps", { "--ss-line": 0 },
-              { "--ss-line": 1, duration: 0.95, ease: "power2.inOut" }, "-=0.15")
-        .from("#ss-intro .ss-intro__step-dot",
-              { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2)", stagger: 0.1,
-                transformOrigin: "50% 50%", clearProps: "transform" }, "-=0.7")
-        .from("#ss-intro .ss-intro__step-label",
-              { opacity: 0, y: 10, duration: 0.5, ease: "power2.out", stagger: 0.1 }, "-=0.55");
+        /* 1. eyebrow "PROLOGUE": Cormorant·골드·letter-spacing 0.5em — 어둠에서 스며드는 잉크 등장 */
+        .from(introEl.querySelector(".ss-intro__eyebrow"), {
+          opacity: 0, y: 10, duration: 1.0, ease: "expo.out",
+        })
+        /* 2. 타이틀: eyebrow 끝물에 크게 솟아오름 — 골드 .ss-em 잉크와이프는 SS_TITLE_SELS 에서 별도 */
+        .from(introEl.querySelector(".ss-intro__title"), {
+          opacity: 0, y: 28, duration: 1.05, ease: "power3.out",
+        }, "-=0.6")
+        /* 3. 서브: 타이틀과 자연스럽게 겹쳐 이어짐 */
+        .from(introEl.querySelector(".ss-intro__sub"), {
+          opacity: 0, y: 16, duration: 0.85, ease: "power3.out",
+        }, "-=0.55")
+        /* 4. TOC 헤더 + 골드 룰: 서브 끝물, 순차 등장 */
+        .from(
+          [introEl.querySelector(".ss-intro__toc-title"), introEl.querySelector(".ss-intro__toc-rule")],
+          { opacity: 0, y: 12, duration: 0.65, ease: "power2.out", stagger: 0.1 },
+          "-=0.32"
+        )
+        /* 5. 골드 연결선: 왼→오 드로잉 — "실마리가 그어지는" 방탈출 무드 */
+        .fromTo(introEl.querySelector(".ss-intro__steps"), { "--ss-line": 0 },
+          { "--ss-line": 1, duration: 1.1, ease: "power2.inOut" }, "+=0.05")
+        /* 6. dot 팝: 연결선이 지나가며 톡톡 — stagger 0.16으로 선 진행과 보조 맞춤 */
+        .from(introEl.querySelectorAll(".ss-intro__step-dot"), {
+          scale: 0, opacity: 0, duration: 0.42, ease: "back.out(2.8)", stagger: 0.16,
+          transformOrigin: "50% 50%", clearProps: "transform",
+        }, "-=0.82")
+        /* 6b. dot 골드 글로우: 팝과 동시 시작, 느리게 점등 (box-shadow, GPU 합성) */
+        .to(introEl.querySelectorAll(".ss-intro__step-dot"), {
+          boxShadow: "0 0 5px 1px rgba(255,194,132,.4), 0 0 10px 3px rgba(255,194,132,.12)",
+          duration: 0.8, ease: "power2.out", stagger: 0.16,
+        }, "<")
+        /* 7. 라벨: dot 뒤따라 서서히 */
+        .from(introEl.querySelectorAll(".ss-intro__step-label"), {
+          opacity: 0, y: 8, duration: 0.5, ease: "power2.out", stagger: 0.14,
+        }, "-=0.65");
     }
 
     /* ================================================================
