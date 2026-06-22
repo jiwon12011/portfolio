@@ -1699,9 +1699,14 @@ html.process-open { overflow: hidden; }
   border-radius: 12px; object-fit: contain; }
 /* 목업/노션 이미지 — 답답하지 않게 작게 contain, 하단 정렬(작은 여백) */
 .pcard--shot { overflow: visible; }      /* 노션 원이 모서리 밖으로 나오게 */
-.pcard__shot--bleed { margin: auto auto calc(-1 * var(--pad)); align-self: center; width: 86%;
+/* 노트북 목업 — 전 프로젝트 통일(플레디스 기준 66%). 소스가 모두 ~1.53 종횡비라
+   aspect-ratio 고정 시 폭·높이가 모달 전환해도 동일 → 들썩임 없음 */
+.pcard__shot--bleed { margin: auto auto calc(-1 * var(--pad)); align-self: center; width: 66%;
+  aspect-ratio: 1.53; height: auto;
   max-height: clamp(124px, 16vh, 166px); object-fit: contain; object-position: bottom center;
   border-radius: 12px 12px 0 0; }
+/* 정사각 플레이스토어 샷(자린고비) 예외 — 종횡비 1.05 유지하되 폭 45%로 목업과 같은 높이 맞춤 */
+.pcard__shot--bleed.pcard__shot--sq { width: 45%; aspect-ratio: 712 / 676; }
 
 /* 틱톡 — 크림 원 + 둥둥 떠다니는 컬러 닷 (Image #16) */
 .pcard__tiktok { position: relative; margin: auto auto 8px; width: 92px; height: 92px;
@@ -1720,7 +1725,9 @@ html.process-open { overflow: hidden; }
 /* 노션 스크린샷 래퍼 — 하단 플러시 + 그 위에 N 아이콘을 얹기 위한 기준 */
 .pcard__shotwrap { position: relative; align-self: center; width: 100%;
   margin: auto auto calc(-1 * var(--pad)); }
-.pcard__shotwrap .pcard__shot { margin: 0; width: 100%; max-height: clamp(150px, 20.5vh, 206px);
+/* 노션 샷 — 소스 종횡비가 1.71~2.04로 제각각이라 박스 높이를 고정(max→height)해야
+   모달 전환 시 카드 높이가 흔들리지 않음. contain+하단정렬로 원본 손실 없이 바닥에 붙임 */
+.pcard__shotwrap .pcard__shot { margin: 0; width: 100%; height: clamp(112px, 15vh, 134px);
   object-fit: contain; object-position: bottom center; border-radius: 12px 12px 0 0; display: block; }
 
 /* 노션 — 초록 원 + 실제 N 로고, 스크린샷 우상단 모서리에 걸치게 (Image #23) */
@@ -1889,9 +1896,7 @@ html.process-open { overflow: hidden; }
 /* 히어로 영상: 본 영상은 턴테이블 둘레에 네이비 여백이 있어 16:9 박스에선 작게 보임
    → 살짝 확대해 다른 패널처럼 꽉 차게(여백 크롭) */
 .process--pledis .process__hero-media { object-position: center center; transform: scale(1.16); }
-/* 목업: 소스가 프레임을 꽉 채워 기본 86%면 커 보임 → 폭만 좁히고
-   하단 플러시(카드 바닥에 붙임)는 다른 패널과 동일하게 유지 */
-.process--pledis .pcard__shot--bleed { width: 66%; }
+/* (목업 폭 66%는 이제 .pcard__shot--bleed 기본값으로 전 프로젝트 공통) */
 /* PROCESS 노션 N 배지 원형 배경 = 브랜드 오렌지 */
 .process--pledis .pcard__notion { background: #d65a3d; }
 
@@ -3686,8 +3691,6 @@ html.process-open { overflow: hidden; }
   border-color: rgba(243,170,205,0.55); }
 .process--yumi .pcard h3 { color: #3e3357; }
 .process--yumi .pcard p { color: #6b6184; }
-/* 유미 목업(웹/관리자) — 텍스트와 겹치지 않게 조금 작게 */
-.process--yumi .pcard__shot--bleed { width: 76%; max-height: clamp(104px, 13vh, 140px); }
 .process--yumi .pcard--info dt { color: #9d8fba; }
 .process--yumi .pcard--info dd { color: #463c60; }
 .process--yumi .pcard--info dd i { color: #9d8fba; }
@@ -4389,17 +4392,24 @@ html.process-open { overflow: hidden; }
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 400; color: #666; line-height: 1.75;
 }
+/* Before 영역(레이블+기존 사이트 스크린샷 4장)을 감싸는 카드 — pd-r4 카드와 동일 톤.
+   박스 윗변이 본문 시작 경계가 되어 리드↔본문 간격도 함께 좁아짐 */
+.pd-r1__beforebox {
+  position: absolute; left: 6.944cqw; top: 38.5cqw;
+  width: 86.111cqw; height: 38.2cqw;
+  background: #fff; border: 1px solid #eaeaea; border-radius: 0.694cqw;
+}
 .pd-r1__before {
-  position: absolute; left: 8.611cqw; top: 42.5cqw;
+  position: absolute; left: 8.611cqw; top: 41cqw;
   font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #444;
 }
 .pd-r1__before-sub {
-  position: absolute; left: 12.986cqw; top: 42.57cqw;
+  position: absolute; left: 12.986cqw; top: 41.07cqw;
   font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400; color: #666;
 }
 /* 스크린샷 4장 */
 .pd-r1__ss {
-  position: absolute; top: 45.139cqw;
+  position: absolute; top: 43.639cqw;
   height: 31.042cqw; object-fit: cover; border-radius: 0.278cqw;
 }
 .pd-r1__ss--1 { left: 8.611cqw; width: 18.611cqw; }
@@ -4407,21 +4417,6 @@ html.process-open { overflow: hidden; }
 .pd-r1__ss--3 { left: 53.542cqw; width: 15.208cqw; }
 .pd-r1__ss--4 { left: 73.264cqw; width: 18.125cqw; }
 /* 스크린샷 하단 레이블 (중앙 정렬) */
-.pd-r1__nav {
-  position: absolute; top: 77.57cqw;
-  transform: translateX(-50%);
-  font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500;
-  color: #444; text-align: center; line-height: 1.2;
-}
-.pd-r1__nav small {
-  display: block; margin-top: 0.556cqw;
-  font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400;
-  color: #666; line-height: 1.5;
-}
-.pd-r1__nav--1 { left: 17.917cqw; }
-.pd-r1__nav--2 { left: 40.417cqw; }
-.pd-r1__nav--3 { left: 61.146cqw; }
-.pd-r1__nav--4 { left: 82.326cqw; }
 /* 문제점 */
 .pd-r1__prob-lbl {
   position: absolute; left: 8.611cqw; top: 86.111cqw;
@@ -4435,9 +4430,9 @@ html.process-open { overflow: hidden; }
 /* 문제 카드 3장 */
 .pd-r1__card {
   position: absolute; top: 86.111cqw;
-  width: 22.083cqw; min-height: 8.333cqw; height: auto;
+  width: 23.4cqw; min-height: 8.333cqw; height: auto;
   background: #fff; border-radius: 0.694cqw; border: 1px solid #eaeaea;
-  display: flex; align-items: center; padding: 0 1.5cqw; gap: 1.111cqw;
+  display: flex; align-items: center; padding: 0 1.15cqw; gap: 0.95cqw;
 }
 .pd-r1__card--1 { left: 20.069cqw; }
 .pd-r1__card--2 { left: 44.722cqw; }
@@ -4459,8 +4454,8 @@ html.process-open { overflow: hidden; }
 }
 
 /* ── SECTION 2 · REDESIGN DIRECTION (1440×1171, cqw = px/14.4) ── */
-.pd-r2 { aspect-ratio: 1440 / 1300; background: #fff;
-  font-family: "Pretendard Variable", Pretendard, sans-serif; }
+.pd-r2 { aspect-ratio: 1440 / 1300; background: #fdfdfd;
+  font-family: "Pretendard Variable", Pretendard, sans-serif; }   /* 다이어그램 배경(#fdfdfd)과 일치 → 이미지 사각 경계 안 보이게 */
 .pd-r2__num {
   position: absolute; left: 6.944cqw; top: 2.917cqw;
   font-size: clamp(36px, 8.889cqw, 128px); font-weight: 800; line-height: 1;
@@ -4500,10 +4495,10 @@ html.process-open { overflow: hidden; }
   display: grid; grid-template-columns: 7.431cqw minmax(0, 1fr);
   align-items: center; column-gap: 1.25cqw; padding: 0 1.667cqw;
 }
-.pd-r2__card--1 { top: 39.236cqw; }
-.pd-r2__card--2 { top: 51.945cqw; }
-.pd-r2__card--3 { top: 64.653cqw; }
-.pd-r2__card--4 { top: 77.361cqw; }
+.pd-r2__card--1 { top: 36.176cqw; }
+.pd-r2__card--2 { top: 48.885cqw; }
+.pd-r2__card--3 { top: 61.593cqw; }
+.pd-r2__card--4 { top: 74.301cqw; }
 .pd-r2__icon { justify-self: center; object-fit: contain; width: 5.417cqw; height: auto; }
 .pd-r2__icon--2 { width: 7.431cqw; }
 .pd-r2__icon--3 { width: 5.556cqw; }
@@ -4517,7 +4512,7 @@ html.process-open { overflow: hidden; }
   color: #444; line-height: 1.5;
 }
 .pd-r2__diagram {
-  position: absolute; left: 45.278cqw; top: 38.958cqw;
+  position: absolute; left: 45.278cqw; top: 35.898cqw;
   width: 50.278cqw; height: auto; display: block;
 }
 
@@ -4564,11 +4559,11 @@ html.process-open { overflow: hidden; }
   object-fit: cover; display: block;
 }
 .pd-r3__screen--hero {
-  top: 40.417cqw; height: 18.054cqw;
+  top: 37.357cqw; height: 18.054cqw;
   object-position: top center;
 }
 .pd-r3__screen--flow {
-  top: 58.471cqw; height: 72.988cqw;
+  top: 55.411cqw; height: 72.988cqw;
   object-position: bottom center;
 }
 .pd-r3__flow {
@@ -4577,14 +4572,14 @@ html.process-open { overflow: hidden; }
 .pd-r3__item {
   position: absolute; left: 60.278cqw; width: 32.5cqw; min-height: 8cqw;
 }
-.pd-r3__item--1 { top: 45.556cqw; }
-.pd-r3__item--2 { top: 62.848cqw; }
-.pd-r3__item--3 { top: 84.514cqw; }
-.pd-r3__item--4 { top: 105.278cqw; }
-.pd-r3__item--5 { top: 122.361cqw; }
+.pd-r3__item--1 { top: 42.496cqw; }
+.pd-r3__item--2 { top: 59.788cqw; }
+.pd-r3__item--3 { top: 81.454cqw; }
+.pd-r3__item--4 { top: 102.218cqw; }
+.pd-r3__item--5 { top: 119.301cqw; }
 .pd-r3__line {
   position: absolute; left: -14.722cqw; top: 0.625cqw;
-  width: 9.861cqw; border-top: 1px solid #ffdfd2;
+  width: 9.861cqw; border-top: 1.5px solid #ff8456;
 }
 .pd-r3__badge {
   position: absolute; left: -5.556cqw; top: -0.764cqw;
@@ -4741,7 +4736,7 @@ html.process-open { overflow: hidden; }
 .pd-r5__lead1 { top: 26.944cqw; }
 .pd-r5__lead2 { top: 32cqw; }
 .pd-r5__card {
-  position: absolute; top: 39.514cqw;
+  position: absolute; top: 36.16cqw;
   width: 40.833cqw; height: 38.6cqw;
   background: #fff; border: 1px solid #eaeaea; border-radius: 0.694cqw;
 }
@@ -4947,9 +4942,10 @@ html.process-open { overflow: hidden; }
 /* pd5 SVG 연결선 (MIDJOURNEY ↔ CLAUDE CODE) */
 .pd-r5__connector {
   position: absolute;
-  /* 프롬프트 카드 우측 끝(48.333cqw)~코드 카드 좌측(52cqw) 중간 */
-  left: 48.2cqw; top: 58cqw;
-  width: 3.6cqw; height: 0.5cqw;
+  /* 카드 사이 간격(48.333~52cqw, 중심 50.17) 정중앙 + 카드 세로 중심(58.81cqw)에 정렬.
+     좌우 점이 양 카드에서 대칭으로 떨어지도록 폭을 간격보다 살짝 좁게 */
+  left: 48.5cqw; top: 55.21cqw;
+  width: 3.33cqw; height: 0.5cqw;
   overflow: visible;
   z-index: 2; pointer-events: none;
 }
