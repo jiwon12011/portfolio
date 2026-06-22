@@ -2742,11 +2742,15 @@ html.process-open { overflow: hidden; }
    process__making 공통 overflow:hidden 이 sticky 차단 → 한정 해제(바깥 라운드/클립은 .process__panel 담당). */
 #process-sangsang .process__making--sangsang { overflow: visible; }
 .ss-pin { container-type: inline-size; }
+/* ss-intro PROLOGUE 핀: 뷰 상단 도달 시 고정, 목차 reveal 자동재생.
+   래퍼 높이는 making-sangsang.js setIntroPinHeight 가 섹션 실측+600px 으로 산출. */
+#ss-intro { position: sticky; top: 0; }
 /* ss1 OVERVIEW: 문 열리듯 슬릿 오픈 + 텍스트 진입 (섹션이 뷰포트에 들어옴 → A형) */
 #ss1-pin { height: 240svh; }
 #ss1 { position: sticky; top: 0; }  /* top 은 making-sangsang.js setSs1Top 가 중앙정렬로 덮음 */
 @media (prefers-reduced-motion: reduce) {
   .ss-pin { height: auto; }
+  #ss-intro { position: static; }
   #ss1 { position: static; }
 }
 /* ss3 STORY 포스터: 필름스트립 핀 — .ss3-stage(화면 높이) sticky 고정,

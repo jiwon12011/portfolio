@@ -92,102 +92,48 @@
     }
 
     /* ================================================================
-       SECTION · PROLOGUE 인트로 (#ss-intro) — 시네마틱 강화 v2
-       어두운 배경에서 골드가 "떠오르듯" 들어오는 무드.
-       eyebrow(serif·골드) → 타이틀 → 서브 → TOC 헤더+룰 →
-       골드 연결선 드로잉 → dot 팝+글로우 → 라벨 페이드. once 진입.
-       · 트리거: DOM 직접 참조(selector 분해 없음), scroller 기준, once
-       · 연결선 --ss-line CSS 변수 scaleX(0→1) + dot stagger 보조 맞춤:
-         선이 각 dot 위치를 지나간 직후 dot이 팝 → "실마리 발견" 리듬
-       · dot box-shadow 골드 글로우: 팝과 동시 점등 후 정적 유지(GPU 합성)
-         clearProps:"transform" → back.out 오버슈트 후 CSS 상태로 원복
-       · 타이틀 .ss-em 골드 잉크와이프는 SS_TITLE_SELS 에서 자동 적용(sangsang 시그니처)
+       SECTION · PROLOGUE 인트로 (#ss-intro) — ScrollTrigger 핀 reveal
+       ────────────────────────────────────────────────────────────────
+       스크롤하다 뷰 상단에 닿으면 섹션이 sticky 고정,
+       600px 핀 구간 동안 목차 reveal(introTL) 1회 자동재생,
+       구간 끝나면 언핀 → ss1으로 자연스럽게 진행.
+
+       · 래퍼 #ss-intro-pin 이 핀 컨테이너(ss1-pin 동일 패턴):
+         JS setIntroPinHeight → 래퍼 높이 = 섹션 실측 + PIN_EXTRA(600px)
+         CSS: #ss-intro { position: sticky; top: 0; } → 래퍼 안에서 고정
+       · ScrollTrigger: trigger=래퍼, start="top top", end="+=PIN_EXTRA"
+         onEnter → introTL.play(0) 자동재생(scrub 없음 — "멈추고 목차가 나와야지")
+         onLeaveBack → pause(0) 초기화 → 재스크롤 시 처음부터 재생
+       · introTL: 기존 시퀀스 동일(eyebrow→타이틀→서브→TOC→연결선→dot→라벨)
+       · 타이틀 .ss-em 잉크와이프: SS_TITLE_SELS 별도 ST(once) 유지.
+         핀 진입 전에 선(빠른 스크롤) 실행되더라도 초기 opacity:0(TL) 아래 무시되고
+         introTL 재생 시 em이 골드 상태로 나타남 — 시각 충돌 없음.
+       · prefers-reduced-motion: init() 상단 early-return → 이 블록 미진입 → 폴백 OK
+       · invalidateOnRefresh+onRefreshInit → 모달 오픈 후 refresh 시 높이 재산출
     ================================================================ */
-    const introEl = scroller.querySelector("#ss-intro");
+    const introEl    = scroller.querySelector("#ss-intro");
+    const introPinEl = scroller.querySelector("#ss-intro-pin");
     if (introEl) {
-      /* ── #ss-intro 스크롤 락 ─────────────────────────────────────────────────
-       * 진입 모션(introTL, ~4.4s) 재생 중 하향 스크롤 차단.
-       * sangsang은 smooth-process 미적용 → 네이티브 overflow 스크롤.
-       * wheel / touch / keyboard(Space·PageDown·↓·End) 하향 입력 무시.
-       * 위로(상향)는 항상 허용. prefers-reduced-motion 시 init() 에서 early-return되므로
-       * 이 블록 자체에 진입하지 않음 → 별도 guard 불필요.
-       * 안전장치: TL totalDuration + 1.2s 타임아웃 → 어떤 이유로도 갇힘 절대 없음.
-       * 모달 닫힘 감지(MutationObserver) → 락 및 리스너 즉시 정리(누수 방지). */
-      let introLockActive  = false;
-      let introLockTop     = 0;
-      let introLockTimer   = null;
-      let introTouchStartY = 0;
+      /* ── 래퍼 높이 동적 산출: 섹션 실측 + 600px 스크롤 여유 ── */
+      const PIN_EXTRA = 600; /* px — TL ~4.4s 재생 동안 유지되는 핀 거리 */
+      const setIntroPinHeight = () => {
+        if (!introPinEl) return;
+        introPinEl.style.height = (introEl.offsetHeight + PIN_EXTRA) + "px";
+      };
+      setIntroPinHeight();
+      window.addEventListener("resize", setIntroPinHeight);
 
-      const _introOnWheel = (e) => {
-        if (e.deltaY > 0) e.preventDefault();          /* 아래 방향만 차단, 위로·핀치줌 통과 */
-      };
-      const _introOnTouchStart = (e) => {
-        introTouchStartY = e.touches[0].clientY;
-      };
-      const _introOnTouchMove = (e) => {
-        /* 손가락이 위로 올라감(clientY 감소) → 컨텐츠는 아래로 → 차단 */
-        if (introTouchStartY - e.touches[0].clientY > 0) e.preventDefault();
-      };
-      const _introOnKeyDown = (e) => {
-        /* 입력 필드 포커스 중에는 방해하지 않음 */
-        const a = document.activeElement;
-        if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.tagName === "SELECT")) return;
-        if ([" ", "PageDown", "ArrowDown", "End"].includes(e.key)) e.preventDefault();
-      };
-      const _introOnScroll = () => {
-        /* 모멘텀·스크롤바 드래그 등 이벤트 차단을 빠져나간 스크롤 강제 복귀 */
-        if (scroller.scrollTop > introLockTop) scroller.scrollTop = introLockTop;
-      };
-
-      const introUnlock = () => {
-        if (!introLockActive) return;
-        introLockActive = false;
-        clearTimeout(introLockTimer);
-        introLockTimer = null;
-        scroller.removeEventListener("wheel",      _introOnWheel);
-        scroller.removeEventListener("touchstart", _introOnTouchStart);
-        scroller.removeEventListener("touchmove",  _introOnTouchMove);
-        scroller.removeEventListener("scroll",     _introOnScroll);
-        document.removeEventListener("keydown",    _introOnKeyDown);
-      };
-
-      const introLock = () => {
-        if (introLockActive) return;
-        introLockActive = true;
-        introLockTop = scroller.scrollTop;
-        scroller.addEventListener("wheel",      _introOnWheel,      { passive: false });
-        scroller.addEventListener("touchstart", _introOnTouchStart, { passive: true  });
-        scroller.addEventListener("touchmove",  _introOnTouchMove,  { passive: false });
-        scroller.addEventListener("scroll",     _introOnScroll,     { passive: true  });
-        document.addEventListener("keydown",    _introOnKeyDown);
-        /* 안전장치: TL 종료 예정 시간 + 1.2s 후 무조건 해제 (갇힘 절대 금지)
-         * introLock()은 introTL이 빌드된 후 onEnter에서 호출되므로 totalDuration() 확정 */
-        introLockTimer = setTimeout(introUnlock, (introTL.totalDuration() + 1.2) * 1000);
-      };
-
-      /* 모달 닫힘·프로젝트 전환 시 락 정리 */
-      const _introModal = scroller.closest("[id^='process-']");
-      if (_introModal) {
-        new MutationObserver(() => {
-          if (!_introModal.classList.contains("is-open")) introUnlock();
-        }).observe(_introModal, { attributes: true, attributeFilter: ["class"] });
-      }
-
-      /* introTL: paused 로 생성, scrollTrigger를 TL에서 분리 ───────────────────
-       * scrollTrigger를 타임라인에 부착하면 scrub 여부와 무관하게 GSAP 내부에서
-       * ST가 재생을 중개. 스크롤을 잠근 상태에서 ticker 독립 재생을 보장하려면
-       * TL을 ST에서 완전히 분리하고, 별도 ST.create() onEnter에서 직접 .play() 호출. */
-      const introTL = gsap.timeline({
-        paused: true,
-        onComplete: introUnlock,   /* TL 완료 즉시 해제 */
-      });
+      /* ── introTL: paused 생성, onEnter 에서 .play(0) 직접 호출 ──
+       * scrub 없음 — 시간기반 자동재생으로 "멈춘 상태에서 목차가 나오는" 느낌 구현.
+       * 시퀀스: eyebrow → 타이틀 → 서브 → TOC헤더+룰 → 연결선드로잉 → dot팝+글로우 → 라벨 */
+      const introTL = gsap.timeline({ paused: true });
 
       introTL
         /* 1. eyebrow "PROLOGUE": Cormorant·골드·letter-spacing 0.5em — 어둠에서 스며드는 잉크 등장 */
         .from(introEl.querySelector(".ss-intro__eyebrow"), {
           opacity: 0, y: 10, duration: 1.0, ease: "expo.out",
         })
-        /* 2. 타이틀: eyebrow 끝물에 크게 솟아오름 — 골드 .ss-em 잉크와이프는 SS_TITLE_SELS 에서 별도 */
+        /* 2. 타이틀: eyebrow 끝물에 크게 솟아오름 */
         .from(introEl.querySelector(".ss-intro__title"), {
           opacity: 0, y: 28, duration: 1.05, ease: "power3.out",
         }, "-=0.6")
@@ -219,13 +165,23 @@
           opacity: 0, y: 8, duration: 0.5, ease: "power2.out", stagger: 0.14,
         }, "-=0.65");
 
-      /* ST.create(): #ss-intro top 80% 진입 → introLock() + introTL.play() 직접 구동
-       * once: true → 1회 발화 후 ST 소멸. 재진입 시 TL이 이미 ended 상태이므로 재발동 없음. */
-      ScrollTrigger.create({
-        trigger: introEl, scroller,
-        start: "top 80%", once: true,
-        onEnter: () => { introLock(); introTL.play(); },
-      });
+      /* ── ScrollTrigger: 래퍼를 트리거로, 핀 구간 onEnter→play / onLeaveBack→pause ──
+       * trigger = introPinEl(래퍼) — CSS sticky(#ss-intro)가 실제 고정을 담당.
+       * end = "+=PIN_EXTRA": start에서 600px 후 — 섹션 sticky 해제 시점과 일치.
+       * invalidateOnRefresh: 모달 오픈 후 refresh 시 start/end 재계산.
+       * onRefreshInit: 래퍼 높이를 refresh 직전에 갱신 → 레이아웃 안정. */
+      if (introPinEl) {
+        ScrollTrigger.create({
+          trigger: introPinEl,
+          scroller,
+          start: "top top",
+          end:   "+=" + PIN_EXTRA,
+          invalidateOnRefresh: true,
+          onRefreshInit: setIntroPinHeight,
+          onEnter:     () => introTL.play(0),
+          onLeaveBack: () => introTL.pause(0),
+        });
+      }
     }
 
     /* ================================================================
