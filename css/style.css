@@ -816,6 +816,14 @@ img.is-empty { color: transparent; }
 /* 성능: 비활성(화면 밖) 패널의 진주 애니메이션 정지 → 백그라운드 GPU 소모 제거 */
 .deck-panel:not(.is-active) .intro-nav__orb::before,
 .deck-panel:not(.is-active) .intro-nav__pearl { animation-play-state: paused; }
+/* 슬라이드 전환 중 인트로 패널 backdrop-filter 동결:
+   orbit 정지(Patch A+B) 후에도 hero-godray CSS animation이 scene 레이어를
+   매 프레임 dirty로 만들어 backdrop-filter 재샘플이 남는다. deck-sliding 850ms 동안 none. */
+html.deck-sliding .project-intro__back,
+html.deck-sliding .intro-nav__ico {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
 /* 펼쳐도 중앙 진주는 그 자리에 흐릿하게 남김(+살짝 수축 = '버블이 빠져나간' 느낌) */
 .intro-nav--pearl.is-open .intro-nav__pearl { opacity: .45; pointer-events: none;
   animation: none; transform: translateX(-50%) scale(.88);

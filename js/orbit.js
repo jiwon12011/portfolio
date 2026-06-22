@@ -623,7 +623,7 @@
     /* 제작과정/About 오버레이가 열려 있으면 orbit 연산·렌더 스킵(가려진 채 CPU·GPU 낭비 방지).
        rAF 는 유지해 닫힐 때 즉시 재개, dt 점프 방지 위해 last 갱신 */
     const root = document.documentElement;
-    if (root.classList.contains("process-open") || root.classList.contains("about-open")) {
+    if (root.classList.contains("process-open") || root.classList.contains("about-open") || root.classList.contains("deck-sliding")) {
       last = ts;
       rafId = requestAnimationFrame(tick);
       return;

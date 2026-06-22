@@ -154,7 +154,12 @@
     if (!usedMorph) { pendingMorphRect = null; } // 소비 안 됐으면 정리
     /* 전환 직전에만 GPU 레이어 승격(끝나면 해제 → 비활성 패널 VRAM 점유 제거) */
     out.style.willChange = inc.style.willChange = "transform";
-    setTimeout(() => { out.style.willChange = ""; inc.style.willChange = ""; }, 850);
+    root.classList.add("deck-sliding");
+    setTimeout(() => {
+      out.style.willChange = "";
+      inc.style.willChange = "";
+      root.classList.remove("deck-sliding");
+    }, 850);
     if (!usedMorph) {
       /* 기존 슬라이드: 들어오는 패널을 진행 방향 반대편에 즉시 배치(트랜지션 없이) */
       tr(inc, false);
