@@ -1836,6 +1836,13 @@ html.process-open { overflow: hidden; }
 /* 노션 배지 — POZE 더스티 로즈 액센트로(기본 세이지 그린 대신), 그림자도 따뜻하게 */
 .process--poze .pcard__notion { background: #cf9ea6;
   box-shadow: 0 9px 22px -8px rgba(58,33,38,0.5), inset 0 1px 1px rgba(255,255,255,0.45); }
+/* POZE 오버뷰 한정 — 툴 아이콘 6개를 한 줄로(콤팩트).
+   기본 32px 6개는 info 카드 폭을 넘겨 2줄로 접혀 카드행이 ~41px 높아지고
+   그만큼 영상(.process__hero, flex:1)이 눌려 다른 패널(~59%)보다 작아졌다(~53%).
+   POZE만 아이콘을 줄여 1줄로 → 카드행이 낮아지고 영상이 같은 비율을 회복. */
+#pzsec-01 .pcard__tools { gap: 7px; flex-wrap: nowrap; }
+#pzsec-01 .pcard__tools img { width: 26px; height: 26px; padding: 3px; border-radius: 7px; }
+#pzsec-01 .pcard__tool-label { padding-top: 13px; }
 
 /* ===================================================================
    플레디스(PLEDIS ARCHIVE) 모달 — 딥 네이비 슬레이트 + 피치/크림 + 브랜드 오렌지 태그 (#4)
@@ -2161,6 +2168,14 @@ html.process-open { overflow: hidden; }
 .mh-s1__shot { position: absolute; left: 41.875cqw; top: 31.042cqw;
   width: 51.181cqw; height: 45.278cqw; object-fit: cover; object-position: top; display: block;
   filter: drop-shadow(.14cqw .28cqw .7cqw rgba(40,70,130,.16)); }
+/* 기존 사이트 바로가기 — 스크린샷 좌하단의 블루 텍스트 링크 */
+.mh-s1__oldlink { position: absolute; left: 41.875cqw; top: 76.7cqw; z-index: 2;
+  display: inline-flex; align-items: center; gap: .35cqw;
+  font-size: 1.111cqw; font-weight: 600; color: #316efa; text-decoration: none;
+  border-bottom: 1px solid transparent; transition: border-color .2s ease, color .2s ease; }
+.mh-s1__oldlink span { font-size: 1.25cqw; line-height: 1; }
+.mh-s1__oldlink:hover { color: #1f5be0; border-bottom-color: currentColor; }
+.mh-s1__oldlink:focus-visible { outline: 2px solid #316efa; outline-offset: 3px; border-radius: 2px; }
 
 /* From archive 밴드 */
 .mh-s1__band { position: absolute; left: 6.944cqw; top: 79.236cqw;
@@ -2848,6 +2863,17 @@ html.process-open { overflow: hidden; }
   font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 2.778cqw;
   line-height: 1.4; color: #fff; }
 .ss-tr__title .ss-em { color: #ffc284; }
+/* 기존 사이트 바로가기 — 골드 고스트 버튼(우상단, TEAM RESEARCH 키커와 좌우 균형) */
+.ss-tr__oldlink { position: absolute; right: 6.944cqw; top: 6.25cqw; z-index: 2;
+  display: inline-flex; align-items: center; gap: .5cqw;
+  padding: .76cqw 1.39cqw; border-radius: 999px;
+  font-family: "Pretendard", sans-serif; font-weight: 500; font-size: 1.042cqw;
+  color: #ffc284; text-decoration: none;
+  border: 1px solid rgba(255,194,132,.45); background: rgba(255,194,132,.06);
+  transition: background .25s ease, border-color .25s ease, color .25s ease; }
+.ss-tr__oldlink span { font-size: 1.18cqw; line-height: 1; }
+.ss-tr__oldlink:hover { background: rgba(255,194,132,.16); border-color: rgba(255,194,132,.85); color: #ffd6a6; }
+.ss-tr__oldlink:focus-visible { outline: 2px solid #ffc284; outline-offset: 3px; }
 /* 데코 아이콘 */
 .ss-tr__deco { position: absolute; object-fit: contain; display: block; }
 .ss-tr__deco--door { left: 71.736cqw; top: 27.5cqw;   width: 12.708cqw; height: 14.167cqw; }
@@ -4590,6 +4616,16 @@ html.process-open { overflow: hidden; }
   position: absolute; left: 12.986cqw; top: 41.07cqw;
   font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400; color: #666;
 }
+/* 기존 사이트 바로가기 — Before 헤더행 우측의 주황 텍스트 링크 */
+.pd-r1__oldlink {
+  position: absolute; right: 8.611cqw; top: 40.9cqw; z-index: 2;
+  display: inline-flex; align-items: center; gap: 0.3cqw;
+  font-size: clamp(8px, 0.972cqw, 14px); font-weight: 600; color: #ff4600; text-decoration: none;
+  border-bottom: 1px solid transparent; transition: border-color .2s ease, color .2s ease;
+}
+.pd-r1__oldlink span { font-size: clamp(9px, 1.111cqw, 16px); line-height: 1; }
+.pd-r1__oldlink:hover { color: #e23d00; border-bottom-color: currentColor; }
+.pd-r1__oldlink:focus-visible { outline: 2px solid #ff4600; outline-offset: 3px; border-radius: 2px; }
 /* 스크린샷 4장 */
 .pd-r1__ss {
   position: absolute; top: 43.639cqw;
