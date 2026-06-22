@@ -2168,14 +2168,16 @@ html.process-open { overflow: hidden; }
 .mh-s1__shot { position: absolute; left: 41.875cqw; top: 31.042cqw;
   width: 51.181cqw; height: 45.278cqw; object-fit: cover; object-position: top; display: block;
   filter: drop-shadow(.14cqw .28cqw .7cqw rgba(40,70,130,.16)); }
-/* 기존 사이트 바로가기 — 스크린샷 좌하단의 블루 텍스트 링크 */
-.mh-s1__oldlink { position: absolute; left: 41.875cqw; top: 76.7cqw; z-index: 2;
-  display: inline-flex; align-items: center; gap: .35cqw;
+/* 기존 사이트 바로가기 — 02 PROBLEM FINDING 헤더 우측 정렬 (펄/캡슐 버튼) */
+.mh-s1__oldlink { position: absolute; right: 6.944cqw; top: 106.4cqw; z-index: 3;
+  display: inline-flex; align-items: center; gap: .5cqw;
+  padding: .9cqw 1.6cqw;
   font-size: 1.111cqw; font-weight: 600; color: #316efa; text-decoration: none;
-  border-bottom: 1px solid transparent; transition: border-color .2s ease, color .2s ease; }
+  background: rgba(49,110,250,.08); border: 1px solid rgba(49,110,250,.45);
+  border-radius: 999px; transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease; }
 .mh-s1__oldlink span { font-size: 1.25cqw; line-height: 1; }
-.mh-s1__oldlink:hover { color: #1f5be0; border-bottom-color: currentColor; }
-.mh-s1__oldlink:focus-visible { outline: 2px solid #316efa; outline-offset: 3px; border-radius: 2px; }
+.mh-s1__oldlink:hover { color: #fff; background: #316efa; border-color: #316efa; box-shadow: 0 .55cqw 1.4cqw rgba(49,110,250,.28); }
+.mh-s1__oldlink:focus-visible { outline: 2px solid #316efa; outline-offset: 3px; }
 
 /* From archive 밴드 */
 .mh-s1__band { position: absolute; left: 6.944cqw; top: 79.236cqw;
@@ -4567,7 +4569,7 @@ html.process-open { overflow: hidden; }
 }
 
 /* ── SECTION 1 · WHY REDESIGN (1440×1263, cqw = px/14.4) ── */
-.pd-r1 { aspect-ratio: 1440 / 1450; background: #fcfafa;
+.pd-r1 { aspect-ratio: 1440 / 1384; background: #fcfafa;
   font-family: "Pretendard Variable", Pretendard, sans-serif; }
 .pd-r1__num {
   position: absolute; left: 6.944cqw; top: 6.875cqw;
@@ -4604,31 +4606,34 @@ html.process-open { overflow: hidden; }
 /* Before 영역(레이블+기존 사이트 스크린샷 4장)을 감싸는 카드 — pd-r4 카드와 동일 톤.
    박스 윗변이 본문 시작 경계가 되어 리드↔본문 간격도 함께 좁아짐 */
 .pd-r1__beforebox {
-  position: absolute; left: 6.944cqw; top: 38.5cqw;
+  position: absolute; left: 6.944cqw; top: 33.9cqw;
   width: 86.111cqw; height: 38.2cqw;
   background: #fff; border: 1px solid #eaeaea; border-radius: 0.694cqw;
 }
 .pd-r1__before {
-  position: absolute; left: 8.611cqw; top: 41cqw;
+  position: absolute; left: 8.611cqw; top: 36.4cqw;
   font-size: clamp(8px, 1.111cqw, 16px); font-weight: 500; color: #444;
 }
 .pd-r1__before-sub {
-  position: absolute; left: 12.986cqw; top: 41.07cqw;
+  position: absolute; left: 12.986cqw; top: 36.47cqw;
   font-size: clamp(7px, 0.972cqw, 14px); font-weight: 400; color: #666;
 }
-/* 기존 사이트 바로가기 — Before 헤더행 우측의 주황 텍스트 링크 */
+/* 기존 사이트 바로가기 — Before 박스 위쪽 오른쪽의 주황 캡슐 버튼(강조) */
 .pd-r1__oldlink {
-  position: absolute; right: 8.611cqw; top: 40.9cqw; z-index: 2;
-  display: inline-flex; align-items: center; gap: 0.3cqw;
-  font-size: clamp(8px, 0.972cqw, 14px); font-weight: 600; color: #ff4600; text-decoration: none;
-  border-bottom: 1px solid transparent; transition: border-color .2s ease, color .2s ease;
+  position: absolute; right: 6.944cqw; top: 29.3cqw; z-index: 3;
+  display: inline-flex; align-items: center; gap: 0.45cqw;
+  padding: 0.75cqw 1.45cqw;
+  font-size: clamp(9px, 1.042cqw, 15px); font-weight: 600; color: #fff; text-decoration: none;
+  background: #ff4600; border: 1px solid #ff4600; border-radius: 999px;
+  box-shadow: 0 0.4cqw 1.1cqw rgba(255,70,0,.26);
+  transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 .pd-r1__oldlink span { font-size: clamp(9px, 1.111cqw, 16px); line-height: 1; }
-.pd-r1__oldlink:hover { color: #e23d00; border-bottom-color: currentColor; }
-.pd-r1__oldlink:focus-visible { outline: 2px solid #ff4600; outline-offset: 3px; border-radius: 2px; }
+.pd-r1__oldlink:hover { background: #e23d00; box-shadow: 0 0.6cqw 1.5cqw rgba(255,70,0,.38); transform: translateY(-1px); }
+.pd-r1__oldlink:focus-visible { outline: 2px solid #ff4600; outline-offset: 3px; }
 /* 스크린샷 4장 */
 .pd-r1__ss {
-  position: absolute; top: 43.639cqw;
+  position: absolute; top: 39.039cqw;
   height: 31.042cqw; object-fit: cover; border-radius: 0.278cqw;
 }
 .pd-r1__ss--1 { left: 8.611cqw; width: 18.611cqw; }
@@ -4638,17 +4643,17 @@ html.process-open { overflow: hidden; }
 /* 스크린샷 하단 레이블 (중앙 정렬) */
 /* 문제점 */
 .pd-r1__prob-lbl {
-  position: absolute; left: 8.611cqw; top: 86.111cqw;
+  position: absolute; left: 8.611cqw; top: 81.511cqw;
   margin: 0; font-size: clamp(8px, 1.111cqw, 16px);
   font-weight: 500; color: #ff4600; line-height: 1.5;
 }
 .pd-r1__prob-line {
-  position: absolute; left: 8.611cqw; top: 89.445cqw;
+  position: absolute; left: 8.611cqw; top: 84.845cqw;
   width: 2.222cqw; border-top: 1px solid #ff4600; display: block;
 }
 /* 문제 카드 3장 */
 .pd-r1__card {
-  position: absolute; top: 86.111cqw;
+  position: absolute; top: 81.511cqw;
   width: 23.4cqw; min-height: 8.333cqw; height: auto;
   background: #fff; border-radius: 0.694cqw; border: 1px solid #eaeaea;
   display: flex; align-items: center; padding: 0 1.15cqw; gap: 0.95cqw;
@@ -4824,7 +4829,7 @@ html.process-open { overflow: hidden; }
 
 /* ── SECTION 4 · SUB PAGE REDESIGN (1440×2194, cqw = px/14.4) ── */
 .pd-r4 {
-  aspect-ratio: 1440 / 2310; background: #fcfafa;
+  aspect-ratio: 1440 / 2228; background: #fcfafa;
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 .pd-r4__num {
@@ -4857,10 +4862,10 @@ html.process-open { overflow: hidden; }
   width: 82.778cqw; height: 29.028cqw;
   background: #fff; border: 1px solid #eaeaea; border-radius: 0.694cqw;
 }
-.pd-r4__card--1 { top: 36.417cqw; }
-.pd-r4__card--2 { top: 67.389cqw; }
-.pd-r4__card--3 { top: 97.806cqw; }
-.pd-r4__card--4 { top: 128.222cqw; }
+.pd-r4__card--1 { top: 30.717cqw; }
+.pd-r4__card--2 { top: 61.689cqw; }
+.pd-r4__card--3 { top: 92.106cqw; }
+.pd-r4__card--4 { top: 122.522cqw; }
 .pd-r4__copy {
   position: absolute; left: 2.083cqw; top: 2.639cqw;
   width: 35.417cqw; color: #666;
@@ -5020,7 +5025,7 @@ html.process-open { overflow: hidden; }
 
 /* ── SECTION 6 · TROUBLE & SOLUTION (1440×785, cqw = px/14.4) ── */
 .pd-r6 {
-  aspect-ratio: 1440 / 785; background: #feece9;
+  aspect-ratio: 1440 / 766; background: #feece9;
   font-family: "Pretendard Variable", Pretendard, sans-serif;
 }
 .pd-r6__lead {
@@ -5048,7 +5053,7 @@ html.process-open { overflow: hidden; }
   letter-spacing: 0.1em; color: #ff8456;
 }
 .pd-r6__card {
-  position: absolute; top: 33.958cqw;
+  position: absolute; top: 32.658cqw;
   width: 26.944cqw; height: 15.556cqw;
   background: #fff; border: 1px solid #eaeaea; border-radius: 0.694cqw;
 }
