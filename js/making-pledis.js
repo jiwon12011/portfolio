@@ -328,10 +328,11 @@
       const connLine = connSvg.querySelector(".pd-r5__connector-line");
       const connDots = connSvg.querySelectorAll(".pd-r5__connector-dot");
       if (connLine) {
-        /* getTotalLength(): SVG viewBox 좌표 기준 길이. line (2,3)→(46,3) = 44 */
-        const lineLen = (typeof connLine.getTotalLength === "function")
-          ? connLine.getTotalLength()
-          : 44;
+        /* getTotalLength(): SVG viewBox 좌표 기준 길이. line (2,3)→(46,3) = 44.
+           모달이 닫혀(display:none) 비-렌더일 때 getTotalLength 가 InvalidStateError 를 던지므로
+           try/catch — 폴백 44 가 실제 길이와 동일이라 값 손실 없음(콘솔 에러만 제거). */
+        let lineLen = 44;
+        try { if (connLine.getTotalLength) lineLen = connLine.getTotalLength(); } catch (e) {}
         gsap.set(connLine, { strokeDasharray: lineLen, strokeDashoffset: lineLen });
         gsap.set(connDots, { opacity: 0, scale: 0, transformOrigin: "50% 50%" });
         const connTL = gsap.timeline({ scrollTrigger: ST(connSvg, "top 90%") });
