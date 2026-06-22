@@ -2784,7 +2784,7 @@ html.process-open { overflow: hidden; }
 
 /* ── SECTION · PROLOGUE 인트로 (히어로↔본문 사이, 다크+골드) — 디자인 1440×700, cqw=px/14.4
    중앙정렬은 transform 없이 left:0;right:0;text-align:center. .ss-sec가 #0e0d14 다크 배경 상속 ── */
-.ss-intro { aspect-ratio: 1440 / 700; background: #0e0d14;
+.ss-intro { aspect-ratio: 1440 / 770; background: #0e0d14;
   font-family: "Pretendard", sans-serif; }
 
 /* eyebrow — Cormorant 골드. letter-spacing 만큼 text-indent 보정해 시각적 정중앙 */
@@ -2804,7 +2804,7 @@ html.process-open { overflow: hidden; }
   font-size: 1.111cqw; line-height: 1.6; color: #b0a890; }
 
 /* 목차 헤더 + 골드 룰 */
-.ss-intro__toc { position: absolute; left: 6.944cqw; right: 6.944cqw; top: 30cqw; text-align: center; }
+.ss-intro__toc { position: absolute; left: 6.944cqw; right: 6.944cqw; top: 35cqw; text-align: center; }
 .ss-intro__toc-title { display: block; font-family: "Cormorant Garamond", serif;
   font-size: 1.389cqw; font-weight: 400; letter-spacing: 0.32em; text-indent: 0.32em; color: #ffc284; }
 .ss-intro__toc-rule { display: block; width: 2.4cqw; height: 1px; margin: .9cqw auto 0; background: #ffc284; }
