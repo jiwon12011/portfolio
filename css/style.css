@@ -5857,7 +5857,7 @@ html.process-open { overflow: hidden; }
   text-align: center; font-size: 1.25cqw; line-height: 1.4; color: #444;
   word-break: keep-all; }
 .mk-intro__sub--1 { top: 22.847cqw; max-width: 52.222cqw; }
-.mk-intro__sub--2 { top: 26.667cqw; }
+.mk-intro__sub--2 { top: 25.6cqw; }
 
 /* 2) PROCESS — Frame 405 (1440×588). 배경 = 물결 이미지 전체(동일비율→왜곡없음) */
 .mk-intro__process { position: relative; container-type: inline-size;
