@@ -105,9 +105,83 @@
     ================================================================ */
     const introEl = scroller.querySelector("#ss-intro");
     if (introEl) {
+      /* ── #ss-intro 스크롤 락 ─────────────────────────────────────────────────
+       * 진입 모션(introTL, ~4.4s) 재생 중 하향 스크롤 차단.
+       * sangsang은 smooth-process 미적용 → 네이티브 overflow 스크롤.
+       * wheel / touch / keyboard(Space·PageDown·↓·End) 하향 입력 무시.
+       * 위로(상향)는 항상 허용. prefers-reduced-motion 시 init() 에서 early-return되므로
+       * 이 블록 자체에 진입하지 않음 → 별도 guard 불필요.
+       * 안전장치: TL totalDuration + 1.2s 타임아웃 → 어떤 이유로도 갇힘 절대 없음.
+       * 모달 닫힘 감지(MutationObserver) → 락 및 리스너 즉시 정리(누수 방지). */
+      let introLockActive  = false;
+      let introLockTop     = 0;
+      let introLockTimer   = null;
+      let introTouchStartY = 0;
+
+      const _introOnWheel = (e) => {
+        if (e.deltaY > 0) e.preventDefault();          /* 아래 방향만 차단, 위로·핀치줌 통과 */
+      };
+      const _introOnTouchStart = (e) => {
+        introTouchStartY = e.touches[0].clientY;
+      };
+      const _introOnTouchMove = (e) => {
+        /* 손가락이 위로 올라감(clientY 감소) → 컨텐츠는 아래로 → 차단 */
+        if (introTouchStartY - e.touches[0].clientY > 0) e.preventDefault();
+      };
+      const _introOnKeyDown = (e) => {
+        /* 입력 필드 포커스 중에는 방해하지 않음 */
+        const a = document.activeElement;
+        if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.tagName === "SELECT")) return;
+        if ([" ", "PageDown", "ArrowDown", "End"].includes(e.key)) e.preventDefault();
+      };
+      const _introOnScroll = () => {
+        /* 모멘텀·스크롤바 드래그 등 이벤트 차단을 빠져나간 스크롤 강제 복귀 */
+        if (scroller.scrollTop > introLockTop) scroller.scrollTop = introLockTop;
+      };
+
+      const introUnlock = () => {
+        if (!introLockActive) return;
+        introLockActive = false;
+        clearTimeout(introLockTimer);
+        introLockTimer = null;
+        scroller.removeEventListener("wheel",      _introOnWheel);
+        scroller.removeEventListener("touchstart", _introOnTouchStart);
+        scroller.removeEventListener("touchmove",  _introOnTouchMove);
+        scroller.removeEventListener("scroll",     _introOnScroll);
+        document.removeEventListener("keydown",    _introOnKeyDown);
+      };
+
+      const introLock = () => {
+        if (introLockActive) return;
+        introLockActive = true;
+        introLockTop = scroller.scrollTop;
+        scroller.addEventListener("wheel",      _introOnWheel,      { passive: false });
+        scroller.addEventListener("touchstart", _introOnTouchStart, { passive: true  });
+        scroller.addEventListener("touchmove",  _introOnTouchMove,  { passive: false });
+        scroller.addEventListener("scroll",     _introOnScroll,     { passive: true  });
+        document.addEventListener("keydown",    _introOnKeyDown);
+        /* 안전장치: TL 종료 예정 시간 + 1.2s 후 무조건 해제 (갇힘 절대 금지)
+         * introLock()은 introTL이 빌드된 후 onEnter에서 호출되므로 totalDuration() 확정 */
+        introLockTimer = setTimeout(introUnlock, (introTL.totalDuration() + 1.2) * 1000);
+      };
+
+      /* 모달 닫힘·프로젝트 전환 시 락 정리 */
+      const _introModal = scroller.closest("[id^='process-']");
+      if (_introModal) {
+        new MutationObserver(() => {
+          if (!_introModal.classList.contains("is-open")) introUnlock();
+        }).observe(_introModal, { attributes: true, attributeFilter: ["class"] });
+      }
+
+      /* introTL: paused 로 생성, scrollTrigger를 TL에서 분리 ───────────────────
+       * scrollTrigger를 타임라인에 부착하면 scrub 여부와 무관하게 GSAP 내부에서
+       * ST가 재생을 중개. 스크롤을 잠근 상태에서 ticker 독립 재생을 보장하려면
+       * TL을 ST에서 완전히 분리하고, 별도 ST.create() onEnter에서 직접 .play() 호출. */
       const introTL = gsap.timeline({
-        scrollTrigger: { trigger: introEl, scroller, start: "top 80%", once: true },
+        paused: true,
+        onComplete: introUnlock,   /* TL 완료 즉시 해제 */
       });
+
       introTL
         /* 1. eyebrow "PROLOGUE": Cormorant·골드·letter-spacing 0.5em — 어둠에서 스며드는 잉크 등장 */
         .from(introEl.querySelector(".ss-intro__eyebrow"), {
@@ -144,6 +218,14 @@
         .from(introEl.querySelectorAll(".ss-intro__step-label"), {
           opacity: 0, y: 8, duration: 0.5, ease: "power2.out", stagger: 0.14,
         }, "-=0.65");
+
+      /* ST.create(): #ss-intro top 80% 진입 → introLock() + introTL.play() 직접 구동
+       * once: true → 1회 발화 후 ST 소멸. 재진입 시 TL이 이미 ended 상태이므로 재발동 없음. */
+      ScrollTrigger.create({
+        trigger: introEl, scroller,
+        start: "top 80%", once: true,
+        onEnter: () => { introLock(); introTL.play(); },
+      });
     }
 
     /* ================================================================
