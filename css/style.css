@@ -2782,6 +2782,47 @@ html.process-open { overflow: hidden; }
 .ss-hero__meta--role { left: 50%; transform: translateX(-50%); }
 .ss-hero__meta--date { left: 77.5cqw; }
 
+/* ── SECTION · PROLOGUE 인트로 (히어로↔본문 사이, 다크+골드) — 디자인 1440×700, cqw=px/14.4
+   중앙정렬은 transform 없이 left:0;right:0;text-align:center. .ss-sec가 #0e0d14 다크 배경 상속 ── */
+.ss-intro { aspect-ratio: 1440 / 700; background: #0e0d14;
+  font-family: "Pretendard", sans-serif; }
+
+/* eyebrow — Cormorant 골드. letter-spacing 만큼 text-indent 보정해 시각적 정중앙 */
+.ss-intro__eyebrow { position: absolute; left: 0; right: 0; top: 7.5cqw; margin: 0;
+  text-align: center; font-family: "Cormorant Garamond", serif; font-weight: 400;
+  font-size: 1.389cqw; letter-spacing: 0.5em; text-indent: 0.5em; color: #ffc284; }
+
+/* 멘트 타이틀 (중앙 2줄) */
+.ss-intro__title { position: absolute; left: 0; right: 0; top: 11.5cqw; margin: 0;
+  text-align: center; font-family: "Pretendard", sans-serif; font-weight: 500;
+  font-size: 2.6cqw; line-height: 1.3; color: #fff3e8; }
+.ss-intro__title .ss-em { color: #ffc284; }
+
+/* 서브 (중앙 2줄, 회색) */
+.ss-intro__sub { position: absolute; left: 0; right: 0; top: 22cqw; margin: 0;
+  text-align: center; font-family: "Pretendard", sans-serif; font-weight: 400;
+  font-size: 1.111cqw; line-height: 1.6; color: #b0a890; }
+
+/* 목차 헤더 + 골드 룰 */
+.ss-intro__toc { position: absolute; left: 6.944cqw; right: 6.944cqw; top: 30cqw; text-align: center; }
+.ss-intro__toc-title { display: block; font-family: "Cormorant Garamond", serif;
+  font-size: 1.389cqw; font-weight: 400; letter-spacing: 0.32em; text-indent: 0.32em; color: #ffc284; }
+.ss-intro__toc-rule { display: block; width: 2.4cqw; height: 1px; margin: .9cqw auto 0; background: #ffc284; }
+
+/* 가로 5단계 타임라인 — 연결선은 ::before, --ss-line(0→1) scaleX 로 드로잉(기본 1=완성) */
+.ss-intro__steps { --ss-line: 1; position: relative; display: flex; margin: 3.4cqw 0 0;
+  padding: 0; list-style: none; }
+.ss-intro__steps::before { content: ""; position: absolute; left: calc(100% / 10); right: calc(100% / 10);
+  top: 1.65cqw; height: 1.5px; background: rgba(255,194,132,.35);
+  transform: scaleX(var(--ss-line)); transform-origin: left center; z-index: 0; }
+.ss-intro__step { position: relative; z-index: 1; flex: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 1cqw; }
+.ss-intro__step-dot { display: flex; align-items: center; justify-content: center;
+  width: 3.3cqw; height: 3.3cqw; border-radius: 50%; background: #0e0d14; border: 1.5px solid #ffc284;
+  font-size: 1.15cqw; font-weight: 700; line-height: 1; color: #ffc284; }
+.ss-intro__step-label { font-size: 1cqw; font-weight: 500; line-height: 1.3;
+  text-align: center; color: #ede5d2; white-space: nowrap; }
+
 /* SECTION 2 · OVERVIEW (1440×753) */
 .ss-overview { aspect-ratio: 1440 / 753; }
 .ss-overview__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }

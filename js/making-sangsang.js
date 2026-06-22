@@ -92,6 +92,32 @@
     }
 
     /* ================================================================
+       SECTION · PROLOGUE 인트로 (#ss-intro)
+       eyebrow→타이틀→서브 페이드업 / 목차헤더 / 타임라인 골드 연결선 드로잉
+       + dot 5개 팝(back.out) + 라벨 페이드. once 진입.
+       · 중앙정렬은 CSS text-align(transform 무관) → xPercent 불필요
+       · 연결선은 ::before(가상요소) → --ss-line CSS 변수 scaleX 로 드로잉
+         (gsap이 0→1 보간. reduced-motion/미로드 시 CSS 기본 1=완성 폴백)
+       · 타이틀 .ss-em 골드 잉크와이프는 SS_TITLE_SELS 에서 자동 적용(sangsang 시그니처)
+    ================================================================ */
+    if (scroller.querySelector("#ss-intro")) {
+      const introTL = gsap.timeline({ scrollTrigger: ST("#ss-intro", "top 80%") });
+      introTL
+        .from("#ss-intro .ss-intro__eyebrow", { opacity: 0, y: 18, duration: 0.7, ease: "power3.out" })
+        .from("#ss-intro .ss-intro__title",   { opacity: 0, y: 26, duration: 0.9, ease: "power3.out" }, "-=0.42")
+        .from("#ss-intro .ss-intro__sub",      { opacity: 0, y: 22, duration: 0.8, ease: "power3.out" }, "-=0.5")
+        .from(["#ss-intro .ss-intro__toc-title", "#ss-intro .ss-intro__toc-rule"],
+              { opacity: 0, y: 14, duration: 0.6, ease: "power3.out", stagger: 0.08 }, "-=0.38")
+        .fromTo("#ss-intro .ss-intro__steps", { "--ss-line": 0 },
+              { "--ss-line": 1, duration: 0.95, ease: "power2.inOut" }, "-=0.15")
+        .from("#ss-intro .ss-intro__step-dot",
+              { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(2)", stagger: 0.1,
+                transformOrigin: "50% 50%", clearProps: "transform" }, "-=0.7")
+        .from("#ss-intro .ss-intro__step-label",
+              { opacity: 0, y: 10, duration: 0.5, ease: "power2.out", stagger: 0.1 }, "-=0.55");
+    }
+
+    /* ================================================================
        SECTION 1 · OVERVIEW (#ss1)
        kicker / title / lead 페이드+업 순차 진입
     ================================================================ */
@@ -155,7 +181,7 @@
        대상: ss1·ss2·ss5 타이틀 .ss-em. base+color 2겹, color clipPath 왼→오. once(top 85%).
        나머지 .ss-em(캡션 등)은 아래 기존 페이드 유지. */
     const _ssEsc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const SS_TITLE_SELS = [".ss-overview__title", ".ss-tr__title", ".ss-outro__title"];
+    const SS_TITLE_SELS = [".ss-intro__title", ".ss-overview__title", ".ss-tr__title", ".ss-outro__title"];
     const inkWipe = (titleSel) => {
       const title = scroller.querySelector(titleSel);
       const em = title && title.querySelector(".ss-em");
