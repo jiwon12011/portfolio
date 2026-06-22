@@ -22,6 +22,54 @@
     gsap.registerPlugin(ScrollTrigger);
     const ST = (trigger, start = "top 86%") => ({ trigger, scroller, start, once: true });
 
+    /* ── #mk-intro · 인트로 섹션 스크롤 진입 모션 ── */
+    (() => {
+      const sec = scroller.querySelector("#mk-intro");
+      if (!sec) return;
+
+      /* 타이틀 (.mk-intro__hl 강조 포함) */
+      const title = sec.querySelector(".mk-intro__title");
+      if (title) gsap.from(title, {
+        opacity: 0, y: 24, duration: 0.9, ease: "power3.out",
+        scrollTrigger: ST(title, "top 86%"),
+        clearProps: "transform,opacity",
+      });
+      /* 부제 2개 stagger */
+      const subs = sec.querySelectorAll(".mk-intro__sub");
+      if (subs.length) gsap.from(subs, {
+        opacity: 0, y: 20, duration: 0.8, ease: "power3.out", stagger: 0.1, delay: 0.08,
+        scrollTrigger: ST(subs[0], "top 86%"),
+        clearProps: "transform,opacity",
+      });
+      /* PROJECT PROCESS eyebrow + head */
+      const eyebrow = sec.querySelector(".mk-intro__eyebrow");
+      const head    = sec.querySelector(".mk-intro__head");
+      if (eyebrow) gsap.from(eyebrow, {
+        opacity: 0, y: 16, duration: 0.7, ease: "power2.out",
+        scrollTrigger: ST(eyebrow, "top 84%"),
+        clearProps: "transform,opacity",
+      });
+      if (head) gsap.from(head, {
+        opacity: 0, y: 18, duration: 0.75, ease: "power2.out", delay: 0.08,
+        scrollTrigger: ST(eyebrow || head, "top 84%"),
+        clearProps: "transform,opacity",
+      });
+      /* 아이콘 카드 6개 stagger + 아이콘 pop */
+      const cards = sec.querySelectorAll(".mk-icard");
+      if (cards.length) {
+        gsap.from(cards, {
+          opacity: 0, y: 32, duration: 0.8, ease: "power3.out", stagger: 0.08,
+          scrollTrigger: ST(cards[0], "top 82%"),
+          clearProps: "transform,opacity",
+        });
+        gsap.from(sec.querySelectorAll(".mk-icard__icon"), {
+          scale: 0.72, duration: 0.6, ease: "back.out(1.5)", stagger: 0.08, delay: 0.1,
+          scrollTrigger: ST(cards[0], "top 82%"),
+          clearProps: "transform",
+        });
+      }
+    })();
+
     /* ── SECTION 1 ── */
     gsap.from(".s1-char",         { opacity: 0, x: -46, duration: .9, ease: "power3.out", scrollTrigger: ST(".s1-char", "top 85%") });
     gsap.from(".s1-text .mk-rise",{ opacity: 0, y: 30,  duration: .8, ease: "power3.out", stagger: .12, scrollTrigger: ST(".s1-text", "top 84%") });

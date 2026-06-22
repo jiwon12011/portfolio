@@ -93,6 +93,48 @@
     });
 
     /* ================================================================
+       SECTION · 인트로 (#mh-intro) — 타이틀 → 부제 → 카드 → TOC 스태거
+       Tone: 블루 (#316efa)
+    ================================================================ */
+    (() => {
+      const sec = scroller.querySelector("#mh-intro");
+      if (!sec) return;
+
+      /* 타이틀 + 부제 */
+      up("#mh-intro .mh-intro__title", "top 88%", { y: 28, duration: 0.95 });
+      up("#mh-intro .mh-intro__sub",   "top 86%", { y: 22 });
+
+      /* 아이콘 카드 3개 stagger fade-up */
+      group("#mh-intro .mh-intro__card", "top 82%", { y: 32, stagger: 0.1 });
+
+      /* TOC 타이틀 */
+      up("#mh-intro .mh-intro__toc-title", "top 84%", { y: 16, duration: 0.7 });
+
+      /* 연결선 scaleX 드로잉 (left→right) */
+      const rule = sec.querySelector(".mh-intro__toc-rule");
+      if (rule) {
+        gsap.set(rule, { transformOrigin: "left center" });
+        gsap.from(rule, {
+          scaleX: 0, duration: 0.9, ease: "power3.out",
+          scrollTrigger: ST(sec.querySelector(".mh-intro__toc-title"), "top 84%"),
+        });
+      }
+
+      /* 스텝 7개 stagger + dot 팝 */
+      const steps = sec.querySelectorAll(".mh-intro__step");
+      if (steps.length) {
+        gsap.from(steps, {
+          opacity: 0, y: 20, duration: 0.6, ease: "power3.out", stagger: 0.07,
+          scrollTrigger: ST(steps[0], "top 84%"),
+        });
+        gsap.from(sec.querySelectorAll(".mh-intro__step-dot"), {
+          scale: 0.6, duration: 0.45, ease: "back.out(1.7)", stagger: 0.07, delay: 0.08,
+          scrollTrigger: ST(steps[0], "top 84%"),
+        });
+      }
+    })();
+
+    /* ================================================================
        SECTION 1 · OVERVIEW + PROBLEM (#mh1)
        [기존] 헤더·카드·shot·band·pcard·diagram 유지
        [추가] pcard-no data-count 카운트업 (once, 00→01/02/03)

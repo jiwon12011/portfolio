@@ -62,6 +62,62 @@
         .to(el, { textShadow: '0 0 3px ' + glow(0.12), duration: 0.7, ease: 'power2.out' }, 0.5);
     };
 
+    /* ================================================================
+       PL-INTRO · 인트로 섹션 (#pl-intro) — eyebrow → 타이틀 → 부제 → TOC 스태거
+       Tone: 핑크 (#e67889)
+       ※ .pl-intro__title em 은 아래 makeGlow([class*="__title"] em) 가 처리 — 색 건드리지 않음
+    ================================================================ */
+    (() => {
+      const sec = scroller.querySelector('#pl-intro');
+      if (!sec) return;
+
+      /* eyebrow → 타이틀 → 부제 순서로 fade-up (같은 trigger: sec 진입 시) */
+      const eyebrow = sec.querySelector('.pl-intro__eyebrow');
+      const title   = sec.querySelector('.pl-intro__title');
+      const sub     = sec.querySelector('.pl-intro__sub');
+      if (eyebrow) gsap.from(eyebrow, {
+        opacity: 0, y: 18, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: ST(sec, 'top 88%'),
+      });
+      if (title) gsap.from(title, {
+        opacity: 0, y: 24, duration: 0.9, ease: 'power3.out', delay: 0.1,
+        scrollTrigger: ST(sec, 'top 88%'),
+      });
+      if (sub) gsap.from(sub, {
+        opacity: 0, y: 20, duration: 0.8, ease: 'power3.out', delay: 0.22,
+        scrollTrigger: ST(sec, 'top 88%'),
+      });
+
+      /* TOC 타이틀 */
+      const tocTitle = sec.querySelector('.pl-intro__toc-title');
+      if (tocTitle) gsap.from(tocTitle, {
+        opacity: 0, y: 16, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: ST(tocTitle, 'top 84%'),
+      });
+
+      /* 연결선 scaleX 드로잉 (left→right) */
+      const rule = sec.querySelector('.pl-intro__toc-rule');
+      if (rule) {
+        gsap.set(rule, { transformOrigin: 'left center' });
+        gsap.from(rule, {
+          scaleX: 0, duration: 0.85, ease: 'power3.out',
+          scrollTrigger: ST(tocTitle || sec, 'top 84%'),
+        });
+      }
+
+      /* 스텝 7개 stagger + dot 팝 */
+      const steps = sec.querySelectorAll('.pl-intro__step');
+      if (steps.length) {
+        gsap.from(steps, {
+          opacity: 0, y: 20, duration: 0.6, ease: 'power3.out', stagger: 0.07,
+          scrollTrigger: ST(steps[0], 'top 84%'),
+        });
+        gsap.from(sec.querySelectorAll('.pl-intro__step-dot'), {
+          scale: 0.6, duration: 0.45, ease: 'back.out(1.7)', stagger: 0.07, delay: 0.08,
+          scrollTrigger: ST(steps[0], 'top 84%'),
+        });
+      }
+    })();
 
     /* ================================================================
        PL1 · PROJECT OVERVIEW

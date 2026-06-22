@@ -107,6 +107,39 @@
     }
 
     /* ================================================================
+       SECTION · 목차 인트로 (#pd-contents) — eyebrow → 타이틀 → 항목 스태거
+       Tone: 따뜻한 피치 (#ff4600/#ff8456)
+    ================================================================ */
+    (() => {
+      const sec = scroller.querySelector("#pd-contents");
+      if (!sec) return;
+
+      /* eyebrow + 타이틀 순차 페이드업 */
+      const eyebrow = sec.querySelector(".pd-contents__eyebrow");
+      const title   = sec.querySelector(".pd-contents__title");
+      if (eyebrow) gsap.from(eyebrow, {
+        opacity: 0, y: 18, duration: 0.7, ease: "power2.out",
+        scrollTrigger: ST(sec, "top 88%"),
+        clearProps: "transform,opacity",
+      });
+      if (title) gsap.from(title, {
+        opacity: 0, y: 26, duration: 0.9, ease: "power3.out", delay: 0.1,
+        scrollTrigger: ST(sec, "top 88%"),
+        clearProps: "transform,opacity",
+      });
+
+      /* 목차 항목 stagger fade-up — 번호+텍스트 함께 */
+      const items = sec.querySelectorAll(".pd-contents__item");
+      if (items.length) {
+        gsap.from(items, {
+          opacity: 0, y: 28, duration: 0.75, ease: "power3.out", stagger: 0.07,
+          scrollTrigger: ST(items[0], "top 85%"),
+          clearProps: "transform,opacity",
+        });
+      }
+    })();
+
+    /* ================================================================
        SECTION 1 · WHY REDESIGN (#pd-r1)
        [추가] h1/h2 clipPath 커튼 와이프 + prob-line scaleX 드로잉
     ================================================================ */
