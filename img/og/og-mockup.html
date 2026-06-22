@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>OG 썸네일 시안 — JIWON SEO PORTFOLIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root {
+    --ink: #ffffff;
+    --bg-dark: #0a0b11;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #17181f;
+    color: #cfd2da;
+    font-family: Pretendard, sans-serif;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: flex-start;
+  }
+  h2.label {
+    font-size: 15px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #8b90a0; margin-bottom: 14px;
+  }
+  .label .reco { color: #e8b06a; }
+
+  /* ── OG 카드 공통: 정확히 1200×630 ── */
+  .og {
+    width: 1200px; height: 630px;
+    position: relative; overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .og__photo {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center 42%;
+  }
+  /* 좌→우 검정 그라데이션 베일 (blur 없음 — JPG 안전) */
+  .og__veil {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      100deg,
+      rgba(8,9,14,0.78) 0%,
+      rgba(8,9,14,0.55) 34%,
+      rgba(8,9,14,0.12) 60%,
+      rgba(8,9,14,0.0) 80%
+    );
+  }
+  /* 하단 살짝 보강 (좌하단 안전영역) */
+  .og__veil-bottom {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(8,9,14,0.35) 0%,
+      rgba(8,9,14,0.0) 30%
+    );
+  }
+  .og__text {
+    position: absolute;
+    left: 84px; bottom: 76px;     /* 좌 7% · 하 12% 안전영역 */
+    display: flex; flex-direction: column;
+    align-items: flex-start;
+  }
+  .og__kicker {
+    font-family: Pretendard, sans-serif;
+    font-size: 26px; font-weight: 600;
+    letter-spacing: 0.36em; text-transform: uppercase;
+    color: rgba(255,255,255,0.82);
+    margin-bottom: 22px;
+    padding-left: 4px;
+  }
+  .og__kicker::before {
+    content: ""; display: inline-block;
+    width: 46px; height: 2px; vertical-align: middle;
+    background: #e8b06a; margin-right: 18px;
+    transform: translateY(-5px);
+  }
+  .og__title {
+    font-family: "Playfair Display", serif;
+    font-size: 132px; font-weight: 600; line-height: 0.94;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    text-shadow: 0 6px 30px rgba(0,0,0,0.45);
+  }
+  .og__sub {
+    font-family: Pretendard, sans-serif;
+    font-size: 40px; font-weight: 400; line-height: 1.2;
+    color: rgba(255,255,255,0.92);
+    margin-top: 26px;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+  }
+
+  /* ── 검정 변형 ── */
+  .og--black { background: var(--bg-dark); }
+  .og--black .og__hairline {
+    position: absolute; left: 84px; top: 84px;
+    width: 64px; height: 2px; background: #e8b06a;
+  }
+  .og--black .og__text { bottom: auto; top: 50%; transform: translateY(-50%); }
+
+  .note { max-width: 1200px; font-size: 14px; line-height: 1.7; color: #9aa0b0; }
+  .note code { background:#23252e; padding:2px 7px; border-radius:4px; color:#dfe2ea; }
+  .note b { color: #e8b06a; font-weight: 600; }
+</style>
+</head>
+<body>
+
+  <section>
+    <h2 class="label">안 C · 히어로 오버레이 <span class="reco">★ 추천</span> — 1200 × 630</h2>
+    <div class="og" id="card-hero">
+      <img class="og__photo" src="../main/main_bg.webp" alt="" />
+      <div class="og__veil"></div>
+      <div class="og__veil-bottom"></div>
+      <div class="og__text">
+        <div class="og__kicker">JIWON SEO</div>
+        <div class="og__title">Portfolio</div>
+        <div class="og__sub">Designing worlds worth staying in.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="label">안 D · 검정 에디토리얼 (비교용) — 1200 × 630</h2>
+    <div class="og og--black" id="card-black">
+      <div class="og__hairline"></div>
+      <div class="og__text">
+        <div class="og__kicker">JIWON SEO</div>
+        <div class="og__title">Portfolio</div>
+        <div class="og__sub">Visual &amp; Experience Design</div>
+      </div>
+    </div>
+  </section>
+
+  <p class="note">
+    <b>쓰는 법</b> — 이 파일을 브라우저로 열면 두 시안이 실제 <code>1200×630</code> 크기로 렌더됩니다.
+    Figma에서 그대로 재현하거나, 카드 영역만 캡쳐해 참고용으로 쓰세요.<br />
+    <b>스펙</b> — 배경 <code>img/main/main_bg.webp</code> · 좌→우 검정 베일(0.78→0, blur 없음) ·
+    타이틀 Playfair Display 132px / 서브 Pretendard 40px · 좌하단 안전영역(좌 84px·하 76px).<br />
+    <b>작은 썸네일 검증</b> — 카드를 200px 폭으로 줄여도 "JIWON SEO · Portfolio"가 읽히는지 꼭 확인하세요(카톡 카드 기준).
+    필요하면 타이틀을 대문자 <code>PORTFOLIO</code>로 키워도 됩니다.
+  </p>
+
+</body>
+</html>
