@@ -1891,6 +1891,14 @@ html.process-open { overflow: hidden; }
   .process__cards .pcard--info dt,
   .process__cards .pcard--info dd { word-break: break-word; }
   .process__cards .pcard--info dd i { font-size: 9px; }
+
+  /* [버그] 그리드 아이템 기본 min-width:auto 블로우아웃 → 2열이 좁은 폰(≤~340)에서 컨테이너를
+     넘겨 우측 카드가 잘림. min-width:0 으로 1fr 트랙이 실제 컨테이너에 맞게 축소(전 프로젝트 공통). */
+  .process__cards .pcard { min-width: 0; }
+  /* [버그] 오버스크롤 종료 칩: nowrap 라벨이 좁은 폰에서 가로로 넘침 → 줄바꿈 허용 + 폭 제한(전 프로젝트 공통) */
+  .process__exit { max-width: 100%; }
+  .process__exit-glass { max-width: 100%; flex-wrap: wrap; justify-content: center; }
+  .process__exit-label { white-space: normal; text-align: center; }
 }
 
 /* 모션 최소화 존중 */
@@ -2733,6 +2741,321 @@ html.process-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .mh-search__cursor { animation: none; } }
 
 
+/* ===== MathHub 본문 모바일 1열 리플로우 (≤768px portrait) — 유미 패턴 적용 =====
+   데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정으로 짜여 있어
+   모바일 1열로 풀려면 좌표/크기 속성에 !important 가 필요하다(인라인 cqw 는 없음).
+   타이틀 <b> 는 making-mathhub.js 가 .mh-emph(base 다크 + color 파랑 오버레이,
+   둘 다 white-space:nowrap)로 감싸므로 모바일에선 color 한 겹만 inline 으로 노출해 줄바꿈시킨다.
+   폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
+  .mh-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible;
+    padding: clamp(24px,4vw,36px) clamp(16px,4vw,22px);
+  }
+  /* 풀블리드 키비주얼: 높이만, bg(inset:0 cover) 그대로 채움 */
+  .mh-sec.mh-hero { height: clamp(220px,55vw,320px) !important; padding: 0 !important; }
+  .mh-hero__bg { height: 100% !important; }
+  /* 장식 배경 이미지: 데스크톱 절대배치용 백드롭이라 1열 흐름에선 콘텐츠와 정렬이 안 맞아
+     듬성한 구간에 비쳐 빈 영역처럼 보이고 텍스트 대비도 불안정 → 모바일에선 숨김(섹션 solid bg만 남김) */
+  .mh-s1__bg, .mh-s2__bg, .mh-s5__bg, .mh-s7__bg { display: none !important; }
+
+  /* ── mh2 핀 해제(모션은 JS가 모바일 비활성, CSS도 일반 흐름 보장 / setMh2Top 인라인 top 무력화) ── */
+  #mh2-pin { height: auto !important; }
+  #mh2 { position: relative !important; top: auto !important; }
+
+  /* ── 타이틀 강조어 .mh-emph: nowrap 오버레이 → 파랑 color 한 겹만 inline·wrap ── */
+  .mh-emph { display: inline !important; vertical-align: baseline !important; }
+  .mh-emph__base, .mh-emph__ul { display: none !important; }
+  .mh-emph__color {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline !important; white-space: normal !important; clip-path: none !important; }
+
+  /* ── 헤더 리듬(전 섹션): 큰 넘버 + 카테고리 한 줄 → 타이틀 → 리드 ── */
+  .mh-s1__no, .mh-s2__no, .mh-s3__no, .mh-s4__no, .mh-s5__no, .mh-s6__no, .mh-s7__no {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; vertical-align: middle;
+    font-size: clamp(14px,1.8vw,18px) !important; line-height: 1.2 !important; }
+  .mh-s1__cat, .mh-s2__cat, .mh-s3__cat, .mh-s4__cat, .mh-s6__cat, .mh-s7__cat {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; margin-left: 8px; vertical-align: middle;
+    font-size: clamp(12px,1.5vw,14px) !important; line-height: 1.2 !important; }
+  .mh-s1__title, .mh-s2__title, .mh-s3__title, .mh-s4__title, .mh-s5__title, .mh-s6__title, .mh-s7__title {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: clamp(10px,2vw,14px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.25 !important; }
+  .mh-s1__lead, .mh-s2__lead, .mh-s3__lead, .mh-s4__lead, .mh-s5__lead, .mh-s6__lead, .mh-s7__lead {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 8px 0 clamp(16px,2.5vw,22px) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  /* ════ INTRO · 개요 ════ */
+  .mh-intro__title {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    text-align: center; margin: 0 0 clamp(10px,2vw,14px) !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.3 !important; }
+  .mh-intro__sub {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    text-align: center; margin: 0 0 clamp(20px,4vw,28px) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  .mh-intro__cards {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    display: flex !important; flex-direction: column; gap: clamp(12px,1.6vw,16px); margin: 0 0 clamp(16px,3vw,22px); }
+  .mh-intro__card { min-height: 0 !important; gap: 8px; padding: clamp(14px,4vw,18px); border-radius: clamp(12px,1.8vw,16px); }
+  .mh-intro__card-ico { font-size: clamp(28px,7vw,40px) !important; }
+  .mh-intro__card-title { font-size: clamp(16px,2.1vw,20px) !important; line-height: 1.25 !important; }
+  .mh-intro__card-desc { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .mh-intro__toc {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    min-height: 0 !important; padding: clamp(16px,4vw,22px); border-radius: clamp(12px,1.8vw,16px); }
+  .mh-intro__toc-title { font-size: clamp(16px,2.1vw,20px) !important; }
+  .mh-intro__toc-rule { width: 22px !important; margin-top: 8px !important; }
+  /* 7단계 → 2열 그리드(가로 연결선 제거), 각 항목은 도트+라벨 가로 */
+  .mh-intro__steps {
+    display: grid !important; grid-template-columns: 1fr 1fr;
+    gap: clamp(10px,2vw,14px) clamp(12px,3vw,18px); margin: clamp(16px,4vw,24px) 0 0 !important; }
+  .mh-intro__steps::before { display: none !important; }
+  .mh-intro__step { flex-direction: row !important; align-items: center; gap: 8px; }
+  .mh-intro__step-dot {
+    width: clamp(26px,7vw,32px) !important; height: clamp(26px,7vw,32px) !important;
+    flex: none; font-size: clamp(12px,1.5vw,14px) !important; }
+  .mh-intro__step-label {
+    font-size: clamp(12px,1.5vw,14px) !important; line-height: 1.3 !important;
+    white-space: normal !important; text-align: left; }
+
+  /* ════ 01 OVERVIEW + 02 PROBLEM FINDING (mh1 합본) ════ */
+  /* 인포 카드 4 — 세로 1열, 아이콘 + 텍스트 가로 */
+  .mh-s1__card {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    margin: 0 0 clamp(12px,1.6vw,16px); padding: clamp(12px,3.5vw,16px);
+    gap: clamp(12px,3vw,16px); border-radius: clamp(12px,1.8vw,16px); }
+  .mh-s1__card:nth-of-type(1) { margin-top: clamp(6px,1.5vw,10px); }
+  .mh-s1__card-ico { width: clamp(44px,12vw,56px) !important; height: clamp(44px,12vw,56px) !important; }
+  .mh-s1__card-ico img { width: 52% !important; height: 52% !important; }
+  .mh-s1__card-label { font-size: clamp(12px,1.5vw,14px) !important; }
+  .mh-s1__card-val { font-size: clamp(14px,1.7vw,16px) !important; }
+  .mh-s1__card-sub { font-size: clamp(13px,1.4vw,15px) !important; }
+  /* 우측 목업 → 풀폭 */
+  .mh-s1__shot {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: clamp(4px,1.5vw,10px) 0 clamp(12px,2vw,16px);
+    border-radius: clamp(10px,1.8vw,14px); }
+  /* 기존 사이트 바로가기 캡슐 → 인라인 */
+  .mh-s1__oldlink {
+    position: static !important; right: auto !important; top: auto !important;
+    margin: 0 0 clamp(16px,3vw,22px); padding: 9px 16px; font-size: clamp(13px,1.5vw,15px) !important; }
+  .mh-s1__oldlink span { font-size: clamp(13px,1.5vw,15px) !important; }
+  /* From archive 밴드 */
+  .mh-s1__band {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    margin: 0 0 clamp(16px,3vw,22px); padding: clamp(16px,4vw,22px); border-radius: clamp(12px,2vw,16px); }
+  .mh-s1__band-title {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(10px,2vw,14px) !important; font-size: clamp(16px,2.1vw,20px) !important; line-height: 1.3 !important; }
+  .mh-s1__band-img {
+    position: static !important; left: auto !important; top: auto !important;
+    width: clamp(160px,42vw,220px) !important; height: auto !important; }
+  /* 02 헤더 — 새 블록 시작 간격 */
+  .mh-s1__no--2 { margin-top: clamp(28px,6vw,44px) !important; }
+  /* 문제 카드 3 — 프레임 → 흰 카드 1열, 내부 요소 흐름 */
+  .mh-s1__pcard {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    margin: 0 0 clamp(12px,1.6vw,16px); padding: clamp(12px,3.5vw,16px);
+    background: #fff; border: 1px solid #d0dee9; border-radius: clamp(12px,1.8vw,16px); }
+  .mh-s1__pcard-shot {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px);
+    border-radius: clamp(8px,1.4vw,12px); }
+  .mh-s1__pcard-no {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; place-items: center; vertical-align: middle;
+    width: clamp(24px,6.5vw,30px) !important; height: clamp(24px,6.5vw,30px) !important;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .mh-s1__pcard-title {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline !important; margin: 0 0 0 8px !important; vertical-align: middle;
+    font-size: clamp(15px,1.9vw,17px) !important; line-height: 1.3 !important; }
+  .mh-s1__pcard-desc {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: clamp(8px,1.6vw,10px) 0 0 !important; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  /* BEFORE 진단 다이어그램 */
+  .mh-s1__diagram {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: 100% !important; height: auto !important; margin: clamp(8px,2vw,14px) 0 0; border-radius: clamp(10px,1.8vw,14px); }
+
+  /* ════ 03 IA REBUILD (mh2) ════ */
+  .mh-s2__quote { position: static !important; }
+  .mh-s2__quote p {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; white-space: normal !important; text-align: center;
+    margin: 0 0 clamp(16px,3vw,22px) !important; font-size: clamp(14px,1.7vw,16px) !important; line-height: 1.5 !important; }
+  .mh-s2__quote-mark, .mh-s2__quote-arrow { display: none !important; }   /* 손글씨 따옴표·화살표 장식 제거 */
+  /* BEFORE / AFTER 패널 — 흰 박스 흐름, 내부 요소 static */
+  .mh-s2__panel {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    margin: 0 0 clamp(12px,1.6vw,16px); padding: clamp(14px,4vw,18px); border-radius: clamp(12px,1.8vw,16px); }
+  .mh-s2__pill {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-flex !important; height: auto; margin: 0 0 clamp(8px,1.6vw,10px);
+    padding: 5px 10px; border-radius: 6px; font-size: clamp(12px,1.5vw,14px) !important; }
+  .mh-s2__panel-title {
+    position: static !important; left: auto !important; top: auto !important;
+    display: block; margin: 0 0 6px; font-size: clamp(15px,1.9vw,17px) !important; }
+  .mh-s2__panel-desc {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .mh-s2__before-shot {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: clamp(10px,2vw,14px) 0 0; border-radius: clamp(8px,1.4vw,12px); }
+  /* AFTER 카테고리 카드 4 — 1열(배경색은 --1~4 유지) */
+  .mh-s2__cat-card {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; min-height: 0 !important;
+    margin: 0 0 clamp(12px,1.6vw,16px); padding: clamp(14px,4vw,18px); border-radius: clamp(12px,1.8vw,16px); }
+  .mh-s2__cat-no {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; font-size: clamp(13px,1.6vw,15px) !important; }
+  .mh-s2__cat-ico {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: clamp(48px,14vw,64px) !important; height: auto !important; margin: clamp(8px,2vw,12px) 0; display: block; }
+  .mh-s2__cat-title {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 4px !important; font-size: clamp(15px,1.9vw,17px) !important; }
+  .mh-s2__cat-desc {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  /* ════ 검색 밴드 (mh-search) ════ */
+  .mh-search { padding: clamp(20px,5vw,28px) clamp(16px,4vw,22px) !important; }
+  .mh-search__bar {
+    width: 100% !important; flex-wrap: wrap; gap: clamp(8px,2vw,12px);
+    padding: clamp(12px,3.5vw,16px); border-radius: clamp(12px,2vw,16px); }
+  .mh-search__ico { width: clamp(18px,5vw,22px) !important; height: clamp(18px,5vw,22px) !important; }
+  .mh-search__text {
+    flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: clamp(13px,3.2vw,15px) !important; }
+  .mh-search__cursor { height: clamp(16px,4vw,20px) !important; }
+  .mh-search__chips { margin-left: auto; flex-wrap: wrap; gap: clamp(6px,2vw,9px); }
+  .mh-search__chip { font-size: clamp(11px,3vw,13px) !important; padding: 5px 12px; border-radius: 999px; }
+
+  /* ════ 04 SEARCH & FILTER UX (mh3) ════ */
+  .mh-s3__panel { display: none !important; }   /* 빈 배경 박스 */
+  .mh-s3__pill {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-flex !important; height: auto; margin: clamp(6px,1.5vw,10px) 0 clamp(8px,1.6vw,10px);
+    padding: 5px 10px; border-radius: 6px; font-size: clamp(12px,1.5vw,14px) !important; }
+  .mh-s3__before-shot {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px); border-radius: clamp(8px,1.4vw,12px); }
+  .mh-s3__before-title {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 6px; font-size: clamp(15px,1.9vw,17px) !important; }
+  .mh-s3__before-desc {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(16px,3vw,22px); font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .mh-s3__shot {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px); border-radius: clamp(8px,1.4vw,12px); }
+  .mh-s3__step { display: none !important; }   /* 스크린샷 위 번호 장식 */
+  .mh-s3__leg {
+    position: static !important; left: auto !important; top: auto !important; margin: 0 0 clamp(12px,2vw,16px); }
+  .mh-s3__leg-head h5 { font-size: clamp(14px,1.8vw,16px) !important; }
+  .mh-s3__leg-no { width: clamp(18px,5vw,22px) !important; height: clamp(18px,5vw,22px) !important; font-size: clamp(11px,1.4vw,13px) !important; }
+  .mh-s3__leg p { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  /* ════ 05 CONTENT NAVIGATION (mh4) ════ */
+  .mh-s4__main {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: clamp(4px,1.5vw,10px) 0 clamp(12px,2vw,16px);
+    border-radius: clamp(10px,1.8vw,14px); }
+  .mh-s4__shot {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px); border-radius: clamp(8px,1.4vw,12px); }
+  .mh-s4__conn, .mh-s4__node { display: none !important; }   /* 점선 커넥터·연결점 도트 장식 */
+  .mh-s4__leg {
+    position: static !important; left: auto !important; top: auto !important; margin: 0 0 clamp(12px,2vw,16px); }
+  .mh-s4__leg-head h5 { font-size: clamp(14px,1.8vw,16px) !important; }
+  .mh-s4__leg-no { width: clamp(18px,5vw,22px) !important; height: clamp(18px,5vw,22px) !important; font-size: clamp(11px,1.4vw,13px) !important; }
+  .mh-s4__leg p { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  /* ════ 06 PAGE-SPECIFIC UI (mh5) ════ */
+  .mh-s5__panel { display: none !important; }   /* 빈 배경 박스 */
+  .mh-s5__badge {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; place-items: center; vertical-align: middle;
+    width: clamp(26px,7vw,32px) !important; height: clamp(26px,7vw,32px) !important; font-size: clamp(12px,1.5vw,14px) !important; }
+  .mh-s5__badge--2, .mh-s5__badge--3 { margin-top: clamp(24px,6vw,40px); }   /* 패널 그룹 간격 */
+  .mh-s5__cat {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline !important; margin: 0 0 0 8px !important; vertical-align: middle; font-size: clamp(15px,1.9vw,17px) !important; }
+  .mh-s5__sub {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: clamp(8px,1.6vw,10px) 0 0 !important; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; font-weight: 600; }
+  .mh-s5__desc {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 6px 0 clamp(12px,2.5vw,16px) !important; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .mh-s5__shot {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px); border-radius: clamp(8px,1.4vw,12px); }
+
+  /* ════ 07 COLOR GUIDELINES (mh6) — 스와치 밴드 + 이름/헥스 1열 ════ */
+  .mh-s6__card {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    margin: 0 0 clamp(12px,1.6vw,16px); padding: clamp(12px,3.5vw,16px); border-radius: clamp(12px,1.8vw,16px); }
+  .mh-s6__swatch {
+    position: static !important; left: auto !important; top: auto !important;
+    display: block !important;   /* <span>(inline)이라 display 없으면 width/height 무시 → 0×0 붕괴 */
+    width: 100% !important; height: clamp(72px,20vw,104px) !important;
+    border-radius: clamp(8px,1.4vw,12px); margin: 0 0 clamp(8px,1.6vw,10px); }
+  .mh-s6__name {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 4px !important; font-size: clamp(15px,1.9vw,17px) !important; }
+  .mh-s6__hex {
+    position: static !important; left: auto !important; top: auto !important; font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 08 PUBLISHING TROUBLESHOOTING + OUTRO (mh7) ════ */
+  .mh-s7__log, .mh-s7__log-divider, .mh-s7__timeline, .mh-s7__dot { display: none !important; }   /* 카드 박스·세로선·도트 장식 */
+  .mh-s7__gh {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; vertical-align: middle;
+    width: clamp(18px,5vw,22px) !important; height: clamp(18px,5vw,22px) !important; }
+  .mh-s7__log-title {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; margin: clamp(4px,1.5vw,8px) 0 clamp(10px,2vw,14px) 8px; vertical-align: middle;
+    font-size: clamp(15px,1.9vw,17px) !important; font-weight: 600; }
+  /* 커밋 4 → 세로 리스트(좌측 라인으로 타임라인 결 유지) */
+  .mh-s7__commit {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(12px,2vw,16px); padding-left: clamp(12px,3vw,16px); border-left: 2px solid #316efa; }
+  .mh-s7__ctype { font-size: clamp(12px,1.5vw,14px) !important; }
+  .mh-s7__cmsg { margin: 4px 0 0 !important; font-size: clamp(14px,1.7vw,16px) !important; line-height: 1.4 !important; }
+  .mh-s7__code {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: clamp(8px,2vw,14px) 0 clamp(16px,3vw,22px); border-radius: clamp(10px,1.8vw,14px); }
+  .mh-s7__outro {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: auto !important; white-space: normal !important; text-align: center;
+    margin: clamp(8px,2vw,14px) 0 0 !important; font-size: clamp(20px,3vw,28px) !important; line-height: 1.3 !important; }
+  .mh-s7__outro-1, .mh-s7__outro-2 {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: auto !important; white-space: normal !important; text-align: center;
+    margin: clamp(10px,2vw,14px) 0 0 !important; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .mh-s7__hero {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: clamp(16px,4vw,24px) 0 0; border-radius: clamp(10px,1.8vw,14px); }
+}
+
+
 /* ===================================================================
    귀혼(Soul Saver) 모달 — 따뜻한 다크 + 앰버/불꽃 톤
    POZE의 핑크를 #process-gwihon 한정으로 앰버(소울세이버 화염)로 재테마.
@@ -3366,6 +3689,264 @@ html.process-open { overflow: hidden; }
   .ss-bokeh   { animation: none; opacity: .3; }
 }
 
+/* ===== 상상의 문 본문 모바일 1열 리플로우 (≤768px portrait) — 유미/MathHub 패턴 =====
+   데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정으로 짜여 있어
+   모바일 1열로 풀려면 좌표/크기 속성에 !important 가 필요하다(인라인 cqw 는 없음).
+   다크 시네마틱 테마 유지: 섹션 배경(#0e0d14/#080d11)·라이트 텍스트·골드(#ffc284) 강조 그대로.
+   ⚠️ 데스크톱 핀(ss-intro/ss1/ss3)은 reduced-motion 블록에만 비활성 규칙이 있어
+   여기서 복제한다(JS scrub 은 motion 쪽이 모바일에서 따로 끔).
+   폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* 열쇠 트레일(JS가 데스크톱 좌표로 흩뿌린 164개 장식 점) — 1열에선 좌표 안 맞아 우측으로 넘침 → 숨김 */
+  #process-sangsang .ss-key-trail { display: none !important; }
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 (배경색은 데스크톱 규칙 유지=다크) ── */
+  .ss-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible;
+    padding: clamp(28px,7vw,44px) clamp(16px,4vw,22px);
+  }
+
+  /* ── 핀 비활성(모바일): reduced-motion 규칙 복제 ──
+     .ss-pin = #ss-intro-pin·#ss1-pin 둘 다 보유 / #ss3-pin 은 클래스 없어 별도 명시 */
+  .ss-pin { height: auto !important; }
+  #ss-intro { position: static !important; }
+  #ss1 { position: static !important; top: auto !important; }
+  #ss1-pin { height: auto !important; }
+  #ss3-pin { height: auto !important; }
+  .ss3-stage { position: static !important; height: auto !important; overflow: visible !important; }
+  #ss3 { transform: none !important; will-change: auto !important; }
+
+  /* ════ SECTION 1 · HERO (키비주얼) ════
+     aspect-ratio 풀고 배너 높이로. __bg(cover)·__scrim 은 키비주얼이라 유지.
+     거대 디스플레이 타이포(__sang/__moon 20.8cqw 등)는 clamp 로 줄이고 중앙 세로 흐름으로 재구성.
+     ⚠️ 절대배치였던 텍스트를 static 으로 두면 절대배치 bg/scrim 아래로 깔려 가려짐
+        → position:relative + z-index 로 띄운다. */
+  .ss-sec.ss-hero {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: clamp(8px,2vw,12px); text-align: center;
+    aspect-ratio: auto !important; height: auto !important;
+    min-height: clamp(260px,62vw,360px) !important;
+    padding: clamp(30px,8vw,44px) clamp(16px,4vw,22px) !important;
+  }
+  .ss-hero__kicker, .ss-hero__sang, .ss-hero__moon, .ss-hero__meta {
+    position: relative !important; z-index: 2 !important;
+    left: auto !important; right: auto !important; top: auto !important;
+    transform: none !important; white-space: normal !important; text-align: center; }
+  .ss-hero__kicker { font-size: clamp(11px,2.8vw,13px) !important; letter-spacing: .42em; text-indent: .42em; }
+  .ss-hero__sang--1, .ss-hero__moon { font-size: clamp(40px,12vw,62px) !important; line-height: .95; }
+  .ss-hero__sang--2 { font-size: clamp(26px,8vw,40px) !important; line-height: .95; }
+  .ss-hero__meta { font-size: clamp(11px,2.8vw,13px) !important; line-height: 1.45; }
+  .ss-hero__meta--team { margin-top: clamp(6px,2vw,10px) !important; }
+
+  /* ════ PROLOGUE 인트로 (ss-intro) — 다크 위 중앙정렬 ════ */
+  .ss-intro__eyebrow {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    font-size: clamp(11px,2.8vw,13px) !important; }
+  .ss-intro__title {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    margin: clamp(10px,2.5vw,14px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.35 !important; }
+  .ss-intro__sub {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    margin: clamp(10px,2.5vw,14px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  .ss-intro__toc {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    margin: clamp(22px,6vw,32px) 0 0 !important; }
+  .ss-intro__toc-title { font-size: clamp(12px,1.5vw,14px) !important; }
+  /* 골드 룰: inline span 이지만 display:block 이라 width/height 안전 */
+  .ss-intro__toc-rule { width: clamp(24px,7vw,30px) !important; margin: clamp(8px,2vw,10px) auto 0 !important; }
+  /* 5단계 타임라인: 가로 연결선(::before) 제거, 도트+라벨 가로 유지·clamp 크기 */
+  .ss-intro__steps { margin: clamp(18px,5vw,26px) 0 0 !important; gap: clamp(6px,2vw,10px); }
+  .ss-intro__steps::before { display: none !important; }
+  .ss-intro__step { gap: clamp(6px,1.6vw,9px) !important; }
+  .ss-intro__step-dot {
+    width: clamp(24px,6.5vw,30px) !important; height: clamp(24px,6.5vw,30px) !important;
+    font-size: clamp(11px,2.6vw,13px) !important; }
+  .ss-intro__step-label {
+    font-size: clamp(10px,2.4vw,12px) !important; line-height: 1.3 !important; white-space: normal !important; }
+
+  /* ════ 01 OVERVIEW (ss1 = .ss-overview) ════
+     __bg 는 스크림 없는 풀블리드 백드롭 → 1열에서 텍스트 대비 불안정해 숨김(섹션 다크 bg 유지) */
+  .ss-overview__bg { display: none !important; }
+  .ss-overview__kicker {
+    position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .ss-overview__title {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important;
+    margin: clamp(10px,2vw,14px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.35 !important; }
+  .ss-overview__lead {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important;
+    margin: clamp(10px,2vw,14px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+
+  /* ════ 02 TEAM RESEARCH (ss2 = .ss-tr) ════ */
+  .ss-tr__kicker {
+    position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .ss-tr__title {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important;
+    margin: clamp(8px,2vw,12px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.35 !important; }
+  /* 기존 사이트 바로가기 캡슐 → 인라인 흐름 */
+  .ss-tr__oldlink {
+    position: static !important; right: auto !important; top: auto !important;
+    margin: clamp(12px,3vw,16px) 0 0 !important; padding: 9px 16px;
+    font-size: clamp(13px,1.5vw,15px) !important; }
+  .ss-tr__oldlink span { font-size: clamp(13px,1.5vw,15px) !important; }
+  /* 데코 아이콘·구분선·스파클: 절대배치 장식 → 숨김 */
+  .ss-tr__deco--door, .ss-tr__deco--key, .ss-tr__rule, .ss-tr__sparkle { display: none !important; }
+  /* 리서치 카드 4 — 1열 적층(다크 카드 유지), flex 로 아바타를 상단으로 */
+  .ss-tr__card {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; min-height: 0 !important;
+    display: flex !important; flex-direction: column;
+    margin: clamp(12px,3vw,16px) 0 0; padding: clamp(16px,4vw,22px);
+    border-radius: clamp(12px,2vw,16px); }
+  .ss-tr__card--1 { margin-top: clamp(16px,4vw,22px); }
+  .ss-tr__avatar {
+    position: static !important; left: auto !important; top: auto !important; order: -1;
+    width: clamp(44px,12vw,56px) !important; height: auto !important;
+    margin: 0 0 clamp(8px,2vw,12px); }
+  .ss-tr__cat {
+    position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(11px,1.4vw,13px) !important; }
+  .ss-tr__quote {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important;
+    margin: clamp(6px,1.6vw,8px) 0 0 !important;
+    font-size: clamp(15px,1.9vw,17px) !important; line-height: 1.4 !important; }
+  .ss-tr__desc {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important;
+    margin: clamp(8px,2vw,10px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  .ss-tr__name {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: clamp(8px,2vw,10px) 0 0 !important; font-size: clamp(12px,1.4vw,14px) !important; }
+  /* COMMON INSIGHT */
+  .ss-tr__ci-kicker {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center;
+    margin: clamp(22px,6vw,30px) 0 0 !important; font-size: clamp(12px,1.5vw,14px) !important; }
+  .ss-tr__ci {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center;
+    margin: clamp(8px,2vw,12px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  .ss-tr__ci-em { font-size: clamp(15px,1.9vw,17px) !important; }
+
+  /* ════ 03 STORY 포스터 (ss3 = .ss-story) ════
+     포스터(.ss-story__poster)는 container-type + % 레이아웃의 자기완결 아트워크 →
+     핀만 풀면 1열 흐름에서 통째로 비율유지 축소. 가독 위해 폭만 넓힌다.
+     섹션은 디자인상 흰 배경(다크 흐름 속 의도된 포스터 면) — 유지. */
+  .ss-sec.ss-story { padding: 0 !important; }
+  .ss-story__poster { width: 96% !important; margin: clamp(18px,5vw,30px) auto !important; }
+
+  /* ════ 04 PAGE DESIGN (ss4 = .ss-story-pg) ════
+     절대배치 백드롭·열쇠·명패·JS 분위기 입자(cqw 좌표는 데스크톱 초고높이 기준) → 모두 숨김 */
+  .ss-story-pg__mainbg, .ss-story-pg__photobg, .ss-story-pg__photofade,
+  .ss-story-pg__key--top, .ss-story-pg__key--lock, .ss-story-pg__plaque,
+  .ss-mist, .ss-pg-glow, .ss-god-ray, .ss-bg-star, .ss-dust, .ss-bokeh, .ss-plaque-glow {
+    display: none !important; }
+  .ss-story-pg__head {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center; margin: 0 !important;
+    font-size: clamp(22px,3.2vw,30px) !important; line-height: 1.25 !important; }
+  .ss-story-pg__sub {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; text-align: center; margin: clamp(8px,2vw,12px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  /* 라벨(MAIN/THEME/RESERVATION/TEAM) — 블록 구분 위해 위 여백 */
+  .ss-story-pg__label {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; text-align: left;
+    margin: clamp(28px,7vw,42px) 0 clamp(8px,2vw,10px) !important;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .ss-story-pg__label--main { text-align: center; }
+  .ss-story-pg__caption {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 0 0 clamp(12px,3vw,16px) !important;
+    font-size: clamp(18px,2.4vw,22px) !important; line-height: 1.4 !important; }
+  .ss-story-pg__caption--main { text-align: center; }
+  .ss-story-pg__desc {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 0 0 clamp(10px,2.5vw,14px) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  /* 미디어: 풀폭, 비율 유지 (img 는 intrinsic, video 는 aspect-ratio 명시) */
+  .ss-story-pg__door, .ss-story-pg__main, .ss-story-pg__cap {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(12px,3vw,16px) !important;
+    border-radius: clamp(10px,1.8vw,14px); }
+  .ss-story-pg__door { aspect-ratio: 224 / 100 !important; object-fit: cover; }
+  .ss-story-pg__cap--theme { aspect-ratio: 144 / 100 !important; }
+  /* 명패 이미지는 숨기고 메시지 텍스트만 골드 센터 블록으로 */
+  .ss-story-pg__plaque-text {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center;
+    margin: clamp(22px,5vw,30px) auto !important;
+    font-size: clamp(14px,1.6vw,16px) !important; line-height: 1.55 !important; }
+  /* 팀 프로세스 카드 3 — 1열 적층(다크 카드 유지) */
+  .ss-story-pg__card {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    margin: clamp(12px,3vw,16px) 0 0; padding: clamp(16px,4vw,22px);
+    border-radius: clamp(12px,2vw,16px); }
+  .ss-story-pg__card--1 { margin-top: clamp(14px,3.5vw,18px); }
+  .ss-story-pg__cnum {
+    position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(11px,1.4vw,13px) !important; }
+  .ss-story-pg__ctitle {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: clamp(4px,1.2vw,6px) 0 0 !important; font-size: clamp(15px,1.9vw,17px) !important; }
+  .ss-story-pg__cbody {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important;
+    margin: clamp(8px,2vw,10px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+
+  /* ════ 05 RESULT / PROPOSAL / OUTRO (ss5 = .ss-outro) ════ */
+  .ss-outro__kicker {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .ss-outro__kicker--result { margin-top: clamp(28px,7vw,42px) !important; }
+  .ss-outro__title {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important;
+    margin: clamp(8px,2vw,12px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.35 !important; }
+  /* 제안서 마퀴 — static 풀폭, 좌→우 무한 슬라이드 유지(썸네일 clamp) */
+  .ss-outro__shots {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; margin: clamp(14px,4vw,20px) 0 clamp(14px,4vw,20px) !important; }
+  .ss-outro__shot {
+    width: clamp(160px,48vw,220px) !important; height: auto !important;
+    margin-right: clamp(12px,3vw,16px) !important; }
+  .ss-outro__desc {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; text-align: center; margin: 0 0 clamp(8px,2vw,12px) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  .ss-outro__rule, .ss-outro__sparkle { display: none !important; }
+  .ss-outro__lesson {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center; margin: clamp(10px,2.5vw,14px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  /* LIVE / GITHUB / PROPOSAL 링크 3 — 1열 센터 */
+  .ss-outro__ri {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    transform: none !important; width: auto !important; display: block;
+    margin: clamp(16px,4vw,22px) 0 0 !important; text-align: center; }
+  .ss-outro__ri-label { margin: 0 0 clamp(4px,1.2vw,6px) !important; font-size: clamp(13px,1.5vw,15px) !important; }
+  .ss-outro__ri-desc { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  /* 아웃트로 배경 사진(절대 백드롭) 숨김, thanks 만 센터 */
+  .ss-outro__bg { display: none !important; }
+  .ss-outro__thanks {
+    position: static !important; left: auto !important; top: auto !important;
+    text-align: center; margin: clamp(24px,6vw,36px) 0 0 !important; font-size: clamp(13px,1.5vw,15px) !important; }
+}
+
 /* ── 귀혼 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--gwihon { background: #1a1410; box-shadow: 0 24px 60px -32px rgba(20,12,6,0.55); }
 
@@ -3904,6 +4485,276 @@ html.process-open { overflow: hidden; }
 .gw-r9 { aspect-ratio: 16 / 9; background: #14110d; }
 .gw-r9__img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+/* ===== 귀혼 본문 모바일 1열 리플로우 (≤768px portrait) — 상상의문 등 패턴(핀 비활성 복제 포함) =====
+   데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정으로 짜여 있어
+   모바일 1열로 풀려면 좌표/크기 속성에 !important 가 필요하다(인라인 cqw 는 없음).
+   다크 + 앰버 테마 유지: 다크 섹션(#1a1410/#12110d/#16130f/#0e0a07/#0f141c)·앰버 강조(#e8ba4d) 그대로,
+   디자인상 의도된 밝은 섹션(gw2 GAME RESEARCH·gw-credit TOOLS = #ebe3d6)도 원안대로 둔다.
+   ⚠️ 데스크톱 핀(gw1/gw2/gw3 sticky, gw5 필름스트립)은 reduced-motion 블록에만 비활성 규칙이 있어
+   여기서 복제한다(JS scrub/핀은 making-gwihon.js 가 isMobile 로 따로 끔).
+   폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 (배경색은 데스크톱 규칙 유지) ── */
+  .gw-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible;
+    padding: clamp(24px,4vw,36px) clamp(16px,4vw,22px);
+  }
+
+  /* ── 핀 비활성(모바일): reduced-motion 규칙 복제 + !important ──
+     gw1/gw2/gw3 은 position:sticky + 음수 top(cqw) → static 필수. gw5 는 필름스트립(translate) → 해제 */
+  .gw-pin { height: auto !important; }
+  #gw1-pin, #gw2-pin, #gw3-pin, #gw5-pin { height: auto !important; }
+  #gw1 { position: static !important; top: auto !important; }
+  #gw2 { position: static !important; top: auto !important; }
+  #gw3 { position: static !important; top: auto !important; }
+  #gw5 { transform: none !important; will-change: auto !important; }
+  .gw5-stage { position: static !important; height: auto !important; overflow: visible !important; }
+
+  /* ── 공통: 라벨·번호·카테고리·타이틀·서브카피 절대배치 해제 + cqw폰트→clamp (색은 데스크톱 유지) ── */
+  .gw-bg__label, .gw-r2__label, .gw-r3__label, .gw-r4__label, .gw-r5__label, .gw-r6__label, .gw-r7__label {
+    position: relative !important; left: auto !important; top: auto !important; }
+  .gw-bg__num, .gw-r2__num, .gw-r3__num, .gw-r4__num, .gw-r5__num, .gw-r6__num, .gw-r7__num {
+    width: clamp(34px,8vw,42px) !important; height: clamp(24px,6vw,30px) !important;
+    font-size: clamp(13px,1.6vw,15px) !important; }
+  .gw-bg__cat, .gw-r2__cat, .gw-r3__cat, .gw-r4__cat, .gw-r5__cat, .gw-r6__cat, .gw-r7__cat {
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .gw-bg__title, .gw-r2__title, .gw-r3__title, .gw-r4__title, .gw-r5__title, .gw-r6__title, .gw-r7__title {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    white-space: normal !important; margin: clamp(10px,2.5vw,14px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.3 !important; }
+  .gw-bg__desc, .gw-r2__desc, .gw-r3__desc, .gw-r4__desc, .gw-r5__desc, .gw-r6__desc, .gw-r7__desc {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    margin: clamp(10px,2.5vw,14px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+
+  /* ── 공통: 목표/요약 박스 (gw1·gw3 공유) → static 풀폭, 아이콘+카피 가로 유지 ── */
+  .gw-goal { height: auto !important; padding: clamp(16px,4vw,20px) !important; gap: clamp(12px,3vw,16px) !important; }
+  .gw-bg__goal, .gw-r3__goal {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    margin: clamp(16px,4vw,22px) 0 0 !important; }
+  .gw-goal__ic { width: clamp(36px,9vw,44px) !important; height: clamp(36px,9vw,44px) !important; }
+  .gw-goal p { font-size: clamp(14px,1.6vw,16px) !important; }
+
+  /* ════ HERO (gw-hero) · 키 비주얼 — aspect 풀고 배너 높이, bg cover·로고 clamp ════ */
+  .gw-sec.gw-hero {
+    aspect-ratio: auto !important; height: auto !important;
+    min-height: clamp(220px,56vw,380px) !important; padding: 0 !important; }
+  .gw-hero__logo { width: clamp(140px,42vw,240px) !important; }
+
+  /* ════ 분위기 배너(band) · 풀블리드 씬컷 영상 — 패딩 cqw 복원(스크림 inset 정합 유지) ════ */
+  #gw-band-1 { padding: 2.6cqw 4cqw !important; }
+  #gw-band-2 { padding: 2.6cqw 7.5cqw !important; }
+
+  /* ════ 01 BACKGROUND (gw1 = .gw-bg, 다크) ════
+     장식 텍스처/스트립 백드롭은 1열에서 안 맞아 숨김(섹션 다크 bg 유지) */
+  .gw-bg__tex, .gw-bg__band { display: none !important; }
+  /* 인트로 카피(절대 중앙·nowrap) → 좌측 흐름 */
+  .gw-bg__lead {
+    position: relative !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: left; margin: 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .gw-bg__lead--1 { margin-bottom: clamp(6px,1.6vw,8px) !important; }
+  .gw-bg__lead--2 { margin-bottom: clamp(16px,4vw,22px) !important; }
+  /* 인트로 문단: opacity .5 → 1 (다크 위 대비 확보) */
+  .gw-bg__desc { opacity: 1 !important; }
+  /* 우측 기존사이트 스크린샷 → 풀폭 */
+  .gw-bg__shot {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; aspect-ratio: 16 / 11 !important;
+    margin: clamp(16px,4vw,22px) 0 0 !important; }
+  /* 문제 카드 4 → 1열 적층, 번호+텍스트 한 줄·필 캡슐은 아래로 풀폭 wrap */
+  .gw-pcard {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; flex-wrap: wrap;
+    padding: clamp(14px,3.5vw,18px) !important; margin: clamp(10px,2.5vw,14px) 0 0;
+    border-radius: clamp(10px,2vw,14px); }
+  .gw-pcard--1 { margin-top: clamp(16px,4vw,22px); }
+  .gw-pcard__no {
+    width: clamp(26px,7vw,32px) !important; height: clamp(26px,7vw,32px) !important;
+    font-size: clamp(12px,3vw,14px) !important; }
+  .gw-pcard__txt { flex: 1 1 60%; min-width: 0; }
+  .gw-pcard__txt h4 { font-size: clamp(15px,1.9vw,17px) !important; white-space: normal !important; }
+  .gw-pcard__txt p { font-size: clamp(13px,1.4vw,15px) !important; }
+  .gw-pcard__pill {
+    margin-left: 0 !important; margin-top: clamp(8px,2vw,10px); width: 100% !important; height: auto !important;
+    padding: 9px 12px !important; font-size: clamp(12px,1.5vw,14px) !important; white-space: normal !important; }
+  .gw-pcard__pill svg { width: 12px !important; }
+
+  /* ════ 02 GAME RESEARCH (gw2 = .gw-r2, 의도된 밝은 섹션) ════
+     0×0 앵커 메달리온 + 코너 절대배치 4원/4캡션 → flex order 로 이미지+캡션 페어링 적층.
+     장식 궤도/링/디스크는 숨기고 로고만 센터 표시(밝은 섹션이라 텍스트 색은 원안 유지). */
+  .gw-sec.gw-r2 { display: flex; flex-direction: column; }
+  .gw-r2__label { order: 1; } .gw-r2__title { order: 2; } .gw-r2__desc { order: 3; }
+  .gw-r2__center { order: 4; }
+  .gw-r2__circ--tl { order: 5; } .gw-r2__cap--tl { order: 6; }
+  .gw-r2__circ--tr { order: 7; } .gw-r2__cap--tr { order: 8; }
+  .gw-r2__circ--bl { order: 9; } .gw-r2__cap--bl { order: 10; }
+  .gw-r2__circ--br { order: 11; } .gw-r2__cap--br { order: 12; }
+  .gw-r2__orbit, .gw-r2__ring, .gw-r2__disc { display: none !important; }
+  .gw-r2__center {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; text-align: center;
+    margin: clamp(14px,3.5vw,20px) 0 0 !important; }
+  .gw-r2__logo {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: clamp(110px,34vw,150px) !important; height: auto !important; }
+  .gw-r2__circ {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: clamp(120px,40vw,170px) !important; height: clamp(120px,40vw,170px) !important;
+    margin: clamp(16px,4vw,22px) auto 0 !important; }
+  .gw-r2__cap {
+    position: relative !important; left: auto !important; top: auto !important;
+    text-align: center; margin: clamp(8px,2vw,10px) auto 0 !important; }
+  .gw-r2__cap h4 { font-size: clamp(16px,2.1vw,20px) !important; }
+  .gw-r2__cap p { font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 03 EXPERIMENT (gw3 = .gw-r3, 다크) ════
+     bg+scrim 백드롭은 텍스트 대비 안정 위해 숨김(섹션 #16130f 유지).
+     세로 시안 목업 3 + 설명 3 → flex order 로 목업+설명 페어링 적층. */
+  .gw-sec.gw-r3 { display: flex; flex-direction: column; }
+  .gw-r3__bg, .gw-r3__scrim { display: none !important; }
+  .gw-r3__label { order: 1; } .gw-r3__title { order: 2; } .gw-r3__desc { order: 3; }
+  .gw-r3__shot--1 { order: 4; } .gw-r3__exp--1 { order: 5; }
+  .gw-r3__shot--2 { order: 6; } .gw-r3__exp--2 { order: 7; }
+  .gw-r3__shot--3 { order: 8; } .gw-r3__exp--3 { order: 9; }
+  .gw-r3__goal { order: 10; }
+  .gw-r3__shot {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: clamp(200px,62vw,300px) !important; height: auto !important; aspect-ratio: 238 / 465 !important;
+    object-fit: cover; object-position: top center; margin: clamp(16px,4vw,22px) auto 0 !important; display: block; }
+  .gw-r3__exp {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    margin: clamp(12px,3vw,16px) 0 0 !important; }
+  .gw-r3__exphead { margin-bottom: clamp(8px,2vw,10px) !important; }
+  .gw-r3__expbadge {
+    width: auto !important; height: auto !important; padding: 4px 10px;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .gw-r3__exptitle { font-size: clamp(14px,1.6vw,16px) !important; }
+  .gw-r3__list li { padding-left: 14px; font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 04 VISUAL DIRECTION (gw4 = .gw-r4, 다크) ════
+     겹쳐쌓인 컬러 스와치(span) + 라벨 + 무드 2×2 → flex order 로 스와치+라벨 페어링.
+     ⚠️ 스와치는 inline span → display:block (0×0 붕괴 방지).
+     ⚠️ MAIN 라벨 글자색이 #211308(밝은 스와치 위 다크) → 다크 섹션으로 내려오면 안 보임 → 앰버로 교체. */
+  .gw-sec.gw-r4 { display: flex; flex-direction: column; }
+  .gw-r4__label { order: 1; } .gw-r4__title { order: 2; } .gw-r4__desc { order: 3; }
+  .gw-r4__sw--main { order: 4; } .gw-r4__col--main { order: 5; }
+  .gw-r4__sw--text { order: 6; } .gw-r4__col--text { order: 7; }
+  .gw-r4__sw--point { order: 8; } .gw-r4__col--point { order: 9; }
+  .gw-r4__mood--1 { order: 10; } .gw-r4__mood--2 { order: 11; }
+  .gw-r4__mood--3 { order: 12; } .gw-r4__mood--4 { order: 13; }
+  .gw-r4__sw {
+    position: relative !important; display: block !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: clamp(48px,12vw,64px) !important;
+    border-radius: clamp(10px,2vw,14px) !important; margin: clamp(14px,3.5vw,18px) 0 0 !important; }
+  .gw-r4__col {
+    position: relative !important; left: auto !important; top: auto !important;
+    margin: clamp(6px,1.5vw,8px) 0 0 !important; }
+  .gw-r4__colname { font-size: clamp(13px,1.5vw,15px) !important; }
+  .gw-r4__colhex { font-size: clamp(12px,1.4vw,14px) !important; }
+  .gw-r4__col--main .gw-r4__colname, .gw-r4__col--main .gw-r4__colhex { color: #f6d199 !important; }
+  .gw-r4__mood {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; aspect-ratio: 377 / 251 !important; object-fit: cover;
+    margin: clamp(12px,3vw,16px) 0 0 !important; }
+
+  /* ════ 05 SECTION DESIGN (gw5 = .gw-r5, 다크 타임라인) ════
+     bg·타임라인 척추선·노드 닷은 1열에서 좌표 안 맞아 숨김.
+     가로 스크린샷 5 + 텍스트블록 5 → flex order 로 샷+텍스트 페어링 적층. */
+  .gw-sec.gw-r5 { display: flex; flex-direction: column; }
+  .gw-r5__bg, .gw-r5__line, .gw-r5__node { display: none !important; }
+  .gw-r5__label { order: 1; } .gw-r5__title { order: 2; } .gw-r5__desc { order: 3; }
+  .gw-r5__shot--1 { order: 4; } .gw-r5__tx--1 { order: 5; }
+  .gw-r5__shot--2 { order: 6; } .gw-r5__tx--2 { order: 7; }
+  .gw-r5__shot--3 { order: 8; } .gw-r5__tx--3 { order: 9; }
+  .gw-r5__shot--4 { order: 10; } .gw-r5__tx--4 { order: 11; }
+  .gw-r5__shot--5 { order: 12; } .gw-r5__tx--5 { order: 13; }
+  .gw-r5__shot {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; aspect-ratio: 466 / 243 !important; object-fit: cover;
+    margin: clamp(16px,4vw,22px) 0 0 !important; }
+  .gw-r5__tx {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    margin: clamp(10px,2.5vw,14px) 0 0 !important; gap: clamp(8px,2vw,12px) !important; }
+  .gw-r5__txlabel { font-size: clamp(13px,1.6vw,15px) !important; }
+  .gw-r5__txname { font-size: clamp(15px,1.9vw,17px) !important; }
+  .gw-r5__txbody { gap: clamp(6px,1.5vw,8px) !important; }
+  .gw-r5__txbody p { font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 06 INTERACTION DESIGN (gw6 = .gw-r6, 다크) ════
+     절대배치 5행(아이콘/제목/설명) → 일반 흐름 적층. 세로 구분선은 숨기고 행 위 가로선은 풀폭 유지. */
+  .gw-r6__row {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    margin: clamp(20px,5vw,28px) 0 0 !important; padding-top: clamp(16px,4vw,20px); }
+  .gw-r6__row--1 { margin-top: clamp(22px,5.5vw,30px) !important; }
+  .gw-r6__row::before { left: 0 !important; top: 0 !important; width: 100% !important; }
+  .gw-r6__icon {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: clamp(40px,11vw,52px) !important; height: auto !important; margin-bottom: clamp(10px,2.5vw,14px); }
+  .gw-r6__rhead {
+    position: relative !important; left: auto !important; top: auto !important;
+    margin-bottom: clamp(8px,2vw,10px); }
+  .gw-r6__rlabel { font-size: clamp(12px,1.5vw,14px) !important; }
+  .gw-r6__rtitle { font-size: clamp(18px,2.4vw,22px) !important; }
+  .gw-r6__vline { display: none !important; }
+  .gw-r6__rdesc {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 07 DEVELOPMENT (gw7 = .gw-r7, 다크) ════
+     문제카드(좌)→화살표→해결카드(우) 3분할 → 행마다 세로 적층(화살표 90° 회전해 아래 방향). */
+  .gw-r7__row {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; display: flex; flex-direction: column;
+    gap: clamp(10px,2.5vw,14px); margin: clamp(16px,4vw,22px) 0 0 !important; }
+  .gw-r7__row--1 { margin-top: clamp(20px,5vw,26px) !important; }
+  .gw-r7__prob, .gw-r7__sol {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; padding: clamp(14px,3.5vw,18px); }
+  .gw-r7__pno {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: clamp(26px,7vw,32px) !important; height: clamp(26px,7vw,32px) !important;
+    font-size: clamp(12px,3vw,14px) !important; margin-bottom: clamp(8px,2vw,10px); }
+  .gw-r7__ptitle {
+    position: relative !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 0 !important; font-size: clamp(15px,1.9vw,17px) !important; }
+  .gw-r7__pdesc {
+    position: relative !important; left: auto !important; top: auto !important;
+    margin: clamp(6px,1.5vw,8px) 0 0 !important; font-size: clamp(13px,1.4vw,15px) !important; }
+  .gw-r7__arrow {
+    position: relative !important; left: auto !important; top: auto !important; transform: rotate(90deg) !important;
+    width: clamp(24px,6vw,30px) !important; margin: 0 auto !important; }
+  .gw-r7__slabel {
+    position: relative !important; left: auto !important; top: auto !important;
+    font-size: clamp(15px,1.9vw,17px) !important; }
+  .gw-r7__sdesc {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    margin: clamp(6px,1.5vw,8px) 0 0 !important; font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 08 TOOLS / ROLE / TIME (gw-credit = .gw-r8, 의도된 밝은 섹션) ════
+     3열 절대배치 → 1열 적층 센터(밝은 섹션이라 텍스트 색 원안 유지). */
+  .gw-r8__col {
+    position: relative !important; left: auto !important; top: auto !important; width: auto !important;
+    margin: clamp(20px,5vw,28px) 0 0 !important; gap: clamp(12px,3vw,16px) !important; }
+  .gw-r8__col--tools { margin-top: 0 !important; }
+  .gw-r8__star { width: clamp(20px,5vw,26px) !important; height: clamp(20px,5vw,26px) !important; }
+  .gw-r8__htitle { font-size: clamp(15px,1.9vw,17px) !important; }
+  .gw-r8__grid {
+    grid-template-columns: repeat(3, clamp(48px,15vw,64px)) !important; gap: clamp(10px,2.5vw,14px) !important; }
+  .gw-r8__grid img { width: clamp(48px,15vw,64px) !important; height: clamp(48px,15vw,64px) !important; }
+  .gw-r8__role li { font-size: clamp(14px,1.6vw,16px) !important; }
+  .gw-r8__time { font-size: clamp(14px,1.6vw,16px) !important; }
+
+  /* ════ 09 OUTRO (gw-outro = .gw-r9) · 풀블리드 마무리 이미지 — 16:9 유지 ════ */
+  .gw-sec.gw-r9 { aspect-ratio: 16 / 9 !important; padding: 0 !important; }
+}
+
 /* ===================================================================
    유미의 세포들 모달 — 파스텔 글래스(라벤더/핑크), 감정 날씨 오버뷰
    레퍼런스의 쨍한 색 대신 반투명 유리 느낌으로.
@@ -4379,6 +5230,294 @@ html.process-open { overflow: hidden; }
 
 /* 최종 히어로 */
 .pl-ts__hero { position: absolute; left: 0; top: 101.042cqw; width: 100%; height: 56.042cqw; object-fit: cover; display: block; }
+
+/* ===== playlist 본문 모바일 1열 리플로우 (≤768px portrait) — 유미 등 패턴 =====
+   데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정 + white-space:nowrap 으로 짜여 있어
+   모바일 1열로 풀려면 좌표/크기 속성에 !important 가 필요하다. .pl-aff·.pl-route·.pl-tl-ms 는
+   index.html 에 인라인 style="left:Ncqw" 가 박혀 있어 !important 로만 이긴다.
+   inline <span> 시각요소(룰/하트/도트/바)는 0×0 으로 붕괴하므로 display:block/inline-grid 로 살린다.
+   절대 백드롭(bg·spine·rail·top 밴드)·커넥터·범례는 1열에서 안 맞으므로 숨김.
+   폰트 cqw→clamp(min,vw,max), 본문 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖이라 무회귀. */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
+  .pl-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding: clamp(24px,5vw,36px) clamp(16px,4vw,22px);
+  }
+  /* 라이트 핑크 테마 유지(절대 백드롭은 아래에서 숨김). 나머지 섹션은 자체 배경 유지 */
+  .pl-ov { background: #fdefea !important; }
+  /* 풀폭 키비주얼은 그대로 흐름 유지(block/100%) */
+
+  /* 절대 백드롭·장식·세로 룰 일괄 숨김(전부 aria-hidden 데코) */
+  .pl-ov__bg, .pl-ov__concept-bg, .pl-land__bg, .pl-sys__bg,
+  .pl-sys__spine, .pl-ts-top, .pl-note,
+  .pl-tl__line, .pl-tl__btn, .pl-tl-rail,
+  .pl-anno__conn, .pl-fcont, .pl-now__dot,
+  .pl-ov__rule, .pl-cn__rule, .pl-land__rule, .pl-sys__rule,
+  .pl-impl__rule, .pl-nar__rule, .pl-ts__rule {
+    display: none !important;
+  }
+
+  /* ── 헤더 리듬(공통): badge + eyebrow 한 줄 → title → lead ── */
+  .pl-badge {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; vertical-align: middle;
+    width: clamp(34px,9vw,42px) !important; height: clamp(20px,5.5vw,25px) !important;
+    border-radius: 7px !important; font-size: clamp(12px,3vw,15px) !important;
+  }
+  .pl-eyebrow {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline !important; margin: 0 0 0 8px !important; vertical-align: middle;
+    font-size: clamp(12px,1.6vw,14px) !important;
+  }
+  .pl-ov__title, .pl-cn__title, .pl-land__title, .pl-sys__title,
+  .pl-impl__title, .pl-nar__title, .pl-ts__title {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: clamp(8px,2vw,12px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.25 !important;
+  }
+  .pl-ov__lead, .pl-cn__lead, .pl-land__lead, .pl-sys__lead,
+  .pl-impl__lead, .pl-nar__lead, .pl-ts__lead {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 10px 0 clamp(16px,3vw,22px) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important;
+  }
+
+  /* ════ INTRO · 타임라인 토크 → 세로 중앙정렬 + 스텝 wrap ════ */
+  .pl-intro { padding: clamp(28px,7vw,40px) clamp(16px,4vw,22px) clamp(24px,6vw,32px); }
+  .pl-intro__eyebrow {
+    position: static !important; display: block !important; margin: 0 !important;
+    text-align: center; font-size: clamp(12px,1.6vw,14px) !important;
+  }
+  .pl-intro__title {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; text-align: center; margin: 10px 0 0 !important;
+    font-size: clamp(20px,3.2vw,28px) !important; line-height: 1.32 !important;
+  }
+  .pl-intro__sub {
+    position: static !important; left: auto !important; top: auto !important;
+    text-align: center; margin: 12px 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.55 !important;
+  }
+  .pl-intro__toc {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    margin-top: clamp(22px,6vw,32px);
+  }
+  .pl-intro__toc-title { font-size: clamp(12px,1.6vw,14px) !important; }
+  .pl-intro__toc-rule { width: 40px !important; height: 1px !important; margin: 8px auto 0 !important; }
+  .pl-intro__steps {
+    flex-wrap: wrap !important; justify-content: center;
+    gap: clamp(14px,4vw,20px) clamp(10px,4vw,16px); margin: clamp(16px,4vw,22px) 0 0 !important;
+  }
+  .pl-intro__steps::before { display: none !important; }   /* 가로 연결선 제거(wrap 시 어긋남) */
+  .pl-intro__step { flex: 0 0 auto !important; width: clamp(72px,26vw,96px); gap: 8px; }
+  .pl-intro__step-dot {
+    width: clamp(30px,8vw,38px) !important; height: clamp(30px,8vw,38px) !important;
+    font-size: clamp(12px,3vw,15px) !important;
+  }
+  .pl-intro__step-label { font-size: clamp(11px,2.8vw,13px) !important; white-space: normal !important; }
+
+  /* ════ SECTION 01 · OVERVIEW — 정보카드 4 세로, NOW PLAYING 풀폭 ════ */
+  .pl-info {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px);
+    padding: clamp(12px,3.5vw,16px); border-radius: 14px; gap: clamp(10px,3vw,14px);
+  }
+  .pl-info__ic {
+    width: clamp(20px,5vw,26px) !important; height: clamp(20px,5vw,26px) !important;
+    padding: clamp(8px,2.5vw,11px) !important; border-radius: 10px;
+  }
+  .pl-info__label { width: clamp(48px,13vw,60px) !important; font-size: clamp(12px,1.5vw,14px) !important; }
+  .pl-info__txt { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.4 !important; }
+
+  .pl-now {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(16px,3.5vw,22px);
+    padding: clamp(16px,4.5vw,22px); border-radius: 16px;
+  }
+  .pl-now__label { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(10px,2.5vw,14px); font-size: clamp(12px,1.5vw,14px) !important; }
+  .pl-now__art { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; aspect-ratio: 23 / 20;
+    margin: 0 0 clamp(10px,2.5vw,14px); border-radius: 12px; }
+  .pl-now__track { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 4px; font-size: clamp(12px,1.4vw,14px) !important; }
+  .pl-now__title { position: static !important; left: auto !important; top: auto !important;
+    margin: 0; font-size: clamp(18px,2.4vw,22px) !important; line-height: 1.25 !important; }
+  .pl-now__heart { position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; width: clamp(16px,4vw,20px) !important; height: clamp(16px,4vw,20px) !important; margin: 8px 0 0; }
+  .pl-now__bar { position: relative !important; left: auto !important; top: auto !important;
+    display: block !important; width: 100% !important; height: 4px !important; margin: 10px 0 0; }
+
+  /* ════ SECTION 02 · CONCEPT — 앵커 정렬 + POINT 카드 3 세로 ════ */
+  .pl-anchor { position: static !important; left: auto !important; top: auto !important;
+    display: block; width: auto !important; height: 0 !important; margin-top: clamp(20px,5vw,32px); }
+  .pl-point {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(14px,3vw,18px);
+    padding: clamp(16px,4.5vw,20px); border-radius: 16px; overflow: hidden;
+  }
+  .pl-point__no { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 6px; font-size: clamp(12px,1.4vw,14px) !important; }
+  .pl-point__cat { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 4px; font-size: clamp(16px,2.1vw,20px) !important; }
+  .pl-point__title { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 8px; font-size: clamp(15px,1.8vw,18px) !important; }
+  .pl-point__txt { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(12px,3vw,16px); font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .pl-point__cg { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; aspect-ratio: 31 / 17; border-radius: 12px; display: block; }
+
+  /* ════ SECTION 03 · LANDING — 긴 스트립 풀폭 → 주석 4 세로 ════ */
+  .pl-land__strip { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(16px,4vw,22px); border-radius: 12px; }
+  .pl-anno { position: static !important; left: auto !important; top: auto !important; right: auto !important;
+    width: auto !important; margin: 0 0 clamp(14px,3vw,18px); }
+  .pl-anno__eyebrow { font-size: clamp(12px,1.4vw,14px) !important; }
+  .pl-anno__title { margin: 4px 0 0; font-size: clamp(15px,1.7vw,17px) !important; }
+  .pl-anno__body { margin: 6px 0 0; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.55 !important; }
+
+  /* ════ SECTION 04 · GAME SYSTEM — DOM 순서가 곧 세로 플로우 ════
+     COMMON → 영상 → 선택지 → AFFECTION(캐릭터6) → 가장높은호감도 → ROUTE(루트6) → 분기 → ENDING(CG2).
+     플로우 박스/필/영상엔 clear:both → 앞쪽 float(aff·route)을 줄바꿈으로 정리. */
+  .pl-fbox, .pl-pill, .pl-sys__common, .pl-endcg { clear: both !important; }
+  .pl-fbox {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: 100% !important; max-width: 320px; height: auto !important;
+    margin: 0 auto clamp(10px,2.5vw,14px); padding: clamp(10px,3vw,14px); border-radius: 12px;
+  }
+  .pl-fbox__tag { font-size: clamp(11px,1.3vw,13px) !important; }
+  .pl-fbox__t { font-size: clamp(14px,1.6vw,16px) !important; }
+  .pl-sys__common {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: 100% !important; height: auto !important; aspect-ratio: 43.8 / 24.6;
+    margin: 0 0 clamp(12px,3vw,16px); border-radius: 12px;
+  }
+  .pl-pill {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    display: block !important; width: max-content !important; max-width: 100%; height: auto !important;
+    margin: 0 auto clamp(12px,3vw,16px); padding: clamp(8px,2.5vw,11px) clamp(14px,4vw,18px);
+    border-radius: 999px; font-size: clamp(13px,1.5vw,15px) !important; text-align: center;
+  }
+  /* 캐릭터 호감도 6 + 루트 CG 6 → 3열 float(인라인 left:Ncqw 무력화) */
+  .pl-aff {
+    position: static !important; left: auto !important; top: auto !important;
+    float: left; width: calc(33.333% - 10px) !important; margin: 0 4px clamp(10px,2.5vw,14px);
+  }
+  .pl-aff__img { width: 100% !important; height: auto !important; aspect-ratio: 11 / 9.6; }
+  .pl-aff__name { margin: 6px 0 0; font-size: clamp(11px,1.3vw,13px) !important; }
+  .pl-aff__hearts { font-size: clamp(12px,3vw,15px) !important; }
+  .pl-route {
+    position: static !important; left: auto !important; top: auto !important;
+    float: left; width: calc(33.333% - 10px) !important; height: auto !important;
+    aspect-ratio: 11.3 / 10.8; margin: 0 4px clamp(10px,2.5vw,14px);
+  }
+  .pl-endcg {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; aspect-ratio: 21 / 11.8;
+    margin: 0 0 clamp(10px,2.5vw,14px); border-radius: 12px;
+  }
+
+  /* ════ SECTION 05 · IMPLEMENTATION — POINT 카드 4 세로 → 우측 패널 풀폭 ════ */
+  .pl-pcard {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(12px,3vw,16px);
+    padding: clamp(16px,4.5vw,20px); border-radius: 14px;
+  }
+  .pl-pcard__pt { position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; width: auto !important; height: auto !important;
+    padding: clamp(4px,1.2vw,6px) clamp(10px,3vw,14px); margin: 0 0 clamp(10px,2.5vw,14px);
+    font-size: clamp(12px,1.4vw,14px) !important; }
+  .pl-pcard__chip { position: static !important; left: auto !important; top: auto !important;
+    width: clamp(48px,14vw,64px) !important; height: clamp(48px,14vw,64px) !important;
+    margin: 0 0 clamp(10px,2.5vw,14px); border-radius: 12px; }
+  .pl-pcard__chip img { width: 60% !important; }
+  .pl-pcard__eng { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 4px; font-size: clamp(12px,1.4vw,14px) !important; }
+  .pl-pcard__title { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 8px; font-size: clamp(15px,1.8vw,18px) !important; }
+  .pl-pcard__body { position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.55 !important; }
+  .pl-impl__panel {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: clamp(4px,1.5vw,8px) 0 0;
+    padding: clamp(16px,4.5vw,22px); border-radius: 14px; gap: clamp(16px,4vw,22px);
+  }
+  .pl-impl__eng { font-size: clamp(12px,1.3vw,14px) !important; }
+  .pl-impl__ko { margin: 4px 0 10px !important; font-size: clamp(13px,1.5vw,15px) !important; }
+  .pl-impl__shot { width: 100% !important; }
+  .pl-impl__pair { width: 100% !important; gap: clamp(10px,3vw,14px); }
+
+  /* ════ SECTION 06 · NARRATIVE — 세로 타임라인 + 캐릭터카드 6 세로(figure+텍스트) ════ */
+  .pl-tl-ms {
+    position: relative !important; left: auto !important; top: auto !important; transform: none !important;
+    width: auto !important; display: block !important; margin: 0 !important;
+    padding: 0 0 clamp(16px,4vw,22px) clamp(22px,6vw,30px); border-left: 2px solid #f0cdd3;
+  }
+  /* 마지막 마일스톤(뒤따르는 tl-ms 없음)만 레일 꼬리 제거 — 뒤에 narcard article 이 와서 :last-child 불가 */
+  .pl-tl-ms:not(:has(~ .pl-tl-ms)) { border-left-color: transparent; }
+  .pl-tl-ms__dot { position: absolute !important; left: -7px; top: 3px;
+    width: clamp(12px,3.2vw,15px) !important; height: clamp(12px,3.2vw,15px) !important; }
+  .pl-tl-ms__d { display: inline-block; margin: 0 8px 0 0 !important; font-size: clamp(13px,1.5vw,15px) !important; }
+  .pl-tl-ms__m { display: inline; white-space: normal !important; margin: 0 !important; font-size: clamp(13px,1.4vw,15px) !important; }
+  .pl-tl-ms__cg { display: block; width: 100% !important; max-width: 240px; height: auto !important;
+    aspect-ratio: 12.9 / 8.5; margin: 8px 0 0 !important; border-radius: 10px; }
+
+  .pl-narcard {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(12px,3vw,16px);
+    padding: clamp(14px,4vw,18px); border-radius: 14px; overflow: hidden;
+    display: flex; align-items: center; gap: clamp(12px,3.5vw,16px);
+  }
+  .pl-narcard__fig { position: static !important; left: auto !important; bottom: auto !important;
+    width: clamp(80px,26vw,110px) !important; height: auto !important; flex: none; align-self: flex-end; }
+  .pl-narcard__txt { position: static !important; left: auto !important; top: auto !important; right: auto !important;
+    flex: 1; min-width: 0; }
+  .pl-narcard__name { position: static !important; top: auto !important; margin: 0 0 4px;
+    font-size: clamp(15px,1.8vw,18px) !important; }
+  .pl-narcard__type { position: static !important; top: auto !important; margin: 0 0 6px;
+    font-size: clamp(13px,1.5vw,15px) !important; }
+  .pl-narcard__desc { position: static !important; top: auto !important; margin: 0;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  /* ════ SECTION 07 · TROUBLESHOOTING + 클로징 — ISSUE 카드 3 세로 → 클로징 중앙 ════ */
+  .pl-ts {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(14px,3.5vw,18px);
+    padding: clamp(16px,4.5vw,20px); border-radius: 14px;
+  }
+  .pl-ts__chip { position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; width: clamp(48px,14vw,64px) !important; height: clamp(48px,14vw,64px) !important;
+    margin: 0 0 clamp(10px,2.5vw,14px); border-radius: 12px; }
+  .pl-ts__chip img { width: 60% !important; }
+  .pl-ts__no { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 4px; font-size: clamp(12px,1.4vw,14px) !important; }
+  .pl-ts__title2 { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 4px; font-size: clamp(16px,2vw,19px) !important; }
+  .pl-ts__sub { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(12px,3vw,16px); font-size: clamp(13px,1.4vw,15px) !important; }
+  .pl-ts__tag { position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; width: auto !important; height: auto !important;
+    padding: clamp(3px,1vw,5px) clamp(8px,2.5vw,12px); margin: clamp(10px,2.5vw,14px) 0 4px;
+    font-size: clamp(11px,1.3vw,13px) !important; }
+  .pl-ts__row { position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    margin: 0; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  .pl-close__title { position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: auto !important; text-align: center; margin: clamp(20px,5vw,30px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.3 !important; }
+  .pl-close__p1, .pl-close__p2 { position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: auto !important; text-align: center; margin: clamp(12px,3vw,16px) 0 0 !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.6 !important; }
+  .pl-ts__hero { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; object-fit: contain;
+    margin: clamp(20px,5vw,28px) 0 0; border-radius: 12px; display: block; }
+}
 
 .process__making--pledis { background: #0f1320; box-shadow: 0 24px 60px -32px rgba(30,40,80,0.5); }
 
@@ -5313,6 +6452,242 @@ html.process-open { overflow: hidden; }
   fill: #ff4600;
 }
 
+/* ===== 플레디스 본문 모바일 1열 리플로우 (≤768px portrait) — 유미/MathHub/상상의문 패턴 =====
+   데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정 + white-space:nowrap 으로 짜여 있어
+   모바일 1열로 풀려면 좌표/크기 속성에 !important 가 필요하다(인라인 cqw 는 없음).
+   본문 .pd-r* 섹션은 라이트 카드(다크 wrapper 위), pd-hero/pd-outro 만 다크 → 배경색은 데스크톱 값 유지.
+   행성·궤도 장식(::before/::after 절대 백드롭)은 1열에선 정렬이 안 맞아 숨김.
+   타이틀 색강조(#ff4600)는 making-pledis.js 글로우가 once 트리거로 모바일에서도 점등 → 인라인 span 은 건드리지 않음.
+   폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
+@media (max-width:768px) and (orientation:portrait) {
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
+  .pd-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible;
+    padding: clamp(24px,4vw,36px) clamp(16px,4vw,22px);
+  }
+  /* 풀블리드 비주얼(히어로/아웃트로): 이미지 자체 비율로 채움, 패딩 0 */
+  .pd-sec.pd-hero, .pd-sec.pd-outro { padding: 0 !important; }
+  /* 행성·궤도 장식(::before=행성, ::after=궤도/별가루) — 절대 백드롭이라 1열에선 콘텐츠와 어긋남 → 숨김 */
+  .pd-r1::before, .pd-r1::after, .pd-r2::before, .pd-r2::after,
+  .pd-r3::before, .pd-r3::after, .pd-r4::before, .pd-r4::after,
+  .pd-r5::before, .pd-r5::after, .pd-r6::before, .pd-r6::after,
+  .pd-r7::before, .pd-r7::after { display: none !important; }
+
+  /* ── 헤더 리듬(전 섹션): 큰 넘버 + eyebrow 한 줄 → h1/h2 → lead ── */
+  .pd-r1__num, .pd-r2__num, .pd-r3__num, .pd-r4__num, .pd-r5__num, .pd-r6__num, .pd-r7__num {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; vertical-align: middle; line-height: 1;
+    font-size: clamp(28px,7vw,40px) !important;
+  }
+  .pd-r1__eyebrow, .pd-r2__eyebrow, .pd-r3__eyebrow, .pd-r4__eyebrow, .pd-r5__eyebrow, .pd-r6__eyebrow, .pd-r7__eyebrow {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; margin-left: 8px; vertical-align: middle;
+    font-size: clamp(12px,1.5vw,14px) !important;
+  }
+  .pd-r1__h1, .pd-r1__h2, .pd-r2__h1, .pd-r2__h2, .pd-r3__h1, .pd-r3__h2,
+  .pd-r4__h1, .pd-r4__h2, .pd-r5__h1, .pd-r5__h2, .pd-r6__h1, .pd-r6__h2,
+  .pd-r7__h1, .pd-r7__h2 {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; line-height: 1.25 !important;
+    font-size: clamp(20px,3vw,28px) !important;
+  }
+  .pd-r1__h1, .pd-r2__h1, .pd-r3__h1, .pd-r4__h1, .pd-r5__h1, .pd-r6__h1, .pd-r7__h1 {
+    margin: clamp(10px,2vw,14px) 0 0 !important;
+  }
+  .pd-r1__h2, .pd-r2__h2, .pd-r3__h2, .pd-r4__h2, .pd-r5__h2, .pd-r6__h2, .pd-r7__h2 {
+    margin: 2px 0 0 !important;
+  }
+  .pd-r1__lead1, .pd-r1__lead2, .pd-r2__lead1, .pd-r2__lead2,
+  .pd-r3__lead1, .pd-r3__lead2, .pd-r4__lead, .pd-r5__lead1, .pd-r5__lead2,
+  .pd-r6__lead, .pd-r7__lead1, .pd-r7__lead2 {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 8px 0 clamp(16px,2.5vw,24px) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.55 !important;
+  }
+
+  /* ════ CONTENTS · 목차 — 제목/eyebrow 중앙, 6항목 세로 1열(번호 + 라벨/부제) ════ */
+  .pd-contents__title {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    text-align: center; margin: 0 0 clamp(8px,2vw,12px) !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.3 !important; }
+  .pd-contents__eyebrow {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+    text-align: center; white-space: normal; margin: 0 0 clamp(16px,3vw,22px) !important;
+    font-size: clamp(11px,1.4vw,13px) !important; }
+  .pd-contents__list {
+    position: static !important; inset: auto !important; display: flex !important; flex-direction: column;
+    gap: clamp(10px,2vw,14px); margin: 0; padding: 0; }
+  .pd-contents__item {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; gap: clamp(10px,3vw,14px); padding: 0; }
+  .pd-contents__num { width: auto !important; flex-shrink: 0; font-size: clamp(28px,8vw,40px) !important; }
+  .pd-contents__label { font-size: clamp(13px,1.6vw,16px) !important; }
+  .pd-contents__desc { font-size: clamp(13px,1.4vw,15px) !important; margin: 2px 0 0 !important; }
+
+  /* ════ 01 WHY REDESIGN ════ */
+  .pd-r1__beforebox { display: none !important; }   /* 빈 프레임 박스 */
+  .pd-r1__before {
+    position: static !important; left: auto !important; top: auto !important;
+    display: block; margin: clamp(8px,2vw,12px) 0 0; font-size: clamp(13px,1.5vw,15px) !important; }
+  .pd-r1__before-sub {
+    position: static !important; left: auto !important; top: auto !important;
+    display: block; margin: 2px 0 0; font-size: clamp(12px,1.4vw,14px) !important; }
+  .pd-r1__oldlink {
+    position: static !important; right: auto !important; top: auto !important;
+    display: inline-flex; margin: clamp(10px,2vw,14px) 0 clamp(12px,2.5vw,16px); padding: 9px 16px;
+    font-size: clamp(13px,1.5vw,15px) !important; }
+  .pd-r1__oldlink span { font-size: clamp(13px,1.5vw,15px) !important; }
+  /* 기존 사이트 스크린샷 4장 → 2-up(인라인블록, 래퍼 없음) */
+  .pd-r1__ss {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; vertical-align: top; width: 46% !important; height: auto !important;
+    margin: 0 1% clamp(8px,1.6vw,10px) !important; }
+  .pd-r1__prob-lbl {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: clamp(6px,1.5vw,10px) 0 0 !important; font-size: clamp(14px,1.8vw,16px) !important; }
+  .pd-r1__prob-line {
+    position: static !important; left: auto !important; top: auto !important;
+    width: clamp(24px,7vw,32px) !important; margin: 8px 0 clamp(12px,2vw,16px); }
+  .pd-r1__card {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; margin: 0 0 clamp(10px,1.6vw,14px);
+    padding: clamp(12px,3.5vw,16px); gap: clamp(10px,3vw,14px); }
+  .pd-r1__dot { width: clamp(40px,11vw,52px) !important; height: clamp(40px,11vw,52px) !important; }
+  .pd-r1__dot img { width: 55% !important; height: 55% !important; }
+  .pd-r1__ctext strong { font-size: clamp(14px,1.7vw,16px) !important; }
+  .pd-r1__ctext p { font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 02 REDESIGN DIRECTION — 카드 4 세로(아이콘+텍스트) + 다이어그램 ════ */
+  .pd-r2__card {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(10px,1.6vw,14px);
+    grid-template-columns: clamp(48px,16vw,64px) minmax(0,1fr) !important;
+    column-gap: clamp(10px,3vw,14px) !important; padding: clamp(12px,3.5vw,16px); }
+  .pd-r2__icon { width: clamp(40px,12vw,56px) !important; }
+  .pd-r2__icon--2 { width: clamp(46px,14vw,64px) !important; }
+  .pd-r2__ctext strong { font-size: clamp(14px,1.7vw,16px) !important; }
+  .pd-r2__ctext p { font-size: clamp(13px,1.4vw,15px) !important; }
+  .pd-r2__diagram {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; margin: clamp(12px,2.5vw,18px) 0 0; }
+
+  /* ════ 03 MAIN EXPERIENCE — 동일 스샷 중복 제거(히어로 1장) + 흐름 5단계 ════ */
+  .pd-r3__screen--flow { display: none !important; }
+  .pd-r3__screen--hero {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: clamp(4px,1.5vw,10px) 0 clamp(14px,3vw,20px);
+    border-radius: clamp(8px,1.4vw,12px); }
+  .pd-r3__flow { position: static !important; inset: auto !important; }
+  .pd-r3__item {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; min-height: 0 !important; margin: 0 0 clamp(14px,3vw,20px);
+    padding-left: clamp(34px,10vw,44px); }
+  .pd-r3__line { display: none !important; }   /* 스샷↔단계 가로 연결선 */
+  .pd-r3__badge {
+    position: absolute !important; left: 0 !important; top: 0.1em !important;
+    width: clamp(24px,7vw,30px) !important; height: clamp(24px,7vw,30px) !important; }
+  .pd-r3__item strong { font-size: clamp(15px,1.9vw,18px) !important; margin: 0 0 6px !important; }
+  .pd-r3__item em { font-size: clamp(13px,1.4vw,15px) !important; margin: 0 0 6px !important; }
+  .pd-r3__item p { font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 04 SUB PAGE REDESIGN — 카드 세로, copy 풀폭 + before/after 2-up ════ */
+  .pd-r4__card {
+    position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(12px,2vw,16px);
+    padding: clamp(14px,4vw,18px); display: flex; flex-wrap: wrap;
+    gap: clamp(10px,3vw,14px); align-items: flex-start; }
+  .pd-r4__copy {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; flex: 0 0 100%; }
+  .pd-r4__label { font-size: clamp(12px,1.5vw,14px) !important; margin: 0 0 8px; }
+  .pd-r4__label span {
+    width: clamp(22px,6vw,28px) !important; height: clamp(22px,6vw,28px) !important;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .pd-r4__copy h3 { font-size: clamp(16px,2.1vw,20px) !important; margin: 0 0 8px !important; }
+  .pd-r4__copy p:not(.pd-r4__label) { font-size: clamp(13px,1.4vw,15px) !important; margin: 0 0 8px !important; }
+  .pd-r4__star, .pd-r4__arrow { display: none !important; }   /* 별 장식 + 가로 화살표(::before/after) */
+  .pd-r4__shot {
+    position: static !important; left: auto !important; top: auto !important;
+    flex: 1 1 0; min-width: 0; width: auto !important; height: auto !important;
+    border-radius: clamp(8px,1.4vw,12px); }
+
+  /* ════ 05 AI WORKFLOW — 카드 2 세로, 내부 요소 흐름 ════ */
+  .pd-r5__connector { display: none !important; }   /* 카드 사이 SVG 연결선(connector-dot 포함) */
+  .pd-r5__card {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(12px,2vw,16px);
+    padding: clamp(14px,4vw,18px) clamp(14px,4vw,18px) clamp(16px,4vw,20px); }
+  .pd-r5__label {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(8px,1.6vw,10px) !important; font-size: clamp(12px,1.5vw,14px) !important; }
+  .pd-r5__label span {
+    width: clamp(22px,6vw,28px) !important; height: clamp(22px,6vw,28px) !important;
+    font-size: clamp(12px,1.5vw,14px) !important; }
+  .pd-r5__card h3 {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 6px !important; font-size: clamp(16px,2.1vw,20px) !important; }
+  .pd-r5__desc {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(10px,2vw,14px) !important; font-size: clamp(13px,1.4vw,15px) !important; }
+  .pd-r5__visual, .pd-r5__codeimg {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px);
+    border-radius: clamp(8px,1.4vw,12px); }
+  .pd-r5__chips {
+    position: static !important; left: auto !important; top: auto !important;
+    flex-wrap: wrap; gap: 8px; margin: 0 0 clamp(10px,2vw,14px); }
+  .pd-r5__chips span { height: auto !important; padding: 5px 12px; font-size: clamp(12px,1.5vw,14px) !important; }
+  .pd-r5__prompt {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; padding: clamp(10px,3vw,14px); }
+  .pd-r5__prompt strong { font-size: clamp(12px,1.4vw,14px) !important; margin-bottom: 6px; }
+  .pd-r5__prompt p { font-size: clamp(13px,1.3vw,14px) !important; line-height: 1.45 !important; }
+
+  /* ════ 06 TROUBLE & SOLUTION — DOM이 lead→h1→h2→num 순이라 flex order로 정렬 ════ */
+  .pd-r6 { display: flex !important; flex-direction: column; align-items: stretch; }
+  .pd-r6__num { order: 1; }
+  .pd-r6__eyebrow { order: 2; margin-left: 0 !important; }
+  .pd-r6__h1 { order: 3; }
+  .pd-r6__h2 { order: 4; }
+  .pd-r6__lead { order: 5; }
+  .pd-r6__card {
+    order: 6; position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(10px,1.6vw,14px);
+    padding: clamp(14px,4vw,18px); }
+  .pd-r6__icon {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-block; width: clamp(20px,5vw,26px) !important; height: auto !important;
+    vertical-align: middle; margin: 0 8px 0 0; }
+  .pd-r6__card h3 {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline; vertical-align: middle; font-size: clamp(15px,1.9vw,17px) !important; }
+  .pd-r6__problem {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: clamp(8px,1.6vw,10px) 0 0 !important; font-size: clamp(13px,1.4vw,15px) !important; }
+  .pd-r6__rule { display: none !important; }   /* 회전 구분선 → solution border-top 로 대체 */
+  .pd-r6__solution {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: clamp(8px,1.6vw,10px) 0 0 !important; padding-top: clamp(8px,1.6vw,10px);
+    border-top: 1px solid rgba(255,70,0,0.25); font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ 07 RESULT — 헤더 후 결과 이미지 풀폭 ════ */
+  .pd-r7__img {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: clamp(4px,1.5vw,10px) 0 0;
+    border-radius: clamp(8px,1.4vw,12px); }
+
+  /* ════ 히어로 (키 비주얼) — 이미지 비율 유지, 카피 오버레이 글자 보정(글자 ≥13px) ════ */
+  .pd-hero__copy { left: clamp(16px,5vw,28px) !important; top: clamp(16px,6vw,32px) !important; }
+  .pd-hero__logo { width: clamp(96px,30vw,140px) !important; }
+  .pd-hero__title { font-size: clamp(13px,3.6vw,17px) !important; }
+  .pd-hero__meta { font-size: clamp(11px,2.8vw,13px) !important; }
+}
+
 /* ── 유미 제작 과정 본문 (풀블리드, 한 섹션씩 추가) ── */
 .process__making--yumi { background: #eaf4ff; box-shadow: 0 24px 60px -32px rgba(110,135,180,0.42); }
 .ym-sec { position: relative; container-type: inline-size; overflow: hidden; background: #eaf4ff; }
@@ -5724,6 +7099,218 @@ html.process-open { overflow: hidden; }
   font-size: clamp(30px,3vw,52px); line-height: 1; opacity: 0.9;
   filter: drop-shadow(0 6px 12px rgba(150,110,170,0.3)); }
 
+/* ===== 유미 본문 모바일 1열 리플로우 (≤768px portrait) — 다음 프로젝트 패턴 레퍼런스 =====
+   데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정 + white-space:nowrap 으로 짜여 있어
+   모바일에서 1열로 풀려면 다수 속성에 !important 가 필요하다. ym4 의 badge/clabel/cdesc 는
+   index.html 에 인라인 style="left/top cqw" 가 박혀 있어 !important 로만 이긴다.
+   폰트는 cqw→clamp(min,vw,max), 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
+  .ym-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible;
+    padding: clamp(24px,4vw,36px) clamp(16px,4vw,22px);
+  }
+  /* 풀블리드 미디어 섹션: 높이만 지정, img(inset:0 cover) 는 그대로 채움 */
+  .ym-sec.ym-hero  { height: clamp(240px,50vw,320px) !important; padding: 0 !important; }
+  .ym-sec.ym-band  { height: clamp(180px,40vw,240px) !important; padding: 0 !important; }
+  .ym-sec.ym-outro { height: clamp(280px,60vw,360px) !important; padding: 0 !important; }
+
+  /* ── 헤더 리듬(전 섹션 공통): num+eyebrow 한 줄 → title → lead ── */
+  .ym-r1__num,.ym-r2__num,.ym-r3__num,.ym-r4__num,.ym-r5__num,.ym-r6__num {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; vertical-align: middle;
+    width: clamp(26px,7vw,32px) !important; height: clamp(26px,7vw,32px) !important;
+    font-size: clamp(14px,1.8vw,18px) !important;
+  }
+  .ym-r1__eyebrow,.ym-r2__eyebrow,.ym-r3__eyebrow,.ym-r4__eyebrow,.ym-r5__eyebrow,.ym-r6__eyebrow {
+    position: static !important; left: auto !important; top: auto !important;
+    display: inline; margin-left: 8px; vertical-align: middle;
+    font-size: clamp(12px,1.6vw,15px) !important;
+  }
+  .ym-r1__title,.ym-r2__title,.ym-r3__title,.ym-r4__title,.ym-r5__title,.ym-r6__title {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: clamp(10px,2vw,14px) 0 0 !important;
+    font-size: clamp(20px,3vw,28px) !important; line-height: 1.2 !important;
+  }
+  .ym-r1__lead,.ym-r2__lead,.ym-r3__lead,.ym-r4__lead,.ym-r5__lead,.ym-r6__lead {
+    position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 8px 0 clamp(16px,2.5vw,24px) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important;
+  }
+
+  /* ════ SECTION 1 · OVERVIEW — 카드 세로 1열, 이미지 위 텍스트 오버레이 ════ */
+  .ym-r1__card {
+    position: relative !important; left: auto !important; top: auto !important;
+    right: auto !important; bottom: auto !important;
+    width: auto !important; height: auto !important;
+    min-height: clamp(180px,46vw,240px); margin: 0 0 clamp(12px,1.6vw,16px);
+    border-radius: clamp(12px,1.8vw,16px); overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: clamp(12px,1.6vw,16px);
+  }
+  .ym-r1__card--main { justify-content: center; text-align: center; }
+  .ym-r1__cardimg { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; z-index: 0; }
+  /* 하단 다크 스크림 → 어떤 이미지 위든 텍스트 가독 확보 */
+  /* 풀카드 스크림: 콘텐츠가 카드 높이를 꽉 채우면 justify-end 가 무력화돼 badge/cat 이
+     이미지 밝은 상단에 흰색으로 떠 안 보임 → 상단도 0.42 darkening 으로 전 영역 가독 확보(이미지는 비침) */
+  .ym-r1__card::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(to top, rgba(20,16,40,0.84) 0%, rgba(20,16,40,0.56) 55%, rgba(20,16,40,0.42) 100%); }
+  .ym-r1__card--main::after {
+    background: linear-gradient(to top, rgba(20,16,40,0.72) 0%, rgba(20,16,40,0.55) 50%, rgba(20,16,40,0.4) 100%); }
+  .ym-r1__badge,.ym-r1__cat,.ym-r1__ch,.ym-r1__cline,.ym-r1__cdesc { z-index: 2; }
+  .ym-r1__badge { position: static !important; left: auto !important; top: auto !important;
+    width: clamp(26px,7vw,32px) !important; height: clamp(26px,7vw,32px) !important;
+    margin: 0 0 6px; font-size: clamp(12px,1.5vw,14px) !important; }
+  .ym-r1__cat { position: static !important; left: auto !important; top: auto !important;
+    color: #fff !important; margin: 0 0 2px; font-size: clamp(12px,1.5vw,14px) !important; }
+  .ym-r1__ch { position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; color: #fff !important; margin: 0 0 6px;
+    font-size: clamp(16px,2.1vw,20px) !important; line-height: 1.25 !important; }
+  .ym-r1__ch b { color: #ffd6e6 !important; }
+  .ym-r1__cline { position: static !important; left: auto !important; top: auto !important;
+    width: clamp(28px,9vw,40px) !important; border-top-color: rgba(255,255,255,0.6) !important; margin: 0 0 6px; }
+  .ym-r1__cdesc { position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; color: rgba(255,255,255,0.92) !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.45 !important; }
+  /* 메인 카드: 중앙 정렬 hack(translateX·손글씨 오프셋) 전부 리셋 */
+  .ym-r1__card--main > :not(.ym-r1__cardimg) {
+    position: static !important; left: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center; z-index: 2; margin: 0; }
+  .ym-r1__card--main > .ym-r1__m2 { transform: none !important; }
+  .ym-r1__mlabel { color: #ffd6e6 !important; margin: 0 0 6px !important; font-size: clamp(12px,1.5vw,14px) !important; }
+  .ym-r1__mtitle { color: #fff !important; margin: 0 0 8px !important; font-size: clamp(18px,2.6vw,24px) !important; line-height: 1.2 !important; }
+  .ym-r1__mtitle b { color: #ffd6e6 !important; }
+  .ym-r1__m1 { color: #fff !important; font-size: clamp(13px,1.4vw,15px) !important; }
+  .ym-r1__m2 { color: #ffe1ec !important; margin: 4px 0 !important; font-size: clamp(18px,2.4vw,22px) !important; }
+  .ym-r1__m3 { color: #fff !important; font-size: clamp(13px,1.4vw,15px) !important; }
+
+  /* ════ SECTION 2 · VISUAL CONCEPT ════ */
+  .ym-r2__palette { position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(16px,3vw,22px);
+    padding: clamp(28px,8vw,40px) clamp(12px,4vw,18px) clamp(14px,4vw,18px);
+    border-radius: clamp(12px,2vw,16px); }
+  .ym-r2__dots { left: clamp(12px,4vw,18px) !important; top: clamp(12px,3vw,16px) !important; gap: 6px; }
+  .ym-r2__dots i { width: 9px !important; height: 9px !important; }
+  .ym-r2__grid { position: static !important; left: auto !important; top: auto !important;
+    grid-template-columns: repeat(4,1fr) !important; column-gap: clamp(8px,2vw,12px) !important; row-gap: clamp(8px,2vw,12px) !important; }
+  .ym-r2__sw { width: auto !important; height: clamp(48px,18vw,72px) !important; }
+  .ym-r2__hex { font-size: clamp(11px,1.3vw,13px) !important; margin-top: 4px; }
+  .ym-r2__scene { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(16px,3vw,22px); }
+  /* 캐릭터 6: 컨테이너 없는 형제들 → float 3열(컨테이너 container-type 가 float 포함) */
+  .ym-r2__cha { position: static !important; left: auto !important; top: auto !important;
+    float: left; width: calc(33.333% - 8px) !important; height: auto !important; margin: 4px; }
+
+  /* ════ SECTION 3 · STRUCTURE & FLOW ════ */
+  .ym-r3__points,.ym-r3__ptitle,.ym-r3__pno,.ym-r3__ph,.ym-r3__pd {
+    position: static !important; left: auto !important; top: auto !important; white-space: normal !important; }
+  .ym-r3__points { width: auto !important; height: auto !important; margin: 0 0 clamp(16px,3vw,22px);
+    padding: clamp(14px,4vw,18px); border-radius: clamp(12px,1.8vw,16px); }
+  .ym-r3__ptitle { display: block; margin: 0 0 10px; font-size: clamp(13px,1.6vw,15px) !important; }
+  .ym-r3__pno { display: inline-grid; vertical-align: middle; margin: clamp(10px,2vw,14px) 0 0;
+    width: clamp(26px,7vw,32px) !important; height: clamp(26px,7vw,32px) !important; font-size: clamp(13px,1.5vw,15px) !important; }
+  .ym-r3__ph { display: inline; margin-left: 8px; vertical-align: middle; font-size: clamp(14px,1.7vw,16px) !important; }
+  .ym-r3__pd { display: block; margin: 4px 0 0; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .ym-r3__group { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(16px,3vw,22px); }
+  .ym-r3__menu { position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(12px,1.6vw,16px);
+    min-height: clamp(56px,16vw,72px); border-radius: clamp(12px,1.8vw,16px);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: clamp(12px,3.5vw,16px) clamp(12px,3.5vw,16px) clamp(12px,3.5vw,16px) clamp(56px,18vw,72px); }
+  .ym-r3__menu--narrow { width: auto !important; }
+  .ym-r3__micon { left: clamp(12px,4vw,18px) !important; top: 50% !important; transform: translateY(-50%) !important;
+    width: clamp(34px,11vw,48px) !important; height: auto !important; }
+  .ym-r3__menu--narrow .ym-r3__micon { left: clamp(12px,4vw,18px) !important; width: clamp(30px,9vw,40px) !important; }
+  .ym-r3__mlabel { position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; font-size: clamp(12px,1.5vw,14px) !important; }
+  .ym-r3__mdesc { position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 3px 0 0; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.45 !important; }
+  .ym-r3__mcha { display: none !important; }
+
+  /* ════ SECTION 4 · INTERACTION — 빈 카드배경 div 제거 후 콘텐츠만 1열 흐름 ════
+     ⚠️ badge/clabel/cdesc 는 index.html 인라인 style(left/top cqw) → !important 로만 무력화 */
+  .ym-r4__card { display: none !important; }
+  .ym-r4__badge,.ym-r4__clabel,.ym-r4__cdesc {
+    position: static !important; left: auto !important; top: auto !important; }
+  .ym-r4__badge { display: inline-grid !important; vertical-align: middle; margin: clamp(20px,5vw,28px) 0 0;
+    width: clamp(28px,7.5vw,34px) !important; height: clamp(28px,7.5vw,34px) !important; font-size: clamp(14px,1.8vw,18px) !important; }
+  .ym-r4__clabel { display: inline !important; margin-left: 8px; vertical-align: middle; font-size: clamp(14px,1.7vw,16px) !important; }
+  .ym-r4__cdesc { display: block !important; white-space: normal !important; margin: 6px 0 clamp(10px,2vw,14px);
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .ym-r4__legend { position: static !important; left: auto !important; top: auto !important; margin: 0 0 clamp(12px,2.5vw,16px); }
+  .ym-r4__lrow b { font-size: clamp(13px,1.5vw,15px) !important; }
+  .ym-r4__lrow span { font-size: clamp(12px,1.4vw,14px) !important; }
+  .ym-r4__larrow { width: clamp(12px,3vw,16px) !important; margin: 3px 0 3px clamp(10px,3vw,14px) !important; }
+  .ym-r4__hero { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; min-height: clamp(180px,40vw,240px);
+    border-radius: clamp(12px,1.8vw,16px); margin: 0 0 clamp(12px,2vw,16px); }
+  .ym-r4__pill { display: none !important; }          /* 핀+커넥터(::after/::before) 통째 숨김 */
+  .ym-r4__bullets { position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(12px,2vw,16px); padding-left: 18px; font-size: clamp(13px,1.6vw,15px) !important; line-height: 1.7 !important; }
+  .ym-r4__mo { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 0 clamp(10px,2vw,14px); }
+  .ym-r4__ff { display: none !important; }
+  .ym-r4__cursor { position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important; margin: 0; border-radius: clamp(12px,1.8vw,16px); }
+
+  /* ════ SECTION 5 · TROUBLE SHOOTING — 문제카드 4개 세로, 해결/결과 적층 ════ */
+  .ym-r5__q { position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(12px,1.6vw,16px);
+    padding: clamp(12px,3.5vw,16px); border-radius: clamp(12px,1.8vw,16px);
+    background: #fff; border: 1px solid #f0e6f5; }
+  .ym-r5__qno { position: static !important; left: auto !important; top: auto !important;
+    display: inline-grid !important; vertical-align: middle;
+    width: clamp(28px,7.5vw,34px) !important; height: clamp(28px,7.5vw,34px) !important; font-size: clamp(14px,1.8vw,18px) !important; }
+  .ym-r5__qtitle { position: static !important; left: auto !important; top: auto !important;
+    display: inline !important; margin-left: 8px; vertical-align: middle; white-space: normal !important;
+    font-size: clamp(14px,1.7vw,16px) !important; }
+  .ym-r5__solve,.ym-r5__result { position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: clamp(10px,2vw,12px) 0 0;
+    padding: clamp(10px,3vw,14px); border-radius: clamp(10px,1.6vw,14px); }
+  .ym-r5__solve::before,.ym-r5__result::before { display: none !important; }   /* 연결선 제거 */
+  .ym-r5__slabel,.ym-r5__rlabel { position: static !important; left: auto !important; top: auto !important;
+    display: block; margin: 0 0 6px; font-size: clamp(13px,1.5vw,15px) !important; }
+  .ym-r5__list { position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.45 !important; }
+  .ym-r5__list li { padding-left: 14px; margin-bottom: 6px; }
+  .ym-r5__rdesc { position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; margin: 0; font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  /* ════ SECTION 6 · INSIGHTS — 카드4 세로 + quote ════ */
+  .ym-r6__particles { display: none !important; }
+  .ym-r6__card { position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: 0 0 clamp(12px,1.6vw,16px);
+    min-height: clamp(64px,18vw,84px); border-radius: clamp(12px,1.8vw,16px);
+    padding: clamp(14px,4vw,18px) clamp(14px,4vw,18px) clamp(14px,4vw,18px) clamp(60px,18vw,76px); }
+  .ym-r6__ic { left: clamp(14px,4vw,18px) !important; top: clamp(14px,4vw,18px) !important;
+    width: clamp(40px,11vw,52px) !important; height: clamp(40px,11vw,52px) !important; }
+  .ym-r6__ic img { width: 55% !important; height: 55% !important; }
+  .ym-r6__cat { position: static !important; left: auto !important; top: auto !important;
+    display: block; margin: 0 0 8px; font-size: clamp(13px,1.5vw,15px) !important; }
+  .ym-r6__line { position: static !important; left: auto !important; top: auto !important; width: 100% !important; margin: 0 0 8px; }
+  .ym-r6__list { position: static !important; left: auto !important; top: auto !important; font-size: clamp(13px,1.4vw,15px) !important; }
+  .ym-r6__list li { padding-left: 14px; margin-bottom: 8px; line-height: 1.4 !important; }
+  .ym-r6__list li::before { top: 0.5em !important; width: 5px !important; height: 5px !important; }
+  .ym-r6__quote { position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; margin: clamp(6px,1.5vw,10px) 0 0;
+    padding: clamp(28px,7vw,40px) clamp(20px,6vw,32px); border-radius: clamp(14px,2vw,18px); }
+  .ym-r6__qmark { font-size: clamp(40px,10vw,64px) !important; }
+  .ym-r6__qmark--o { left: clamp(10px,4vw,18px) !important; top: clamp(4px,1.5vw,10px) !important; }
+  .ym-r6__qmark--c { right: clamp(10px,4vw,18px) !important; bottom: clamp(2px,1vw,8px) !important; top: auto !important; }
+  .ym-r6__qtext { position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center; margin: 0;
+    font-size: clamp(18px,2.4vw,24px) !important; line-height: 1.4 !important; }
+  .ym-r6__qsub { position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    white-space: normal !important; text-align: center; margin: clamp(10px,2.5vw,16px) 0 0;
+    font-size: clamp(12px,1.4vw,14px) !important; line-height: 1.5 !important; }
+}
+
 /* 인트로 전체가 클릭 가능(→ 제작 과정). 컨트롤은 각자 cursor 유지 */
 .project-intro.is-clickable { cursor: pointer; }
 /* 라이브 목차는 패널 바깥 고정 — 배경 영역은 기본 커서, 항목만 pointer(커스텀 커서 대상 아님) */
@@ -6019,6 +7606,152 @@ html.process-open { overflow: hidden; }
 }
 .pz-phone__track { padding: 0 0 30px; }  /* 위:0(화면 시작점에 맞춤) / 아래:30 보더 — will-change는 hover 때만 JS가 부여 */
 .pz-phone__shot { display: block; width: 100%; height: auto; }
+
+/* ===== POZE 본문 모바일 1열 리플로우 (≤768px portrait) — 유미 등 패턴 =====
+   데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정 + white-space:nowrap.
+   모바일 1열로 풀려면 다수 속성에 !important 가 필요. 폰트는 cqw→clamp(min,vw,max),
+   본문 바닥 ≥13px. 따뜻한 토프/베이지 테마(#efe9e2/#e0d6cf, 다크 #241a13/#251a13)는 유지.
+   ⚠️ 함정 처리: ①장식 곡선 SVG·중복 중앙라벨 hide ②inline <span> 룰/라인은 display:block(0×0 붕괴 방지)
+   ③#pz-s7 핀 래퍼(220svh)·#pz-s8 sticky 는 일반 흐름으로 중화(motion 은 모바일서 별도 off).
+   데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
+  .pz-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible;
+    padding: clamp(24px,4vw,36px) clamp(16px,4vw,22px);
+  }
+
+  /* ════ SECTION 1 · 에디토리얼 인트로 (#pz1) — 풀블리드 밴드 + 세리프 오버레이 ════ */
+  #pz1 { padding: 0 !important; }            /* 밴드는 꽉 차게(.pz-band 는 이미 width:100% height:auto) */
+  .pz-serif { font-size: clamp(22px,7vw,34px) !important; }   /* cqw→clamp, top% 는 그대로 밴드 위 안착 */
+
+  /* ════ SECTION 2 · 브랜드 철학 (#pz-s2, split) — 이미지 위, 인용구 아래 ════ */
+  .pz-sec--split { background: #e0d6cf !important; }
+  .pz-split-img {
+    position: static !important; right: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important;
+    margin: 0 0 clamp(16px,3vw,22px);
+  }
+  .pz-quote {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; margin: 0 !important;
+    font-size: clamp(16px,4.4vw,22px) !important; line-height: 1.4 !important;
+  }
+
+  /* ════ SECTION 3 · 브랜드 무드 (#pz2, dark flow) — 곡선·중앙라벨 hide, 3블록 1열 ════ */
+  #pz2 { background: #251a13 !important; color: #d3c1af; }
+  .pz-flow__path { display: none !important; }   /* 장식 곡선 SVG — 1열에선 무의미 → 숨김 */
+  .pz-flow__c    { display: none !important; }    /* 중앙 라벨(블록 제목과 중복) → 숨김 */
+  .pz-flow__blk {
+    position: static !important; left: auto !important; top: auto !important;
+    align-items: flex-start; margin: 0 0 clamp(20px,4vw,28px);
+  }
+  .pz-flow__blk:last-of-type { margin-bottom: 0; }
+  .pz-flow__num { font-size: clamp(13px,3.5vw,16px) !important; }
+  .pz-flow__t   { font-size: clamp(15px,4vw,18px) !important; }
+  .pz-flow__line {                               /* inline span — 0×0 붕괴 방지 */
+    display: block !important;
+    width: clamp(28px,9vw,45px) !important; height: 1px !important;
+    margin: clamp(8px,2.5vw,12px) 0 !important;
+  }
+  .pz-flow__d { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.55 !important; }
+
+  /* ════ SECTION 4 · POZE Logo Analysis (#pz-s4) — 제목→Identity→로고→설명 1열 ════ */
+  .pz-sec--logo { background: #e0d6cf !important; color: #201916; }
+  .pz-logo__title {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(16px,3vw,22px) !important;
+    font-size: clamp(22px,6vw,32px) !important; line-height: 1.2 !important;
+  }
+  .pz-logo__id {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; margin: 0 0 clamp(20px,4vw,28px) !important;
+    gap: clamp(8px,2vw,12px) !important;
+  }
+  .pz-logo__idh { font-size: clamp(13px,3.5vw,15px) !important; letter-spacing: 0.08em !important; }
+  .pz-logo__idlist { gap: clamp(4px,1.5vw,8px) !important; }
+  .pz-logo__idlist li { font-size: clamp(13px,3.4vw,15px) !important; letter-spacing: 0.06em !important; }
+  .pz-logo__center {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; gap: clamp(16px,3vw,22px) !important;
+  }
+  .pz-logo__img { width: clamp(140px,46vw,220px) !important; }
+  .pz-logo__desc {
+    white-space: normal !important;
+    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; letter-spacing: 0.04em !important;
+  }
+
+  /* ════ SECTION 5 · 10 · 풀블리드 비디오 (#pz-s5 / #pz-s10, --full) ════ */
+  .pz-sec--full { padding: 0 !important; }       /* 영상 꽉 차게(aspect-ratio 가 높이 예약) */
+  .pz-full-img  { width: 100% !important; height: auto !important; }
+  .pz-cap { font-size: clamp(11px,3vw,14px) !important; }   /* 장식 캡션(보통 숨김) — 떠도 안 깨지게 */
+
+  /* ════ SECTION 6 · REBUILT (#pz-s6, split) — 이미지 위, 텍스트 아래 ════ */
+  .pz-sec--rebuilt { background: #e0d6cf !important; color: #251a13; }
+  .pz-rebuilt__img {
+    position: static !important; left: auto !important; top: auto !important;
+    width: 100% !important; height: auto !important;
+    margin: 0 0 clamp(20px,4vw,28px);
+  }
+  .pz-rebuilt__txt {
+    position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; gap: clamp(10px,2.5vw,14px) !important;
+  }
+  .pz-rebuilt__title { font-size: clamp(22px,6vw,32px) !important; line-height: 1.2 !important; }
+  .pz-rebuilt__sub   { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+
+  /* ════ SECTION 7 · COLOR DIRECTION (#pz-s7) — 핀 중화 + 색카드 1열 적층 ════ */
+  #pz-s7-pin { height: auto !important; }                 /* 220svh 빈공간 제거 → 일반 흐름(핀은 motion 이 모바일서 off) */
+  #pz-s7 { position: static !important; top: auto !important; }
+  .pz-sec--color { background: #e0d6cf !important; color: #251a13; }
+  .pz-color__title {
+    position: static !important; left: auto !important; top: auto !important;
+    margin: 0 0 clamp(16px,3vw,22px) !important;
+    font-size: clamp(22px,6vw,32px) !important; line-height: 1.2 !important;
+  }
+  .pz-color__cards {
+    position: static !important; left: auto !important; top: auto !important;
+    flex-direction: column !important; gap: clamp(12px,2.5vw,16px) !important;
+    align-items: stretch !important;
+  }
+  .pz-color__card {                              /* 카드 자체가 색 스와치 → 배경색 유지 + 실치수 부여 */
+    width: 100% !important; height: auto !important;
+    min-height: clamp(150px,40vw,200px);
+    padding: clamp(18px,4.5vw,24px) clamp(16px,4vw,20px) !important;
+    box-shadow: 0 6px 16px -8px rgba(0,0,0,0.25) !important;
+  }
+  .pz-color__name   { font-size: clamp(14px,3.6vw,16px) !important; }
+  .pz-color__role   { margin-top: 4px !important; font-size: clamp(12px,3vw,13px) !important; }
+  .pz-color__rule {                              /* inline span — 0×0 붕괴 방지 */
+    display: block !important;
+    width: clamp(28px,9vw,40px) !important; height: 1px !important;
+    margin-top: clamp(8px,2.5vw,12px) !important; background: currentColor;
+  }
+  .pz-color__bottom { gap: 6px !important; }
+  .pz-color__hex  { font-size: clamp(12px,3vw,13px) !important; }
+  .pz-color__desc { font-size: clamp(13px,3.4vw,14px) !important; line-height: 1.45 !important; }
+
+  /* ════ SECTION 8 · 웹사이트 목업 (#pz-s8, .pz-shop) — sticky 해제, 1열 적층 ════ */
+  .pz-shop { background: #e0d6cf !important; }
+  .pz-shop__top  { width: 100% !important; height: auto !important; }
+  .pz-shop__row  { flex-direction: column !important; align-items: stretch !important; }
+  .pz-shop__long { width: 100% !important; height: auto !important; }
+  .pz-shop__sticky {                             /* 네이티브 sticky → 일반 흐름(모바일선 고정 의미 없음) */
+    position: static !important; top: auto !important;
+    width: 100% !important; height: auto !important;
+  }
+
+  /* ════ SECTION 9 · 모바일 목업 (#pz-s9, .pz-phone) — 가로 종횡비 → 세로 높이로 폰 크게 ════ */
+  .pz-phone {
+    aspect-ratio: auto !important;
+    height: clamp(360px,100vw,460px) !important;   /* 폰(height:88%)이 보기 좋게 커지도록 */
+  }
+}
 
 /* =======================================================================
    제작 과정 섹션 — 공통 타입 스케일 (모든 섹션 재사용)
@@ -6487,6 +8220,152 @@ html.process-open { overflow: hidden; }
 
 @media (max-width: 560px) {
   .s14-grid { grid-template-columns: 1fr; gap: clamp(32px, 8vw, 48px); text-align: center; }
+}
+
+/* ===== 자린고비 본문 모바일 1열 리플로우 (≤768px portrait) — 패턴 적용(핀 비활성 복제 포함) =====
+   원조 패널 #process. 데스크톱은 position:absolute + cqw 좌표 + aspect-ratio + 컨테이너 cqw 폰트로 짜여
+   있어 1열로 풀려면 좌표/크기/폰트에 !important 가 필요하다.
+   ⚠️ mk-icard(6) + mk-icard__icon(6) 는 index.html 인라인 style 의 커스텀프로퍼티(--cl/--iw/--ih/--it)를
+      쓰는데, 실제 left/top/width/height 는 스타일시트 var() 라 position:static + 좌표/크기 !important 로 무력화된다.
+   ⚠️ 데스크톱 핀(#sec4/#sec6 sticky, #sec3 .s3-goal sticky)은 reduced-motion 블록에만 비활성 규칙이 있어
+      여기서 복제한다(scrub/핀 JS 는 making.js 가 isMobile 로 따로 끔).
+   ⚠️ sec4/5/6/7 의 1열 적층 상당수는 별도 @media(max-width:1080px) 가 이미 처리(s3/s4/s5/s6/s7) — 여기선
+      핀 해제·cqw폰트→clamp·장식 hide·풀블리드 보정만 보강한다.
+   라이트 세이지 그린 테마(--mk-green 계열·#fff/#ebf4e5 배경) 유지. 본문 바닥 ≥13px.
+   데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
+  .mk-sec {
+    position: relative !important;
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible;
+    padding: clamp(24px,4vw,36px) clamp(16px,4vw,22px);
+  }
+  /* 풀블리드 단일 이미지/영상 섹션은 패딩 0 유지(.mk-sec !important 를 다시 이김) */
+  #sec8, #sec11, #sec12, #sec13, #sec15 { padding: 0 !important; }
+  /* sec3 페르소나 그린밴드가 바닥까지 닿도록 */
+  #sec3 { padding-bottom: 0 !important; }
+
+  /* ── 핀 비활성(모바일): reduced-motion 규칙 복제 + !important ── */
+  .mk-pin { height: auto !important; }
+  #sec4-pin, #sec6-pin, #sec3-pin { height: auto !important; }
+  #sec4 { position: static !important; top: auto !important; }
+  #sec6 { position: static !important; top: auto !important; }
+  #sec3 .s3-goal { position: static !important; top: auto !important; }
+  /* 동전 낙하 파티클(절대배치 장식) 숨김 */
+  .jg-coin { display: none !important; }
+
+  /* ── 공통 텍스트: cqw 폰트 → clamp (컨테이너 #sec1~6 기준 cqw 가 모바일에서 과소화되므로) ── */
+  .mk-eyebrow { font-size: clamp(12px,1.6vw,14px) !important; margin: 0 0 clamp(8px,2vw,12px) !important; }
+  .mk-title { font-size: clamp(20px,3vw,28px) !important; line-height: 1.3 !important; }
+  .mk-sub { font-size: clamp(13px,1.4vw,15px) !important; margin: clamp(10px,2vw,14px) 0 0 !important; line-height: 1.6 !important; }
+  .mk-rule { width: clamp(40px,12vw,80px) !important; margin: clamp(12px,3vw,16px) 0 !important; }
+
+  /* ════ INTRO (mk-intro) — LEAD/PROCESS 절대배치+aspect 해제 → 흐름 ════ */
+  .mk-intro { padding: 0 !important; overflow: visible !important; }
+  .mk-intro__lead { aspect-ratio: auto !important;
+    padding: clamp(28px,7vw,44px) clamp(16px,5vw,28px) !important; }
+  .mk-intro__title { position: static !important; top: auto !important;
+    font-size: clamp(19px,3vw,28px) !important; line-height: 1.25 !important; }
+  .mk-intro__sub { position: static !important; left: auto !important; top: auto !important;
+    right: auto !important; max-width: none !important; margin: clamp(10px,2.5vw,14px) auto 0 !important;
+    font-size: clamp(13px,1.5vw,15px) !important; line-height: 1.55 !important; }
+  .mk-intro__process { aspect-ratio: auto !important; background: #fff !important;
+    padding: clamp(24px,6vw,40px) clamp(16px,5vw,28px) !important; }
+  .mk-intro__eyebrow { position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(12px,1.6vw,14px) !important; margin: 0 0 6px !important; }
+  .mk-intro__head { position: static !important; left: auto !important; top: auto !important;
+    white-space: normal !important; font-size: clamp(18px,2.6vw,24px) !important;
+    margin: 0 0 clamp(16px,4vw,22px) !important; }
+  /* 6카드: 절대배치 → 2열 그리드. 인라인 --cl 은 left:var(--cl) 라 left:auto 로 무력화 */
+  .mk-intro__cards { display: grid !important; grid-template-columns: repeat(2,1fr) !important;
+    gap: clamp(10px,2.5vw,14px) !important; }
+  .mk-icard { position: relative !important; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; text-align: center;
+    padding: clamp(32px,9vw,44px) clamp(10px,3vw,14px) clamp(12px,3vw,16px) !important;
+    border-radius: clamp(10px,2vw,14px) !important; }
+  .mk-icard__num { position: absolute !important; top: clamp(8px,2.5vw,12px) !important;
+    left: clamp(8px,2.5vw,12px) !important; font-size: clamp(13px,1.8vw,16px) !important; }
+  /* 아이콘: 인라인 --iw/--ih/--it 무력화 → 흐름 가운데, 높이 고정·contain 으로 비율 유지(0×0 방지) */
+  .mk-icard__icon { position: static !important; left: auto !important; top: auto !important;
+    width: auto !important; height: clamp(34px,10vw,46px) !important;
+    margin: 0 auto clamp(8px,2vw,10px) !important; }
+  .mk-icard__en { position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(12px,1.6vw,14px) !important; margin: 0 0 4px !important; }
+  .mk-icard__ko { position: static !important; left: auto !important; top: auto !important;
+    font-size: clamp(12px,1.4vw,13.5px) !important; line-height: 1.4 !important; }
+
+  /* ════ SECTION 1 · OVERVIEW — 캐릭터+텍스트, 패널 세로 적층 ════ */
+  .s1-intro { flex-direction: column !important; gap: clamp(12px,3vw,18px) !important; text-align: center; }
+  .s1-char { width: clamp(96px,28vw,140px) !important; }
+  .s1-panel { flex-direction: column !important; gap: clamp(14px,3.5vw,20px) !important;
+    padding: clamp(16px,4vw,24px) !important; }
+  .s1-panel__head, .s1-panel__cards { width: 100% !important; }
+
+  /* ════ SECTION 2 · DESK RESEARCH — 텍스트/노트 적층 + 카드3 세로(도넛·막대·체크 유지) ════ */
+  .s2-top { flex-direction: column !important; gap: clamp(16px,4vw,22px) !important; }
+  .s2-note { width: clamp(180px,55vw,260px) !important; align-self: center;
+    margin: clamp(12px,3vw,16px) auto 0 !important; }
+  .s2-cards { grid-template-columns: 1fr !important; gap: clamp(28px,6vw,36px) !important;
+    margin-top: clamp(28px,7vw,40px) !important; }
+  /* 데이터 시각화: 도넛(SVG clamp 폭)·막대(grid)·체크는 0폭 붕괴 없음 → 가독 위해 소형 폰트만 ≥13 보강 */
+  .s2-q { font-size: clamp(15px,2vw,18px) !important; }
+  .s2-quote { font-size: clamp(13px,1.5vw,14px) !important; }
+  .s2-foot { font-size: clamp(13px,1.5vw,14px) !important; }
+  .s2-checks li { font-size: clamp(13.5px,1.6vw,15px) !important; }
+
+  /* ════ SECTION 3 · GOAL & PERSONA — 솔루션/페르소나는 1080쿼리가 1열화. 여기선 핀해제 보강 ════ */
+  .s3-link { display: none !important; }   /* 커넥터(점선/도트) 장식 숨김 */
+  .s3-pfoot { grid-template-columns: 1fr !important; }   /* 소비/페인포인트 세로 적층 */
+  /* 페르소나 그린밴드: 풀블리드 마진/패딩을 모바일 섹션패딩(clamp16~22)에 맞춰 가로 오버플로 차단 */
+  .s3-persona {
+    margin: clamp(20px,5vw,28px) calc(-1*clamp(16px,4vw,22px)) 0 !important;
+    padding: clamp(32px,8vw,48px) clamp(16px,4vw,22px) clamp(32px,7vw,48px) !important; }
+
+  /* ════ SECTION 4 · FLOW CHART (핀해제, s4-flow 2열·loop hide 는 1080쿼리) — 소형 폰트 ≥13 보강 ════ */
+  .s4-step__head h3 { font-size: clamp(13px,1.6vw,15px) !important; }
+  .s4-list li, .s4-foot { font-size: clamp(12px,1.4vw,13px) !important; }
+
+  /* ════ SECTION 5 · DEVELOPMENT ISSUE (s5-row 1080쿼리가 2열화) — 소형 폰트 ≥13 보강 ════ */
+  .s5-issue { font-size: clamp(13px,1.6vw,15.5px) !important; }
+  .s5-cause, .s5-sol { font-size: clamp(12px,1.4vw,13px) !important; }
+  .s5-eff { font-size: clamp(12.5px,1.5vw,15px) !important; }
+
+  /* ════ SECTION 6 · VISUAL CONCEPT (핀해제, s6-grid/typo/swatch 1080쿼리가 1열화) ════ */
+  /* 물고기 박스: max-width:21cqw 가 모바일에서 ~75px 로 짜부 → 해제 */
+  .s6-objs { max-width: none !important; gap: clamp(10px,3vw,16px) !important; }
+
+  /* ════ SECTION 7 · CHARACTER — 통이미지 풀블리드를 모바일 패딩에 맞춰 보정 ════ */
+  .s7-board {
+    width: calc(100% + 2*clamp(16px,4vw,22px)) !important;
+    margin-left: calc(-1*clamp(16px,4vw,22px)) !important;
+    margin-right: calc(-1*clamp(16px,4vw,22px)) !important; }
+
+  /* ════ SECTION 9 · 01 CHALLENGE — 배경 백드롭 hide, 텍스트+폰 1열 흐름 ════ */
+  .s9-board__bg { display: none !important; }
+  .s9-ov { position: static !important; left: auto !important; top: auto !important;
+    transform: none !important; }
+  .s9-ov--text { width: auto !important; }
+  .s9-eyebrow { font-size: clamp(13px,1.6vw,15px) !important; margin: 0 0 8px !important; }
+  .s9-phone, .s9-extra { display: block; width: clamp(170px,55vw,240px) !important;
+    margin: clamp(14px,3.5vw,18px) auto 0 !important; }
+
+  /* ════ SECTION 10 · 02 GROWTH — 배경 백드롭 hide, 텍스트(센터)+폰3+캐릭터 1열 흐름 ════ */
+  .s10-board__bg { display: none !important; }
+  .s10-ov { position: static !important; left: auto !important; top: auto !important;
+    transform: none !important; }
+  .s10-ov--text { width: auto !important; text-align: center !important; }
+  .s10-eyebrow { font-size: clamp(13px,1.6vw,15px) !important; margin: 0 0 8px !important; }
+  .s10-phone { display: block; width: clamp(160px,50vw,220px) !important;
+    margin: clamp(14px,3.5vw,18px) auto 0 !important; }
+  .s10-char { display: block; width: clamp(90px,28vw,130px) !important;
+    margin: clamp(12px,3vw,16px) auto 0 !important; }
+
+  /* ════ SECTION 14 · CREDITS — 3열 → 1열(560쿼리는 ≤560 만 적용되므로 768까지 보강) ════ */
+  .s14-grid { grid-template-columns: 1fr !important; gap: clamp(28px,7vw,44px) !important; }
 }
 
 /* ======================================================================
@@ -8988,7 +10867,7 @@ html.is-dial.deck-sliding .dial-about-capsule {
     overflow: hidden;
     border-radius: 0 0 28px 28px;
     display: flex; flex-direction: column;
-    padding: max(18px, env(safe-area-inset-top)) 20px 22px;
+    padding: max(18px, env(safe-area-inset-top)) 20px 12px;  /* 하단 패딩 축소 → 헤드라인 살짝 아래로 */
     box-sizing: border-box;
     color: #fff;
     background: #0d1521;
@@ -9006,7 +10885,9 @@ html.is-dial.deck-sliding .dial-about-capsule {
       linear-gradient(180deg, rgba(8,11,18,0.50) 0%, rgba(8,11,18,0) 24%),
       linear-gradient(0deg, rgba(8,11,18,0.80) 2%, rgba(8,11,18,0) 42%);
   }
-  .mbh-hero > * { position: relative; z-index: 2; }
+  /* 콘텐츠(topbar·orbit·foot)만 이미지/스크림 위로. 이미지는 위 absolute 유지 —
+     `> *` 가 .mbh-hero__img 의 absolute 를 (동특이도·소스 뒤로) 덮어 흐름 적층시키는 버그 방지 */
+  .mbh-hero > :not(.mbh-hero__img) { position: relative; z-index: 2; }
 
   /* topbar */
   .mbh-topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
@@ -9048,14 +10929,15 @@ html.is-dial.deck-sliding .dial-about-capsule {
     border-radius: 50%; border: 1px solid rgba(255,255,255,0.16);
     pointer-events: none;
   }
-  .mbh-orbit__path--a { width: 300px; height: 300px; box-shadow: 0 0 26px rgba(150,170,255,0.20) inset; }
-  .mbh-orbit__path--b { width: 208px; height: 208px; border-color: rgba(255,210,180,0.24); }
+  /* 반경 185px 기준 비례 확대 (기존 150px → 1.23×) */
+  .mbh-orbit__path--a { width: 368px; height: 368px; box-shadow: 0 0 32px rgba(150,170,255,0.18) inset; }
+  .mbh-orbit__path--b { width: 256px; height: 256px; border-color: rgba(255,210,180,0.22); }
   .mbh-orbit__glow {
     position: absolute; top: 50%; left: 50%;
-    width: 240px; height: 240px; transform: translate(-50%, -50%);
+    width: 300px; height: 300px; transform: translate(-50%, -50%);
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,200,160,0.26) 0%, rgba(150,170,255,0.10) 44%, rgba(0,0,0,0) 70%);
-    filter: blur(8px); pointer-events: none;
+    background: radial-gradient(circle, rgba(255,200,160,0.22) 0%, rgba(150,170,255,0.09) 44%, rgba(0,0,0,0) 70%);
+    filter: blur(10px); pointer-events: none;
   }
   /* 궤도 위 작은 점들 */
   .mbh-orbit__dot {
@@ -9063,20 +10945,25 @@ html.is-dial.deck-sliding .dial-about-capsule {
     background: #fff; box-shadow: 0 0 8px 1.5px rgba(255,255,255,0.85);
     pointer-events: none;
   }
-  .mbh-orbit__dot--1 { left: calc(50% - 124px); top: calc(50% + 16px); }
-  .mbh-orbit__dot--2 { left: calc(50% + 128px); top: calc(50% + 4px); opacity: 0.85; }
-  .mbh-orbit__dot--3 { left: calc(50% - 6px);   top: calc(50% + 52px); width: 5px; height: 5px; }
+  /* 반경 185px 기준 비례 이동 (1.23×) */
+  .mbh-orbit__dot--1 { left: calc(50% - 153px); top: calc(50% + 20px); }
+  .mbh-orbit__dot--2 { left: calc(50% + 157px); top: calc(50% + 5px); opacity: 0.85; }
+  .mbh-orbit__dot--3 { left: calc(50% - 6px);   top: calc(50% + 64px); width: 5px; height: 5px; }
 
   .mbh-orbit__stage {
-    position: relative; width: 280px; max-width: 100%; height: 232px;
-    perspective: var(--mbh-persp, 620px); perspective-origin: 50% 50%;
+    position: relative; width: 300px; max-width: 100%; height: 210px;
+    perspective: var(--mbh-persp, 720px); perspective-origin: 50% 52%;
   }
   .mbh-orbit__ring {
     position: absolute; inset: 0;
     transform-style: preserve-3d; will-change: transform;
     animation: mhOrbitSpin 30s linear infinite;
   }
-  @keyframes mhOrbitSpin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+  /* rotateX(-12deg): 링 평면을 살짝 아래로 기울여 수평 타원(airy) 느낌. 상수 값은 from/to 동일 유지. */
+  @keyframes mhOrbitSpin {
+    from { transform: rotateX(-12deg) rotateY(0deg); }
+    to   { transform: rotateX(-12deg) rotateY(360deg); }
+  }
 
   /* 오빗 글래스 카드 — backdrop-filter 미사용(9장 회전 = perf): 반투명 흰 레이어링으로 글래스 흉내 */
   .mbh-orbit__card {
@@ -9119,10 +11006,9 @@ html.is-dial.deck-sliding .dial-about-capsule {
   /* ── 히어로 헤드라인 ───────────────────────────────────────────── */
   .mbh-hero__foot { margin-top: auto; }
   .mbh-headline {
-    margin: 0 0 8px; font-size: clamp(26px, 7.8vw, 32px); font-weight: 800;
+    margin: 0; font-size: clamp(26px, 7.8vw, 32px); font-weight: 800;
     line-height: 1.22; letter-spacing: -0.01em; text-shadow: 0 2px 16px rgba(0,0,0,0.5);
   }
-  .mbh-subline { margin: 0; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.84); }
 
   /* ───────────────────────── ② 액션 칩 ──────────────────────────── */
   .mbh-chips { display: flex; gap: 10px; padding: 20px 18px 8px; }
@@ -9228,7 +11114,8 @@ html.is-dial.deck-sliding .dial-about-capsule {
   .mbh-copy { margin: 0; font-size: 13px; color: #b5b5b5; }
 
   /* ── prefers-reduced-motion: 링 회전 정지(정적 폴백) ── */
+  /* rotateX(-12deg) 틸트는 유지, rotateY(-20deg)로 카드 3장 가량 정면 노출 */
   @media (prefers-reduced-motion: reduce) {
-    .mbh-orbit__ring { animation: none; }
+    .mbh-orbit__ring { animation: none; transform: rotateX(-12deg) rotateY(-20deg); }
   }
 }

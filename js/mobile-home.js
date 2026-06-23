@@ -22,9 +22,9 @@
   "use strict";
 
   /* ── 튜닝 상수 ─────────────────────────────────────────────────── */
-  const RING_RADIUS    = 150;   // 오빗 링 반경(px). 카드 간 간격.
-  const RING_CARD_W    = 118;   // 오빗 카드 너비(px).
-  const RING_PERSP     = 620;   // 링 perspective(px). 작을수록 원근 과장.
+  const RING_RADIUS    = 185;   // 오빗 링 반경(px). 카드 간 간격. (↑ 150→185: 카드 겹침↓, 간격↑)
+  const RING_CARD_W    = 94;    // 오빗 카드 너비(px). (↓ 118→94: 카드 축소 → 인물 노출)
+  const RING_PERSP     = 720;   // 링 perspective(px). (↑ 620→720: 원근 완화 → airy한 느낌)
   const MAX_CONCURRENT = 2;     // 리스트 영상 동시 재생 한도.
   const IO_MARGIN      = "120px 0px"; // 행 재생 판정 여유(위아래 선행 로드).
 
@@ -158,7 +158,6 @@
       '</div>' +
       '<div class="mbh-hero__foot">' +
         '<h1 class="mbh-headline">몰입을 설계하고,<br>경험을 완성합니다.</h1>' +
-        '<p class="mbh-subline">디자이너 · 프론트엔드 개발자 서지원</p>' +
       '</div>' +
     '</header>' +
     /* ② 액션 칩 */
@@ -167,13 +166,13 @@
         '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>' +
         '<span class="mbh-chip__label">About Me</span>' +
         '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
-      '<button class="mbh-chip" type="button" data-act="projects">' +
-        '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>' +
-        '<span class="mbh-chip__label">Projects</span>' +
+      '<button class="mbh-chip" type="button" data-act="marketing">' +
+        '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg>' +
+        '<span class="mbh-chip__label">Marketing</span>' +
         '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
-      '<button class="mbh-chip" type="button" data-act="contact">' +
-        '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>' +
-        '<span class="mbh-chip__label">Contact</span>' +
+      '<button class="mbh-chip" type="button" data-act="banner">' +
+        '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 16-4.5-4.5L9 18"/></svg>' +
+        '<span class="mbh-chip__label">Banner</span>' +
         '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
     '</nav>' +
     /* ③ 프로젝트 리스트 */
@@ -206,21 +205,18 @@
   /* ───────────────────────────────────────────────────────────────
      동작 바인딩
   ─────────────────────────────────────────────────────────────── */
-  const openAbout = () => { if (window.__aboutCtrl) window.__aboutCtrl.open("resume"); };
-  const smoothTo = (el) => {
-    if (!el) return;
-    const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
-    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-  };
+  /* 햄버거가 여는 About 패널(한 세로 스크롤·3섹션) 의 해당 섹션으로 오픈.
+     anchor: resume(이력서) / marketing(마케팅) / projects(=배너 섹션, about.js 주석상 "프로젝트(배너)"). */
+  const openAbout = (anchor) => { if (window.__aboutCtrl) window.__aboutCtrl.open(anchor || "resume"); };
 
-  root.querySelector(".mbh-menu").addEventListener("click", openAbout);
+  root.querySelector(".mbh-menu").addEventListener("click", () => openAbout("resume"));
 
   root.querySelectorAll(".mbh-chip").forEach((chip) => {
     chip.addEventListener("click", () => {
       const act = chip.dataset.act;
-      if (act === "about") openAbout();
-      else if (act === "projects") smoothTo(root.querySelector("#mbh-projects"));
-      else if (act === "contact") smoothTo(root.querySelector("#mbh-footer"));
+      if (act === "about") openAbout("resume");
+      else if (act === "marketing") openAbout("marketing");   // About 패널 → 마케팅 섹션
+      else if (act === "banner") openAbout("projects");        // About 패널 → 배너(projects) 섹션
     });
   });
 

@@ -11,20 +11,29 @@
 
 | 프로젝트 | 패널 ID | 상태 |
 |---------|--------|------|
-| 자린고비 | `#process` | ✅ 완성 (6개 nav: sec1~sec8~sec14 제외) |
-| POZE | `#process-poze` | ✅ 완성 (미니멀 뷰티 브랜드. 본문 ~10섹션, nav 5: OVERVIEW·VISUAL DIRECTION·REBUILD·EXPERIENCE·OUTCOME, making-poze.js). 스크롤 핀 pz-s7(COLOR DIRECTION 색카드 페인트-필). 디스플레이 타이틀(영문, 색강조 단어 없음) 아래 룰 드로우 액센트(#8b695f Dusty Rose) |
-| 귀혼 | `#process-gwihon` | ✅ 완성 (7개 nav: gw1~gw7, making-gwihon.js, smooth-process 적용) |
-| 유미의 세포들 | `#process-yumi` | ✅ 완성 (making-yumi.js, smooth-process 적용) |
-| MathHub | `#process-mathhub` | ✅ 완성 — 본문 mh1~mh7(개요·IA재설계·탐색필터·콘텐츠탐색·페이지UI·컬러·시행착오) + nav 7개 + making-mathhub.js, smooth-process 적용. 스크롤 핀: **mh2(카오스→구조 4카드)만 유지**(mh4·mh7 핀은 사용자 요청으로 원복=once 진입). 전 타이틀 강조어(`<b>`)에 **밑줄 드로우+색 점등** 효과(.mh-emph) |
-| 상상의 문 | `#process-sangsang` | ✅ 완성 — `making-sangsang.js`, 이미지 30장, mp4 영상 포함. nav·본문 추가 완료 |
-| 우리 사이의 음표 | `#process-playlist` | ✅ 본문 7섹션 완성 — pl1 개요·pl2 컨셉·pl3 랜딩디자인·pl4 게임시스템(멀티루트,하트미터 CSS)·pl5 구현구조·pl6 내러티브(타임라인+캐릭터6)·pl7 트러블슈팅+클로징. Figma → cqw 포팅, `pl-*` 클래스, 에셋 `img/playlist_game/process/`(50개,1.9MB), 원본 `raw/`(gitignore). nav 7개(측정상 720px+ 오버플로 없음). 타이틀 색강조 em(#e67889)에 **핑크 글로우 점등**(makeGlow 헬퍼, 네이티브 스크롤이라 once). pl4 게임시스템 **필름스트립 핀 시도 후 사용자 요청으로 원복**(once 유지). pl7 클로징 타이틀 char-split의 NBSP 버그 수정(createTextNode 인자가 U+00A0였음→일반 공백). 남은 일: 상단 인트로 셸(plsec-01) POZE식 교체. pl3·pl6 배경은 전용 이미지 없어 그라데이션 대체 |
-| 플레디스 | `#process-pledis` | ✅ 완성 — 본문 pd-hero·pd-r1~r7·outro(9섹션) + nav 5개 + making-pledis.js, smooth-process 적용. 타이틀 색강조(.pd-rN__hl / h1·h2 span, #ff4600) 7곳에 **글로우 점화** 효과. GO TO WEB CTA 주황(#ff5a2a) 오버라이드. (pd-hero·pd6 핀은 시도 후 사용자 요청으로 원복=once 유지) |
+| 자린고비 | `#process` | ✅ 완성 (6개 nav: sec1~sec8~sec14 제외). **📱 모바일 본문 1열 리플로우 완료**(style.css 8236~, making.js가 처리·핀 sec4/6/3-goal 모바일 비활성=CSS복제+JS isMobile가드, sec2 도넛/바/카운트업은 모바일에서 최종상태로 set, mk-icard 커스텀프로퍼티 무력화, sec9/10 백드롭 hide) |
+| POZE | `#process-poze` | ✅ 완성 (미니멀 뷰티 브랜드. 본문 ~10섹션, nav 5: OVERVIEW·VISUAL DIRECTION·REBUILD·EXPERIENCE·OUTCOME, making-poze.js). 스크롤 핀 pz-s7(COLOR DIRECTION 색카드 페인트-필). 디스플레이 타이틀(영문, 색강조 단어 없음) 아래 룰 드로우 액센트(#8b695f Dusty Rose). **📱 모바일 본문 1열 리플로우 완료**(style.css 7340~, pz-s7 핀+전 scrub 모바일 가드[from-상태 미적용=보임], pz-flow__line/pz-color__rule display:block, 에디토리얼 풀블리드 band 유지) |
+| 귀혼 | `#process-gwihon` | ✅ 완성 (7개 nav: gw1~gw7, making-gwihon.js, smooth-process 적용). **📱 모바일 본문 1열 리플로우 완료**(style.css 4488~, 핀 4곳[gw1/gw2/gw3/gw5] 모바일 비활성=CSS복제+JS isMobile가드, gw4 라벨 대비수정, 장식bg hide, 다크+앰버 유지) |
+| 유미의 세포들 | `#process-yumi` | ✅ 완성 (making-yumi.js, smooth-process 적용). **📱 모바일 본문 1열 리플로우 완료**(≤768 portrait, style.css 5727~ `@media` 블록 = 본문 모바일 리플로우 **1호·나머지 7개 레퍼런스 패턴**). scrub 3곳만 모바일 skip·once 리빌 유지. 검증은 실제 휠로(프로그램적 스크롤은 리빌 미발화) |
+| MathHub | `#process-mathhub` | ✅ 완성 — 본문 mh1~mh7(개요·IA재설계·탐색필터·콘텐츠탐색·페이지UI·컬러·시행착오) + nav 7개 + making-mathhub.js, smooth-process 적용. 스크롤 핀: **mh2(카오스→구조 4카드)만 유지**(mh4·mh7 핀은 사용자 요청으로 원복=once 진입). 전 타이틀 강조어(`<b>`)에 **밑줄 드로우+색 점등** 효과(.mh-emph). **📱 모바일 본문 1열 리플로우 완료**(style.css 2744~, mh2 핀 모바일 비활성, 장식 bg hide, .mh-s6__swatch display:block) |
+| 상상의 문 | `#process-sangsang` | ✅ 완성 — `making-sangsang.js`, 이미지 30장, mp4 영상 포함. nav·본문 추가 완료. **📱 모바일 본문 1열 리플로우 완료**(style.css 3692~, 핀 3개[ss-intro/ss1/ss3] 모바일 비활성=CSS복제+JS isMobile가드, 거대 디스플레이타이포 clamp, ss-key-trail hide, 다크테마 유지) |
+| 우리 사이의 음표 | `#process-playlist` | ✅ 본문 7섹션 완성 — pl1 개요·pl2 컨셉·pl3 랜딩디자인·pl4 게임시스템(멀티루트,하트미터 CSS)·pl5 구현구조·pl6 내러티브(타임라인+캐릭터6)·pl7 트러블슈팅+클로징. Figma → cqw 포팅, `pl-*` 클래스, 에셋 `img/playlist_game/process/`(50개,1.9MB), 원본 `raw/`(gitignore). nav 7개(측정상 720px+ 오버플로 없음). 타이틀 색강조 em(#e67889)에 **핑크 글로우 점등**(makeGlow 헬퍼, 네이티브 스크롤이라 once). pl4 게임시스템 **필름스트립 핀 시도 후 사용자 요청으로 원복**(once 유지). pl7 클로징 타이틀 char-split의 NBSP 버그 수정(createTextNode 인자가 U+00A0였음→일반 공백). 남은 일: 상단 인트로 셸(plsec-01) POZE식 교체. pl3·pl6 배경은 전용 이미지 없어 그라데이션 대체. **📱 모바일 본문 1열 리플로우 완료**(style.css ~4964, 인라인 cqw .pl-aff/.pl-route/.pl-tl-ms !important 무력화, pl4 게임시스템·pl6 타임라인 1열화, 네이티브 스크롤이라 모션 가드 불필요) |
+| 플레디스 | `#process-pledis` | ✅ 완성 — 본문 pd-hero·pd-r1~r7·outro(9섹션) + nav 5개 + making-pledis.js, smooth-process 적용. 타이틀 색강조(.pd-rN__hl / h1·h2 span, #ff4600) 7곳에 **글로우 점화** 효과. GO TO WEB CTA 주황(#ff5a2a) 오버라이드. (pd-hero·pd6 핀은 시도 후 사용자 요청으로 원복=once 유지). **📱 모바일 본문 1열 리플로우 완료**(style.css ~5897, pd-hero·pd8 scrub 모바일 가드, 다크테마+주황글로우 유지, r6 flex order로 헤더 복원) |
 
 ### 콘텐츠 추가할 때 할 일 (⏳ 프로젝트)
 1. `process__tracks` `<ol>` 안에 `<li>` nav 항목 추가
 2. `process__content` 안에 `<section class="mk-sec" id="...">` 본문 추가
 3. `process__cta` `href`를 실제 배포 URL로 교체
 4. nav 항목이 7개 이상이면 1440px에서 overflow 발생 — 6개 이하로 유지
+
+### 📱 제작과정 본문 모바일 리플로우 (⏳ 진행 중 — 방법①, 프로젝트별 정식 1열)
+- 본문(`.process__making`)은 데스크톱 전용(absolute+cqw+aspect-ratio+nowrap)이라 폰에서 못 읽힘 → 프로젝트별로 `@media (max-width:768px) and (orientation:portrait)` 1열 리플로우.
+- **레퍼런스 = 유미**(style.css 5727~): .ym-sec relative/aspect-ratio:auto/height:auto, absolute→static, cqw→clamp(본문≥13px), nowrap→normal, 카드 세로 적층, 단일클래스+!important. 인라인 cqw(ym4류)는 !important로만 이김.
+- 공유 개요 블록 모바일 버그 2개 이미 수정(@media 768portrait 안, 전 프로젝트 적용): `.process__cards .pcard{min-width:0}`(그리드 블로우아웃 우측카드 잘림), `.process__exit` 종료칩 nowrap 줄바꿈.
+- JS: scrub/핀만 모바일 skip(matchMedia isMobile 가드), once 진입 리빌 유지.
+- **상태: 🎉 8개 전부 완료 — 유미·MathHub·상상의문·플레디스·playlist·POZE·귀혼·자린고비 ✅.** (각 프로젝트 본문에 `@media (max-width:768px) and (orientation:portrait)` 1열 리플로우 블록 + 핀 있는 곳은 CSS 비활성 복제 + JS isMobile 가드 완비)
+- ⚠️ 검증은 **실제 휠 스크롤**로(모달 중앙 CSS좌표). 프로그램적 scrollTop·합성 휠은 smooth-process+ScrollTrigger에서 once 리빌이 발화 안 됨(테스트 아티팩트). 순수 레이아웃은 `*{opacity:1!important;transform:none!important}` 강제 가시화로 확인.
+- **공통 함정(다음 프로젝트도 미리 처리):** ①섹션 **장식 배경이미지**(절대배치 백드롭, 예 `__bg`)는 1열 흐름에서 콘텐츠와 안 맞아 빈영역/대비 문제 → **모바일 hide**(섹션 solid bg만). ②**inline `<span>`에 width/height 주면 무시**(0×0 붕괴) → 색 스와치·밴드 등은 `display:block !important` 필수. ③합본 대형 섹션(아주 긴 단일 섹션)·count-up 숫자 정상.
 
 ## process.js 주의 사항
 - `setup()` — 페이지 로드 시 모든 모달에 즉시 실행. 이벤트 바인딩/초기 상태만. **네트워크·리소스 로딩 코드 절대 금지.**

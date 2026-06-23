@@ -30,6 +30,11 @@
     /* reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
+    /* 모바일(≤768px portrait) — 핀/scrub 3종(ss-intro·ss1·ss3) 비활성화.
+     * CSS가 핀 래퍼 height:auto·position:static으로 처리하므로
+     * JS가 인라인 height/top을 덮어쓰지 않도록 해당 블록 자체를 skip. */
+    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+
     /* once 진입 트리거 공통 옵션 */
     const ST = (trigger, start = "top 84%") => ({
       trigger, scroller, start, once: true,
@@ -113,7 +118,7 @@
     ================================================================ */
     const introEl    = scroller.querySelector("#ss-intro");
     const introPinEl = scroller.querySelector("#ss-intro-pin");
-    if (introEl) {
+    if (introEl && !isMobile) {
       /* ── 래퍼 높이 동적 산출: 섹션 실측 + 600px 스크롤 여유 ── */
       const PIN_EXTRA = 600; /* px — TL ~4.4s 재생 동안 유지되는 핀 거리 */
       const setIntroPinHeight = () => {
@@ -223,7 +228,7 @@
     const ss1Kicker = scroller.querySelector("#ss1 .ss-overview__kicker");
     const ss1Title  = scroller.querySelector("#ss1 .ss-overview__title");
     const ss1Lead   = scroller.querySelector("#ss1 .ss-overview__lead");
-    if (ss1Pin && ss1El && ovBg && ss1Title) {
+    if (ss1Pin && ss1El && ovBg && ss1Title && !isMobile) {
       const setSs1Top = () => {
         const gap = scroller.clientHeight - ss1El.offsetHeight;
         ss1El.style.top = Math.max(0, Math.round(gap / 2)) + "px";
@@ -385,7 +390,7 @@
     const ss3Pin   = scroller.querySelector("#ss3-pin");
     const ss3Stage = scroller.querySelector("#ss3-pin .ss3-stage");
     const ss3El    = scroller.querySelector("#ss3");
-    if (ss3Pin && ss3Stage && ss3El) {
+    if (ss3Pin && ss3Stage && ss3El && !isMobile) {
       /* data-anim → FROM 상태 매핑 (story.html 원본 재현) */
       const ANIM_FROM = {
         up:    { y: 48,   opacity: 0 },

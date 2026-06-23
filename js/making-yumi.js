@@ -37,6 +37,9 @@
     /* prefers-reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
+    /* 모바일 portrait(≤768px) — scrub 패럴랙스/줌 3곳 생성 skip */
+    const isMobile = matchMedia("(max-width: 768px) and (orientation: portrait)").matches;
+
     /* ── 공통 헬퍼 ─────────────────────────────────────────────────── */
 
     /* once 진입 트리거 — 요소 또는 셀렉터 문자열 */
@@ -108,19 +111,21 @@
         opacity: 0, scale: 1.06, transformOrigin: "50% 50%", duration: 1.4, ease: "power3.out",
         scrollTrigger: ST("#ym-hero", "top 88%"),
       });
-      /* [추가] scrub 패럴랙스 — once와 별개 트리거 */
-      gsap.to(heroImg, {
-        yPercent: 18,
-        ease: "none",
-        scrollTrigger: {
-          trigger: scroller.querySelector("#ym-hero"),
-          scroller,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1.4,
-          invalidateOnRefresh: true,
-        },
-      });
+      /* [추가] scrub 패럴랙스 — once와 별개 트리거 / 모바일 portrait skip */
+      if (!isMobile) {
+        gsap.to(heroImg, {
+          yPercent: 18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: scroller.querySelector("#ym-hero"),
+            scroller,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.4,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
     }
 
     /* ================================================================
@@ -298,21 +303,23 @@
       }
     }
 
-    /* [추가] 히어로 레이어 이미지 미세 scrub 패럴랙스 */
-    const heroLayer = scroller.querySelector("#ym4 .ym-r4__hero");
-    if (heroLayer) {
-      gsap.to(heroLayer, {
-        yPercent: -10,
-        ease: "none",
-        scrollTrigger: {
-          trigger: scroller.querySelector("#ym4"),
-          scroller,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.8,
-          invalidateOnRefresh: true,
-        },
-      });
+    /* [추가] 히어로 레이어 이미지 미세 scrub 패럴랙스 / 모바일 portrait skip */
+    if (!isMobile) {
+      const heroLayer = scroller.querySelector("#ym4 .ym-r4__hero");
+      if (heroLayer) {
+        gsap.to(heroLayer, {
+          yPercent: -10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: scroller.querySelector("#ym4"),
+            scroller,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.8,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
     }
 
     /* ================================================================
@@ -441,8 +448,8 @@
         opacity: 0, duration: 1.5, ease: "power3.out",
         scrollTrigger: ST(outroSec || outImg, "top bottom"),
       });
-      /* [추가] scrub 느린 줌 */
-      if (outroSec) {
+      /* [추가] scrub 느린 줌 / 모바일 portrait skip */
+      if (!isMobile && outroSec) {
         gsap.fromTo(outImg,
           { scale: 1.0, transformOrigin: "50% 50%" },
           {

@@ -38,6 +38,9 @@
     /* prefers-reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
+    /* 모바일 portrait — scrub 트윈 비활성화 (데스크톱 무회귀) */
+    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+
     /* once 진입 트리거 공통 옵션
        기본값 "top 90%" — 짧은 모달 스크롤러에서 하위 섹션 도달 불가 방지 */
     const ST = (trigger, start = "top 90%") => ({ trigger, scroller, start, once: true });
@@ -67,13 +70,16 @@
         duration: 1.9, ease: "power3.out",
         scrollTrigger: ST("#pd-hero", "top 92%"),
       });
-      gsap.to(heroBg, {
-        yPercent: 22, ease: "none",
-        scrollTrigger: {
-          trigger: scroller.querySelector("#pd-hero"), scroller,
-          start: "top top", end: "bottom top", scrub: 1.4, invalidateOnRefresh: true,
-        },
-      });
+      /* 모바일 portrait에서 yPercent scrub 패럴랙스 skip — 1열 리플로우에서 튐 방지 */
+      if (!isMobile) {
+        gsap.to(heroBg, {
+          yPercent: 22, ease: "none",
+          scrollTrigger: {
+            trigger: scroller.querySelector("#pd-hero"), scroller,
+            start: "top top", end: "bottom top", scrub: 1.4, invalidateOnRefresh: true,
+          },
+        });
+      }
     }
     const heroLogo = scroller.querySelector("#pd-hero .pd-hero__logo");
     if (heroLogo) gsap.from(heroLogo, {
@@ -479,22 +485,24 @@
         opacity: 0, duration: 1.5, ease: "power3.out",
         scrollTrigger: ST("#pd8", "top bottom"),
       });
-      /* [추가] scrub 느린 줌 scale 1→1.06 */
-      gsap.fromTo(outroImg,
-        { scale: 1.0, transformOrigin: "50% 50%" },
-        {
-          scale: 1.06, transformOrigin: "50% 50%",
-          ease: "none",
-          scrollTrigger: {
-            trigger: scroller.querySelector("#pd8"),
-            scroller,
-            start: "top bottom",
-            end: "bottom center",
-            scrub: 2.2,
-            invalidateOnRefresh: true,
-          },
-        }
-      );
+      /* [추가] scrub 느린 줌 scale 1→1.06 — 모바일 portrait skip */
+      if (!isMobile) {
+        gsap.fromTo(outroImg,
+          { scale: 1.0, transformOrigin: "50% 50%" },
+          {
+            scale: 1.06, transformOrigin: "50% 50%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: scroller.querySelector("#pd8"),
+              scroller,
+              start: "top bottom",
+              end: "bottom center",
+              scrub: 2.2,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
     }
 
     /* ================================================================

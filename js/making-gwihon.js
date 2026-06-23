@@ -22,6 +22,11 @@
     /* reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
+    /* 모바일 세로(≤768px portrait) — 핀/scrub 비활성.
+       from-상태(opacity:0, scale·rotation 등)를 적용하지 않아 요소가 CSS 기본값(보임)으로 유지.
+       once 진입 리빌은 데스크톱과 동일하게 유지. */
+    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+
     /* once 진입 트리거 공통 옵션 */
     const ST = (trigger, start = "top 84%") => ({ trigger, scroller, start, once: true });
     /* 진입 페이드+업 헬퍼 */
@@ -63,7 +68,9 @@
 
     /* 핀 scrub 타임라인 — #gw1-pin(280svh) 기준.
        진입 0~0.33: 헤딩 스크롤(위 rise 담당) → top:-55.7cqw 로 고정되는 지점
-       0.34~  : 고정된 프레임(shot+카드4+goal)에서 순차 조립 */
+       0.34~  : 고정된 프레임(shot+카드4+goal)에서 순차 조립
+       모바일: 생성하지 않음 → from(opacity:0) 미적용, 요소가 CSS 기본값(보임)으로 유지 */
+    if (!isMobile) {
     const pinTl1 = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: { trigger: "#gw1-pin", scroller, start: "top top", end: "bottom bottom", scrub: true },
@@ -73,6 +80,7 @@
       .from("#gw1 .gw-pcard", { opacity: 0, y: 30, duration: 0.16, stagger: 0.09 }, 0.42)
       .from("#gw1 .gw-bg__goal",
         { opacity: 0, y: 22, scale: 0.97, transformOrigin: "50% 50%", duration: 0.14 }, 0.86);
+    } /* /!isMobile — gw1 핀 scrub */
 
     /* ================================================================
        SECTION 2 · GAME RESEARCH (#gw2) — CSS sticky 핀 + 단일 scrub 타임라인
@@ -85,6 +93,10 @@
            0.85~1    캡션 등장
        · transform/opacity only — 60fps 사수
     ================================================================ */
+    /* 모바일: gw2 scrub 전체 생성하지 않음.
+       gsap.set(orbit/ring, xPercent/yPercent) 도 skip → CSS translate(-50%,-50%) 보존.
+       from(opacity:0) 미적용 → 메달리온·원형이미지·캡션 모두 CSS 기본값(보임)으로 유지. */
+    if (!isMobile) {
     const pinTl = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
@@ -154,6 +166,7 @@
     scroller.querySelectorAll("#gw2 .gw-r2__cap").forEach((cap, i) => {
       pinTl.from(cap, { opacity: 0, y: 16, duration: 0.12 }, 0.86 + i * 0.025);
     });
+    } /* /!isMobile — gw2 핀 scrub */
 
     /* ================================================================
        SECTION 3 · EXPERIMENT (#gw3) — 3 시안 목업
@@ -164,7 +177,9 @@
     rise("#gw3 .gw-r3__desc", { y: 22, delay: 0.08, scrollTrigger: ST("#gw3 .gw-r3__desc", "top 84%") });
 
     /* 핀 scrub — #gw3-pin(260svh). top:-33.4cqw 로 고정 시 3 시안 목업+설명이 한 화면.
-       0.28~ : EXP01→02→03 시안 순차 등장, 이어서 설명 텍스트 */
+       0.28~ : EXP01→02→03 시안 순차 등장, 이어서 설명 텍스트
+       모바일: 생성하지 않음 → from(opacity:0) 미적용, shot·exp 모두 CSS 기본값(보임)으로 유지 */
+    if (!isMobile) {
     const pinTl3 = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: { trigger: "#gw3-pin", scroller, start: "top top", end: "bottom bottom", scrub: true },
@@ -172,6 +187,7 @@
     pinTl3
       .from("#gw3 .gw-r3__shot", { opacity: 0, y: 40, duration: 0.18, stagger: 0.12 }, 0.28)
       .from("#gw3 .gw-r3__exp", { opacity: 0, y: 24, duration: 0.14, stagger: 0.08 }, 0.58);
+    } /* /!isMobile — gw3 핀 scrub */
 
     /* goal — 핀 해제 후 자연 스크롤로 등장 */
     gsap.from("#gw3 .gw-r3__goal", {
@@ -217,7 +233,9 @@
        각 행은 프레임 하단으로 들어오는 시점(progress)에 점등(shot 좌→ / tx 우← / node 팝). */
     const gw5El = scroller.querySelector("#gw5");
     const gw5Stage = document.querySelector("#gw5-stage");
-    if (gw5El && gw5Stage) {
+    /* 모바일: 필름스트립 전체 skip → shot/tx/node fromTo(opacity:0) 미적용, 행 전체 보임.
+       syncStageH 도 호출하지 않음(CSS 폴백 height 유지). */
+    if (!isMobile && gw5El && gw5Stage) {
       /* stage 높이 = 스크롤러 가시 높이(모달 뷰포트). refresh 마다 재동기화 */
       /* 모달 닫힘(clientHeight 0) 때 0px 고정 방지 — CSS 폴백(88svh) 유지, open 시 refresh 가 교정 */
       const syncStageH = () => { if (scroller.clientHeight) gw5Stage.style.height = scroller.clientHeight + "px"; };
@@ -328,8 +346,9 @@
       if (vid) tl.from(vid, { scale: 1.12, duration: 1.1, ease: "power3.out" }, 0);
       if (scrim) tl.to(scrim, { opacity: 0, duration: 1.0, ease: "power2.out" }, 0.05);
       /* 카메라 패닝 — 래퍼(overflow:hidden) 안에서 영상 translateY(compositor only, paint 없음).
-         영상 height 110% 헤드룸 → y 0%~-8% 범위에서 항상 커버 유지 */
-      if (vid) gsap.fromTo(vid,
+         영상 height 110% 헤드룸 → y 0%~-8% 범위에서 항상 커버 유지
+         모바일: scrub skip → yPercent 0(CSS 기본) 유지, 영상 정상 표시 */
+      if (!isMobile && vid) gsap.fromTo(vid,
         { yPercent: 4 },
         { yPercent: -4, ease: "none",
           scrollTrigger: { trigger: band, scroller, start: "top bottom", end: "bottom top", scrub: 0.6 } });

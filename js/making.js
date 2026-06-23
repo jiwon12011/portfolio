@@ -19,6 +19,9 @@
     // 모션 최소화 → 애니메이션 없이 정상 표시
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
+    // 모바일(≤768px portrait) — 핀/scrub 비활성화, 데이터시각화 최종상태 즉시 적용
+    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+
     gsap.registerPlugin(ScrollTrigger);
     const ST = (trigger, start = "top 86%") => ({ trigger, scroller, start, once: true });
 
@@ -86,16 +89,24 @@
     const donut = scroller.querySelector(".s2-donut__fill");
     if (donut) {
       const C = 2 * Math.PI * 50, pct = +donut.dataset.pct;
-      gsap.set(donut, { strokeDashoffset: C });
-      ScrollTrigger.create({ trigger: ".s2-donutwrap", scroller, start: "top 80%", once: true,
-        onEnter: () => gsap.to(donut, { strokeDashoffset: C * (1 - pct / 100), duration: 1.3, ease: "power2.out" }) });
+      if (isMobile) {
+        // 모바일: 애니 없이 정확한 % 즉시 표시(CSS default strokeDashoffset:0 = 100% 채움이라 명시 필요)
+        gsap.set(donut, { strokeDashoffset: C * (1 - pct / 100) });
+      } else {
+        gsap.set(donut, { strokeDashoffset: C });
+        ScrollTrigger.create({ trigger: ".s2-donutwrap", scroller, start: "top 80%", once: true,
+          onEnter: () => gsap.to(donut, { strokeDashoffset: C * (1 - pct / 100), duration: 1.3, ease: "power2.out" }) });
+      }
     }
 
     /* 막대: 좌→우 자라기 */
     if (scroller.querySelector(".s2-bar i")) {
-      gsap.set(".s2-bar i", { scaleX: 0 });
-      ScrollTrigger.create({ trigger: ".s2-bars", scroller, start: "top 84%", once: true,
-        onEnter: () => gsap.to(".s2-bar i", { scaleX: 1, duration: 1, ease: "power2.out", stagger: .12 }) });
+      if (!isMobile) {
+        // 모바일: gsap.set 생략 → CSS 기본값(scaleX:1 = 전체 너비) 유지
+        gsap.set(".s2-bar i", { scaleX: 0 });
+        ScrollTrigger.create({ trigger: ".s2-bars", scroller, start: "top 84%", once: true,
+          onEnter: () => gsap.to(".s2-bar i", { scaleX: 1, duration: 1, ease: "power2.out", stagger: .12 }) });
+      }
     }
 
     /* 체크: 하나씩 등장 */
@@ -104,6 +115,11 @@
     /* 숫자 카운트업(도넛·막대 %) */
     scroller.querySelectorAll(".s2-count").forEach((el) => {
       const to = +el.dataset.to, dec = +(el.dataset.dec || 0), suf = el.dataset.suffix || "";
+      if (isMobile) {
+        // 모바일: 최종값 즉시 표시(0 리셋 생략)
+        el.textContent = to.toFixed(dec) + suf;
+        return;
+      }
       const o = { v: 0 }; el.textContent = "0" + suf;
       ScrollTrigger.create({ trigger: el, scroller, start: "top 90%", once: true,
         onEnter: () => gsap.to(o, { v: to, duration: 1.3, ease: "power2.out",
@@ -114,125 +130,118 @@
     });
 
     /* ── SECTION 3 ── */
-    /* ── SECTION 3 GOAL — 스크롤 핀(A형, GOAL 선언 모먼트) ──
-       헤딩 진입 → 고정 후 솔루션 1·2·3 순차 → 연결 점선 → GOAL 박스 팝 + 동전 낙하.
-       페르소나 블록(.s3-persona)은 핀 밖에서 자연 스크롤. framing 은 뷰포트 적응. */
-    const s3goalEl = scroller.querySelector("#sec3 .s3-goal");
-    const setSec3Top = () => {
-      if (!s3goalEl) return;
-      const vp = scroller.clientHeight; if (!vp) return;
-      const base = s3goalEl.getBoundingClientRect().top;
-      const relT = (s) => { const e = s3goalEl.querySelector(s); return e ? e.getBoundingClientRect().top - base : 0; };
-      const relB = (s) => { const e = s3goalEl.querySelector(s); return e ? e.getBoundingClientRect().bottom - base : 0; };
-      const cTop = relT(".mk-eyebrow"), gBot = relB(".s3-goalbox"), fTop = relT(".s3-sols");
-      const top = (gBot - cTop) <= vp
-        ? (vp - (gBot - cTop)) / 2 - cTop
-        : (vp - (gBot - fTop)) / 2 - fTop;
-      s3goalEl.style.top = Math.round(top) + "px";
-    };
-
-    /* 동전 낙하 — GOAL 박스 위로 쏟아져 "절약이 쌓이는" 순간. 스티키 프레임(.s3-goal)에 부착 */
-    let coinsActive = false;   // scrub 왕복 시 .call() 반복 발화로 동전 중복 생성 방지
-    const dropGoalCoins = () => {
-      if (coinsActive) return;
-      const box = scroller.querySelector("#sec3 .s3-goalbox");
-      if (!s3goalEl || !box) return;
-      coinsActive = true;
-      const land = box.offsetTop + box.offsetHeight * 0.35;
-      let remaining = 12;
-      for (let i = 0; i < 12; i++) {
-        const c = document.createElement("div");
-        c.className = "jg-coin"; c.textContent = "₩";
-        c.setAttribute("aria-hidden", "true");   // 장식 — AT가 "₩" 반복해서 읽지 않게
-        c.style.left = gsap.utils.random(34, 66) + "%";
-        s3goalEl.appendChild(c);
-        gsap.fromTo(c, { y: -40, opacity: 1, rotation: 0 },
-          { y: land, rotation: gsap.utils.random(300, 680), opacity: 0,
-            duration: gsap.utils.random(1.2, 1.9), ease: "power1.in", delay: i * 0.07,
-            onComplete: () => { c.remove(); if (--remaining === 0) coinsActive = false; } });
-      }
-    };
-
-    /* 헤딩 — 진입 단계 rise(고정 후 잘릴 수 있으므로 진입 시 노출) */
+    /* 헤딩 — 진입 단계 rise(모바일에서도 유지) */
     gsap.from("#sec3 .s3-goal > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec3 .s3-goal", "top 84%") });
 
-    /* 핀 scrub: 솔루션 1→2→3 → 연결 점선 → GOAL 박스 팝 → 동전 */
-    const pinTl_s3 = gsap.timeline({
-      defaults: { ease: "none" },
-      scrollTrigger: { trigger: "#sec3-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec3Top },
-    });
-    pinTl_s3
-      .from("#sec3 .s3-sol", { opacity: 0, y: 34, stagger: 0.1, duration: 0.13 }, 0.16)
-      /* 연결선(::before/::after 포함 컨테이너)도 솔루션 다 뜬 뒤 등장 → 도트 순차 팝 */
-      .fromTo("#sec3 .s3-link", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.5)
-      .from("#sec3 .s3-link i", { scale: 0.3, transformOrigin: "50% 50%", stagger: 0.06, duration: 0.06 }, 0.54)
-      .fromTo("#sec3 .s3-goalbox", { opacity: 0, scale: 0.94, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.12 }, 0.68)
-      .call(dropGoalCoins, null, 0.74);
+    /* GOAL 핀 scrub — 모바일 skip
+       모바일에서 pinTl의 .from(opacity:0)·.fromTo(opacity:0)가 살아있으면 scrub 미진행 시
+       s3-sol·s3-link·s3-goalbox가 0 상태로 고착됨 → 전체 블록을 skip 해 CSS 기본값 유지 */
+    if (!isMobile) {
+      /* ── SECTION 3 GOAL — 스크롤 핀(A형, GOAL 선언 모먼트) ──
+         헤딩 진입 → 고정 후 솔루션 1·2·3 순차 → 연결 점선 → GOAL 박스 팝 + 동전 낙하.
+         페르소나 블록(.s3-persona)은 핀 밖에서 자연 스크롤. framing 은 뷰포트 적응. */
+      const s3goalEl = scroller.querySelector("#sec3 .s3-goal");
+      const setSec3Top = () => {
+        if (!s3goalEl) return;
+        const vp = scroller.clientHeight; if (!vp) return;
+        const base = s3goalEl.getBoundingClientRect().top;
+        const relT = (s) => { const e = s3goalEl.querySelector(s); return e ? e.getBoundingClientRect().top - base : 0; };
+        const relB = (s) => { const e = s3goalEl.querySelector(s); return e ? e.getBoundingClientRect().bottom - base : 0; };
+        const cTop = relT(".mk-eyebrow"), gBot = relB(".s3-goalbox"), fTop = relT(".s3-sols");
+        const top = (gBot - cTop) <= vp
+          ? (vp - (gBot - cTop)) / 2 - cTop
+          : (vp - (gBot - fTop)) / 2 - fTop;
+        s3goalEl.style.top = Math.round(top) + "px";
+      };
 
-    setSec3Top();
-    window.addEventListener("resize", setSec3Top);
+      /* 동전 낙하 — GOAL 박스 위로 쏟아져 "절약이 쌓이는" 순간. 스티키 프레임(.s3-goal)에 부착 */
+      let coinsActive = false;   // scrub 왕복 시 .call() 반복 발화로 동전 중복 생성 방지
+      const dropGoalCoins = () => {
+        if (coinsActive) return;
+        const box = scroller.querySelector("#sec3 .s3-goalbox");
+        if (!s3goalEl || !box) return;
+        coinsActive = true;
+        const land = box.offsetTop + box.offsetHeight * 0.35;
+        let remaining = 12;
+        for (let i = 0; i < 12; i++) {
+          const c = document.createElement("div");
+          c.className = "jg-coin"; c.textContent = "₩";
+          c.setAttribute("aria-hidden", "true");   // 장식 — AT가 "₩" 반복해서 읽지 않게
+          c.style.left = gsap.utils.random(34, 66) + "%";
+          s3goalEl.appendChild(c);
+          gsap.fromTo(c, { y: -40, opacity: 1, rotation: 0 },
+            { y: land, rotation: gsap.utils.random(300, 680), opacity: 0,
+              duration: gsap.utils.random(1.2, 1.9), ease: "power1.in", delay: i * 0.07,
+              onComplete: () => { c.remove(); if (--remaining === 0) coinsActive = false; } });
+        }
+      };
+
+      /* 핀 scrub: 솔루션 1→2→3 → 연결 점선 → GOAL 박스 팝 → 동전 */
+      const pinTl_s3 = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: { trigger: "#sec3-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec3Top },
+      });
+      pinTl_s3
+        .from("#sec3 .s3-sol", { opacity: 0, y: 34, stagger: 0.1, duration: 0.13 }, 0.16)
+        /* 연결선(::before/::after 포함 컨테이너)도 솔루션 다 뜬 뒤 등장 → 도트 순차 팝 */
+        .fromTo("#sec3 .s3-link", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.5)
+        .from("#sec3 .s3-link i", { scale: 0.3, transformOrigin: "50% 50%", stagger: 0.06, duration: 0.06 }, 0.54)
+        .fromTo("#sec3 .s3-goalbox", { opacity: 0, scale: 0.94, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.12 }, 0.68)
+        .call(dropGoalCoins, null, 0.74);
+
+      setSec3Top();
+      window.addEventListener("resize", setSec3Top);
+    }
+
     gsap.from("#sec3 .s3-persona > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST(".s3-persona", "top 80%") });
     gsap.from(".s3-pcard",   { opacity: 0, y: 42, stagger: .16, duration: .85, ease: "power3.out", scrollTrigger: ST(".s3-pcards", "top 82%") });
 
     /* ── SECTION 4 ── */
-    /* 스크롤 핀(A형) — 반응형 프레이밍.
-       헤딩은 진입 단계에서 rise(고정 전), 고정 후 프레임에서 5스텝 좌→우 + 루프 조립.
-       sticky top 은 뷰포트에 맞춰 JS 로 계산(종횡비에 따라 콘텐츠 높이 vs 뷰포트가 달라짐):
-         · 전체(헤딩~루프)가 뷰포트에 들어오면 → 전체를 세로 중앙
-         · 안 들어오면 → flow+루프만 중앙(헤딩은 진입 시 이미 노출됨) */
-    const sec4El = scroller.querySelector("#sec4");
-    const setSec4Top = () => {
-      if (!sec4El) return;
-      const vp = scroller.clientHeight; if (!vp) return;
-      const base = sec4El.getBoundingClientRect().top;
-      const relT = (sel) => { const e = sec4El.querySelector(sel); return e ? e.getBoundingClientRect().top - base : 0; };
-      const relB = (sel) => { const e = sec4El.querySelector(sel); return e ? e.getBoundingClientRect().bottom - base : 0; };
-      const cTop = relT(".mk-eyebrow"), cBot = relB(".s4-loop");
-      const fTop = relT(".s4-flow"), fBot = relB(".s4-loop");
-      const top = (cBot - cTop) <= vp
-        ? (vp - (cBot - cTop)) / 2 - cTop      // 전체가 들어옴 → 전체 중앙
-        : (vp - (fBot - fTop)) / 2 - fTop;     // 안 들어옴 → flow+루프 중앙
-      sec4El.style.top = Math.round(top) + "px";
-    };
-
-    /* 헤딩 — 진입 단계에서 rise(고정 후 잘릴 수 있으므로 진입 시 1회 노출) */
+    /* 헤딩 — 진입 단계 rise(모바일에서도 유지) */
     gsap.from("#sec4 > :is(p,h2,span).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec4", "top 84%") });
 
-    const pinTl_s4 = gsap.timeline({
-      defaults: { ease: "none" },
-      scrollTrigger: { trigger: "#sec4-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec4Top },
-    });
-    pinTl_s4
-      .from(".s4-step", { opacity: 0, y: 32, stagger: 0.12, duration: 0.14 }, 0.15)
-      .from(".s4-loop", { opacity: 0, duration: 0.12 }, 0.85);
+    /* 스크롤 핀 — 모바일 skip
+       .from(".s4-step"/.s4-loop", opacity:0)이 살아있으면 모바일 scrub 미진행 시 고착됨 */
+    if (!isMobile) {
+      /* 반응형 프레이밍:
+         헤딩은 진입 단계에서 rise(고정 전), 고정 후 프레임에서 5스텝 좌→우 + 루프 조립.
+         sticky top 은 뷰포트에 맞춰 JS 로 계산(종횡비에 따라 콘텐츠 높이 vs 뷰포트가 달라짐):
+           · 전체(헤딩~루프)가 뷰포트에 들어오면 → 전체를 세로 중앙
+           · 안 들어오면 → flow+루프만 중앙(헤딩은 진입 시 이미 노출됨) */
+      const sec4El = scroller.querySelector("#sec4");
+      const setSec4Top = () => {
+        if (!sec4El) return;
+        const vp = scroller.clientHeight; if (!vp) return;
+        const base = sec4El.getBoundingClientRect().top;
+        const relT = (sel) => { const e = sec4El.querySelector(sel); return e ? e.getBoundingClientRect().top - base : 0; };
+        const relB = (sel) => { const e = sec4El.querySelector(sel); return e ? e.getBoundingClientRect().bottom - base : 0; };
+        const cTop = relT(".mk-eyebrow"), cBot = relB(".s4-loop");
+        const fTop = relT(".s4-flow"), fBot = relB(".s4-loop");
+        const top = (cBot - cTop) <= vp
+          ? (vp - (cBot - cTop)) / 2 - cTop      // 전체가 들어옴 → 전체 중앙
+          : (vp - (fBot - fTop)) / 2 - fTop;     // 안 들어옴 → flow+루프 중앙
+        sec4El.style.top = Math.round(top) + "px";
+      };
 
-    setSec4Top();
-    window.addEventListener("resize", setSec4Top);
+      const pinTl_s4 = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: { trigger: "#sec4-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec4Top },
+      });
+      pinTl_s4
+        .from(".s4-step", { opacity: 0, y: 32, stagger: 0.12, duration: 0.14 }, 0.15)
+        .from(".s4-loop", { opacity: 0, duration: 0.12 }, 0.85);
+
+      setSec4Top();
+      window.addEventListener("resize", setSec4Top);
+    }
 
     /* ── SECTION 5 ── */
     gsap.from("#sec5 .s5-intro .mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec5 .s5-intro", "top 84%") });
     gsap.from(".s5-hero", { opacity: 0, scale: .9, y: 16, duration: .9, ease: "back.out(1.5)", scrollTrigger: ST("#sec5 .s5-intro", "top 84%") });
     gsap.from(".s5-row", { opacity: 0, x: -26, stagger: .12, duration: .75, ease: "power3.out", scrollTrigger: ST(".s5-table", "top 84%") });
 
-    /* ── SECTION 6 — 스크롤 핀(A형, 브랜드) ──
-       헤딩은 진입 시 rise, 고정 후 프레임에서 브랜드 그리드(오브젝트/타이포/컬러) 조립.
-       굴비는 BRAND OBJECT 카드 등장 시점에 감쇠 스윙으로 "착지". 목업은 핀 해제 후 노출.
-       framing 은 뷰포트에 맞춰 적응(헤딩+그리드가 들어오면 전체, 아니면 그리드만 중앙). */
-    const sec6El = scroller.querySelector("#sec6");
-    const setSec6Top = () => {
-      if (!sec6El) return;
-      const vp = scroller.clientHeight; if (!vp) return;
-      const base = sec6El.getBoundingClientRect().top;
-      const relT = (s) => { const e = sec6El.querySelector(s); return e ? e.getBoundingClientRect().top - base : 0; };
-      const relB = (s) => { const e = sec6El.querySelector(s); return e ? e.getBoundingClientRect().bottom - base : 0; };
-      const cTop = relT(".mk-eyebrow"), gTop = relT(".s6-grid"), gBot = relB(".s6-grid");
-      const top = (gBot - cTop) <= vp
-        ? (vp - (gBot - cTop)) / 2 - cTop
-        : (vp - (gBot - gTop)) / 2 - gTop;
-      sec6El.style.top = Math.round(top) + "px";
-    };
-
-    /* 굴비 감쇠 스윙(천장에 매달린 조기가 흔들리다 안착) — 핀 조립 시 발화 + hover 재생 */
+    /* ── SECTION 6 ── */
+    /* 굴비 감쇠 스윙 — 모바일도 hover 이벤트 등록(transformOrigin만, 표시에 무해) */
     const fishSwings = [];
     scroller.querySelectorAll("#sec6 .s6-objbox img").forEach((img) => {
       gsap.set(img, { transformOrigin: "50% 0%" });
@@ -243,24 +252,45 @@
       box.addEventListener("mouseenter", swing);
     });
 
-    /* 헤딩 — 진입 단계 rise */
+    /* 헤딩 — 진입 단계 rise(모바일에서도 유지) */
     gsap.from("#sec6 > :is(p,h2).mk-rise", { opacity: 0, y: 28, stagger: .1, duration: .8, ease: "power3.out", scrollTrigger: ST("#sec6", "top 84%") });
 
-    /* 핀 scrub: 브랜드 카드 3개 순차 → 굴비 착지 → 컬러 스와치 팝 */
-    const pinTl_s6 = gsap.timeline({
-      defaults: { ease: "none" },
-      scrollTrigger: { trigger: "#sec6-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec6Top },
-    });
-    pinTl_s6
-      .from("#sec6 .s6-card", { opacity: 0, y: 34, stagger: 0.12, duration: 0.14 }, 0.15)
-      .call(() => fishSwings.forEach((s, i) => gsap.delayedCall(i * 0.12, s)), null, 0.26)
-      .from("#sec6 .s6-swatches figure", { opacity: 0, scale: 0.8, stagger: 0.05, duration: 0.1 }, 0.5);
+    /* 스크롤 핀(A형, 브랜드) — 모바일 skip
+       .from(".s6-card"/.s6-swatches figure", opacity:0)이 살아있으면 모바일에서 고착됨 */
+    if (!isMobile) {
+      /* 헤딩은 진입 시 rise, 고정 후 프레임에서 브랜드 그리드(오브젝트/타이포/컬러) 조립.
+         굴비는 BRAND OBJECT 카드 등장 시점에 감쇠 스윙으로 "착지".
+         framing 은 뷰포트에 맞춰 적응(헤딩+그리드가 들어오면 전체, 아니면 그리드만 중앙). */
+      const sec6El = scroller.querySelector("#sec6");
+      const setSec6Top = () => {
+        if (!sec6El) return;
+        const vp = scroller.clientHeight; if (!vp) return;
+        const base = sec6El.getBoundingClientRect().top;
+        const relT = (s) => { const e = sec6El.querySelector(s); return e ? e.getBoundingClientRect().top - base : 0; };
+        const relB = (s) => { const e = sec6El.querySelector(s); return e ? e.getBoundingClientRect().bottom - base : 0; };
+        const cTop = relT(".mk-eyebrow"), gTop = relT(".s6-grid"), gBot = relB(".s6-grid");
+        const top = (gBot - cTop) <= vp
+          ? (vp - (gBot - cTop)) / 2 - cTop
+          : (vp - (gBot - gTop)) / 2 - gTop;
+        sec6El.style.top = Math.round(top) + "px";
+      };
 
-    /* 목업 — 핀 해제 후 자연 스크롤로 등장 */
+      /* 핀 scrub: 브랜드 카드 3개 순차 → 굴비 착지 → 컬러 스와치 팝 */
+      const pinTl_s6 = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: { trigger: "#sec6-pin", scroller, start: "top top", end: "bottom bottom", scrub: true, onRefreshInit: setSec6Top },
+      });
+      pinTl_s6
+        .from("#sec6 .s6-card", { opacity: 0, y: 34, stagger: 0.12, duration: 0.14 }, 0.15)
+        .call(() => fishSwings.forEach((s, i) => gsap.delayedCall(i * 0.12, s)), null, 0.26)
+        .from("#sec6 .s6-swatches figure", { opacity: 0, scale: 0.8, stagger: 0.05, duration: 0.1 }, 0.5);
+
+      setSec6Top();
+      window.addEventListener("resize", setSec6Top);
+    }
+
+    /* 목업 — 핀 해제 후 자연 스크롤, 모바일에서도 유지 */
     gsap.from(".s6-mockup", { opacity: 0, y: 40, duration: .9, ease: "power3.out", scrollTrigger: ST(".s6-mockup", "top 88%") });
-
-    setSec6Top();
-    window.addEventListener("resize", setSec6Top);
 
     /* ── SECTION 7 ── */
     gsap.from(".s7-board", { opacity: 0, y: 34, duration: .9, ease: "power3.out", scrollTrigger: ST(".s7-board", "top 86%") });

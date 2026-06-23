@@ -42,6 +42,10 @@
     /* reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
+    /* 모바일(≤768px portrait) 판별 — scrub 핀은 1열 리플로우 레이아웃에서 오동작하므로 skip.
+       once 진입 리빌·mh-emph 드로우는 모바일에서도 그대로 실행. */
+    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+
     /* once 진입 트리거 공통 옵션 */
     const ST = (trigger, start = "top 84%") => ({ trigger, scroller, start, once: true });
 
@@ -168,7 +172,7 @@
     ================================================================ */
     const mh2Pin = scroller.querySelector("#mh2-pin");
     const mh2El  = scroller.querySelector("#mh2");
-    if (mh2Pin && mh2El) {
+    if (!isMobile && mh2Pin && mh2El) {
       const setMh2Top = () => {
         mh2El.style.top = Math.round((scroller.clientHeight - mh2El.offsetHeight) / 2) + "px";
       };
