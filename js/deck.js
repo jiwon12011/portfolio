@@ -143,6 +143,31 @@
     });
   }
 
+  /* 메인 양옆(첫 진입 대상) 영상의 첫 프레임을 미리 디코드해 둔다.
+     preload="auto" 로 데이터를 받아도 코덱 초기화·키프레임 디코드는 '첫 play()' 때 일어나
+     메인→양옆 첫 전환 순간 모핑과 겹쳐 끊긴다(특히 무거운 영상). 보이지 않는 패널에서
+     한 번 play→pause 로 디코더를 덥혀 두면 실제 전환 때 즉시 매끄럽게 재생된다.
+     (재생 유지 아님 — 첫 프레임에서 멈춰 둠. 화면 밖이라 시각/합성 영향 없음.) */
+  function warmNeighbors() {
+    if (N < 2) return;
+    [(idx + 1) % N, (idx - 1 + N) % N].forEach((i) => {
+      const v = panels[i] && panels[i].querySelector("video");
+      if (!v || !v.src || v.dataset.warmed) return;
+      v.dataset.warmed = "1";
+      v.muted = true;
+      v.preload = "auto";
+      const prime = () => {
+        const pr = v.play();
+        if (pr && pr.then) pr.then(() => {
+          /* 한 프레임 디코드된 뒤 정지 → 디코더는 덥혀진 채, 다음 play() 는 콜드 비용 없음 */
+          setTimeout(() => { try { v.pause(); v.currentTime = 0; } catch (e) {} }, 60);
+        }).catch(() => {});
+      };
+      if (v.readyState >= 2) prime();
+      else { v.load(); v.addEventListener("canplay", prime, { once: true }); }
+    });
+  }
+
   function slide(to, dir, opts = {}) {
     if (lock || to === idx || to < 0 || to >= N) return;
     lock = true; setTimeout(() => { lock = false; }, COOLDOWN);
@@ -155,6 +180,15 @@
     /* 전환 직전에만 GPU 레이어 승격(끝나면 해제 → 비활성 패널 VRAM 점유 제거) */
     out.style.willChange = inc.style.willChange = "transform";
     root.classList.add("deck-sliding");
+    /* 메인↔옆 전환에서만 라이브 목차를 전환 중 숨긴다(움직이는 패널 위 재합성 렉 방지).
+       프로젝트끼리(옆↔옆) 이동은 이 마커가 안 붙어 바가 원래대로 보이며 롤. */
+    const mainInvolved = (idx === 0 || to === 0);
+    if (mainInvolved) {
+      root.classList.add("deck-sliding-main");
+      /* 마커는 슬라이드 끝(850)보다 일찍 뗀다 → 바가 더 빨리 등장. 슬라이드 ease-out 꼬리 구간
+         이라 패널 움직임이 거의 없어 안전. 더 당기려면 이 값을 줄이면 됨. */
+      setTimeout(() => root.classList.remove("deck-sliding-main"), 460);
+    }
     setTimeout(() => {
       out.style.willChange = "";
       inc.style.willChange = "";
@@ -298,6 +332,6 @@
     if (dx < 0) go(1); else go(-1);
   }, { passive: true });
 
-  /* 초기 LCP 끝난 뒤(1.5s) 옆 영상 미리 버퍼 → 첫 슬라이드 즉시 재생 */
-  setTimeout(preloadNeighbors, 1500);
+  /* 초기 LCP 끝난 뒤(1.5s) 옆 영상 미리 버퍼 + 첫 프레임 디코드(warm) → 첫 슬라이드 끊김 제거 */
+  setTimeout(() => { preloadNeighbors(); warmNeighbors(); }, 1500);
 })();

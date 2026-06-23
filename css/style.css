@@ -820,10 +820,17 @@ img.is-empty { color: transparent; }
    orbit 정지(Patch A+B) 후에도 hero-godray CSS animation이 scene 레이어를
    매 프레임 dirty로 만들어 backdrop-filter 재샘플이 남는다. deck-sliding 850ms 동안 none. */
 html.deck-sliding .project-intro__back,
-html.deck-sliding .intro-nav__ico {
+html.deck-sliding .intro-nav__ico,
+html.deck-sliding .intro-nav__orb,
+html.deck-sliding .intro-nav--pearl .intro-nav__ico {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
+/* 슬라이드 중 메인 씬 godray 호흡 정지: mix-blend-mode:screen 레이어가 매 프레임 opacity
+   변하며 패널 이동과 겹치면 약한 GPU에서 재합성 비용이 큼(휠/화살표 일반 슬라이드가 끊기는 주범 —
+   카드 클릭 모핑은 들어오는 패널이 메인을 덮어 이 블렌드가 컬링됨). opacity 고정 → compositor가
+   레이어를 캐시. 전환 중엔 메인이 화면 밖으로 빠져나가므로 보이는 디자인은 그대로. */
+html.deck-sliding .hero-godray { animation-play-state: paused; }
 /* 펼쳐도 중앙 진주는 그 자리에 흐릿하게 남김(+살짝 수축 = '버블이 빠져나간' 느낌) */
 .intro-nav--pearl.is-open .intro-nav__pearl { opacity: .45; pointer-events: none;
   animation: none; transform: translateX(-50%) scale(.88);
@@ -944,11 +951,22 @@ html.deck-sliding .intro-nav__ico {
   /* 메인에선 숨김 → off-main(프로젝트 패널)일 때만 표시. opacity 로 부드럽게. */
   opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity .4s ease, visibility 0s linear .4s;
+  /* 자체 backing 레이어로 승격: fixed 라 전환 중 움직이는 패널 위에 겹치는데, 레이어가 없으면
+     패널이 움직일 때마다 바 영역(perspective 3D + mask)을 매 프레임 재합성 → 메인↔옆 전환 렉.
+     translateZ(0) 로 한 번 래스터한 텍스처를 blit 만 하게 만들어 재합성·opacity 페이드 둘 다 싸진다. */
+  transform: translateZ(0);
+  will-change: opacity;
 }
 html.off-main .intro-list--live {
   opacity: 1; visibility: visible; pointer-events: auto;
-  transition: opacity .4s ease;
+  transition: opacity .2s ease;   /* 등장 페이드 단축(.4s→.2s) — 슬라이드 끝난 직후 빠릿하게 */
 }
+/* 메인↔옆 전환 중에만 목록 바를 숨긴다 — fixed 라 움직이는 패널 위에 겹쳐 매 프레임 재합성
+   (perspective 3D + mask)되며 메인↔옆 전환을 끊었음. deck.js 가 메인 관여 슬라이드에만
+   deck-sliding-main 을 붙이고 460ms 후 떼므로, 그 직후 .2s 페이드로 빠르게 등장.
+   프로젝트끼리(옆↔옆) 이동은 이 마커가 없어 바가 원래대로 보이며 롤한다.
+   off-main 규칙 뒤(동일 특이도, 소스 순서 우선)라 전환 중 opacity 0 이 이긴다. */
+html.deck-sliding-main .intro-list--live { opacity: 0; }
 
 /* ── viewport: 가운데 ±HALF 칸만 노출(나머지 트랙 행은 위아래로 클립) ──
    높이 = (가운데 + 위아래 HALF) 칸 = (2*HALF+1)행 + HALF*2 gap.
@@ -1057,18 +1075,21 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 
 /* (펄스 도트 eq 는 .intro-list__eq ::before/::after 가 전담 — 가운데 칸 전용 추가 규칙 불필요) */
 
-/* ── 데스크톱(1440px+)에서만 휠 입체감(rotateX·perspective)과 깊이 blur 추가(성능 비용) ──
-   모바일/태블릿은 scale + opacity 위계만으로 거리감(3D 레이어 승격·blur 없음 → 저사양 60fps). */
+/* ── 데스크톱(1440px+)에서만 휠 입체감(rotateX·perspective) ──
+   모바일/태블릿은 scale + opacity 위계만으로 거리감(3D 레이어 승격 없음 → 저사양 60fps).
+   ⚠ 깊이 blur(filter)는 제거: filter:blur 는 항목마다 별도 합성 레이어를 만들고 매번 블러 패스를
+   따로 렌더 → 메인→옆 전환 때 목록이 opacity 페이드인되며 blur 레이어 4개+perspective 를 한꺼번에
+   합성하느라 약한 GPU 가 버벅였다(목록 바가 렉의 원인). rotateX+scale+opacity 만으로 거리감 충분. */
 @media (min-width: 1440px) {
   .intro-list__viewport { perspective: 1200px; perspective-origin: 50% 50%; }
   /* 휠 기울임: 위 칸(음수 slot)은 윗면, 아래 칸은 아랫면이 앞으로. scale 과 함께. */
-  .intro-list__item[data-slot="-2"] { transform: rotateX(-16deg) scale(.88); filter: blur(2px); }
-  .intro-list__item[data-slot="2"]  { transform: rotateX( 16deg) scale(.88); filter: blur(2px); }
-  .intro-list__item[data-slot="-1"] { transform: rotateX( -8deg) scale(.94); filter: blur(.6px); }
-  .intro-list__item[data-slot="1"]  { transform: rotateX(  8deg) scale(.94); filter: blur(.6px); }
-  .intro-list__item[data-slot="0"]  { transform: rotateX(0deg) scale(1); filter: none; }
-  /* 호버 시 또렷 + blur 해제 */
-  .intro-list__item:hover { transform: rotateX(0deg) scale(1); filter: none; }
+  .intro-list__item[data-slot="-2"] { transform: rotateX(-16deg) scale(.88); }
+  .intro-list__item[data-slot="2"]  { transform: rotateX( 16deg) scale(.88); }
+  .intro-list__item[data-slot="-1"] { transform: rotateX( -8deg) scale(.94); }
+  .intro-list__item[data-slot="1"]  { transform: rotateX(  8deg) scale(.94); }
+  .intro-list__item[data-slot="0"]  { transform: rotateX(0deg) scale(1); }
+  /* 호버 시 또렷 */
+  .intro-list__item:hover { transform: rotateX(0deg) scale(1); }
 }
 
 /* ── 선택 프레임: 가운데 칸 위 고정 오버레이 — Stage2 독립 글래스 셀렉터 ──
@@ -1079,10 +1100,15 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
   top: 50%; height: var(--frame-h, 56px);
   transform: translateY(-50%);
   border-radius: 13px;
-  /* 글래스 — 원래 활성 박스와 같은 테마색 톤([data-project]별 --it-box-bg/border). */
-  background: var(--it-box-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* 글래스 — 원래 활성 박스와 같은 테마색 톤([data-project]별 --it-box-bg/border).
+     ⚠ 이 프레임은 "재생 중인" 인트로 배경 영상 바로 위에 항상 떠 있다. backdrop-filter 는
+     뒤 픽셀이 바뀔 때마다 블러를 다시 합성하는데, 배경이 영상이라 매 프레임 reblur →
+     저사양/통합 GPU 에서 상시 렉(고사양 집 PC 에선 티가 안 남 = 하드웨어 의존 증상).
+     → blur 제거하고 반투명 레이어링으로 프로스티드 글래스를 흉내(.scene 오빗과 동일 전략):
+       테마 톤(--it-box-bg) 위에 상단 흰 sheen + 하단 음영으로 두께감, 가독성은 톤 보강으로. */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04) 40%, rgba(0,0,0,.12)),
+    var(--it-box-bg);
   border: 1.2px solid var(--it-box-border);
   box-shadow:
     inset 0  1px 2px rgba(255,255,255,.22),
