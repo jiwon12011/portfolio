@@ -321,11 +321,16 @@
 
   /* 터치 스와이프(수평) */
   let tx = 0, ty = 0;
+  /* 모바일 세로 판별 함수: 메인(idx=0)에서 다이얼이 가로 제스처를 독점.
+     wheel·keydown 은 그대로 유지 — 터치 스와이프만 양보. */
+  const isDialMode = () => matchMedia("(max-width:768px) and (orientation:portrait)").matches;
   window.addEventListener("touchstart", (e) => {
     tx = e.touches[0].clientX; ty = e.touches[0].clientY;
   }, { passive: true });
   window.addEventListener("touchend", (e) => {
     if (lock || locked()) return;
+    /* 모바일 세로 + 메인(idx=0): 다이얼이 가로 제스처 독점 → deck 스와이프 무시 */
+    if (isDialMode() && idx === 0) return;
     const dx = e.changedTouches[0].clientX - tx;
     const dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;

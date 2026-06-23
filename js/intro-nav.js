@@ -10,7 +10,13 @@
 (() => {
   const navs = [...document.querySelectorAll(".intro-nav")];
   if (!navs.length) return;
-  if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;  // 터치/모바일: 그대로
+  /* pearl(진주) enhance 조건: 데스크톱 hover 환경 OR 데스크톱 폭(>1024px).
+     후자를 포함해 hover 미보고 환경(터치 노트북·DevTools 기기 에뮬레이션)에서도 1440 등 넓은
+     화면이면 진주로 통일 — hover 없으면 진주를 '탭'으로 토글(click 핸들러가 처리). 좁은 모바일
+     (≤1024)만 기본 가로 nav 유지. */
+  const wantPearl = matchMedia("(hover: hover) and (pointer: fine)").matches
+    || matchMedia("(min-width: 1025px)").matches;
+  if (!wantPearl) return;
 
   const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   let uid = 0;

@@ -235,6 +235,9 @@
     /* 프로젝트 순환 순서(단일 소스) — 제작과정 prev/next 등이 양옆 프로젝트를 키로 계산할 때 사용.
        순서를 바꾸려면 위 PROJECTS 배열만 고치면 됨(이걸 참조하는 곳은 자동으로 따라옴). */
     order: PROJECTS.map((p) => p.key),
+    /* 전체 프로젝트 데이터(단일 소스) — 모바일 메인(mobile-home.js)이 리스트·오빗 링을
+       이 한 배열로 렌더. key/num/title/sub/thumb/preview 그대로 노출(불변 사용). */
+    projects: PROJECTS,
   };
 
   /* 초기 seed: 첫 프로젝트로 재중심해 둠(메인에선 CSS 가 숨김). current 는 −1 로 둬서

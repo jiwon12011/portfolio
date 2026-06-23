@@ -117,6 +117,16 @@
         content.dispatchEvent(new Event("process:navscroll"));  /* 오버스크롤 종료 navLock 트리거 */
       }));
 
+    /* 태블릿(≤1366): 좌측 네비(BACK 포함)가 CSS로 숨겨지므로 패널 우상단에 플로팅 ✕ 닫기 주입.
+       터치엔 Esc 가 없고 scrim 가장자리가 좁아 갇힐 수 있어 명시적 닫기 제공(표시 토글은 CSS). */
+    const closeFab = document.createElement("button");
+    closeFab.type = "button";
+    closeFab.className = "process__close-fab";
+    closeFab.setAttribute("aria-label", "닫기");
+    closeFab.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    closeFab.addEventListener("click", close);
+    panel.appendChild(closeFab);
+
     /* 닫기(back/scrim) + Esc */
     modal.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", close));
     document.addEventListener("keydown", (e) => {

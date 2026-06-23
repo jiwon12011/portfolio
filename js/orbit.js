@@ -199,6 +199,13 @@
   const isMobile     = matchMedia("(max-width:768px)").matches;
   const _lowEnd      = (navigator.hardwareConcurrency || 8) <= 4;
 
+  /* ── 모바일 세로 early-return: orbit-mobile.js 가 다이얼 UI 전담 ──
+     rAF · SVG 링 생성 · canvas 파티클 · 카드 배치 전부 스킵.
+     카드 opacity:0(CSS 초기값) 해제 소유권은 orbit-mobile.js 로 이전.
+     데스크톱/태블릿 경로는 완전 불변. ── */
+  const isMobilePortrait = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+  if (isMobilePortrait) return;
+
   /* ── 인터랙션 상태 ───────────────────────────────────────────────
      phase     : 누적 회전각(라디안). dt 기반으로만 증가.
      speedMul  : 0(정지)~1(정속). speedTarget 으로 부드럽게 수렴(freeze).
