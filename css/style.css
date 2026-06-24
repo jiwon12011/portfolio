@@ -10788,6 +10788,13 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   opacity: 1 !important;
 }
 
+/* ---- prefers-reduced-motion: 모션 없이 즉시 노출 (IO 발화 시 opacity만 전환) ---- */
+@media (prefers-reduced-motion: reduce) {
+  [data-bcl-anim]:not(.bcl-visible)  { transform: none; }
+  [data-bcl-anim].bcl-visible        { animation: none; opacity: 1; transform: none; }
+  [data-bcl-anim="float-scale"].bcl-visible { animation: none; opacity: 1; transform: none; }
+}
+
 /* ======================================================================
    📱 ABOUT 패널 모바일 1열 리플로우 (≤768 portrait)
    제작과정 8패널과 동일 패턴: 고정프레임→흐름형, 절대배치→세로 적층,
