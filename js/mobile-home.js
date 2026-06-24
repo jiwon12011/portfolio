@@ -109,7 +109,7 @@
         '<div class="mbh-card__media">' +
           (p.preview
             ? '<video class="mbh-card__vid" muted loop playsinline preload="none"' +
-                ' poster="' + esc(p.thumb) + '" data-src="' + esc(p.preview) + '"></video>'
+                ' poster="' + esc(p.cardPoster || p.thumb) + '" data-src="' + esc(p.preview) + '"></video>'
             : '<img class="mbh-card__vid" src="' + esc(p.thumb) + '" alt="" loading="lazy" decoding="async" />') +
           '<span class="mbh-card__play" aria-hidden="true">' + PLAY_SVG + '</span>' +
         '</div>' +
@@ -156,25 +156,24 @@
         '<span class="mbh-orbit__dot mbh-orbit__dot--3"></span>' +
         '<div class="mbh-orbit__stage"><div class="mbh-orbit__ring">' + ringCardsHTML + '</div></div>' +
       '</div>' +
+      /* ② 액션 칩 — 헤드라인 자리로 이동(히어로 하단, 이미지 위) */
       '<div class="mbh-hero__foot">' +
-        '<h1 class="mbh-headline">몰입을 설계하고,<br>경험을 완성합니다.</h1>' +
+        '<nav class="mbh-chips" aria-label="바로가기">' +
+          '<button class="mbh-chip" type="button" data-act="about">' +
+            '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>' +
+            '<span class="mbh-chip__label">About Me</span>' +
+            '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
+          '<button class="mbh-chip" type="button" data-act="marketing">' +
+            '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg>' +
+            '<span class="mbh-chip__label">Marketing</span>' +
+            '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
+          '<button class="mbh-chip" type="button" data-act="banner">' +
+            '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 16-4.5-4.5L9 18"/></svg>' +
+            '<span class="mbh-chip__label">Banner</span>' +
+            '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
+        '</nav>' +
       '</div>' +
     '</header>' +
-    /* ② 액션 칩 */
-    '<nav class="mbh-chips" aria-label="바로가기">' +
-      '<button class="mbh-chip" type="button" data-act="about">' +
-        '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>' +
-        '<span class="mbh-chip__label">About Me</span>' +
-        '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
-      '<button class="mbh-chip" type="button" data-act="marketing">' +
-        '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg>' +
-        '<span class="mbh-chip__label">Marketing</span>' +
-        '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
-      '<button class="mbh-chip" type="button" data-act="banner">' +
-        '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 16-4.5-4.5L9 18"/></svg>' +
-        '<span class="mbh-chip__label">Banner</span>' +
-        '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
-    '</nav>' +
     /* ③ 프로젝트 리스트 */
     '<section class="mbh-projects" id="mbh-projects" aria-label="프로젝트">' +
       '<h2 class="mbh-projects__title">PROJECTS</h2>' +

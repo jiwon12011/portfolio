@@ -33,7 +33,7 @@
     { key: "pledis",    num: "05", title: "플레디스",      sub: "Branding / 2025", thumb: "img/main/main_pledis.webp",    preview: "img/pledis/pledis_intro.mp4?v=2" },
     { key: "poze",      num: "06", title: "POZE",          sub: "Branding / 2024", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
     { key: "sangsang",  num: "07", title: "상상의 문",     sub: "Web / 2025",      thumb: "img/main/main_door.webp",      preview: "img/sangsangdoor/sangsangdoor_intro.mp4" },
-    { key: "playlist",  num: "08", title: "우리 사이의 음표", sub: "Visual Novel / 2025", thumb: "img/main/main_playlist_game.webp", preview: "img/playlist_game/playlist_game_intro.mp4?v=2" },
+    { key: "playlist",  num: "08", title: "우리 사이의 음표", sub: "Visual Novel / 2025", thumb: "img/main/main_playlist_game.webp", preview: "img/playlist_game/playlist_game_intro.mp4?v=2", cardPoster: "img/playlist_game/playlist_card_poster.webp" },
   ];
 
   const N = PROJECTS.length;
