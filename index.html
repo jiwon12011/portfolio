@@ -72,20 +72,31 @@
     var txEl=sp.querySelector('.tx'), curEl=sp.querySelector('.cur');
     var text="PORTFOLIO JIWON SEO";
     var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var i=0, typed=false, loaded=(document.readyState==='complete'), done=false;
-    function rm(){ if(done) return; done=true; if(sp.parentNode) sp.parentNode.removeChild(sp); }
-    function finish(){ setTimeout(function(){
+    var i=0, typed=false, loaded=(document.readyState==='complete'), done=false, finishing=false, hardCap;
+    function rm(){ if(done) return; done=true; clearTimeout(hardCap); if(sp.parentNode) sp.parentNode.removeChild(sp); }
+    function finish(){ if(finishing) return; finishing=true; setTimeout(function(){
       if(curEl) curEl.style.display='none';
       sp.classList.add('leaving');
       sp.addEventListener('transitionend', rm); setTimeout(rm, 800);
     }, 480); }
     function maybe(){ if(typed && loaded) finish(); }
+    // 타이핑 완료 시점 기준 안전장치: load가 늦으면 최대 1200ms 뒤 load 무관 제거(망/리소스 stall 영구 행 방지)
+    function onTyped(){
+      typed=true; maybe();
+      if(!loaded) setTimeout(function(){ loaded=true; maybe(); }, 1200);
+    }
     function type(){
-      if(reduce){ txEl.textContent=text; typed=true; maybe(); return; }
+      if(reduce){ txEl.textContent=text; onTyped(); return; }
       if(i<text.length){ var c=text.charAt(i++); txEl.textContent+=c; setTimeout(type, c===' '?105:60); }
-      else { typed=true; maybe(); }
+      else onTyped();
     }
     if(!loaded) window.addEventListener('load', function(){ loaded=true; maybe(); });
+    // 절대 하드캡: 백그라운드 throttle·극저사양에서 타이핑 자체가 지연돼도 5s 내 무조건 제거(정상 ~3.9s완료와 1s+ 간격)
+    hardCap = setTimeout(function(){ if(done) return; txEl.textContent=text; finish(); }, 5000);
+    // 백그라운드였다 복귀하면 즉시 완성·제거(타이머 throttle로 갇힌 케이스 즉시 해소)
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden || done) return; txEl.textContent=text; finish();
+    });
     setTimeout(type, 240);
   })();
   </script>
@@ -2198,7 +2209,11 @@
 
         <img class="acl-bg" src="img/oddmi/bg.webp" alt="" aria-hidden="true" loading="lazy" width="1920" height="1022">
 
-        <img class="acl-phones" src="img/oddmi/phones.webp" alt="AI 실험 계정 스크린샷" loading="eager" width="3184" height="3504">
+        <!-- 데스크톱 전용 콘텐츠. 모바일(≤768px)은 CSS로 hide되므로 <source media>로 다운로드 자체를 차단(파일 412KB·디코드 ~44MB 절약) -->
+        <picture>
+          <source media="(min-width:769px)" srcset="img/oddmi/phones.webp">
+          <img class="acl-phones" alt="AI 실험 계정 스크린샷" loading="eager" width="3184" height="3504">
+        </picture>
 
         <p class="acl-kicker" data-bcl-anim="fade-up">
           <span class="acl-kicker__lab">AI CONTENT LAB</span>
@@ -2244,7 +2259,8 @@
       <section class="about__section about__section--acl2" id="sec-acl2" data-section="acl2" tabindex="-1">
         <span class="about__eyebrow" aria-hidden="true">AI CONTENT LAB — 02 EXPERIMENT JOURNEY</span>
 
-        <img class="acl-bg" src="img/oddmi/acl2bg.webp" aria-hidden="true" loading="eager" width="1920" height="1022">
+        <!-- .acl-bg는 전역 display:none(장식, 전 기기 미표시) → eager 시 622KB 무의미 다운로드. lazy로 전환해 다운로드 차단(시각 변화 없음) -->
+        <img class="acl-bg" src="img/oddmi/acl2bg.webp" aria-hidden="true" loading="lazy" width="1920" height="1022">
 
         <p class="acl2-kicker" data-bcl-anim="fade-up">
           <span class="acl2-kicker__lab">AI CONTENT LAB</span>
@@ -2279,7 +2295,7 @@
             <div class="acl2-step__tags">
               <span>#ASMR</span><span>#몰입형콘텐츠</span><span>#반응비교</span>
             </div>
-            <img class="acl2-step__img" src="img/oddmi/step01.webp" alt="AI ASMR 콘텐츠 실험" loading="eager" width="552" height="796">
+            <img class="acl2-step__img" src="img/oddmi/step01.webp" alt="AI ASMR 콘텐츠 실험" loading="lazy" width="552" height="796">
             <div class="acl2-step__insight">
               <span class="acl2-step__insight-label">KEY INSIGHT</span>
               <p>시각적 자극이 강한 콘텐츠가<br>짧은 조회 시간 내 높은 반응을 얻음</p>
@@ -2294,7 +2310,7 @@
             <div class="acl2-step__tags">
               <span>#Python</span><span>#JSON</span><span>#카드뉴스자동화</span>
             </div>
-            <img class="acl2-step__img" src="img/oddmi/step02.webp" alt="카드뉴스 자동화 실험" loading="eager" width="544" height="788">
+            <img class="acl2-step__img" src="img/oddmi/step02.webp" alt="카드뉴스 자동화 실험" loading="lazy" width="544" height="788">
             <div class="acl2-step__insight">
               <span class="acl2-step__insight-label">KEY INSIGHT</span>
               <p>자동화 제작으로<br>콘텐츠 생산 속도와 일관성 개선</p>
@@ -2309,7 +2325,7 @@
             <div class="acl2-step__tags">
               <span>#ClaudeDesign</span><span>#제작효율</span><span>#자동화</span>
             </div>
-            <img class="acl2-step__img" src="img/oddmi/step03.webp" alt="Claude Design 자동화" loading="eager" width="544" height="796">
+            <img class="acl2-step__img" src="img/oddmi/step03.webp" alt="Claude Design 자동화" loading="lazy" width="544" height="796">
             <div class="acl2-step__insight">
               <span class="acl2-step__insight-label">KEY INSIGHT</span>
               <p>기획+디자인 자동화로<br>정보 전달력과 제작 효율 확보</p>
@@ -2320,7 +2336,11 @@
 
       <!-- ── ACL3: PLATFORM RESPONSE ─────────────────────────── -->
       <section class="about__section about__section--acl3" id="sec-acl3" data-section="acl3" tabindex="-1">
-        <img class="acl3-bg" src="img/oddmi/acl3_bg.webp" aria-hidden="true" loading="eager" width="1920" height="1022">
+        <!-- 데스크톱 전용 배경. 모바일은 CSS로 hide되므로 <source media>로 다운로드 차단(305KB 절약) -->
+        <picture>
+          <source media="(min-width:769px)" srcset="img/oddmi/acl3_bg.webp">
+          <img class="acl3-bg" alt="" aria-hidden="true" loading="eager" width="1920" height="1022">
+        </picture>
 
         <!-- Left column -->
         <p class="acl3-kicker" data-bcl-anim="fade-up">
@@ -2350,7 +2370,7 @@
         <!-- Instagram card -->
         <div class="acl3-platform acl3-platform--insta" data-bcl-anim="fade-up" style="--bcl-delay:.3s">
           <div class="acl3-platform__header">
-            <img class="acl3-platform__icon" src="img/oddmi/icon_instagram.webp" alt="Instagram" loading="eager">
+            <img class="acl3-platform__icon" src="img/oddmi/icon_instagram.webp" alt="Instagram" loading="lazy">
             <span class="acl3-platform__name">Instagram에서 반응한 포맷</span>
           </div>
           <div class="acl3-platform__row">
@@ -2377,7 +2397,7 @@
         <!-- TikTok card -->
         <div class="acl3-platform acl3-platform--tiktok" data-bcl-anim="fade-up" style="--bcl-delay:.35s">
           <div class="acl3-platform__header">
-            <img class="acl3-platform__icon" src="img/oddmi/icon_tiktok.webp" alt="TikTok" loading="eager">
+            <img class="acl3-platform__icon" src="img/oddmi/icon_tiktok.webp" alt="TikTok" loading="lazy">
             <span class="acl3-platform__name">TikTok에서 반응한 포맷</span>
           </div>
           <div class="acl3-platform__row">

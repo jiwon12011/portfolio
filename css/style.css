@@ -9093,18 +9093,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 .mktg-tagline p { margin: 0; }
 .mktg-tagline p + p { margin-top: 0.6%; }
 
-@media (max-width: 760px) {
-  .about__section--mktg { height: auto; min-height: 100svh; overflow: visible; }
-  .mktg-kicker         { position: relative; left: auto; top: auto; padding: 56px 28px 0; display: block; }
-  .mktg-title          { position: relative; left: auto; top: auto; padding: 14px 28px 0; display: block; font-size: clamp(34px, 10vw, 60px); }
-  .mktg-tags           { position: relative; left: auto; top: auto; padding: 16px 28px 0; }
-  .mktg-desc           { position: relative; left: auto; top: auto; padding: 10px 28px 0; width: auto; }
-  .mktg-cta            { position: relative; left: auto; top: auto; margin: 18px 28px 0; }
-  .mktg-platform-icons { position: relative; left: auto; top: auto; padding: 18px 28px 0; }
-  .mktg-img--phone     { position: relative; left: auto; top: auto; transform: none; width: 70vw; max-width: 320px; margin: 24px auto 0; display: block; }
-  .mktg-stats          { position: relative; left: auto; top: auto; margin: 24px 28px 0; grid-template-columns: repeat(2, 1fr); width: calc(100% - 56px); }
-  .mktg-tagline        { position: relative; left: auto; top: auto; padding: 20px 28px 40px; width: auto; }
-}
+/* (구 @media max-width:760px 마케팅 부분 리플로우 → 768 portrait 컨벤션으로 통합·이전. 파일 하단 📱 about 블록 참조) */
 
 /* ============================================================
    FRAME 343 — PROCESS (02 SYSTEM)
@@ -10663,6 +10652,254 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 /* ---- SVG draw: opacity 숨김 제외 (경로 자체는 dashoffset으로 제어) ---- */
 [data-bcl-anim="svg-draw"]:not(.bcl-visible) {
   opacity: 1 !important;
+}
+
+/* ======================================================================
+   📱 ABOUT 패널 모바일 1열 리플로우 (≤768 portrait)
+   제작과정 8패널과 동일 패턴: 고정프레임→흐름형, 절대배치→세로 적층,
+   cqw/vw 폰트→clamp(본문≥13px), 장식배경·목업 hide.
+   데스크톱(>768 또는 가로)은 일절 영향 없음.
+====================================================================== */
+@media (max-width: 768px) and (orientation: portrait) {
+
+  /* ── 공통: 우측 점 네비/BACK은 fixed 유지, 가로 오버플로 차단 ── */
+  .about__scroll { overflow-x: hidden; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about resume (#sec-resume) — 흐름형 2열→1열, 거대 photo 캡
+     (.about__inner/.about__grid 1열화는 880 쿼리가 이미 처리)
+  ─────────────────────────────────────────────────────────────── */
+  #sec-resume { justify-content: flex-start; }
+  #sec-resume .about__inner { padding: 56px clamp(20px, 5vw, 28px) 40px; gap: 28px; }
+  #sec-resume .about__photo { width: min(100%, 280px); max-height: none; }
+  #sec-resume .about__grid  { gap: 36px 0; margin-top: 28px; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about marketing (#sec-marketing) — 고정프레임→흐름, 절대→static
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--mktg {
+    height: auto; min-height: auto; overflow: visible;
+    justify-content: flex-start; padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  .mktg-kicker, .mktg-title, .mktg-desc, .mktg-tags, .mktg-cta,
+  .mktg-platform-icons, .mktg-img--phone, .mktg-stats, .mktg-tagline {
+    position: static; left: auto; top: auto; right: auto;
+    transform: none; width: auto; max-width: none;
+  }
+  .mktg-kicker         { margin: 0 0 12px; }
+  .mktg-title          { margin: 0 0 16px; font-size: clamp(30px, 8.5vw, 46px); }
+  .mktg-desc           { margin: 0 0 16px; }
+  .mktg-tags           { margin: 0 0 20px; }
+  .mktg-cta            { display: inline-flex; margin: 0 0 24px; }
+  .mktg-platform-icons { margin: 0 0 28px; }
+  .mktg-img--phone     { width: min(72%, 300px); height: auto; margin: 0 auto 28px; display: block; }
+  /* phone-float(IO) 애니메이션이 translateY(-50%)로 폰을 끌어올려 타이틀과 겹침 + 박스 높이만큼 빈공간 →
+     attr+.bcl-visible(0,2,0)보다 높은 specificity + !important로 transform/animation 무력화, 정적 1열 흐름 고정 */
+  .mktg-img--phone[data-bcl-anim="phone-float"],
+  .mktg-img--phone[data-bcl-anim="phone-float"]:not(.bcl-visible),
+  .mktg-img--phone[data-bcl-anim="phone-float"].bcl-visible {
+    position: static !important; left: auto !important; top: auto !important;
+    right: auto !important; bottom: auto !important;
+    animation: none !important; transform: none !important; opacity: 1 !important;
+  }
+  .mktg-stats          { grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 0 0 24px; }
+  .mktg-stat           { height: auto; min-height: 120px; }
+  .mktg-stat__label    { font-size: 13px; }
+  .mktg-stat__note     { font-size: 11px; }
+  .mktg-tagline        { margin: 0; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about process (#sec-process) — 플로우차트 장식 hide + 스텝/카드 적층
+     (id 프리픽스로 .proc-card[data-bcl-anim] 오버라이드 specificity 이김)
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--proc {
+    height: auto; min-height: auto; overflow: visible;
+    justify-content: flex-start; padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  /* 장식 플로우 비주얼 전부 hide (원/아이콘/화살표/센터카드/SVG 커넥터) */
+  .proc-circle, .proc-si, .proc-arrow, .proc-connectors,
+  .proc-center-pill, .proc-center-img { display: none !important; }
+  /* 플랫폼 카드 안 폰 목업/스크린샷도 장식 → hide */
+  .proc-card__phone, .proc-card__phone-bg, .proc-card__screenshot { display: none !important; }
+
+  .proc-kicker, .proc-title, .proc-subtitle {
+    position: static; left: auto; top: auto;
+  }
+  .proc-kicker   { margin: 0 0 12px; }
+  .proc-title    { margin: 0 0 16px; font-size: clamp(28px, 7.5vw, 44px); }
+  .proc-subtitle { margin: 0 0 4px; font-size: 14px; }
+
+  /* 스텝 라벨 → 세로 번호 리스트 */
+  #sec-process .proc-sl {
+    position: static; left: auto !important; top: auto; width: auto !important;
+    align-items: flex-start; text-align: left; gap: 2px;
+    padding: 14px 0; border-bottom: 1px solid #f3d9d9;
+  }
+  #sec-process .proc-sl__num  { width: auto; font-size: 13px; font-weight: 600; }
+  #sec-process .proc-sl__name { font-size: 16px; font-weight: 600; color: #222; }
+  #sec-process .proc-sl__desc { font-size: 13px; }
+
+  /* 플랫폼 카드 → 풀폭 적층 + 내부 절대배치 흐름화 */
+  #sec-process .proc-card {
+    position: static; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; transform: none !important;
+    padding: 18px; margin: 12px 0 0;
+  }
+  #sec-process .proc-card:first-of-type { margin-top: 20px; }
+  #sec-process .proc-card:hover { transform: none !important; box-shadow: 4px 4px 4px 0 rgba(222, 200, 199, 0.3); }
+  #sec-process .proc-card__badge, #sec-process .proc-card__name,
+  #sec-process .proc-card__metric, #sec-process .proc-card__stat,
+  #sec-process .proc-card__stat-desc {
+    position: static; left: auto !important; top: auto !important;
+    width: auto !important; transform: none !important;
+  }
+  #sec-process .proc-card__badge { display: inline-block; width: 28px; height: 28px; margin-bottom: 8px; }
+  #sec-process .proc-card__name  { font-size: 16px; }
+  #sec-process .proc-card__metric { font-size: 13px; margin: 4px 0 8px; }
+  #sec-process .proc-card__stat  { font-size: 14px; margin: 0 0 6px; }
+  #sec-process .proc-card__stat-desc { opacity: 1 !important; font-size: 13px; }
+
+  /* KEY POINT */
+  #sec-process .proc-keypoint {
+    position: static; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important;
+    padding: 18px; margin: 16px 0 0;
+  }
+  #sec-process .proc-kp__title, #sec-process .proc-kp__line2 { font-size: clamp(15px, 4vw, 18px); }
+  #sec-process .proc-kp__en { font-size: 12px; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about experiment (#sec-experiment) — insight + 테스트 3카드 적층
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--exp {
+    height: auto; min-height: auto; overflow: visible;
+    justify-content: flex-start; padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  .exp-kicker, .exp-title, .exp-subtitle, .exp-desc, .exp-insight-card, .exp-tests {
+    position: static; left: auto !important; top: auto !important;
+    width: auto !important; max-width: none;
+  }
+  .exp-kicker       { margin: 0 0 12px; }
+  .exp-title        { margin: 0 0 16px; font-size: clamp(28px, 7.5vw, 44px); white-space: normal; }
+  .exp-subtitle     { margin: 0 0 8px; white-space: normal; }
+  .exp-desc         { margin: 0 0 20px; }
+  .exp-insight-card { margin: 0 0 24px; }
+  .exp-tests        { height: auto !important; gap: 12px; }
+  .exp-test         { flex: 0 0 auto; flex-direction: column; height: auto; align-items: stretch; padding: 18px; gap: 12px; }
+  .exp-test__visual { width: auto; }
+  .exp-test__visual--icon { width: auto; align-self: center; min-height: 90px; }
+  .exp-test__content { border-right: 0; border-bottom: 1px solid #f0d8d8; padding: 0 0 12px; }
+  .exp-test__result  { width: auto; padding: 0; }
+  .exp-test__q       { font-size: clamp(16px, 4.6vw, 22px); }
+  .exp-test__desc, .exp-test__conclusion { font-size: 13px; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about result (#sec-result) — stat4 + screens + 도넛 적층
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--rslt {
+    height: auto; min-height: auto; overflow: visible;
+    justify-content: flex-start; padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  .rslt-kicker, .rslt-title, .rslt-subtitle, .rslt-desc,
+  .rslt-insight-card, .rslt-stat, .rslt-screens-card, .rslt-donut-card {
+    position: static; left: auto !important; top: auto !important;
+    width: auto !important; max-width: none;
+  }
+  .rslt-kicker       { margin: 0 0 12px; }
+  .rslt-title        { margin: 0 0 16px; font-size: clamp(28px, 7.5vw, 44px); }
+  .rslt-subtitle     { margin: 0 0 8px; white-space: normal; }
+  .rslt-desc         { margin: 0 0 20px; }
+  .rslt-insight-card { margin: 0 0 22px; }
+  .rslt-stat         { height: auto; padding: 18px; margin: 0 0 12px; }
+  .rslt-stat__icon   { margin-top: 0; }
+  .rslt-stat__name   { margin-top: 10px; font-size: 14px; }
+  .rslt-stat__label  { margin-top: 10px; font-size: 13px; }
+  .rslt-stat__num    { margin-top: 6px; }
+  .rslt-stat__change { margin-top: 10px; font-size: 13px; }
+  .rslt-screens-card { height: auto; padding: 18px; margin: 0 0 16px; }
+  .rslt-screens__row  { flex-wrap: wrap; gap: 12px; }
+  .rslt-screens__item { flex: 1 1 42%; }
+  .rslt-screens__item img { height: 150px; flex: none; }
+  .rslt-screens__item p   { font-size: 12px; }
+  .rslt-donut-card   { height: auto; padding: 20px 18px 24px; margin: 0; }
+  /* 도넛은 모바일 최종상태 강제(IO 미발화 대비) */
+  .rslt-donut        { --donut-fill: 322deg !important; }
+  .rslt-donut__pct   { opacity: 1 !important; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about acl / AI LAB (#sec-acl) — bg·거대 phones hide, 텍스트 1열
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--acl {
+    height: auto; min-height: auto; overflow: visible;
+    justify-content: flex-start; padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  /* 3184×3504 eager 목업 — 모바일 페이로드/레이아웃 부적합 → hide (※ src 다운로드는 JS/HTML에서 별도 차단 권장) */
+  .acl-phones { display: none !important; }
+  .acl-kicker, .acl-title, .acl-sub, .acl-desc, .acl-tags, .acl-cta, .acl-platform-icons {
+    position: static; left: auto; top: auto; width: auto !important; height: auto;
+  }
+  .acl-kicker { margin: 0 0 12px; }
+  .acl-title  { margin: 0 0 16px; font-size: clamp(30px, 8vw, 48px); }
+  .acl-sub    { margin: 0 0 16px; font-size: clamp(18px, 5vw, 26px); }
+  .acl-desc   { margin: 0 0 18px; }
+  .acl-tags   { margin: 0 0 20px; }
+  .acl-tags span { font-size: 14px; }
+  .acl-cta    { display: inline-flex; padding: 12px 20px; margin: 0 0 22px; }
+  .acl-platform-icons { margin: 0; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about acl2 / 실험여정 (#sec-acl2) — 스텝 3카드 1열 (bg는 전역 hide)
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--acl2 {
+    height: auto; min-height: auto; overflow: visible;
+    padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  .acl2-kicker, .acl2-title, .acl2-desc, .acl2-purpose, .acl2-steps {
+    position: static; left: auto; top: auto;
+    width: auto !important; height: auto !important; max-width: none !important;
+  }
+  .acl2-kicker  { margin: 0 0 12px; }
+  .acl2-title   { margin: 0 0 16px; font-size: clamp(26px, 7vw, 40px); }
+  .acl2-desc    { margin: 0 0 18px; }
+  .acl2-purpose { margin: 0 0 22px; }
+  .acl2-purpose__list li { font-size: 14px; }
+  .acl2-steps   { flex-direction: column; gap: 12px; }
+  .acl2-step    { flex: none; height: auto; }
+  .acl2-step__title { font-size: clamp(16px, 4.6vw, 22px); }
+  .acl2-step__desc  { font-size: 13px; }
+  .acl2-step__img   { flex: none; height: auto; max-height: 360px; margin-top: 12px; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about acl3 / 플랫폼반응 (#sec-acl3) — bg hide, 플랫폼 2카드 적층
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--acl3 {
+    height: auto; min-height: auto; overflow: visible;
+    justify-content: flex-start; padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  .acl3-bg { display: none !important; }
+  .acl3-kicker, .acl3-title, .acl3-desc, .acl3-insights, .acl3-platform, .acl3-summary {
+    position: static; left: auto !important; top: auto !important;
+    width: auto !important; height: auto !important; max-width: none;
+  }
+  .acl3-kicker   { margin: 0 0 12px; }
+  .acl3-title    { margin: 0 0 16px; font-size: clamp(26px, 7vw, 42px); }
+  .acl3-desc     { margin: 0 0 20px; }
+  .acl3-insights { margin: 0 0 22px; }
+  .acl3-insights__list li { font-size: 14px; }
+  .acl3-platform { margin: 0 0 16px; }
+  .acl3-platform__desc { font-size: 14px; }
+  .acl3-platform__thumbs { height: clamp(90px, 28vw, 140px); }
+  .acl3-pstat__label { font-size: 11px; }
+  .acl3-summary  { margin: 0; flex-direction: column; align-items: flex-start; gap: 12px; padding: 18px; }
+  .acl3-summary__text { font-size: 14px; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about projects / 그래픽 (#sec-projects) — 이미 가로갤러리, 간격만
+  ─────────────────────────────────────────────────────────────── */
+  /* 그래픽 섹션: min-height:100svh 잔존 → 100svh 차지하며 위가 비어 보임.
+     min-height:auto+flex-start로 콘텐츠에 붙임 (가로 트랙은 gallery.js native라 무영향) */
+  .about__section--gallery { min-height: auto; justify-content: flex-start; padding-top: 56px; }
+  .banner-track { height: clamp(300px, 52vh, 480px); }
 }
 
 /* =====================================================================

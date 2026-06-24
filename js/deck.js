@@ -337,6 +337,18 @@
     if (dx < 0) go(1); else go(-1);
   }, { passive: true });
 
-  /* 초기 LCP 끝난 뒤(1.5s) 옆 영상 미리 버퍼 + 첫 프레임 디코드(warm) → 첫 슬라이드 끊김 제거 */
-  setTimeout(() => { preloadNeighbors(); warmNeighbors(); }, 1500);
+  /* 옆 영상 선로딩은 window.load 이후 idle 시점으로 미룬다 → 스플래시 load와 대역폭 경쟁 방지.
+     slide() 내부 preloadNeighbors()가 매 전환마다 돌아 실제 진입 전 충분히 warm됨. */
+  const _isMobile = () => window.innerWidth <= 768;
+  function _initNeighborWarm(){
+    preloadNeighbors();
+    if (!_isMobile()) warmNeighbors();   // 모바일은 디코더 warm 생략(배터리·메모리)
+  }
+  function _scheduleWarm(){
+    ('requestIdleCallback' in window)
+      ? requestIdleCallback(_initNeighborWarm, { timeout: 2000 })
+      : setTimeout(_initNeighborWarm, 300);
+  }
+  if (document.readyState === 'complete') _scheduleWarm();
+  else window.addEventListener('load', _scheduleWarm, { once: true });
 })();
