@@ -19,14 +19,14 @@
 
   /* I1 — 카드→인트로 clip-path 모핑 전환
      메인(panel0)에서 인트로로 갈 때만, 클릭된 카드의 뷰포트 좌표를 inset 시작값으로 씀.
-     prefers-reduced-motion · 모바일(≤768) · rect 취득 실패 시 → 기존 슬라이드 폴백. */
+     prefers-reduced-motion · 모바일(≤1024) · rect 취득 실패 시 → 기존 슬라이드 폴백. */
   const MORPH_EASE = "clip-path .62s cubic-bezier(.7,0,.2,1)";
   let pendingMorphRect = null;   // 카드 클릭 시 저장, slide() 에서 소비
 
   function tryCardMorph(inc) {
     /* 폴백 조건 체크 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-    if (window.innerWidth <= 768) return false;
+    if (matchMedia("(max-width:1024px) and (orientation:portrait)").matches) return false;
     const rect = pendingMorphRect;
     pendingMorphRect = null;
     if (!rect) return false;
@@ -323,7 +323,7 @@
   let tx = 0, ty = 0;
   /* 모바일 세로 판별 함수: 메인(idx=0)에서 다이얼이 가로 제스처를 독점.
      wheel·keydown 은 그대로 유지 — 터치 스와이프만 양보. */
-  const isDialMode = () => matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+  const isDialMode = () => matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
   window.addEventListener("touchstart", (e) => {
     tx = e.touches[0].clientX; ty = e.touches[0].clientY;
   }, { passive: true });
@@ -339,7 +339,7 @@
 
   /* 옆 영상 선로딩은 window.load 이후 idle 시점으로 미룬다 → 스플래시 load와 대역폭 경쟁 방지.
      slide() 내부 preloadNeighbors()가 매 전환마다 돌아 실제 진입 전 충분히 warm됨. */
-  const _isMobile = () => window.innerWidth <= 768;
+  const _isMobile = () => matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
   function _initNeighborWarm(){
     preloadNeighbors();
     if (!_isMobile()) warmNeighbors();   // 모바일은 디코더 warm 생략(배터리·메모리)

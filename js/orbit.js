@@ -203,8 +203,22 @@
      rAF · SVG 링 생성 · canvas 파티클 · 카드 배치 전부 스킵.
      카드 opacity:0(CSS 초기값) 해제 소유권은 orbit-mobile.js 로 이전.
      데스크톱/태블릿 경로는 완전 불변. ── */
-  const isMobilePortrait = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
-  if (isMobilePortrait) return;
+  const _mqlPortrait     = matchMedia("(max-width:1024px) and (orientation:portrait)");
+  const isMobilePortrait = _mqlPortrait.matches;
+  if (isMobilePortrait) {
+    /* 모바일 세로로 로드됐을 때:
+       뷰포트가 데스크톱으로 바뀌면(MQ 해제) 1회 reload → orbit 정상 초기화.
+       orbit.js 는 "1회 초기화 구조"라 boot() 재진입보다 reload 가 안전하다.
+       (버전 토글도 동일 패턴 — wireVerToggle 참고)
+       reload 후 _mqlPortrait.matches = false → 이 분기를 건너뛰고 정상 경로 진행. */
+    _mqlPortrait.addEventListener("change", function _onPortraitChange(e) {
+      if (!e.matches) {
+        _mqlPortrait.removeEventListener("change", _onPortraitChange);
+        location.reload();
+      }
+    });
+    return;
+  }
 
   /* ── 인터랙션 상태 ───────────────────────────────────────────────
      phase     : 누적 회전각(라디안). dt 기반으로만 증가.

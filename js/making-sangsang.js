@@ -30,10 +30,10 @@
     /* reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
-    /* 모바일(≤768px portrait) — 핀/scrub 3종(ss-intro·ss1·ss3) 비활성화.
+    /* 모바일(≤1024px portrait) — 핀/scrub 3종(ss-intro·ss1·ss3) 비활성화.
      * CSS가 핀 래퍼 height:auto·position:static으로 처리하므로
      * JS가 인라인 height/top을 덮어쓰지 않도록 해당 블록 자체를 skip. */
-    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+    const isMobile = matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
 
     /* once 진입 트리거 공통 옵션 */
     const ST = (trigger, start = "top 84%") => ({

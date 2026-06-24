@@ -39,7 +39,7 @@
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
     /* 모바일 portrait — scrub 트윈 비활성화 (데스크톱 무회귀) */
-    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+    const isMobile = matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
 
     /* once 진입 트리거 공통 옵션
        기본값 "top 90%" — 짧은 모달 스크롤러에서 하위 섹션 도달 불가 방지 */

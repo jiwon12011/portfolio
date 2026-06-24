@@ -22,10 +22,10 @@
     /* reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
-    /* 모바일 세로(≤768px portrait) — 핀/scrub 비활성.
+    /* 모바일 세로(≤1024px portrait) — 핀/scrub 비활성.
        from-상태(opacity:0, scale·rotation 등)를 적용하지 않아 요소가 CSS 기본값(보임)으로 유지.
        once 진입 리빌은 데스크톱과 동일하게 유지. */
-    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+    const isMobile = matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
 
     /* once 진입 트리거 공통 옵션 */
     const ST = (trigger, start = "top 84%") => ({ trigger, scroller, start, once: true });

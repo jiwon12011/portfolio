@@ -19,8 +19,8 @@
     // 모션 최소화 → 애니메이션 없이 정상 표시
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
-    // 모바일(≤768px portrait) — 핀/scrub 비활성화, 데이터시각화 최종상태 즉시 적용
-    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+    // 모바일(≤1024px portrait) — 핀/scrub 비활성화, 데이터시각화 최종상태 즉시 적용
+    const isMobile = matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
 
     gsap.registerPlugin(ScrollTrigger);
     const ST = (trigger, start = "top 86%") => ({ trigger, scroller, start, once: true });

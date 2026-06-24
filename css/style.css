@@ -1825,7 +1825,7 @@ html.process-open { overflow: hidden; }
    · .process__hero / .process__cards 는 8개 개요 첫 섹션에만 존재 → 직접 타깃 안전.
      (본문 속 분위기 배너 등은 다른 클래스라 영향 없음)
 =================================================================== */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
   /* 1) 개요 큰 영상/이미지 제거 (개요 process__hero 한정) */
   .process__hero { display: none !important; }
 
@@ -2747,7 +2747,7 @@ html.process-open { overflow: hidden; }
    타이틀 <b> 는 making-mathhub.js 가 .mh-emph(base 다크 + color 파랑 오버레이,
    둘 다 white-space:nowrap)로 감싸므로 모바일에선 color 한 겹만 inline 으로 노출해 줄바꿈시킨다.
    폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
   .mh-sec {
@@ -3696,7 +3696,7 @@ html.process-open { overflow: hidden; }
    ⚠️ 데스크톱 핀(ss-intro/ss1/ss3)은 reduced-motion 블록에만 비활성 규칙이 있어
    여기서 복제한다(JS scrub 은 motion 쪽이 모바일에서 따로 끔).
    폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* 열쇠 트레일(JS가 데스크톱 좌표로 흩뿌린 164개 장식 점) — 1열에선 좌표 안 맞아 우측으로 넘침 → 숨김 */
   #process-sangsang .ss-key-trail { display: none !important; }
@@ -4493,7 +4493,7 @@ html.process-open { overflow: hidden; }
    ⚠️ 데스크톱 핀(gw1/gw2/gw3 sticky, gw5 필름스트립)은 reduced-motion 블록에만 비활성 규칙이 있어
    여기서 복제한다(JS scrub/핀은 making-gwihon.js 가 isMobile 로 따로 끔).
    폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 (배경색은 데스크톱 규칙 유지) ── */
   .gw-sec {
@@ -5238,7 +5238,7 @@ html.process-open { overflow: hidden; }
    inline <span> 시각요소(룰/하트/도트/바)는 0×0 으로 붕괴하므로 display:block/inline-grid 로 살린다.
    절대 백드롭(bg·spine·rail·top 밴드)·커넥터·범례는 1열에서 안 맞으므로 숨김.
    폰트 cqw→clamp(min,vw,max), 본문 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖이라 무회귀. */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
   .pl-sec {
@@ -6459,7 +6459,7 @@ html.process-open { overflow: hidden; }
    행성·궤도 장식(::before/::after 절대 백드롭)은 1열에선 정렬이 안 맞아 숨김.
    타이틀 색강조(#ff4600)는 making-pledis.js 글로우가 once 트리거로 모바일에서도 점등 → 인라인 span 은 건드리지 않음.
    폰트 cqw→clamp, 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
-@media (max-width:768px) and (orientation:portrait) {
+@media (max-width:1024px) and (orientation:portrait) {
 
   /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
   .pd-sec {
@@ -7104,7 +7104,7 @@ html.process-open { overflow: hidden; }
    모바일에서 1열로 풀려면 다수 속성에 !important 가 필요하다. ym4 의 badge/clabel/cdesc 는
    index.html 에 인라인 style="left/top cqw" 가 박혀 있어 !important 로만 이긴다.
    폰트는 cqw→clamp(min,vw,max), 본문 바닥 ≥13px. 데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
   .ym-sec {
@@ -7614,7 +7614,7 @@ html.process-open { overflow: hidden; }
    ⚠️ 함정 처리: ①장식 곡선 SVG·중복 중앙라벨 hide ②inline <span> 룰/라인은 display:block(0×0 붕괴 방지)
    ③#pz-s7 핀 래퍼(220svh)·#pz-s8 sticky 는 일반 흐름으로 중화(motion 은 모바일서 별도 off).
    데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
   .pz-sec {
@@ -8233,7 +8233,7 @@ html.process-open { overflow: hidden; }
       핀 해제·cqw폰트→clamp·장식 hide·풀블리드 보정만 보강한다.
    라이트 세이지 그린 테마(--mk-green 계열·#fff/#ebf4e5 배경) 유지. 본문 바닥 ≥13px.
    데스크톱/태블릿은 이 미디어쿼리 밖에서 무회귀. */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* ── 섹션 공통: 절대배치/고정비율 해제 → 일반 흐름 ── */
   .mk-sec {
@@ -9093,7 +9093,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
 .mktg-tagline p { margin: 0; }
 .mktg-tagline p + p { margin-top: 0.6%; }
 
-/* (구 @media max-width:760px 마케팅 부분 리플로우 → 768 portrait 컨벤션으로 통합·이전. 파일 하단 📱 about 블록 참조) */
+/* (구 @media max-width:760px 마케팅 부분 리플로우 → 1024 portrait 컨벤션으로 통합·이전. 파일 하단 📱 about 블록 참조) */
 
 /* ============================================================
    FRAME 343 — PROCESS (02 SYSTEM)
@@ -10660,7 +10660,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
    cqw/vw 폰트→clamp(본문≥13px), 장식배경·목업 hide.
    데스크톱(>768 또는 가로)은 일절 영향 없음.
 ====================================================================== */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* ── 공통: 우측 점 네비/BACK은 fixed 유지, 가로 오버플로 차단 ── */
   .about__scroll { overflow-x: hidden; }
@@ -10911,7 +10911,7 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
    ===================================================================== */
 
 /* ─── 모바일 세로 전용 기반 규칙 ─────────────────────────────────── */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
   /* godray 호흡 애니메이션 정지 — 정적 유지(색 자체는 보임) */
   html.is-dial .hero-godray { animation: none; }
 
@@ -11055,7 +11055,7 @@ html.is-dial.deck-sliding .dial-about-capsule {
 /* 기본(모든 뷰포트): 모바일 컨테이너 숨김 → 데스크톱 무회귀 */
 .mobile-home { display: none; }
 
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) and (orientation: portrait) {
 
   /* 데스크톱 메인 크롬 비노출 (scene 은 밝은 mobile-home 이 완전히 덮음) */
   .scene .card-arm,
@@ -11351,4 +11351,22 @@ html.is-dial.deck-sliding .dial-about-capsule {
   @media (prefers-reduced-motion: reduce) {
     .mbh-orbit__ring { animation: none; transform: rotateX(-12deg) rotateY(-20deg); }
   }
+}
+
+/* ── 태블릿 세로(600~1024px portrait) 오빗 1.4배 확대 ──────────────────
+   폰(≤600 portrait)은 위 모바일 블록 그대로 무회귀. 이 블록이 source 뒤라
+   같은 specificity에서 600~1024 구간만 덮어쓴다.
+   카드 반경/폭은 root(.mobile-home) 인라인 변수를 못 이기므로 조상 stage에서 덮음. */
+@media (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
+  .mbh-orbit__path--a { width: 515px; height: 515px; }   /* 368×1.4 */
+  .mbh-orbit__path--b { width: 358px; height: 358px; }   /* 256×1.4 */
+  .mbh-orbit__glow    { width: 420px; height: 420px; }   /* 300×1.4 */
+  .mbh-orbit__stage {
+    width: 420px; height: 294px;                          /* 300×210 ×1.4 */
+    --mbh-ring-card-w: 132px;   /* 94×1.4, root 인라인을 조상 stage에서 덮음 */
+    --mbh-ring-r: 259px;        /* 185×1.4 */
+  }
+  .mbh-orbit__dot--1 { left: calc(50% - 214px); top: calc(50% + 28px); }
+  .mbh-orbit__dot--2 { left: calc(50% + 220px); top: calc(50% + 7px); }
+  .mbh-orbit__dot--3 { left: calc(50% - 8px);   top: calc(50% + 90px); width: 7px; height: 7px; }
 }

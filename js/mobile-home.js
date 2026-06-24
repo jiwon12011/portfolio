@@ -1,5 +1,5 @@
 /* =====================================================================
-   mobile-home.js — 모바일 세로 전용 메인 (≤768px portrait)
+   mobile-home.js — 모바일 세로 전용 메인 (≤1024px portrait)
    ---------------------------------------------------------------------
    확정 목업: 1페이지 세로 스크롤
      ① 히어로(풀블리드 = 기존 .scene 배경) + 워드마크 + 햄버거 + 자동회전 오빗 링
@@ -49,7 +49,7 @@
   };
 
   /* ── 게이트: 모바일 세로일 때만 의미. 다만 DOM 은 항상 빌드(회전 대응) ── */
-  const MQ = matchMedia("(max-width:768px) and (orientation:portrait)");
+  const MQ = matchMedia("(max-width:1024px) and (orientation:portrait)");
 
   const projects = (window.__introToc && window.__introToc.projects) || null;
   if (!projects || !projects.length) return;  // 단일 소스 없으면 중단(로드 순서 보장됨)
@@ -79,7 +79,7 @@
 
   const ringCardHTML = (it, i) => {
     const tf = 'translate(-50%,-50%) rotateY(' +
-      (i * ANGLE_STEP).toFixed(2) + 'deg) translateZ(' + RING_RADIUS + 'px)';
+      (i * ANGLE_STEP).toFixed(2) + 'deg) translateZ(var(--mbh-ring-r))';
     if (it.about) {
       return '<div class="mbh-orbit__card mbh-orbit__card--about" style="transform:' + tf + '">' +
         '<span class="mbh-ocard__name">' + esc(it.title) + '</span>' +
@@ -197,6 +197,7 @@
   /* 튜닝 상수 → CSS 변수(단일 소스: 이 파일) */
   root.style.setProperty("--mbh-persp", RING_PERSP + "px");
   root.style.setProperty("--mbh-ring-card-w", RING_CARD_W + "px");
+  root.style.setProperty("--mbh-ring-r", RING_RADIUS + "px");
 
   document.body.appendChild(root);
   document.documentElement.classList.toggle("is-mobile-home", MQ.matches);

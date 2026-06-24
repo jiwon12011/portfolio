@@ -54,7 +54,7 @@
   /* 카드 클릭 시: 그 카드 위치에서 풀스크린으로 clip-path 모핑(프로젝트 카드와 동일 연출).
      originRect 없으면(진주 네비·CTA 등) 기존 aboutIn 슬라이드 폴백. */
   const morphOpen = (rect) => {
-    if (!rect || reduce() || window.innerWidth <= 768) return false;
+    if (!rect || reduce() || matchMedia("(max-width:1024px) and (orientation:portrait)").matches) return false;
     const t = Math.round(rect.top), r = Math.round(innerWidth - rect.right),
           b = Math.round(innerHeight - rect.bottom), l = Math.round(rect.left);
     if (t < -200 || l < -200 || r < -200 || b < -200) return false;

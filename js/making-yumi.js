@@ -37,8 +37,8 @@
     /* prefers-reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
-    /* 모바일 portrait(≤768px) — scrub 패럴랙스/줌 3곳 생성 skip */
-    const isMobile = matchMedia("(max-width: 768px) and (orientation: portrait)").matches;
+    /* 모바일 portrait(≤1024px) — scrub 패럴랙스/줌 3곳 생성 skip */
+    const isMobile = matchMedia("(max-width: 1024px) and (orientation: portrait)").matches;
 
     /* ── 공통 헬퍼 ─────────────────────────────────────────────────── */
 

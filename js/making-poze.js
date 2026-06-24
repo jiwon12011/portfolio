@@ -7,7 +7,7 @@
      요소가 clip-path로 숨는 일 없음
    · window.__makingRefresh() (전역) 가 열릴 때 ScrollTrigger.refresh()를
      호출하므로 POZE 트리거도 함께 갱신됨
-   · 모바일(≤768px portrait): scrub·핀 전체 비활성.
+   · 모바일(≤1024px portrait): scrub·핀 전체 비활성.
      gsap.set() 포함 from-상태 적용 코드 자체를 실행하지 않아
      clip-path/구분선/색카드 등 모든 요소가 CSS 기본(최종·보임) 상태로 유지됨.
      reduced-motion early-return 과 동일한 "GSAP skip" 방식.
@@ -27,11 +27,11 @@
     /* reduced-motion → 모션 없이 정상 표시, 초기화는 완료로 처리 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
-    /* 모바일 portrait(≤768px): scrub·핀 전체 skip.
+    /* 모바일 portrait(≤1024px): scrub·핀 전체 skip.
        gsap.set()으로 clip-path 등 from-상태를 설정하는 코드도 실행하지 않아
        pathImg·rbTitle·pz-s7 색카드가 닫힌 채 고착되지 않는다.
        scrub이 아닌 once(ST) 트리거는 if 블록 밖에서 그대로 실행됨. */
-    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+    const isMobile = matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
 
     /* ScrollTrigger 헬퍼 (once 트리거 공통 옵션) */
     const ST = (trigger, start = "top 86%") => ({
@@ -298,7 +298,7 @@
     ================================================================ */
     const s5Vid = scroller.querySelector("#pz-s5 .pz-full-vid");
     if (s5Vid) {
-      const s5Blur = matchMedia("(max-width: 768px)").matches ? 0 : 7;   /* 모바일은 영상 blur 생략(디코드+blur 부담) */
+      const s5Blur = matchMedia("(max-width:1024px) and (orientation:portrait)").matches ? 0 : 7;   /* 모바일(태블릿 세로 포함)은 영상 blur 생략(디코드+blur 부담) */
       gsap.fromTo(s5Vid,
         { filter: `blur(${s5Blur}px)` },
         { filter: "blur(0px)", duration: 1.3, ease: "power3.out",
@@ -463,7 +463,7 @@
        화면 밖으로는 .pz-phone__screen 의 overflow:hidden 으로 안 보임.
        hover 이벤트: 모바일에서 mouseenter 발생 안 하므로 isMobile 가드 불필요.
        phoneDevice 등장 scrub(fromTo opacity/y): 모바일에서 비활성.
-       phoneBlur: 이미 (max-width:768px) 체크로 blur=0 → if(phoneBlur) 불통과 → 자동 skip.
+       phoneBlur: 이미 (max-width:1024px) 체크로 blur=0 → if(phoneBlur) 불통과 → 자동 skip.
     ================================================================ */
     const phoneDevice = scroller.querySelector("#pz-s9 .pz-phone__device");
     const phoneScreen = scroller.querySelector("#pz-s9 .pz-phone__screen");
@@ -501,8 +501,8 @@
             scrollTrigger: STS("#pz-s9", "top 84%", "top 50%") });
       }
 
-      /* 모바일(≤768px)은 filter 부담 커서 blur 생략(0). will-change 는 tween 동안만. */
-      const phoneBlur = matchMedia("(max-width: 768px)").matches ? 0 : 9;
+      /* 모바일(≤1024px portrait)은 filter 부담 커서 blur 생략(0). will-change 는 tween 동안만. */
+      const phoneBlur = matchMedia("(max-width:1024px) and (orientation:portrait)").matches ? 0 : 9;
       if (phoneBlur) {
         gsap.fromTo(phoneDevice,
           { filter: `blur(${phoneBlur}px)` },

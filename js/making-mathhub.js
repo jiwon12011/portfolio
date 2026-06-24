@@ -42,9 +42,9 @@
     /* reduced-motion → 모션 없이 정상 표시 */
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
 
-    /* 모바일(≤768px portrait) 판별 — scrub 핀은 1열 리플로우 레이아웃에서 오동작하므로 skip.
+    /* 모바일(≤1024px portrait) 판별 — scrub 핀은 1열 리플로우 레이아웃에서 오동작하므로 skip.
        once 진입 리빌·mh-emph 드로우는 모바일에서도 그대로 실행. */
-    const isMobile = matchMedia("(max-width:768px) and (orientation:portrait)").matches;
+    const isMobile = matchMedia("(max-width:1024px) and (orientation:portrait)").matches;
 
     /* once 진입 트리거 공통 옵션 */
     const ST = (trigger, start = "top 84%") => ({ trigger, scroller, start, once: true });
