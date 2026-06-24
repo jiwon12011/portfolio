@@ -8909,6 +8909,120 @@ html.lb-open { overflow: hidden; }
 }
 
 /* ===================================================================
+   EXPERIENCE & ACTIVITIES SECTION (#sec-exp / data-section="exp")
+   Figma 절대배치(1080px 고정) 익스포트를 시맨틱 반응형 그리드로 재구성한 다크 섹션.
+   ⚠️ prefix는 xp-/--xp 사용 — 기존 experiment 섹션이 exp-/--exp 를 이미 점유.
+=================================================================== */
+.about__section--xp {
+  background: #000;
+  height: auto;
+  min-height: 100svh;
+  justify-content: flex-start;
+  /* 좌우 여백 ~5.2vw(1920기준 100px) — Figma 와이드 레이아웃 */
+  padding: clamp(72px, 10vh, 132px) clamp(24px, 5.2vw, 110px) clamp(64px, 9vh, 120px);
+}
+
+/* Figma 1920 기준 콘텐츠 폭(좌100~우1819 ≈ 1720px) — 넓게 사용 */
+.xp-inner { width: 100%; max-width: 1760px; margin: 0 auto; }
+
+.xp-h {
+  margin: 0 0 clamp(28px, 4.4vh, 52px);
+  color: #fff;
+  font-size: clamp(28px, 2.4vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+}
+
+.xp-group { margin-top: clamp(34px, 4.8vh, 60px); }
+.xp-group:first-of-type { margin-top: 0; }
+
+.xp-cat {
+  margin: 0 0 clamp(16px, 2vh, 22px);
+  color: #f471a1;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.xp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(22px, 2.2vw, 36px) clamp(18px, 1.8vw, 30px);
+}
+
+.xp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;                                  /* 그리드 트랙 블로우아웃 방지 */
+}
+
+.xp-card__label {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease;
+}
+
+/* 둥근 pill 타이틀 — 검정 bg + 흰 1px 보더. 카드 폭 가득(모든 박스 동일 크기) + 텍스트 상하좌우 중앙정렬 */
+.xp-card__title {
+  margin: 0;
+  align-self: flex-start;         /* 카드 왼쪽 시작 — 라벨·불릿 텍스트와 X좌표 정렬 */
+  width: 92%;                     /* 카드 폭의 92% (오른쪽만 조금 짧게). 그리드 1fr 이라 모든 pill 동일 크기 */
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 18px;
+  background: #000;
+  border: 1px solid #fff;
+  border-radius: 34px;
+  color: #fff;
+  font-size: clamp(14px, 0.95vw, 16px);   /* 축소(20→16) */
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.xp-card__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.xp-card__list li {
+  position: relative;
+  padding-left: 14px;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+/* 카드(박스) 호버 시 해당 카드의 불릿 설명만 #DFBFCB(연한 로즈)로 밝힘 (날짜 라벨 제외) */
+.xp-card:hover .xp-card__list li { color: #DFBFCB; }
+.xp-card__list li::before {                      /* 불릿 도트 마커 */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: #777;
+}
+
+/* 중간폭(태블릿 가로 등) → 2열 */
+@media (max-width: 1280px) {
+  .xp-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ===================================================================
    MARKETING SECTION — AI Experiments (단미 Beauty Content Lab)
    Figma Frame 342 — 1920×1022 기준 비율 변환 (절대 포지셔닝)
 =================================================================== */
@@ -10693,6 +10807,19 @@ a.mktg-pi:hover { transform: scale(1.1); background: #f7e8ea; }
   #sec-resume .about__inner { padding: 56px clamp(20px, 5vw, 28px) 40px; gap: 28px; }
   #sec-resume .about__photo { width: min(100%, 280px); max-height: none; }
   #sec-resume .about__grid  { gap: 36px 0; margin-top: 28px; }
+
+  /* ───────────────────────────────────────────────────────────────
+     📱 about experience & activities (#sec-exp) — 카테고리별 카드 1열 적층
+  ─────────────────────────────────────────────────────────────── */
+  .about__section--xp {
+    min-height: auto;
+    padding: 56px clamp(20px, 5vw, 28px) 40px;
+  }
+  .xp-h    { margin-bottom: 28px; font-size: clamp(24px, 6.5vw, 30px); }
+  .xp-cat  { font-size: 13px; }
+  .xp-grid { grid-template-columns: 1fr; gap: 20px; }
+  .xp-card__title { font-size: clamp(14px, 4vw, 16px); }
+  .xp-card__list li { font-size: 13px; }
 
   /* ───────────────────────────────────────────────────────────────
      📱 about marketing (#sec-marketing) — 고정프레임→흐름, 절대→static
