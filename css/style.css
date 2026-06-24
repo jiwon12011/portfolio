@@ -726,6 +726,7 @@ img.is-empty { color: transparent; }
   --it-box-bg: rgba(255,255,255,0.16);
   --it-box-border: rgba(27,41,68,0.1);
   --it-on-accent: #fff;
+  --it-shadow: none;   /* 라이트 글래스 기본값 = 그림자 없음. 다크 글래스 테마만 켜서 가독성 보강 */
   /* 공유 변수는 테마 변수에 연동(기존 셀렉터 호환) */
   --glass: var(--it-box-bg);
   --line: var(--it-box-border);
@@ -946,6 +947,7 @@ html.deck-sliding .hero-godray { animation-play-state: paused; }
   --pad: clamp(28px, 3.4vw, 65px);
   --it-accent: #1b2944; --it-title: #1b2944; --it-text: rgba(27,41,68,0.72);
   --it-muted: rgba(27,41,68,0.56); --it-box-bg: rgba(255,255,255,0.16); --it-box-border: rgba(27,41,68,0.1);
+  --it-shadow: none;
   --glass: var(--it-box-bg); --muted: var(--it-muted);
   color: var(--it-text); font-family: Pretendard, sans-serif;
   /* 메인에선 숨김 → off-main(프로젝트 패널)일 때만 표시. opacity 로 부드럽게. */
@@ -1056,6 +1058,8 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 .intro-list__item[data-slot="0"] {
   opacity: 1;
   transform: scale(1);
+  /* 가운데 칸만 다크 글래스 프레임 위 → 텍스트 그림자로 가독성 보강(옆칸은 흐린 영상 위라 제외) */
+  text-shadow: var(--it-shadow);
   /* 안착 강조: 가운데 카드에 은은한 발광(줄어들고 사라지는 한 번 반짝) */
   animation: pickerSettle .45s cubic-bezier(.22,1,.36,1) both;
 }
@@ -1232,6 +1236,9 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
     0 14px 30px -18px rgba(18,22,30,0.30),
     inset 0 1px 2px rgba(255,255,255,0.45),
     inset 0 -1px 1px rgba(20,30,50,0.05);
+  /* 저투명 다크 글래스(--it-shadow set 테마)에서 밝은 글자가 영상 비침에도 또렷하게.
+     라이트 글래스(default·jaringobi)는 --it-shadow:none 이라 무효. text-shadow 는 자식 텍스트로 상속. */
+  text-shadow: var(--it-shadow);
 }
 /* 공유 rim light ::before — 선택 프레임은 테마색 글래스로 별도 처리(::before 미사용) */
 .intro-process::before,
@@ -1288,6 +1295,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
   --it-box-bg: rgba(48,38,24,0.30);
   --it-box-border: rgba(232,192,116,0.42);
   --it-on-accent: #2c2214;
+  --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
   --it-eq: linear-gradient(180deg, #f3dca0, #e8c074);
 }
 #intro-gwihon .intro-grad {
@@ -1307,6 +1315,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
   --it-box-bg: rgba(40,26,42,0.46);
   --it-box-border: rgba(230,169,196,0.40);
   --it-on-accent: #fff;
+  --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
   --it-eq: linear-gradient(180deg, #e0c0d0, #d49bb5);
 }
 /* yumi 영상도 어두운 침실↔밝은 핑크 UI 로 변동 → 좌측 어두운 플럼 스크림으로
@@ -1329,6 +1338,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
   --it-box-bg: rgba(40,33,25,0.46);
   --it-box-border: rgba(188,206,150,0.40);
   --it-on-accent: #2b2a1d;
+  --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
   --it-eq: linear-gradient(180deg, #cfdcab, #bcce96);
 }
 #intro-poze .intro-grad {
@@ -1348,6 +1358,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
   --it-box-bg: rgba(36,26,12,0.46);
   --it-box-border: rgba(212,169,64,0.38);
   --it-on-accent: #1e1506;
+  --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
   --it-eq: linear-gradient(180deg, #e0c880, #d4a940);
 }
 #intro-pledis .intro-grad {
@@ -1362,6 +1373,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 .intro-list--live[data-project="mathhub"] {
   --it-accent: #7fb0e8; --it-title: #eef3fb; --it-text: #d8e2f2; --it-muted: rgba(216,226,242,0.66);
   --it-box-bg: rgba(28,40,68,0.34); --it-box-border: rgba(127,176,232,0.42); --it-on-accent: #16233e;
+  --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
   --it-eq: linear-gradient(180deg, #cfe0f7, #7fb0e8);
 }
 #intro-mathhub .intro-grad {
@@ -1375,6 +1387,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 .intro-list--live[data-project="sangsang"] {
   --it-accent: #e0c179; --it-title: #f3eede; --it-text: #e4dcc6; --it-muted: rgba(228,220,198,0.68);
   --it-box-bg: rgba(20,26,44,0.36); --it-box-border: rgba(224,193,121,0.40); --it-on-accent: #1a2138;
+  --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
   --it-eq: linear-gradient(180deg, #f0dca6, #e0c179);
 }
 #intro-sangsang .intro-grad {
@@ -1388,6 +1401,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 .intro-list--live[data-project="playlist"] {
   --it-accent: #c8b8e8; --it-title: #f0ebfa; --it-text: #dbd2ee; --it-muted: rgba(219,210,238,0.66);
   --it-box-bg: rgba(38,28,58,0.36); --it-box-border: rgba(180,160,220,0.40); --it-on-accent: #1d1630;
+  --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
 }
 #intro-playlist .intro-grad {
   background:
@@ -1673,6 +1687,12 @@ html.process-open { overflow: hidden; }
 .process--gwihon .process__exit-arrow svg { stroke: rgba(243,231,215,0.82); }
 .process--gwihon .process__exit-fill { background: rgba(240,206,140,0.92); }
 .process--gwihon.is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(246,200,115,.95), rgba(232,145,63,1)); box-shadow: 0 0 10px rgba(232,145,63,.55); }
+/* MathHub 톤 (블루) — base coral 폴백 오버라이드 */
+.process--mathhub.is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(138,180,255,.95), rgba(75,115,232,1)); box-shadow: 0 0 10px rgba(75,115,232,.55); }
+/* 플레디스 톤 (오렌지레드) */
+.process--pledis.is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(255,150,110,.95), rgba(214,90,61,1)); box-shadow: 0 0 10px rgba(214,90,61,.55); }
+/* 자린고비 톤 (세이지 그린) — modifier 없는 base 패널이라 data-project로만 타기팅(playlist·yumi 폴백 불변) */
+.process[data-project="jaringobi"].is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(150,176,118,.95), rgba(95,113,69,1)); box-shadow: 0 0 10px rgba(95,113,69,.55); }
 @media (prefers-reduced-motion: reduce) {
   .process__exit { transition: opacity .15s ease; transform: none; }
   .process.is-near-end .process__exit { transform: none; }
@@ -2004,7 +2024,7 @@ html.process-open { overflow: hidden; }
 .process--pledis .process__tracks i { color: #8a91b2; }
 .process--pledis .process__tplay { fill: #b6bcd6; }
 .process--pledis .process__tracks a:hover {
-  background: rgba(220,224,240,0.10); border-color: rgba(224,214,200,0.22); }
+  background: rgba(238,222,202,0.10); border-color: rgba(224,214,200,0.22); }
 /* active = 밝은 피치/크림 패널 + 어두운 네이비 글자 */
 .process--pledis .process__tracks .is-active a {
   background: linear-gradient(155deg, rgba(238,222,202,0.96), rgba(226,206,182,0.95));
@@ -2023,11 +2043,11 @@ html.process-open { overflow: hidden; }
 .process--pledis .process__now-meta strong { color: #e8ebf5; }
 .process--pledis .process__now-ctrl button { color: #c2c8de; }
 .process--pledis .process__now-ctrl button:hover { color: #fff; }
-/* NOW PLAYING 앨범아트 — 가로형 워드마크라 네이비 타일 위에 contain 으로 앉혀 앨범커버 느낌(POZE 처럼) */
+/* 목차 썸네일(불투명 우주 이미지)로 교체 — 워드마크용 contain/네이비 타일 불필요 */
 .process--pledis .process__now-art {
-  object-fit: contain; padding: 8px;
-  background: linear-gradient(150deg, #3a4166, #2a3050);
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.08); }
+  object-fit: cover; padding: 0;
+  background: none;
+  box-shadow: none; }
 /* 카드 */
 .process--pledis .pcard {
   background: linear-gradient(160deg, rgba(54,62,90,0.52), rgba(40,46,68,0.40));
@@ -3098,10 +3118,10 @@ html.process-open { overflow: hidden; }
 .process--gwihon .process__now {
   background: linear-gradient(160deg, rgba(52,46,40,0.58), rgba(38,33,29,0.44));
   border-color: rgba(255,244,230,0.14); }
-/* 불 아이콘(투명)이 떠 보이지 않게 — 아이콘 뒤 작은 앰버-다크 박스 */
+/* 목차 썸네일(불투명 달밤 이미지)로 교체 — 투명 아이콘용 앰버-다크 박스 불필요 */
 .process--gwihon .process__now-art {
-  background: radial-gradient(115% 115% at 50% 38%, rgba(92,55,24,0.72), rgba(26,19,13,0.94));
-  box-shadow: inset 0 0 0 1px rgba(255,200,140,0.14); }
+  background: none;
+  box-shadow: none; }
 .process--gwihon .process__now-meta span { color: #9e8d77; }
 .process--gwihon .process__now-meta strong { color: #f1e6d6; }
 .process--gwihon .process__now-ctrl button { color: #d8c8b4; }
