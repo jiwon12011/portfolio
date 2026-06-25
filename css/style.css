@@ -8779,12 +8779,47 @@ html.about-open { overflow: hidden; }
 /* 라이트박스 */
 html.lb-open { overflow: hidden; }
 .banner-lb { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center;
+  padding: clamp(20px, 4vh, 48px) clamp(56px, 7vw, 96px);
   background: rgba(13,18,30,0.94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .banner-lb.is-open { display: flex; animation: lbIn .26s ease both; }
 @keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
-.banner-lb__fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.banner-lb__fig img { max-width: 92vw; max-height: 84vh; border-radius: 8px; box-shadow: 0 28px 70px -22px rgba(0,0,0,0.7); }
-.banner-lb__cap { font-size: 13px; letter-spacing: 0.04em; color: rgba(255,255,255,0.92); }
+/* 2단 레이아웃: 좌 이미지 스테이지 + 우 설명 패널 */
+.banner-lb__inner { display: flex; align-items: stretch; gap: clamp(22px, 3.4vw, 56px);
+  width: 100%; max-width: 1180px; max-height: 86vh; }
+.banner-lb__stage { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px; }
+.banner-lb__stage img { max-width: 100%; max-height: 82vh; border-radius: 8px; object-fit: contain;
+  box-shadow: 0 28px 70px -22px rgba(0,0,0,0.7); }
+.banner-lb__cap { display: none; font-size: 13px; letter-spacing: 0.04em; color: rgba(255,255,255,0.85); }
+
+/* 우측 설명 패널 */
+.banner-lb__panel { flex: 0 0 clamp(300px, 32vw, 432px); align-self: stretch; overflow-y: auto;
+  padding-right: 6px; color: rgba(255,255,255,0.9); -webkit-overflow-scrolling: touch; }
+.banner-lb__panel::-webkit-scrollbar { width: 6px; }
+.banner-lb__panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 999px; }
+.banner-lb__title { margin: 0 0 clamp(28px, 4.4vh, 46px); padding-bottom: clamp(16px, 2.4vh, 24px);
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+  font-size: clamp(21px, 1.9vw, 29px); font-weight: 700; line-height: 1.34; color: #fff; }
+.lb-sec { margin: 0 0 clamp(18px, 2.6vh, 28px); }
+.lb-sec:last-child { margin-bottom: 4px; }
+.lb-sec__h { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 9px; margin: 0 0 9px;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.01em; color: #fff; }
+.lb-sec__mk { color: #7faee5; font-weight: 800; }
+.lb-sec__en { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: rgba(255,255,255,0.38); }
+.lb-sec__body { margin: 0; font-size: 13.5px; line-height: 1.78; color: rgba(255,255,255,0.74); }
+.lb-sec__body + .lb-sec__body { margin-top: 0.7em; }
+.lb-sec__body strong { color: rgba(255,255,255,0.95); font-weight: 700; }
+
+/* 설명 없는 배너: 패널 숨기고 이미지만 중앙 + 캡션 */
+.banner-lb__inner.is-bare { width: auto; max-width: 92vw; }
+.banner-lb__inner.is-bare .banner-lb__panel { display: none; }
+.banner-lb__inner.is-bare .banner-lb__cap { display: block; }
+
+@media (max-width: 860px) {
+  .banner-lb__inner { flex-direction: column; width: 92vw; max-height: 88vh; overflow-y: auto; gap: 18px; }
+  .banner-lb__stage img { max-height: 52vh; }
+  .banner-lb__panel { flex: none; width: 100%; overflow: visible; padding-right: 0; }
+}
 .banner-lb__btn { position: absolute; display: inline-flex; align-items: center; justify-content: center;
   width: 46px; height: 46px; border-radius: 50%; cursor: pointer; color: #fff;
   background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22);
@@ -8796,7 +8831,7 @@ html.lb-open { overflow: hidden; }
 .banner-lb__next { right: clamp(12px, 2.5vw, 30px); top: 50%; transform: translateY(-50%); }
 .banner-lb__prev:hover { transform: translateY(-50%) scale(1.06); }
 .banner-lb__next:hover { transform: translateY(-50%) scale(1.06); }
-@media (max-width: 560px) { .banner-lb__prev, .banner-lb__next { top: auto; bottom: 22px; transform: none; } }
+@media (max-width: 860px) { .banner-lb__prev, .banner-lb__next { top: auto; bottom: 22px; transform: none; } }
 
 /* 우측 인페이지 인디케이터 — 점 기본, 호버/활성 시 라벨(흰 배경이라 다크 톤) */
 .about-nav { position: fixed; right: clamp(16px, 2vw, 30px); top: 50%; transform: translateY(-50%);
