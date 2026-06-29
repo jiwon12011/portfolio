@@ -92,12 +92,12 @@
     }
 
     /* ================================================================
-       SECTION 2 — #pz-s2
-       .pz-split-img  우측(x: 40)에서 슬라이드+페이드
-       .pz-quote      통째로 페이드+업
+       SECTION 2 — #pz-s2 (RIPE 브랜드 소개)
+       .rp-brief__img   우측(x: 44)에서 슬라이드+페이드
+       .rp-brief__text  통째로 페이드+업
     ================================================================ */
     if (!isMobile) {
-      const splitImg = scroller.querySelector(".pz-split-img");
+      const splitImg = scroller.querySelector(".rp-brief__img");
       if (splitImg) {
         gsap.from(splitImg, {
           opacity: 0,
@@ -107,13 +107,11 @@
         });
       }
 
-      const quote = scroller.querySelector(".pz-quote");
-      if (quote) {
-        /* ① 자간 호흡 — 넓은 자간(0.28em)에서 정상값으로 스크롤 따라 수렴 */
-        gsap.from(quote, {
+      const brief = scroller.querySelector(".rp-brief__text");
+      if (brief) {
+        gsap.from(brief, {
           opacity: 0,
           y: 28,
-          letterSpacing: "0.28em",
           ease: "none",
           scrollTrigger: STS("#pz-s2", "top 86%", "top 48%"),
         });
@@ -215,11 +213,18 @@
     if (!isMobile) {
       const logoSection = scroller.querySelector("#pz-s4");
       if (logoSection) {
+        const lCaption = logoSection.querySelector(".pz-logo__caption");
         const lTitle = logoSection.querySelector(".pz-logo__title");
         const lIdItems = logoSection.querySelectorAll(".pz-logo__id > *");
         const lImg = logoSection.querySelector(".pz-logo__img");
         const lDesc = logoSection.querySelector(".pz-logo__desc");
 
+        if (lCaption) {
+          gsap.from(lCaption, {
+            opacity: 0, y: 18, ease: "none",
+            scrollTrigger: STS("#pz-s4", "top 86%", "top 54%"),
+          });
+        }
         if (lTitle) {
           gsap.from(lTitle, {
             opacity: 0, y: 20, ease: "none",
@@ -467,30 +472,27 @@
     ================================================================ */
     const phoneDevice = scroller.querySelector("#pz-s9 .pz-phone__device");
     const phoneScreen = scroller.querySelector("#pz-s9 .pz-phone__screen");
-    const phoneTrack = scroller.querySelector("#pz-s9 .pz-phone__track");
+    const phoneLive = scroller.querySelector("#pz-s9 .pz-phone__live");
 
-    if (phoneDevice && phoneScreen && phoneTrack) {
-      /* enter/leave 마다 트랙의 기존 tween을 전부 죽이고 하나만 → 중첩/충돌 방지.
-         스크롤 거리는 hover 시점에 계산(그때 이미지 로드 완료 보장). */
-      const phoneIn = () => {
-        const dist = phoneTrack.scrollHeight - phoneScreen.clientHeight;
-        if (dist <= 4) return;
-        phoneTrack.style.willChange = "transform";   /* hover 동안만 GPU 힌트 */
-        gsap.killTweensOf(phoneTrack);
-        gsap.to(phoneTrack, {
-          y: -dist, duration: Math.max(3, dist / 300), ease: "none",  /* ≈300px/s 프리뷰 스크롤 */
-          repeat: -1, yoyo: true,
-        });
+    if (phoneDevice && phoneScreen && phoneLive) {
+      /* 라이브 iframe 을 모바일 논리폭(390px)으로 렌더 → 화면 px 에 맞춰 scale 다운.
+         (site 가 보는 viewport=390px → 제대로 된 모바일 레이아웃, 화면엔 선명히 축소)
+         화면이 실제 크기를 가질 때(모달 오픈/리사이즈)마다 재계산. */
+      const LOGICAL_W = 390;
+      const setPhoneLive = () => {
+        const w = phoneScreen.clientWidth, h = phoneScreen.clientHeight;
+        if (w < 2) return;
+        const s = w / LOGICAL_W;
+        phoneLive.style.width = LOGICAL_W + "px";
+        phoneLive.style.height = (h / s) + "px";
+        phoneLive.style.transform = "scale(" + s + ")";
       };
-      const phoneOut = () => {
-        gsap.killTweensOf(phoneTrack);
-        gsap.to(phoneTrack, { y: 0, duration: 0.6, ease: "power2.out",
-          onComplete: () => { phoneTrack.style.willChange = "auto"; } });
-      };
-      phoneDevice.addEventListener("mouseenter", phoneIn);
-      phoneDevice.addEventListener("mouseleave", phoneOut);
-      phoneDevice.addEventListener("focus", phoneIn);   /* 키보드 접근성 */
-      phoneDevice.addEventListener("blur", phoneOut);
+      if (window.ResizeObserver) new ResizeObserver(setPhoneLive).observe(phoneScreen);
+      else window.addEventListener("resize", setPhoneLive);
+      /* 모달 오픈 시 process.js 가 ScrollTrigger.refresh 를 호출 → 그때 화면이 실제 px 를 가지므로
+         refresh 마다 재계산(닫힌 채 setup 되어 화면=0 이던 초기 누락 보강). */
+      ScrollTrigger.addEventListener("refresh", setPhoneLive);
+      setPhoneLive();
 
       if (!isMobile) {
         /* ⑧ 핸드폰 등장 — fade+업(transform/opacity)은 scrub로 스크롤 따라.
@@ -526,12 +528,12 @@
     ================================================================ */
     [
       ["#pz1",   "#f4efe9"],   /* 크림 #efe9e2 ← 살짝 밝게 */
-      ["#pz-s2", "#e7ddd6"],   /* 토프 #e0d6cf ← 살짝 따뜻하게 */
-      ["#pz2",   "#2c2018"],   /* 다크 #251a13 ← 살짝 들어올려 */
-      ["#pz-s4", "#e7ddd6"],
-      ["#pz-s6", "#e7ddd6"],
-      ["#pz-s7", "#e7ddd6"],
-      ["#pz-s8", "#e7ddd6"],
+      ["#pz-s2", "#f6f3f0"],   /* 화이트 #fff ← 거의 흰색(따뜻한 톤)에서 수렴 */
+      ["#pz2",   "#ece9e4"],   /* 라이트 #f2f1ef ← 살짝 가라앉혀 수렴 */
+      ["#pz-s4", "#f6f3f0"],   /* 화이트 #fff ← 거의 흰색에서 수렴 */
+      ["#pz-s6", "#f6f3f0"],   /* 화이트 #fff ← 거의 흰색에서 수렴 */
+      ["#pz-s7", "#ece9e4"],   /* 라이트 #f2f1ef ← 살짝 가라앉혀 수렴 */
+      /* #pz-s8 제외 — 히어로 영상+긴 이미지가 배경을 완전히 덮어 드리프트가 안 보임 */
     ].forEach(([sel, fromTone]) => {
       const el = scroller.querySelector(sel);
       if (!el) return;

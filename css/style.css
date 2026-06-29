@@ -1451,15 +1451,15 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
    세지그린(초록 사과) 액센트 + 어두운 모카 스크림으로 가독성 확보. */
 #intro-poze .intro-ui,
 .intro-list--live[data-project="poze"] {
-  --it-accent: #bcce96;
+  --it-accent: #d9b06a;
   --it-title: #f3efe6;
   --it-text: #e6e0d3;
   --it-muted: rgba(230,224,211,0.70);
   --it-box-bg: rgba(40,33,25,0.46);
-  --it-box-border: rgba(188,206,150,0.40);
+  --it-box-border: rgba(217,176,106,0.40);
   --it-on-accent: #2b2a1d;
   --it-shadow: 0 1px 3px rgba(0,0,0,0.35);
-  --it-eq: linear-gradient(180deg, #cfdcab, #bcce96);
+  --it-eq: linear-gradient(180deg, #e6cf9f, #d9b06a);
 }
 #intro-poze .intro-grad {
   background:
@@ -1796,11 +1796,11 @@ html.process-open { overflow: hidden; }
 .process.is-exit-armed .process__exit-fill { background: linear-gradient(90deg,#ffd9a8,#ff9e9e); box-shadow: 0 0 10px rgba(255,158,158,.6); }
 .process.is-exit-armed .process__exit-glass { border-color: rgba(255,200,170,0.42); }
 /* POZE 톤 (다크 토프 + 핑크) */
-.process--poze .process__exit-glass { background: rgba(40,30,24,0.5); border-color: rgba(222,178,182,0.24); }
+.process--poze .process__exit-glass { background: rgba(40,30,24,0.5); border-color: rgba(214,176,120,0.24); }
 .process--poze .process__exit-label { color: rgba(241,227,219,0.95); }
 .process--poze .process__exit-arrow svg { stroke: rgba(241,227,219,0.82); }
-.process--poze .process__exit-fill { background: rgba(233,205,210,0.92); }
-.process--poze.is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(233,194,201,.95), rgba(210,142,160,1)); box-shadow: 0 0 10px rgba(210,142,160,.55); }
+.process--poze .process__exit-fill { background: rgba(232,212,168,0.92); }
+.process--poze.is-exit-armed .process__exit-fill { background: linear-gradient(90deg, rgba(230,205,150,.95), rgba(198,150,78,1)); box-shadow: 0 0 10px rgba(198,150,78,.55); }
 /* 귀혼 톤 (다크 + 앰버) */
 .process--gwihon .process__exit-glass { background: rgba(36,28,20,0.5); border-color: rgba(232,184,110,0.26); }
 .process--gwihon .process__exit-label { color: rgba(243,231,215,0.95); }
@@ -2063,7 +2063,7 @@ html.process-open { overflow: hidden; }
 .process--poze .process__back { color: #ebe0d5; }
 .process--poze .process__back:hover { color: #fff; }
 .process--poze .process__label { color: #b1a392; }
-.process--poze .process__eq i { background: linear-gradient(180deg, #ecc0cb, #d28ea0); } /* 로즈/핑크 */
+.process--poze .process__eq i { background: linear-gradient(180deg, #ecd2a0, #cf9a55); } /* 로즈/핑크 */
 .process--poze .process__tracks b { color: #b09d8d; }
 .process--poze .process__tracks h4 { color: #ece1d4; }
 .process--poze .process__tracks i { color: #9f8d7c; }
@@ -2076,15 +2076,15 @@ html.process-open { overflow: hidden; }
   border-color: rgba(255,255,255,0.4);
   box-shadow: 0 13px 28px -14px rgba(22,14,12,0.6), inset 0 1px 1px rgba(255,255,255,0.7);
 }
-.process--poze .process__tracks .is-active b { color: #7a565c; }
+.process--poze .process__tracks .is-active b { color: #9a6f33; }
 .process--poze .process__tracks .is-active h4 { color: #3a2d29; }
 .process--poze .process__tracks .is-active i { color: rgba(58,45,41,0.62); }
-.process--poze .process__tracks .is-active .process__tplay { fill: #7a565c; }
+.process--poze .process__tracks .is-active .process__tplay { fill: #9a6f33; }
 /* GO TO WEB — 따뜻한 핑크 고스트 */
 .process--poze .process__cta {
-  color: #e9c2c9; background: rgba(255,255,255,0.06); border-color: rgba(214,150,162,0.5); }
+  color: #e8cf9f; background: rgba(255,255,255,0.06); border-color: rgba(208,160,92,0.5); }
 .process--poze .process__cta:hover {
-  background: rgba(214,150,162,0.16); border-color: rgba(214,150,162,0.85); }
+  background: rgba(208,160,92,0.16); border-color: rgba(208,160,92,0.85); }
 /* NOW PLAYING */
 .process--poze .process__now {
   background: linear-gradient(160deg, rgba(58,47,44,0.58), rgba(42,34,32,0.44));
@@ -2099,7 +2099,7 @@ html.process-open { overflow: hidden; }
   border-color: rgba(255,247,240,0.15); }
 .process--poze .pcard:hover {
   background: linear-gradient(160deg, rgba(86,70,65,0.58), rgba(62,51,47,0.46));
-  border-color: rgba(222,178,182,0.42); }
+  border-color: rgba(214,176,120,0.42); }
 .process--poze .pcard h3 { color: #f1e7dc; }
 .process--poze .pcard p { color: #bdaf9f; }
 .process--poze .pcard--info dt { color: #b5a695; }
@@ -2108,11 +2108,11 @@ html.process-open { overflow: hidden; }
 .process--poze .pcard__tool-label { color: #b5a695; }
 .process--poze .pcard__go {
   background: rgba(255,255,255,0.10); border-color: rgba(255,247,240,0.32); color: #ebe0d5; }
-.process--poze .pcard:hover .pcard__go { background: rgba(214,150,162,0.42); color: #fff; }
+.process--poze .pcard:hover .pcard__go { background: rgba(208,160,92,0.42); color: #fff; }
 /* ptag = 밝은 베이지 + 어두운 글자 */
 .process--poze .ptag { background: rgba(230,221,210,0.92); color: #5c4a45; }
 /* 노션 배지 — POZE 더스티 로즈 액센트로(기본 세이지 그린 대신), 그림자도 따뜻하게 */
-.process--poze .pcard__notion { background: #cf9ea6;
+.process--poze .pcard__notion { background: #c79a64;
   box-shadow: 0 9px 22px -8px rgba(58,33,38,0.5), inset 0 1px 1px rgba(255,255,255,0.45); }
 /* POZE 오버뷰 한정 — 툴 아이콘 6개를 한 줄로(콤팩트).
    기본 32px 6개는 info 카드 폭을 넘겨 2줄로 접혀 카드행이 ~41px 높아지고
@@ -7560,7 +7560,7 @@ html.process-open { overflow: hidden; }
 /* ── POZE 스크롤 핀 (making 래퍼는 이미 overflow:visible) ── */
 .pz-pin { container-type: inline-size; }
 /* pz-s7 COLOR DIRECTION: 뷰포트에 들어옴(≈0.67×) → A형 핀, 색 카드 페인트-필 */
-#pz-s7-pin { height: 220svh; }
+#pz-s7-pin { height: 220svh; background: #f2f1ef; }   /* 핀 빈공간에 making 크림(#efe9e2)이 비쳐 띠가 보이던 문제 → 섹션7과 같은 라이트로 채움 */
 #pz-s7 { position: sticky; top: 0; }  /* top 은 making-poze.js setPzS7Top 가 중앙정렬로 덮음 */
 @media (prefers-reduced-motion: reduce) {
   .pz-pin { height: auto; }
@@ -7576,77 +7576,85 @@ html.process-open { overflow: hidden; }
 .pz-serif--poze     { top: 28.5%; }   /* 디자인 top472/1620 — image1 하단 */
 .pz-serif--everyday { top: 63.2%; }   /* 디자인 top1038/1620 — image2/3 경계 */
 
-/* ── RIPE 제작과정 SECTION 1 — 에디토리얼 인트로 (Image#7) ──────────────────
-   상단 풀폭 바스켓 컷 + 하단 2컷(좌 물보라·우 모델) + 우상단 RIPE 워드마크(Cormorant).
-   .pz-sec(container-type:inline-size) 안이라 cqw 반응형. 사용자 추후 수정 예정. */
-.rp-intro { display: flex; flex-direction: column; gap: 1cqw; padding: 1.4cqw; background: #efe9e2; }
-.rp-intro__hero { display: block; width: 100%; height: auto; border-radius: 2px; }
-.rp-intro__pair { position: relative; display: grid; grid-template-columns: 0.74fr 1.26fr; gap: 1cqw; }
-.rp-intro__pair img { display: block; width: 100%; height: 34cqw; object-fit: cover; border-radius: 2px; }
+/* ── RIPE 제작과정 SECTION 1 — 에디토리얼 인트로 ──────────────────
+   상단 풀폭 바스켓 컷(1920×876) + 하단 풀폭 모델 컷(1920×878) 세로 적층 +
+   하단 우상단 RIPE 워드마크(Cormorant). .pz-sec(container-type:inline-size) 안이라 cqw 반응형. */
+.rp-intro { display: flex; flex-direction: column; gap: 0; padding: 0; background: #efe9e2; }
+.rp-intro__hero,
+.rp-intro__model { display: block; width: 100%; height: auto; border-radius: 0; }
+.rp-intro__bottom { position: relative; }
 .rp-wordmark {
-  position: absolute; top: 1.6cqw; right: 2cqw; z-index: 2;
+  position: absolute; top: 2cqw; right: 2.4cqw; z-index: 2;
   font-family: 'Cormorant Garamond', serif; font-weight: 400;
   font-size: 4.6cqw; line-height: 1; letter-spacing: 0.2em; color: #fff;
   text-shadow: 0 2px 14px rgba(30,22,16,0.42);
 }
 
-/* 섹션2 — 좌 세리프 카피 / 우 플랫레이 (디자인 1440×907) */
-.pz-sec--split { aspect-ratio: 1440 / 907; background: #e0d6cf; }
-.pz-split-img {
-  position: absolute; right: 0; top: 0; width: 50%; height: 100%;
+/* 섹션2 — RIPE 브랜드 소개 (좌 화이트 텍스트블록 / 우 플랫레이, 레퍼런스 1432×886) */
+.rp-brief { aspect-ratio: 1432 / 886; background: #fff; }
+.rp-brief__img {
+  position: absolute; right: 0; top: 0; width: 48%; height: 100%;
   object-fit: cover; display: block;
 }
-.pz-quote {
-  position: absolute; left: 7.15%; top: 53%; margin: 0;     /* 디자인 left103/top482 */
-  color: #251a13; text-align: left;
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-  font-weight: 400; font-size: 2.5cqw; line-height: 1.34; letter-spacing: 0.003em;
+.rp-brief__text { position: absolute; left: 8.6cqw; bottom: 8cqw; max-width: 33cqw; color: #2a2622; }
+.rp-brief__title {
+  font-family: 'Cormorant Garamond', "Playfair Display", Georgia, serif; font-weight: 500;
+  font-size: 2.2cqw; line-height: 1.16; letter-spacing: 0.005em;
+  margin: 0 0 2.1cqw; color: #221f1b;
 }
+.rp-brief__meta { margin: 0; display: flex; flex-direction: column; }
+.rp-brief__meta > div { display: flex; gap: 0.42em; font-size: 1.22cqw; line-height: 1.8; color: #463f39; }
+.rp-brief__meta dt { margin: 0; font-weight: 500; white-space: nowrap; }
+.rp-brief__meta dt::after { content: ':'; }
+.rp-brief__meta dd { margin: 0; }
 
-/* 섹션3 — 브랜드 무드 곡선 플로우 (디자인 1440×949, 다크) */
-.pz-flow { aspect-ratio: 1440 / 949; background: #251a13; color: #d3c1af; }
-.pz-flow__path { position: absolute; left: 45.4%; top: 9.48%; width: 12.85%; height: auto; display: block; }
+/* 섹션3 — 브랜드 무드 곡선 플로우 (디자인 1440×949, 라이트 — 흰 배경·검정 곡선) */
+.pz-flow { aspect-ratio: 1440 / 949; background: #f2f1ef; color: #2a2825; }
+.pz-flow__path { position: absolute; left: 45.4%; top: 9.48%; width: 12.85%; height: auto; display: block;
+  filter: brightness(0); }   /* SVG fill 이 #D3C1AF/#B2A294(다크용 밝은톤) → 흰 배경에선 안 보여서 검정으로 */
 .pz-flow__c {                 /* 중앙 라벨 — 점 아래 */
-  position: absolute; font-weight: 300; font-size: 1.11cqw; white-space: nowrap; color: #d3c1af;
+  position: absolute; font-weight: 400; font-size: 1.11cqw; white-space: nowrap; color: #2a2825;
 }
 .pz-flow__c1 { left: 45.76%; top: 22.97%; }   /* BRAND MOOD (659/218) */
-.pz-flow__c2 { left: 45.14%; top: 52.05%; }   /* EDITORIAL FLOW (650/494) */
-.pz-flow__c3 { left: 44.58%; top: 79.03%; }   /* QIET INTERACTION (642/750) */
+.pz-flow__c2 { left: 45.14%; top: 52.05%; }   /* SENSORY FLOW (650/494) */
+.pz-flow__c3 { left: 44.58%; top: 79.03%; }   /* QUIET INTERACTION (642/750) */
 .pz-flow__blk { position: absolute; display: flex; flex-direction: column; align-items: flex-start; font-size: 1.11cqw; }
 .pz-flow__b1 { left: 8.82%; top: 20.44%; }    /* 127/194 */
 .pz-flow__b2 { left: 66.94%; top: 42.15%; }   /* 964/400 */
 .pz-flow__b3 { left: 8.82%; top: 68.7%; }     /* 127/652 */
-.pz-flow__num { font-weight: 300; color: #d3c1af; }
-.pz-flow__t { margin-top: 0.15em; font-weight: 600; color: #d3c1af; letter-spacing: 0.03em; }
-.pz-flow__line { width: 3.12cqw; height: 1px; background: #d3c1af; margin: 1.25cqw 0; } /* 45px */
-.pz-flow__d { margin: 0; font-weight: 300; color: #d3c1af; line-height: 1.55; }
+.pz-flow__num { font-weight: 400; color: #9a938b; }
+.pz-flow__t { margin-top: 0.15em; font-weight: 700; color: #1a1815; letter-spacing: 0.03em; }
+.pz-flow__line { width: 3.12cqw; height: 1px; background: #1a1815; margin: 1.25cqw 0; } /* 45px */
+.pz-flow__d { margin: 0; font-weight: 400; color: #57534c; line-height: 1.6; }
 
 /* 섹션4 — POZE Logo Analysis (디자인 1440×949, 라이트 토프) */
-.pz-sec--logo { aspect-ratio: 1440 / 949; background: #e0d6cf; color: #201916; }
-.pz-logo__title {                              /* 좌상단 제목 (180/157) */
-  position: absolute; left: 12.5%; top: 16.54%; margin: 0;
-  font-family: "Playfair Display", Georgia, serif; font-weight: 400;
-  font-size: 2.5cqw; line-height: 1.3; color: #251a13;
+/* 섹션4 — RIPE Logo Analysis (레퍼런스 1336×712, 화이트 — 캡션 상단중앙·제목 좌·로고 중앙·Identity 우하단) */
+.pz-sec--logo { aspect-ratio: 1336 / 712; background: #fff; color: #2a2825; }
+.pz-logo__caption {                            /* 중앙 상단 캡션 */
+  position: absolute; left: 50%; top: 13%; transform: translateX(-50%);
+  margin: 0; text-align: center;
+  font-weight: 400; font-size: 1.55cqw; line-height: 1.5; letter-spacing: 0.005em; color: #2a2825;
 }
-.pz-logo__id {                                 /* 우측 Identity Elements (990/212) */
-  position: absolute; left: 68.75%; top: 22.34%; width: 14.51cqw;
-  display: flex; flex-direction: column; align-items: flex-start; gap: 1.25cqw;
+.pz-logo__title {                              /* 좌측 제목 */
+  position: absolute; left: 8.6%; top: 29%; margin: 0;
+  font-family: 'Cormorant Garamond', "Playfair Display", Georgia, serif; font-weight: 500;
+  font-size: 2.4cqw; line-height: 1.28; letter-spacing: 0.01em; color: #1f1c18;
 }
-.pz-logo__idh { font-weight: 500; font-size: 1.25cqw; letter-spacing: 0.1em; color: #201916; }
+.pz-logo__img {                                /* 중앙 로고 애너토미(원형 주석 1~4 포함) */
+  position: absolute; left: 50%; top: 40%; transform: translateX(-50%);
+  width: 21.5%; height: auto; display: block;
+}
+.pz-logo__id {                                 /* 우하단 Identity Elements */
+  position: absolute; left: 69.2%; top: 66%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1.1cqw;
+}
+.pz-logo__idh { font-weight: 700; font-size: 1.42cqw; letter-spacing: 0.01em; color: #1a1815; }
 .pz-logo__idlist {
-  margin: 0; padding: 0; list-style: none;
-  display: flex; flex-direction: column; gap: 0.694cqw;
+  margin: 0; padding: 0; list-style: none; counter-reset: rpie;
+  display: flex; flex-direction: column; gap: 0.55cqw;
 }
-.pz-logo__idlist li { font-weight: 300; font-size: 1.25cqw; letter-spacing: 0.1em; color: #201916; }
-.pz-logo__center {                             /* 중앙 그룹 (345/401, w750) */
-  position: absolute; left: 23.96%; top: 42.25%; width: 52.08%;
-  display: flex; flex-direction: column; align-items: center; gap: 6.94cqw;
-}
-.pz-logo__img { width: 28.4cqw; height: auto; display: block; }   /* group-176 409px */
-.pz-logo__desc {                               /* 3줄 구조 유지 (cqw로 스케일 → 넘칠 일 없음) */
-  margin: 0; text-align: center; white-space: nowrap;
-  font-weight: 400; font-size: 1.528cqw; line-height: 1.299; letter-spacing: 0.1em; color: #201916;
-}
+.pz-logo__idlist li { font-weight: 400; font-size: 1.46cqw; letter-spacing: 0.01em; color: #46403a; }
+.pz-logo__idlist li::before { content: counter(rpie) ". "; counter-increment: rpie; }
 
 /* 섹션5 — 풀블리드 에디토리얼 이미지 한 장 */
 .pz-sec--full { background: #241a13; }   /* .pz-sec 가 position:relative + overflow:hidden 제공 → 글로우/캡션 오버레이 기준 */
@@ -7670,33 +7678,39 @@ html.process-open { overflow: hidden; }
    네비 클릭 스크롤 목표가 안 밀리고(내려가다 마는 문제 해결), 로드 시 레이아웃
    점프(CLS)·스크롤 끊김도 사라짐. 값=줄인 webp 실제 치수 */
 .pz-band            { aspect-ratio: 1500 / 563; }
-#pz-s5  .pz-full-img { aspect-ratio: 1500 / 1046; }
-#pz-s10 .pz-full-img { aspect-ratio: 1500 / 845; }
+#pz-s5  .pz-full-img { aspect-ratio: 1920 / 1082; }   /* ripe-flatlay-water.webp 실제 치수 */
+#pz-s10 { aspect-ratio: 1440 / 810; }   /* 섹션이 높이 예약(ripe_end.mp4 비율) → 영상은 absolute 로 위·아래 bleed */
+#pz-s10 .pz-full-img {
+  position: absolute; left: 0; top: -28px;
+  width: 100%; height: calc(100% + 56px);   /* 위·아래 28px 여유 → 패럴랙스(y:-26)가 섹션 배경 띠를 못 드러냄 */
+  aspect-ratio: auto; object-fit: cover;
+}
 .pz-shop__top       { aspect-ratio: 1500 / 1906; }
 .pz-shop__long      { aspect-ratio: 1100 / 3079; }
 
 /* 섹션6 — REBUILT FOR IMMERSION (디자인 1440×829, 좌 이미지 / 우 텍스트) */
-.pz-sec--rebuilt { aspect-ratio: 1440 / 829; background: #e0d6cf; color: #251a13; }
-.pz-rebuilt__img {                             /* 좌측 이미지 714px = 49.58% */
-  position: absolute; left: 0; top: 0; width: 49.58%; height: 100%;
+/* 섹션6 — REBUILT FOR SCENT IMMERSION (레퍼런스 1378×929, 화이트 — 좌 세로 스플래시 / 우 텍스트) */
+.pz-sec--rebuilt { aspect-ratio: 1378 / 929; background: #fff; color: #1f1c18; }
+.pz-rebuilt__img {                             /* 좌측 세로 이미지 */
+  position: absolute; left: 0; top: 0; width: 48%; height: 100%;
   object-fit: cover; display: block;
 }
-.pz-rebuilt__txt {                             /* 우측 텍스트 (866/418, w404) */
-  position: absolute; left: 60.14%; top: 50.42%; width: 28.06%;
-  display: flex; flex-direction: column; align-items: flex-start; gap: 2.22cqw;
+.pz-rebuilt__txt {                             /* 우측 텍스트 (하단 정렬) */
+  position: absolute; left: 53.3%; top: 62.5%; width: 40%;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1.9cqw;
 }
 .pz-rebuilt__title {
-  margin: 0; font-family: "Playfair Display", Georgia, serif; font-weight: 400;
-  font-size: 2.5cqw; line-height: 1.3; color: #251a13;
+  margin: 0; font-family: 'Cormorant Garamond', "Playfair Display", Georgia, serif; font-weight: 500;
+  font-size: 2.45cqw; line-height: 1.32; letter-spacing: 0.035em; color: #1f1c18;
 }
-.pz-rebuilt__sub { margin: 0; font-weight: 400; font-size: 1.667cqw; line-height: 1.3; color: #251a13; }
+.pz-rebuilt__sub { margin: 0; font-weight: 400; font-size: 1.22cqw; line-height: 1.65; color: #46403a; }
 
-/* 섹션7 — COLOR DIRECTION (디자인 1440×579, 3 스와치 카드) */
-.pz-sec--color { aspect-ratio: 1440 / 579; background: #e0d6cf; color: #251a13; }
+/* 섹션7 — COLOR DIRECTION (디자인 1440×579, 3 스와치 카드 — RIPE 라이트) */
+.pz-sec--color { aspect-ratio: 1440 / 579; background: #f2f1ef; color: #2b1f1a; }
 .pz-color__title {                             /* 좌측 제목 (124/115) */
   position: absolute; left: 8.61%; top: 19.86%; margin: 0;
-  font-family: "Playfair Display", Georgia, serif; font-weight: 400;
-  font-size: 2.5cqw; line-height: 1.3; color: #251a13;
+  font-family: 'Cormorant Garamond', "Playfair Display", Georgia, serif; font-weight: 500;
+  font-size: 2.5cqw; line-height: 1.32; letter-spacing: 0.02em; color: #2b1f1a;
 }
 .pz-color__cards {                             /* 카드 행 (406/115) */
   position: absolute; left: 28.19%; top: 19.86%;
@@ -7706,11 +7720,12 @@ html.process-open { overflow: hidden; }
   width: 19.46cqw; height: 24.23cqw;
   padding: 3.15cqw 1.63cqw 2.94cqw 2.1cqw;
   display: flex; flex-direction: column; justify-content: space-between;
-  box-shadow: 0 0.21cqw 0.21cqw rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(43, 31, 26, 0.10);   /* hairline — 아이보리 카드를 배경에서 분리 */
+  box-shadow: 0 0.7cqw 1.7cqw -0.3cqw rgba(43, 31, 26, 0.14);
 }
-.pz-color__card--cream    { background: #f9f4f0; color: #251a13; }
-.pz-color__card--dusty    { background: #8b695f; color: #f9f4f0; }
-.pz-color__card--rosewood { background: #251a13; color: #f9f4f0; }
+.pz-color__card--ivory { background: #f5f0e8; color: #2b1f1a; }
+.pz-color__card--amber { background: #dab791; color: #2b1f1a; }
+.pz-color__card--deep  { background: #2b1f1a; color: #f5f0e8; border-color: rgba(43, 31, 26, 0.10); }
 .pz-color__top { display: flex; flex-direction: column; align-items: flex-start; }
 .pz-color__name { font-weight: 500; font-size: 1.111cqw; }
 .pz-color__role { margin-top: 0.55cqw; font-weight: 300; font-size: 0.833cqw; }
@@ -7719,33 +7734,30 @@ html.process-open { overflow: hidden; }
 .pz-color__hex { font-weight: 300; font-size: 0.764cqw; letter-spacing: 0.02em; }
 .pz-color__desc { margin: 0; font-weight: 300; font-size: 0.833cqw; line-height: 1.45; }
 
-/* 섹션8 — POZE 웹사이트 목업 (디자인 1440 기준; 오른쪽 사진은 JS로 pin)
-   · 정적 레이아웃 = 디자인 그대로 + reduced-motion 폴백
-   · sticky는 making 블록 overflow:hidden 때문에 CSS 대신 ScrollTrigger pin */
-.pz-shop { position: relative; background: #e0d6cf; }
-.pz-shop__top {                                /* 상단 목업 — 모달 폭 끝까지 풀블리드 */
-  display: block; width: 100%; height: auto; margin: 0;
+/* 섹션8 — RIPE 웹사이트: 히어로 영상 sticky 고정 + 긴 페이지 이미지가 스크롤로 덮으며 올라옴
+   · 히어로(.rp-shop__hero) = position:sticky top:0, z-index 0 → 뷰포트 상단에 잠깐 고정
+   · 페이지(.rp-shop__page) = z-index 1 → 히어로 위로 스크롤되며 덮음
+   · ⚠ sticky가 먹으려면 조상 overflow:visible 필요 → .rp-shop 도 visible (.pz-sec 기본 hidden 무력화) */
+.rp-shop { position: relative; background: #efe9e2; overflow: visible; }
+.rp-shop__hero {
+  position: sticky; top: 0; z-index: 0;
+  width: 100%; aspect-ratio: 1440 / 764;        /* 영상 1440×764 */
+  overflow: hidden; background: #1c1714;
 }
-.pz-shop__row {                                /* 하단 2단 — 가로 꽉, 좌 컬럼+우 사진이 폭을 분할 */
-  display: flex; align-items: flex-start; justify-content: center;
-  width: 100%; margin: 0;
-}
-.pz-shop__long   { width: 48.07%; height: auto; display: block; }  /* 548/1140 비율 유지 */
-.pz-shop__sticky {                             /* 우측 사진 — 네이티브 sticky로 뷰포트 높이 꽉 채워 고정
-                                                  (height는 JS가 스크롤러 높이에 맞춰 지정,
-                                                   JS 미동작/reduced-motion이면 height:auto 폴백) */
-  width: 51.93%; height: auto; display: block; object-fit: cover; object-position: center;
-  position: sticky; top: 0; align-self: flex-start;
+.rp-shop__hero-vid { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rp-shop__page {
+  position: relative; z-index: 1; display: block;
+  width: 100%; height: auto;                     /* 긴 페이지(2000×5132) — 위로 올라오며 히어로 덮음 */
 }
 
 /* 섹션9 — 모바일 목업 (핸드폰 안에서 hover 스크롤; 화면 밖으로 이미지 안 보임) */
 .pz-phone {
   position: relative; aspect-ratio: 1264 / 711; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  background:                                  /* 블러 무화과 배경 + 핸드폰 대비용 다크 베일 */
-    linear-gradient(rgba(22,14,9,0.30), rgba(22,14,9,0.42)),
-    url("../img/poze/process/section9_bg.webp") center / cover no-repeat,
-    #160f0a;
+  background:                                  /* RIPE 블러 과일 배경 + 핸드폰 대비용 옅은 베일 */
+    linear-gradient(rgba(40,30,24,0.10), rgba(40,30,24,0.16)),
+    url("../img/ripe/process/ripe-phone-bg.webp") center / cover no-repeat,
+    #efe9e2;
 }
 .pz-phone__device {                            /* 핸드폰 — 섹션 높이에 맞춰 스케일 */
   position: relative; height: 88%; aspect-ratio: 1736 / 3068; outline: none;
@@ -7760,6 +7772,10 @@ html.process-open { overflow: hidden; }
 }
 .pz-phone__track { padding: 0 0 30px; }  /* 위:0(화면 시작점에 맞춤) / 아래:30 보더 — will-change는 hover 때만 JS가 부여 */
 .pz-phone__shot { display: block; width: 100%; height: auto; }
+.pz-phone__live {                              /* 라이브 RIPE 사이트 iframe — JS(setPhoneLive)가 390px 논리폭→화면 px 스케일 */
+  position: absolute; top: 0; left: 0; border: 0; display: block;
+  transform-origin: top left; background: #fff;
+}
 
 /* ===== POZE 본문 모바일 1열 리플로우 (≤768px portrait) — 유미 등 패턴 =====
    데스크톱은 position:absolute + cqw 좌표 + aspect-ratio 고정 + white-space:nowrap.
@@ -7784,21 +7800,22 @@ html.process-open { overflow: hidden; }
   #pz1 { padding: 0 !important; }            /* 밴드는 꽉 차게(.pz-band 는 이미 width:100% height:auto) */
   .pz-serif { font-size: clamp(22px,7vw,34px) !important; }   /* cqw→clamp, top% 는 그대로 밴드 위 안착 */
 
-  /* ════ SECTION 2 · 브랜드 철학 (#pz-s2, split) — 이미지 위, 인용구 아래 ════ */
-  .pz-sec--split { background: #e0d6cf !important; }
-  .pz-split-img {
+  /* ════ SECTION 2 · RIPE 브랜드 소개 (#pz-s2) — 이미지 위, 텍스트 아래 ════ */
+  .rp-brief { aspect-ratio: auto !important; background: #fff !important; padding: 0 0 clamp(22px,6vw,34px) !important; }
+  .rp-brief__img {
     position: static !important; right: auto !important; top: auto !important;
     width: 100% !important; height: auto !important;
-    margin: 0 0 clamp(16px,3vw,22px);
+    margin: 0 0 clamp(18px,5vw,26px);
   }
-  .pz-quote {
-    position: static !important; left: auto !important; top: auto !important;
-    width: auto !important; margin: 0 !important;
-    font-size: clamp(16px,4.4vw,22px) !important; line-height: 1.4 !important;
+  .rp-brief__text {
+    position: static !important; left: auto !important; bottom: auto !important;
+    max-width: none !important; padding: 0 clamp(18px,5vw,26px);
   }
+  .rp-brief__title { font-size: clamp(22px,6.4vw,32px) !important; margin: 0 0 clamp(14px,3.6vw,20px) !important; }
+  .rp-brief__meta > div { font-size: clamp(14px,3.8vw,17px) !important; line-height: 1.7 !important; }
 
-  /* ════ SECTION 3 · 브랜드 무드 (#pz2, dark flow) — 곡선·중앙라벨 hide, 3블록 1열 ════ */
-  #pz2 { background: #251a13 !important; color: #d3c1af; }
+  /* ════ SECTION 3 · 브랜드 무드 (#pz2, light flow) — 곡선·중앙라벨 hide, 3블록 1열 ════ */
+  #pz2 { background: #f2f1ef !important; color: #2a2825; }
   .pz-flow__path { display: none !important; }   /* 장식 곡선 SVG — 1열에선 무의미 → 숨김 */
   .pz-flow__c    { display: none !important; }    /* 중앙 라벨(블록 제목과 중복) → 숨김 */
   .pz-flow__blk {
@@ -7816,29 +7833,29 @@ html.process-open { overflow: hidden; }
   .pz-flow__d { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.55 !important; }
 
   /* ════ SECTION 4 · POZE Logo Analysis (#pz-s4) — 제목→Identity→로고→설명 1열 ════ */
-  .pz-sec--logo { background: #e0d6cf !important; color: #201916; }
+  .pz-sec--logo { background: #fff !important; color: #2a2825; padding: clamp(24px,6vw,40px) clamp(18px,5vw,26px) !important; }
+  .pz-logo__caption {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    margin: 0 0 clamp(18px,4vw,26px) !important; text-align: center;
+    font-size: clamp(15px,4vw,18px) !important; line-height: 1.5 !important;
+  }
   .pz-logo__title {
     position: static !important; left: auto !important; top: auto !important;
     margin: 0 0 clamp(16px,3vw,22px) !important;
-    font-size: clamp(22px,6vw,32px) !important; line-height: 1.2 !important;
+    font-size: clamp(22px,6vw,32px) !important; line-height: 1.24 !important;
+  }
+  .pz-logo__img {
+    position: static !important; left: auto !important; top: auto !important; transform: none !important;
+    width: clamp(150px,52vw,240px) !important; margin: 0 0 clamp(20px,4vw,28px) !important;
   }
   .pz-logo__id {
     position: static !important; left: auto !important; top: auto !important;
-    width: auto !important; margin: 0 0 clamp(20px,4vw,28px) !important;
+    width: auto !important; margin: 0 !important;
     gap: clamp(8px,2vw,12px) !important;
   }
-  .pz-logo__idh { font-size: clamp(13px,3.5vw,15px) !important; letter-spacing: 0.08em !important; }
+  .pz-logo__idh { font-size: clamp(13px,3.5vw,16px) !important; letter-spacing: 0.02em !important; }
   .pz-logo__idlist { gap: clamp(4px,1.5vw,8px) !important; }
-  .pz-logo__idlist li { font-size: clamp(13px,3.4vw,15px) !important; letter-spacing: 0.06em !important; }
-  .pz-logo__center {
-    position: static !important; left: auto !important; top: auto !important;
-    width: 100% !important; gap: clamp(16px,3vw,22px) !important;
-  }
-  .pz-logo__img { width: clamp(140px,46vw,220px) !important; }
-  .pz-logo__desc {
-    white-space: normal !important;
-    font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; letter-spacing: 0.04em !important;
-  }
+  .pz-logo__idlist li { font-size: clamp(13px,3.4vw,16px) !important; letter-spacing: 0.02em !important; }
 
   /* ════ SECTION 5 · 10 · 풀블리드 비디오 (#pz-s5 / #pz-s10, --full) ════ */
   .pz-sec--full { padding: 0 !important; }       /* 영상 꽉 차게(aspect-ratio 가 높이 예약) */
@@ -7846,7 +7863,7 @@ html.process-open { overflow: hidden; }
   .pz-cap { font-size: clamp(11px,3vw,14px) !important; }   /* 장식 캡션(보통 숨김) — 떠도 안 깨지게 */
 
   /* ════ SECTION 6 · REBUILT (#pz-s6, split) — 이미지 위, 텍스트 아래 ════ */
-  .pz-sec--rebuilt { background: #e0d6cf !important; color: #251a13; }
+  .pz-sec--rebuilt { background: #fff !important; color: #1f1c18; padding: 0 0 clamp(22px,6vw,34px) !important; }
   .pz-rebuilt__img {
     position: static !important; left: auto !important; top: auto !important;
     width: 100% !important; height: auto !important;
@@ -7854,10 +7871,11 @@ html.process-open { overflow: hidden; }
   }
   .pz-rebuilt__txt {
     position: static !important; left: auto !important; top: auto !important;
-    width: auto !important; gap: clamp(10px,2.5vw,14px) !important;
+    width: auto !important; gap: clamp(12px,3vw,16px) !important;
+    padding: 0 clamp(18px,5vw,26px);
   }
-  .pz-rebuilt__title { font-size: clamp(22px,6vw,32px) !important; line-height: 1.2 !important; }
-  .pz-rebuilt__sub   { font-size: clamp(13px,1.4vw,15px) !important; line-height: 1.5 !important; }
+  .pz-rebuilt__title { font-size: clamp(22px,6vw,32px) !important; line-height: 1.24 !important; }
+  .pz-rebuilt__sub   { font-size: clamp(14px,3.8vw,17px) !important; line-height: 1.6 !important; }
 
   /* ════ SECTION 7 · COLOR DIRECTION (#pz-s7) — 핀 중화 + 색카드 1열 적층 ════ */
   #pz-s7-pin { height: auto !important; }                 /* 220svh 빈공간 제거 → 일반 흐름(핀은 motion 이 모바일서 off) */
@@ -7890,15 +7908,13 @@ html.process-open { overflow: hidden; }
   .pz-color__hex  { font-size: clamp(12px,3vw,13px) !important; }
   .pz-color__desc { font-size: clamp(13px,3.4vw,14px) !important; line-height: 1.45 !important; }
 
-  /* ════ SECTION 8 · 웹사이트 목업 (#pz-s8, .pz-shop) — sticky 해제, 1열 적층 ════ */
-  .pz-shop { background: #e0d6cf !important; }
-  .pz-shop__top  { width: 100% !important; height: auto !important; }
-  .pz-shop__row  { flex-direction: column !important; align-items: stretch !important; }
-  .pz-shop__long { width: 100% !important; height: auto !important; }
-  .pz-shop__sticky {                             /* 네이티브 sticky → 일반 흐름(모바일선 고정 의미 없음) */
-    position: static !important; top: auto !important;
-    width: 100% !important; height: auto !important;
+  /* ════ SECTION 8 · 웹사이트 목업 (#pz-s8, .rp-shop) — sticky 해제, 영상→이미지 1열 적층 ════ */
+  .rp-shop { background: #efe9e2 !important; }
+  .rp-shop__hero {                               /* 모바일선 고정 의미 없음 → 일반 흐름 */
+    position: static !important; top: auto !important; z-index: auto !important;
+    width: 100% !important;
   }
+  .rp-shop__page { width: 100% !important; height: auto !important; }
 
   /* ════ SECTION 9 · 모바일 목업 (#pz-s9, .pz-phone) — 가로 종횡비 → 세로 높이로 폰 크게 ════ */
   .pz-phone {
