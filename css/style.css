@@ -7576,6 +7576,20 @@ html.process-open { overflow: hidden; }
 .pz-serif--poze     { top: 28.5%; }   /* 디자인 top472/1620 — image1 하단 */
 .pz-serif--everyday { top: 63.2%; }   /* 디자인 top1038/1620 — image2/3 경계 */
 
+/* ── RIPE 제작과정 SECTION 1 — 에디토리얼 인트로 (Image#7) ──────────────────
+   상단 풀폭 바스켓 컷 + 하단 2컷(좌 물보라·우 모델) + 우상단 RIPE 워드마크(Cormorant).
+   .pz-sec(container-type:inline-size) 안이라 cqw 반응형. 사용자 추후 수정 예정. */
+.rp-intro { display: flex; flex-direction: column; gap: 1cqw; padding: 1.4cqw; background: #efe9e2; }
+.rp-intro__hero { display: block; width: 100%; height: auto; border-radius: 2px; }
+.rp-intro__pair { position: relative; display: grid; grid-template-columns: 0.74fr 1.26fr; gap: 1cqw; }
+.rp-intro__pair img { display: block; width: 100%; height: 34cqw; object-fit: cover; border-radius: 2px; }
+.rp-wordmark {
+  position: absolute; top: 1.6cqw; right: 2cqw; z-index: 2;
+  font-family: 'Cormorant Garamond', serif; font-weight: 400;
+  font-size: 4.6cqw; line-height: 1; letter-spacing: 0.2em; color: #fff;
+  text-shadow: 0 2px 14px rgba(30,22,16,0.42);
+}
+
 /* 섹션2 — 좌 세리프 카피 / 우 플랫레이 (디자인 1440×907) */
 .pz-sec--split { aspect-ratio: 1440 / 907; background: #e0d6cf; }
 .pz-split-img {

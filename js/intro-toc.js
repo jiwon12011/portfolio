@@ -31,7 +31,7 @@
     { key: "gwihon",    num: "03", title: "귀혼",          sub: "UXUI / 2026",     thumb: "img/main/main_hon.webp",       preview: "img/hon/hon_thumb.mp4" },
     { key: "mathhub",   num: "04", title: "MathHub",       sub: "UXUI / 2026",     thumb: "img/main/main_mathhub.webp",   preview: "img/mathhub/mathhub_intro.mp4" },
     { key: "pledis",    num: "05", title: "플레디스",      sub: "Branding / 2026", thumb: "img/main/main_pledis.webp",    preview: "img/pledis/pledis_intro.mp4?v=2" },
-    { key: "poze",      num: "06", title: "POZE",          sub: "Branding / 2026", thumb: "img/main/main_poze.webp",      preview: "img/poze/poze_thumb.mp4" },
+    { key: "poze",      num: "06", title: "Ripe",          sub: "Fragrance / 2026", thumb: "img/main/main_poze.webp",      preview: "img/ripe/ripe_intro.mp4" },
     { key: "sangsang",  num: "07", title: "상상의 문",     sub: "Web / 2026",      thumb: "img/main/main_door.webp",      preview: "img/sangsangdoor/sangsangdoor_intro.mp4" },
     { key: "playlist",  num: "08", title: "우리 사이의 음표", sub: "Visual Novel / 2026", thumb: "img/main/main_playlist_game.webp", preview: "img/playlist_game/playlist_game_intro.mp4?v=2", cardPoster: "img/playlist_game/playlist_card_poster.webp" },
   ];
