@@ -11,7 +11,7 @@
   const modals = [...document.querySelectorAll(".process")];
   if (!modals.length) return;
 
-  const NO_OPEN = ".intro-list, .intro-nav, .intro-brand, [data-go], [data-go-main]";
+  const NO_OPEN = ".intro-list, .intro-nav, .site-nav, .intro-brand, [data-go], [data-go-main]";
   const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const PLAY  = "M8 5v14l11-7z";
   const PAUSE = "M8 5h3v14H8zM13 5h3v14h-3z";
@@ -252,7 +252,7 @@
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!fine || reduce) return;
 
-  const NO = ".intro-list, .intro-nav, .intro-brand, [data-go], [data-go-main]";
+  const NO = ".intro-list, .intro-nav, .site-nav, .intro-brand, [data-go], [data-go-main]";
   const HALF = 21;                 // 디스크 반지름(42/2) — 포인터 중심 정렬
   let tx = innerWidth / 2, ty = innerHeight / 2, cx = tx, cy = ty;
   let on = false, idleT = 0;

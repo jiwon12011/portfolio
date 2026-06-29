@@ -171,6 +171,11 @@
             '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 16-4.5-4.5L9 18"/></svg>' +
             '<span class="mbh-chip__label">Banner</span>' +
             '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
+          /* AI 활용기술 — 외부 포트폴리오(새 탭). 데스크톱 .site-nav 와 동일 목적지 */
+          '<a class="mbh-chip mbh-chip--ext" href="https://jiwon12011.github.io/portfolio_aiflow/" target="_blank" rel="noopener" aria-label="AI 활용기술 — 새 탭에서 열기">' +
+            '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="2"/><path d="M12 8V4M8.5 13h.01M15.5 13h.01M9 16.5h6"/></svg>' +
+            '<span class="mbh-chip__label">AI Tech</span>' +
+            '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>' +
         '</nav>' +
       '</div>' +
     '</header>' +

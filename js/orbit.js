@@ -229,7 +229,7 @@
      tiltX/Y   : 마우스 기반 패럴럭스 틸트(-1..1), tiltXSmooth/Y lerp 추종. */
   let phase = (IS_3D && ORBIT_MODE === "continuous") ? -theta0[FRONT_CARD_3D] : 0;  // 로드 시 about 정면
   let spinT = 0;          // 하이브리드 인트로 스핀 누적시간(호버 freeze 시 일시정지)
-  let bobT = 0;           // 부유(bobbing) 전용 시간 — freeze 시 느려지되 멈추진 않음
+  let bobT = 0;           // 부유(bobbing) 전용 시간 — deck-sliding 중엔 advance 정지(위상 hold) → 같은 위상에서 재개
   let speedMul = 1;
   let speedTarget = 1;
   let steer = 0;          // 목표 steering
@@ -644,7 +644,7 @@
     /* 제작과정/About 오버레이가 열려 있으면 orbit 연산·렌더 스킵(가려진 채 CPU·GPU 낭비 방지).
        rAF 는 유지해 닫힐 때 즉시 재개, dt 점프 방지 위해 last 갱신 */
     const root = document.documentElement;
-    if (root.classList.contains("process-open") || root.classList.contains("about-open") || root.classList.contains("deck-sliding")) {
+    if (root.classList.contains("process-open") || root.classList.contains("about-open")) {
       last = ts;
       rafId = requestAnimationFrame(tick);
       return;
@@ -653,6 +653,18 @@
     let dt = (ts - last) / 1000;
     last = ts;
     if (dt > 0.1) dt = 0.1;
+
+    /* ── deck-sliding 위상 hold ──────────────────────────────────────────
+       가로 슬라이드 전환(메인↔인트로 등) 중엔 bob 위상(bobT)을 advance 하지 않고
+       카드 transform 도 다시 그리지 않아 마지막 프레임 그대로 정지 → 세로 이동 0.
+       진폭을 0으로 줄이지 않으므로 시작 시 "내려앉음"·도착 시 "부풀어오름"(위에서 아래로 들썩)이 없다.
+       전환이 끝나면 bobT 가 같은 위상에서 이어져 점프/onset 없이 부유 재개.
+       phase 갱신·steering·parallax 등 나머지 orbit 연산도 함께 스킵. ── */
+    if (root.classList.contains("deck-sliding")) {
+      rafId = requestAnimationFrame(tick);
+      return;
+    }
+
     tShow += dt;
     bobT  += dt * lerp(0.2, 1.0, speedMul);
 

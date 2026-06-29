@@ -772,6 +772,119 @@ img.is-empty { color: transparent; }
 .intro-nav__txt i { font-size: 10.5px; font-style: normal; color: var(--muted); }
 
 /* ======================================================================
+   .site-nav — 좌상단 단일 고정 섹션 네비(메인+인트로 공통, deck 바깥).
+   글래스 패널 + 세로 스택. 내 소개/마케팅/그래픽은 about.js 라우팅
+   (.intro-nav__item[data-nav]) 재사용, AI 활용기술은 외부 새 탭.
+   자식이 참조하는 --it-* 테마 변수를 로컬로 정의(전역 다크 글래스).
+====================================================================== */
+.site-nav {
+  position: fixed; z-index: 62;        /* 인트로 패널(50)·목차(60) 위, play-cursor(90)·process(100)·about(120) 아래 */
+  left: clamp(28px, 3.4vw, 65px);
+  top: calc(clamp(28px, 3.4vw, 65px) + clamp(30px, 2.4vw, 40px));   /* 브랜드 아래 12~16px */
+  width: clamp(206px, 14.5vw, 244px);
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 10px 10px 11px; border-radius: 16px;
+  /* 기본 = 인트로 톤: 아주 옅은 라이트 프로스티드(밝은 영상 위 가독은 텍스트 shadow가 받침).
+     메인에선 아래 html:not(.off-main) 에서 박스를 완전히 벗고 텍스트+칩만 남긴다. */
+  background:
+    radial-gradient(130% 80% at 50% -10%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 34%, transparent 64%),
+    rgba(220, 230, 250, 0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 14px 34px -26px rgba(20,30,60,0.42), inset 0 1px 1px rgba(255,255,255,0.18);
+  -webkit-backdrop-filter: blur(13px) saturate(1.04);
+          backdrop-filter: blur(13px) saturate(1.04);
+  --it-title: #fff; --it-accent: #a8c8f0;
+  --muted: rgba(255,255,255,0.62); --it-text: rgba(255,255,255,0.86);
+  color: var(--it-text);
+  transform: translateZ(0);            /* 고정 레이어 승격 — 패널 슬라이드 위 재합성 비용↓ */
+  transition: opacity .28s ease;       /* 전환(블랙 화면) 중 숨김용 페이드 */
+}
+/* 메인 씬(라이트 카드 톤) — 박스 "외형"만 숨김(배경/테두리색/그림자/블러).
+   ⚠️ 패딩·테두리 폭 등 레이아웃은 base(인트로)와 동일하게 유지 → 메인↔인트로에서
+   텍스트·아이콘 위치가 일치(전환 시 점프 없음). 박스만 안 보일 뿐 콘텐츠 좌표는 같다. */
+html:not(.off-main) .site-nav {
+  background: none; border-color: transparent; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+html:not(.off-main) .site-nav .intro-nav__item:hover,
+html:not(.off-main) .site-nav .intro-nav__item:focus-visible { background: rgba(255,255,255,0.05); }
+html:not(.off-main) .site-nav .intro-nav__ico {
+  background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.18);
+}
+/* 인트로(밝은 영상 위) — 라벨 가독성 보강 */
+html.off-main .site-nav .intro-nav__txt b { text-shadow: 0 2px 5px rgba(18,32,64,0.30); }
+html.off-main .site-nav .intro-nav__txt i { color: rgba(255,255,255,0.72); }
+
+/* CLICK ME — 시선 끄는 작은 글래스 캡션 + 미세 글로우 점멸 */
+.site-nav__hint { margin: 1px 3px 5px; font-size: 0; }
+.site-nav__hint span {
+  display: inline-block; padding: 3px 9px; border-radius: 999px;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0.22em; color: #bcd2f2;
+  background: rgba(168,200,240,0.09); border: 1px solid rgba(168,200,240,0.22);
+  text-shadow: 0 1px 8px rgba(80,110,160,0.45);
+}
+/* 메인(박스 없음·밝은 하늘 위) — 텍스트 가독성 soft shadow */
+html:not(.off-main) .site-nav .intro-nav__txt b { text-shadow: 0 1px 7px rgba(18,36,68,0.42); }
+html:not(.off-main) .site-nav .intro-nav__txt i { color: rgba(255,255,255,0.74); text-shadow: 0 1px 6px rgba(18,36,68,0.36); }
+html:not(.off-main) .site-nav__hint span { text-shadow: 0 1px 9px rgba(40,70,120,0.55); }
+@media (prefers-reduced-motion: no-preference) {
+  .site-nav__hint span { animation: siteNavPulse 2.4s ease-in-out infinite; }
+}
+@keyframes siteNavPulse {
+  /* opacity만 펄스(컴포지터 단독) — box-shadow 키프레임은 매 프레임 페인트라 제거.
+     정적 text-shadow/border 글로우가 이미 있어 "숨쉬는 빛" 느낌은 유지된다. */
+  0%, 100% { opacity: 0.72; }
+  50%      { opacity: 1; }
+}
+
+/* 항목 — .intro-nav__item 베이스를 행 블록으로 확장(좌측 액센트 띠 + 호버 틴트) */
+.site-nav .intro-nav__item {
+  position: relative; gap: 10px; overflow: hidden;
+  padding: 8px 10px 8px 12px; border-radius: 11px;
+  transition: background .22s ease;
+}
+.site-nav .intro-nav__item::before {
+  content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2.5px;
+  border-radius: 2px; background: var(--it-accent);
+  transform: scaleY(0); transform-origin: top; opacity: 0;
+  transition: transform .26s cubic-bezier(.22,1,.36,1), opacity .26s ease;
+}
+.site-nav .intro-nav__item:hover,
+.site-nav .intro-nav__item:focus-visible { background: rgba(255,255,255,0.08); }
+.site-nav .intro-nav__item:hover::before,
+.site-nav .intro-nav__item:focus-visible::before { transform: scaleY(1); opacity: 1; }
+.site-nav .intro-nav__item:focus-visible { outline: 2px solid var(--it-accent); outline-offset: 2px; }
+/* 아이콘 칩 — 패널이 이미 글래스라 칩의 backdrop-filter 는 제거(중첩 블러 비용↓) */
+.site-nav .intro-nav__ico {
+  width: 34px; height: 34px; border-radius: 10px;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.22);
+}
+.site-nav .intro-nav__txt b { font-size: 13px; letter-spacing: 0; color: #fff; }
+.site-nav .intro-nav__txt i { font-size: 10.5px; letter-spacing: 0.03em; }
+/* 외부 링크(AI) — 우측 새 탭 아이콘 */
+.site-nav__go { margin-left: auto; font-size: 15px; line-height: 1; color: var(--muted);
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+  transition: color .2s, transform .2s; }
+.site-nav__ext:hover .site-nav__go { color: var(--it-accent); transform: translate(2px, -2px); }
+
+/* 제작과정 모달·About 풀페이지 열림 시 가림 + 키보드 탭 순서에서 제거(visibility:hidden).
+   About(z120)는 시각적으론 이미 덮지만, 뒤의 .site-nav 4항목이 탭으로 잡히던 갭을 차단. */
+html.process-open .site-nav,
+html.about-open .site-nav { opacity: 0; visibility: hidden; pointer-events: none; }
+/* 페이지 전환(블랙 화면) 중엔 떠있지 않게 — 메인↔인트로/패널↔패널 슬라이드 동안 페이드아웃 */
+html.deck-sliding-main .site-nav,
+html.deck-sliding .site-nav { opacity: 0; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav .intro-nav__item,
+  .site-nav .intro-nav__item::before,
+  .site-nav .intro-nav__ico,
+  .site-nav__go { transition: none; }
+  .site-nav .intro-nav__item:hover .intro-nav__ico { transform: none; }
+}
+
+/* ======================================================================
    진주 토글 네비 (데스크톱 전용 — js/intro-nav.js 가 .intro-nav--pearl 부여)
    평소: 상단 중앙 진주 1개 → hover/focus/click 시 3개 글래스 버블로 펼침.
    터치/모바일은 enhance 안 함 → 기존 우상단 글래스 칩 그대로.
@@ -823,7 +936,8 @@ img.is-empty { color: transparent; }
 html.deck-sliding .project-intro__back,
 html.deck-sliding .intro-nav__ico,
 html.deck-sliding .intro-nav__orb,
-html.deck-sliding .intro-nav--pearl .intro-nav__ico {
+html.deck-sliding .intro-nav--pearl .intro-nav__ico,
+html.deck-sliding .site-nav {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -891,8 +1005,9 @@ html.deck-sliding .hero-godray { animation-play-state: paused; }
   .intro-nav__pearl, .intro-nav__orb::before { animation: none; }   /* 방어선 — 후속 코드 추가 시 모션 누수 방지 */
 }
 
-/* 좌측 프로젝트 정보 — 헤더 아래부터 한 컬럼으로(충돌 방지) */
-.intro-info { position: absolute; left: var(--pad); top: clamp(140px, 19vh, 212px); max-width: min(42vw, 540px); }  /* 우측 목차(.intro-list)와 상단 정렬 일치 */
+/* 좌측 프로젝트 정보 — 헤더+.site-nav 박스 아래로 내림(겹침 방지).
+   top = 브랜드 위치(--pad) + .site-nav 높이 여유분. 박스↔타이틀 ≥40px 확보. */
+.intro-info { position: absolute; left: var(--pad); top: calc(clamp(28px, 3.4vw, 65px) + 352px); max-width: min(42vw, 540px); }
 .intro-info__eyebrow { margin:0 0 12px; font-size: 12px; letter-spacing: 0.24em; color: var(--muted); font-weight: 600; }
 .intro-info__title { margin: 0; font-size: clamp(34px, 3.9vw, 75px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.04; color: var(--it-title); }
 .intro-info__sub { margin: clamp(18px, 1.8vh, 28px) 0 0; font-size: clamp(13px, 1vw, 19px); color: var(--it-text); }
@@ -1179,19 +1294,24 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 .intro-scroll__line { width:1px; height: 34px; background: linear-gradient(var(--it-muted), transparent); }
 @keyframes introScroll { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(5px);opacity:.35} }
 
-/* ── 패널 진입 시 좌측 정보 스태거 등장(시네마틱) — .project-intro__back 패턴 확장 ── */
+/* ── 패널 진입 시 좌측 정보 스태거 등장(시네마틱) — .project-intro__back 패턴 확장 ──
+   【수정 2026-06】
+   ① NOT-active 상태에 `transition: none` 명시: Chrome/Blink 가 이탈 시 이전 `.is-active`
+     transition 을 역방향(0→14px = 아래) 재사용하는 현상을 차단.
+   ② `.is-active` 규칙에 `opacity:1; transform:none` TO값 명시: 암묵적 기본값 의존 제거,
+     브라우저간 FROM/TO 계산 일관성 확보. ── */
 .project-intro:not(.is-active) .intro-info__eyebrow,
 .project-intro:not(.is-active) .intro-info__title,
 .project-intro:not(.is-active) .intro-info__sub,
 .project-intro:not(.is-active) .intro-info__rule,
 .project-intro:not(.is-active) .intro-info__desc,
-.project-intro:not(.is-active) .intro-index { opacity: 0; transform: translateY(14px); }
-.project-intro.is-active .intro-info__eyebrow { transition: opacity .45s ease .32s, transform .5s cubic-bezier(.22,1,.36,1) .32s; }
-.project-intro.is-active .intro-info__title   { transition: opacity .5s ease .42s, transform .55s cubic-bezier(.22,1,.36,1) .42s; }
-.project-intro.is-active .intro-info__sub     { transition: opacity .4s ease .52s, transform .45s cubic-bezier(.22,1,.36,1) .52s; }
-.project-intro.is-active .intro-info__rule    { transition: opacity .35s ease .58s; }
-.project-intro.is-active .intro-info__desc    { transition: opacity .4s ease .60s, transform .45s cubic-bezier(.22,1,.36,1) .60s; }
-.project-intro.is-active .intro-index         { transition: opacity .4s ease .68s, transform .45s cubic-bezier(.22,1,.36,1) .68s; }
+.project-intro:not(.is-active) .intro-index { opacity: 0; transform: translateY(14px); transition: none; }
+.project-intro.is-active .intro-info__eyebrow { opacity: 1; transform: none; transition: opacity .45s ease .32s, transform .5s cubic-bezier(.22,1,.36,1) .32s; }
+.project-intro.is-active .intro-info__title   { opacity: 1; transform: none; transition: opacity .5s ease .42s, transform .55s cubic-bezier(.22,1,.36,1) .42s; }
+.project-intro.is-active .intro-info__sub     { opacity: 1; transform: none; transition: opacity .4s ease .52s, transform .45s cubic-bezier(.22,1,.36,1) .52s; }
+.project-intro.is-active .intro-info__rule    { opacity: 1; transform: none; transition: opacity .35s ease .58s; }
+.project-intro.is-active .intro-info__desc    { opacity: 1; transform: none; transition: opacity .4s ease .60s, transform .45s cubic-bezier(.22,1,.36,1) .60s; }
+.project-intro.is-active .intro-index         { opacity: 1; transform: none; transition: opacity .4s ease .68s, transform .45s cubic-bezier(.22,1,.36,1) .68s; }
 @media (prefers-reduced-motion: reduce) {
   .project-intro:not(.is-active) .intro-info__eyebrow,
   .project-intro:not(.is-active) .intro-info__title,
@@ -1213,7 +1333,7 @@ html:not(.off-main) .intro-list__eq::before { animation-play-state: paused; }
 
 /* 반응형: 좁은 화면에선 보조 UI 숨김(가독성 우선) */
 @media (max-width: 900px) {
-  .intro-list, .intro-hints { display: none; }
+  .intro-list, .intro-hints, .site-nav { display: none; }
   .intro-info { max-width: 80vw; top: 16%; }
 }
 
@@ -8407,8 +8527,10 @@ html.about-open { overflow: hidden; }
 /* 3섹션 — 각 섹션 최소 한 화면, 콘텐츠 세로 중앙 */
 .about__section { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; }
 .about__section--ph { align-items: center; text-align: center; }
-.about__eyebrow { position: absolute; top: clamp(18px, 3vh, 30px); left: clamp(28px, 4vw, 56px);
-  font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: rgba(40,40,40,0.5); }
+/* BACK 버튼이 좌상단으로 이동(.about__back left)하면서 섹션 라벨은 우상단으로 미러 —
+   원래 BACK이 쓰던 자리라 콘텐츠가 비어있는 게 보장됨(좌상단 BACK과 충돌 회피). */
+.about__eyebrow { position: absolute; top: clamp(18px, 3vh, 30px); right: clamp(28px, 4vw, 56px);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.18em; color: rgba(40,40,40,0.5); text-align: right; }
 .about__ph { padding: 0 clamp(28px, 5vw, 80px); }
 .about__sectitle { margin: 0; font-size: clamp(28px, 3.6vw, 54px); font-weight: 800; letter-spacing: -0.02em; color: #1a1a1a; line-height: 1.08; }
 .about__phnote { margin: 16px 0 0; font-size: clamp(13px, 1.05vw, 17px); color: #9a9a9a; }
@@ -8848,7 +8970,7 @@ html.lb-open { overflow: hidden; }
 .about-nav__item.is-active .about-nav__dot { width: 26px; background: #1a1a1a; }
 @media (max-width: 880px) { .about-nav { right: 12px; gap: 12px; } .about-nav__label { display: none; } }
 @media (prefers-reduced-motion: reduce) { .about-nav__dot, .about-nav__label { transition: none; } }
-.about__back { position: fixed; top: 24px; right: 30px; z-index: 5;
+.about__back { position: fixed; top: 24px; left: 30px; z-index: 5;
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(255,255,255,0.72); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   border: 1px solid #e4e4e4; border-radius: 999px; padding: 8px 16px 8px 12px;
@@ -11251,6 +11373,7 @@ html.is-dial.deck-sliding .dial-about-capsule {
   .scene .scene-name,
   .ver-toggle,
   .intro-list--live,
+  .site-nav,
   .project-intro { display: none !important; }
 
   /* 문서 레벨 가로 스크롤 차단(방어선) — 3D/넘침 요소가 새도 뷰포트 밖으로 못 나감 */
@@ -11432,10 +11555,10 @@ html.is-dial.deck-sliding .dial-about-capsule {
   /* ───────────────────────── ② 액션 칩 (히어로 하단, 이미지 위) ───────── */
   /* 헤드라인 제거 → 칩이 히어로 foot(하단)으로 이동. foot은 margin-top:auto로 바닥 정렬 */
   .mbh-hero__foot { margin-top: auto; }
-  .mbh-chips { display: flex; gap: 10px; padding: 0; }
+  .mbh-chips { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; }
   /* 어두운 히어로 이미지 위 글래스 칩 — 어두운 글래스 + 흰 텍스트로 대비 확보(보라 아이콘 액센트 유지) */
   .mbh-chip {
-    flex: 1 1 0; min-width: 0; min-height: 48px; border-radius: 18px;
+    flex: 1 1 calc(50% - 5px); min-width: 0; min-height: 48px; border-radius: 18px;
     display: inline-flex; align-items: center; gap: 7px; padding: 12px 13px;
     border: 1px solid rgba(255,255,255,0.3);
     background: rgba(20,24,40,0.48);
