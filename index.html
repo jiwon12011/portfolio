@@ -7,9 +7,9 @@
   <meta name="description" content="Designing worlds worth staying in. Visual & experience design portfolio." />
 
   <!-- 파비콘 (오빗 모티프 — 열린 궤도 + 행성) -->
-  <link rel="icon" href="favicon.ico?v=6" sizes="any" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=6" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=6" />
+  <link rel="icon" href="favicon.ico?v=7" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=7" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=7" />
   <meta name="theme-color" content="#0d1521" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://jiwon12011.github.io/portfolio/" />
@@ -52,7 +52,7 @@
   <noscript><link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=block" /></noscript>
 
-  <link rel="stylesheet" href="css/style.css?v=20260629k" />
+  <link rel="stylesheet" href="css/style.css?v=20260630b" />
 
   <!-- ── 로딩 스플래시: 좌상단 워드마크 타이핑 (즉시 페인트, 다 쳐지면 페이드 → 메인) ── -->
   <style>
@@ -697,7 +697,7 @@
       <span class="intro-nav__ico material-symbols-outlined" aria-hidden="true">campaign</span>
       <span class="intro-nav__txt"><b>마케팅 실험</b><i>Marketing Lab</i></span>
     </a>
-    <a href="#" class="intro-nav__item" data-nav="projects">
+    <a href="#" class="intro-nav__item" data-nav="client">
       <span class="intro-nav__ico material-symbols-outlined" aria-hidden="true">grid_view</span>
       <span class="intro-nav__txt"><b>외주 작업</b><i>Client Works</i></span>
     </a>
@@ -5326,6 +5326,25 @@
     </div>
   </div>
 
+  <!-- ===================================================================
+       외주 작업(Client Works) 오버레이 — 사이트 네비 "외주 작업" 클릭 시 오픈.
+       타일은 js/client-works.js 의 CW_DATA 단일 소스에서 렌더(썸네일·URL 채우면 자동 갱신).
+  ==================================================================== -->
+  <section class="cw" id="client-works" role="dialog" aria-modal="true" aria-hidden="true" aria-label="외주 작업 Client Works">
+    <div class="cw__scrim" data-cw-close aria-hidden="true"></div>
+    <button class="cw__back" type="button" data-cw-close aria-label="닫기">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>BACK
+    </button>
+    <div class="cw__scroll">
+      <header class="cw__head">
+        <p class="cw__eyebrow">CLIENT WORKS</p>
+        <h2 class="cw__title">외주 작업</h2>
+        <p class="cw__lead">클라이언트와 함께한 웹 · 앱 · 커머스 스킨 작업.<br>타일을 누르면 실제 결과물로 이동합니다.</p>
+      </header>
+      <div class="cw__groups"><!-- js/client-works.js 가 렌더 --></div>
+    </div>
+  </section>
+
   <script src="js/main.js" defer></script>
   <script src="js/orbit.js?v=20260622c" defer></script>
   <script src="js/intro-toc.js" defer></script>
@@ -5333,6 +5352,7 @@
   <script src="js/deck.js?v=20260622c" defer></script>
   <script src="js/intro-toc-preview.js" defer></script>
   <script src="js/about.js" defer></script>
+  <script src="js/client-works.js?v=20260630a" defer></script>
   <script src="js/danmi-anim.js" defer></script>
   <script src="js/gallery.js" defer></script>
   <script src="js/process.js" defer></script>
