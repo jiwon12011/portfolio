@@ -167,9 +167,10 @@
             '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg>' +
             '<span class="mbh-chip__label">Marketing</span>' +
             '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
-          '<button class="mbh-chip" type="button" data-act="banner">' +
-            '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 16-4.5-4.5L9 18"/></svg>' +
-            '<span class="mbh-chip__label">Banner</span>' +
+          /* 외주 작업 — client-works 오버레이(__clientWorksCtrl). 데스크톱 .site-nav data-nav="client" 와 동일 */
+          '<button class="mbh-chip" type="button" data-act="client">' +
+            '<svg class="mbh-chip__ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></svg>' +
+            '<span class="mbh-chip__label">Client Works</span>' +
             '<svg class="mbh-chip__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>' +
           /* AI 활용기술 — 외부 포트폴리오(새 탭). 데스크톱 .site-nav 와 동일 목적지 */
           '<a class="mbh-chip mbh-chip--ext" href="https://jiwon12011.github.io/portfolio_aiflow/" target="_blank" rel="noopener" aria-label="AI 활용기술 — 새 탭에서 열기">' +
@@ -219,7 +220,7 @@
       const act = chip.dataset.act;
       if (act === "about") openAbout("resume");
       else if (act === "marketing") openAbout("marketing");   // About 패널 → 마케팅 섹션
-      else if (act === "banner") openAbout("projects");        // About 패널 → 배너(projects) 섹션
+      else if (act === "client") { if (window.__clientWorksCtrl) window.__clientWorksCtrl.open(); }  // 외주 작업 오버레이
     });
   });
 
