@@ -26,8 +26,8 @@
     {
       client: "웹네스트", type: "APP", note: "앱 3종", frame: "phone",
       items: [
-        { title: "웹네스트 앱 1", desc: "", url: "", thumb: "" },
-        { title: "웹네스트 앱 2", desc: "", url: "", thumb: "" },
+        { title: "수리수리 도감", desc: "", url: "", thumb: "img/webnest/webnest_1.webp?v=2" },
+        { title: "LAST SALVAGE", desc: "", url: "", thumb: "img/webnest/webnest_2.webp?v=2" },
         { title: "웹네스트 앱 3", desc: "", url: "", thumb: "" },
       ],
     },

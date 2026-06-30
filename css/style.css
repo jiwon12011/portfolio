@@ -11847,7 +11847,7 @@ a.cw-card:hover .cw-card__go { color: #2f7fe0; transform: translate(2px,-2px); }
 .cw-card--phone .cw-card__thumb { aspect-ratio: auto; display: grid; place-items: center;
   padding: clamp(22px,8%,40px) 0; overflow: hidden;
   background: radial-gradient(120% 92% at 50% 0%, rgba(77,159,255,0.16), rgba(77,159,255,0.04) 56%, #f1f5fb); }
-.cw-phone { position: relative; display: block; width: min(64%, 168px); aspect-ratio: 9 / 19;
+.cw-phone { position: relative; display: block; width: min(64%, 168px); aspect-ratio: 9 / 16.5;
   padding: 5px; border-radius: clamp(20px,9%,30px);
   background: linear-gradient(155deg, #23272f, #15171c);
   box-shadow: 0 20px 42px -18px rgba(20,30,50,0.55), 0 2px 6px -2px rgba(20,30,50,0.3); }
