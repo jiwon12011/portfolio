@@ -11802,8 +11802,72 @@ a.cw-card:hover .cw-card__go { color: #2f7fe0; transform: translate(2px,-2px); }
 .cw-card__soon { position: absolute; right: 13px; bottom: 14px;
   font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #aeb4be; }
 
+/* ── Feature Row: 좌 목업카드 + 우 설명 2단 (단일 항목 그룹) ──────────── */
+.cw__grid--featured { grid-template-columns: minmax(0,1.25fr) minmax(0,1fr);
+  align-items: center; gap: clamp(20px,3vw,46px); }
+.cw-featured__cell { display: flex; }
+.cw-featured__info { display: flex; flex-direction: column; gap: 10px; }
+.cw-featured__client { margin: 0; font-size: clamp(22px,2.4vw,34px); font-weight: 800;
+  letter-spacing: -0.02em; line-height: 1.05; color: #16181d; }
+.cw-featured__type { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: #2670cf; }
+.cw-featured__desc { margin: 6px 0 0; font-size: clamp(14px,1.05vw,16px); line-height: 1.75; color: #6b7280; }
+.cw-featured__cta { align-self: flex-start; margin-top: 8px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #2670cf; color: #fff; text-decoration: none;
+  font-size: 13px; font-weight: 700; letter-spacing: .02em;
+  padding: 10px 18px; border-radius: 999px;
+  box-shadow: 0 10px 24px -12px rgba(47,127,224,0.6);
+  transition: transform .2s, box-shadow .2s, background .2s; }
+.cw-featured__cta:hover { transform: translateY(-2px); background: #2670cf;
+  box-shadow: 0 16px 30px -12px rgba(47,127,224,0.7); }
+.cw-featured__cta:focus-visible { outline: 2px solid #4D9FFF; outline-offset: 2px; }
+.cw-featured__cta .material-symbols-outlined { font-size: 17px; }
+
+/* ── 브라우저 창 목업 (전부 CSS·이미지 0개, 장식은 aria-hidden) ──────── */
+.cw-chrome { position: absolute; inset: 0; display: flex; flex-direction: column; background: #fff; }
+.cw-chrome__bar { flex: none; display: flex; align-items: center; gap: 10px; height: 30px; padding: 0 12px;
+  background: linear-gradient(#fafbfd, #eef1f6); border-bottom: 1px solid rgba(0,0,0,0.07); }
+.cw-chrome__dots { display: inline-flex; gap: 6px; flex: none; }
+.cw-chrome__dots i { display: block; width: 9px; height: 9px; border-radius: 50%; }
+.cw-chrome__dots i:nth-child(1) { background: #ff5f57; }
+.cw-chrome__dots i:nth-child(2) { background: #febc2e; }
+.cw-chrome__dots i:nth-child(3) { background: #28c840; }
+.cw-chrome__url { flex: 1; min-width: 0; height: 18px; line-height: 18px; padding: 0 11px;
+  background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 999px;
+  font-size: 10.5px; color: #9aa1ad; letter-spacing: .02em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cw-chrome__view { position: relative; flex: 1; overflow: hidden; }
+/* 크롬 카드에선 배지를 상단 바 아래(뷰 영역)로 내려 신호등과 겹치지 않게 */
+.cw-card--chrome .cw-card__badge { top: 41px; left: 12px; }
+
+/* ── 폰 기기 목업 (전부 CSS·이미지 0개, 장식은 aria-hidden) ───────────── */
+/* 세로 폰이라 16/10 썸네일이 안 맞음 → 연한 파랑 별빛 틴트 위에 폰을 세워 가운데 정렬.
+   폰 폭은 카드폭의 64%지만 168px로 캡 → 3열 폰 3대가 동일 크기로 정렬됨. */
+.cw-card--phone .cw-card__thumb { aspect-ratio: auto; display: grid; place-items: center;
+  padding: clamp(22px,8%,40px) 0; overflow: hidden;
+  background: radial-gradient(120% 92% at 50% 0%, rgba(77,159,255,0.16), rgba(77,159,255,0.04) 56%, #f1f5fb); }
+.cw-phone { position: relative; display: block; width: min(64%, 168px); aspect-ratio: 9 / 19;
+  padding: 5px; border-radius: clamp(20px,9%,30px);
+  background: linear-gradient(155deg, #23272f, #15171c);
+  box-shadow: 0 20px 42px -18px rgba(20,30,50,0.55), 0 2px 6px -2px rgba(20,30,50,0.3); }
+.cw-phone::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,0.14), transparent 28%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); }
+.cw-phone__screen { position: relative; display: block; width: 100%; height: 100%;
+  border-radius: clamp(15px,7%,24px); overflow: hidden; background: #eef2f7; }
+/* 다이내믹 아일랜드형 노치 — 화면 상단 위에 얹는 작은 다크 필 */
+.cw-phone__notch { position: absolute; top: clamp(8px,5%,13px); left: 50%; transform: translateX(-50%); z-index: 2;
+  width: clamp(26px,28%,44px); height: clamp(6px,4.5%,9px); border-radius: 999px;
+  background: #0c0d10; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); }
+.cw-card--phone .cw-card__img { transition: transform .4s cubic-bezier(.22,1,.36,1); }
+a.cw-card--phone:hover .cw-card__img { transform: scale(1.05); }
+
 /* 반응형: 태블릿 2열 → 모바일 1열 */
-@media (max-width: 900px) { .cw__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) {
+  .cw__grid { grid-template-columns: repeat(2, 1fr); }
+  .cw__grid--featured { grid-template-columns: 1fr; }   /* 카드 위 / 설명 아래 */
+}
 @media (max-width: 560px) {
   .cw__grid { grid-template-columns: 1fr; gap: 14px; }
   .cw__back { top: 12px; left: 12px; }
