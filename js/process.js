@@ -62,6 +62,7 @@
       bandVids.forEach((bv) => { bv.muted = true; const pby = bv.play(); if (pby && pby.catch) pby.catch(() => {}); });
       document.querySelectorAll(".project-intro video").forEach((v) => v.pause());
       if (window.__makingRefresh) requestAnimationFrame(() => { window.__makingRefresh(); content.scrollTop = 0; });
+      if (window.__modalFocus) window.__modalFocus.activate(modal);   /* 직전 포커스 저장 + 닫기로 이동 + 배경 inert */
     };
     const finishClose = () => {
       panel.style.willChange = "";                          /* 레이어 해제 */
@@ -79,6 +80,7 @@
     };
     const close = () => {
       if (!modal.classList.contains("is-open") || modal.classList.contains("is-closing")) return;
+      if (window.__modalFocus) window.__modalFocus.deactivate(modal);   /* 배경 inert 복원 + 직전 포커스로 복귀 */
       if (reduceMotion()) { finishClose(); return; }
       panel.style.willChange = "transform, opacity";        /* 닫힘 직전 레이어 예약 */
       modal.querySelectorAll(".process__eq i").forEach((i) => (i.style.animationPlayState = "paused"));
@@ -192,6 +194,7 @@
       if (m !== currentModal && m !== targetModal && m.classList.contains("is-open")) {
         m.classList.remove("is-open", "is-closing", "is-switch-out");
         m.setAttribute("aria-hidden", "true");
+        if (window.__modalFocus) window.__modalFocus.deactivate(m, true);  /* 스택에서 정리(포커스 복원 생략) */
       }
     });
 
@@ -209,8 +212,10 @@
       switchTimer = null;
       currentModal.classList.remove("is-open", "is-closing", "is-switch-out");
       currentModal.setAttribute("aria-hidden", "true");
-      const curHero = currentModal.querySelector(".process__hero-media");
-      if (curHero) curHero.pause();
+      /* 이전 모달의 모든 영상 정지(hero·문·밴드·본문 등) — 안 보이는데 계속 디코드/재생되던 문제 */
+      currentModal.querySelectorAll("video").forEach((v) => { try { v.pause(); } catch (e) {} });
+      /* 타겟은 이미 열려 포커스를 가져갔으므로 현재는 스택에서만 정리(silent) */
+      if (window.__modalFocus) window.__modalFocus.deactivate(currentModal, true);
       /* 무거운 동기화(덱/피커 + ScrollTrigger refresh)는 전환 끝난 뒤 idle 에 → "끝 프리즈" 방지.
          그 사이 닫혀도 안전, 연타 시엔 마지막 것만 실행됨(switchTimer 로 직전 것 취소). */
       const sync = () => {

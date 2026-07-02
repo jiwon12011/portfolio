@@ -72,7 +72,7 @@
   const PLAY_SVG = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 
   /* 오빗에 올릴 항목 = 프로젝트 8 + ABOUT ME 카드 1(가운데 삽입) → 총 9. 장식(aria-hidden). */
-  const aboutItem = { about: true, title: "ABOUT ME", lead: "디자인과 개발로 이야기를 만듭니다" };
+  const aboutItem = { about: true, title: "ABOUT ME", lead: "AI를 디렉팅해 브랜드 경험을 설계합니다" };
   const ringItems = projects.slice();
   ringItems.splice(4, 0, aboutItem);
   const ANGLE_STEP = 360 / ringItems.length;

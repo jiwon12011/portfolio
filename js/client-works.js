@@ -28,7 +28,7 @@
       items: [
         { title: "수리수리 도감", desc: "", url: "", thumb: "img/webnest/webnest_1.webp?v=2" },
         { title: "LAST SALVAGE", desc: "", url: "", thumb: "img/webnest/webnest_2.webp?v=2" },
-        { title: "웹네스트 앱 3", desc: "", url: "", thumb: "" },
+        { title: "퐁당", desc: "", url: "", thumb: "img/webnest/webnest_3.webp" },
       ],
     },
     {
@@ -133,6 +133,7 @@
     document.documentElement.classList.add("cw-open");
     const sc = cw.querySelector(".cw__scroll"); if (sc) sc.scrollTop = 0;
     window.dispatchEvent(new CustomEvent("clientworks:open"));
+    if (window.__modalFocus) window.__modalFocus.activate(cw);  /* 직전 포커스 저장 + 닫기로 이동 + 배경 inert */
   };
   const finishClose = () => {
     cw.classList.remove("is-open", "is-closing");
@@ -141,6 +142,7 @@
   };
   const close = () => {
     if (!cw.classList.contains("is-open") || cw.classList.contains("is-closing")) return;
+    if (window.__modalFocus) window.__modalFocus.deactivate(cw);  /* 배경 inert 복원 + 직전 포커스로 복귀 */
     if (reduce()) { finishClose(); return; }
     cw.classList.add("is-closing");
     let done = false;

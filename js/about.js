@@ -82,6 +82,7 @@
     requestAnimationFrame(() => { jumpTo(id, true); spy(); });   /* 오픈은 해당 섹션으로 즉시 */
     setTimeout(() => { jumpTo(id, true); spy(); }, 300);         /* 이미지·갤러리 레이아웃 정착 후 보정 */
     window.dispatchEvent(new CustomEvent("about:open", { detail: id }));  /* 갤러리 등장 트리거 등 */
+    if (window.__modalFocus) window.__modalFocus.activate(about);  /* 직전 포커스 저장 + 닫기로 이동 + 배경 inert */
   };
   const finishClose = () => {
     about.classList.remove("is-open", "is-closing");
@@ -90,6 +91,7 @@
   };
   const close = () => {
     if (!about.classList.contains("is-open") || about.classList.contains("is-closing")) return;
+    if (window.__modalFocus) window.__modalFocus.deactivate(about);  /* 배경 inert 복원 + 직전 포커스로 복귀 */
     if (reduce()) { finishClose(); return; }
     about.classList.add("is-closing");
     let done = false;
