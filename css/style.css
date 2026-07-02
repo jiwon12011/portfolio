@@ -9100,6 +9100,44 @@ html.lb-open { overflow: hidden; }
 }
 
 /* ===================================================================
+   공용 오버스크롤 체인 힌트 칩 (.oxit) — about → client-works → 처음화면
+   js/overlay-exit.js 가 host(.about/.cw) 에 동적 주입. 라이트 글래스+블루.
+   host 에 is-near-end(노출)·is-exit-armed(임계 근접) 토글, --p(0~1) 게이지.
+=================================================================== */
+.oxit { position: fixed; left: 50%; bottom: clamp(16px, 3vh, 30px);
+  transform: translateX(-50%) translateY(10px); z-index: 30;
+  pointer-events: none; opacity: 0; transition: opacity .4s ease, transform .4s ease; }
+.is-near-end .oxit { opacity: 1; transform: translateX(-50%); }
+.is-closing .oxit { opacity: 0 !important; transition-delay: 0s; }
+.oxit__glass { display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.62); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,0,0,0.07); border-radius: 999px; padding: 8px 16px;
+  box-shadow: 0 12px 30px -16px rgba(20,30,60,0.4); transition: border-color .2s, box-shadow .2s; }
+.oxit__arrow { display: inline-flex; }
+.oxit__arrow svg { width: 15px; height: 15px; fill: none; stroke: #3f8fe6; stroke-width: 2.2;
+  stroke-linecap: round; stroke-linejoin: round; animation: oxitBob 1.6s ease-in-out infinite; }
+@keyframes oxitBob { 0%,100% { transform: translateY(-1px); } 50% { transform: translateY(2px); } }
+.oxit__label { font-size: 12px; font-weight: 600; letter-spacing: .01em; color: #4a5460; white-space: nowrap; }
+.oxit__track { position: relative; width: 48px; height: 4px; border-radius: 999px; background: rgba(0,0,0,0.08); overflow: hidden; }
+.oxit__fill { position: absolute; top: 0; bottom: 0; left: 0; width: calc(var(--p,0) * 100%);
+  background: #4D9FFF; border-radius: inherit; }
+.is-exit-armed .oxit__glass { border-color: rgba(77,159,255,0.55); box-shadow: 0 14px 34px -14px rgba(77,159,255,0.5); }
+.is-exit-armed .oxit__arrow svg { animation: none; transform: translateY(3px); }
+.is-exit-armed .oxit__fill { background: linear-gradient(90deg, #7db9ff, #2f7fe0); box-shadow: 0 0 10px rgba(77,159,255,.55); }
+@media (max-width: 560px) {
+  .oxit__glass { max-width: calc(100vw - 32px); flex-wrap: wrap; justify-content: center; }
+  .oxit__label { white-space: normal; text-align: center; word-break: keep-all; }  /* 단어 중간 꺾임 방지 */
+}
+/* 모바일 세로: about 스크롤 끝에 스페이서 — fixed 칩이 마지막 본문을 안 덮게 */
+@media (max-width: 1024px) and (orientation: portrait) {
+  #about .about__scroll::after { content: ""; display: block; height: 88px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .oxit { transition: opacity .2s ease; }
+  .oxit__arrow svg { animation: none; }
+}
+
+/* ===================================================================
    EXPERIENCE & ACTIVITIES SECTION (#sec-exp / data-section="exp")
    Figma 절대배치(1080px 고정) 익스포트를 시맨틱 반응형 그리드로 재구성한 다크 섹션.
    ⚠️ prefix는 xp-/--xp 사용 — 기존 experiment 섹션이 exp-/--exp 를 이미 점유.

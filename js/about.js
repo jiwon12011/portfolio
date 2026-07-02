@@ -39,6 +39,7 @@
   const jumpTo = (id, instant) => {
     const sec = sectionEl(id);
     if (!sec || !scroller) return;
+    scroller.dispatchEvent(new Event("overlay:navscroll"));   /* overlay-exit: 프로그램 스크롤 중 오버스크롤 감지 잠금 */
     const top = topOf(sec);
     setActive(id);
     if (instant || reduce() || !window.gsap) {
