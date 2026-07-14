@@ -227,9 +227,10 @@
   /* ── about:open 이벤트 수신 — 열릴 때마다 모드 결정 ── */
   window.addEventListener("about:open", () => {
     if (!reduce() && isDesktop()) {
-      /* morphOpen 640ms + 레이아웃 정착 여유 → 720ms 후 핀 생성 */
-      setTimeout(initPin, 720);
+      /* 아래 섹션 앵커 점프가 밀리지 않도록 핀 레이아웃은 오픈 직후 먼저 확정 */
+      initPin();
       /* 이미지 로드 등 추가 정착 후 높이 재계산 */
+      setTimeout(() => { if (pinST) pinST.refresh(); }, 300);
       setTimeout(() => { if (pinST) pinST.refresh(); }, 1100);
     } else {
       initNative();
@@ -306,8 +307,11 @@
     lb.classList.add("is-open");
     lb.setAttribute("aria-hidden", "false");
     document.documentElement.classList.add("lb-open");
+    if (window.__modalFocus) window.__modalFocus.activate(lb);
   };
   const closeLb = () => {
+    if (!lb.classList.contains("is-open")) return;
+    if (window.__modalFocus) window.__modalFocus.deactivate(lb);
     lb.classList.remove("is-open");
     lb.setAttribute("aria-hidden", "true");
     document.documentElement.classList.remove("lb-open");
@@ -325,8 +329,9 @@
   lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
   document.addEventListener("keydown", (e) => {
     if (!lb.classList.contains("is-open")) return;
+    e.stopPropagation();
     if (e.key === "Escape") closeLb();
     else if (e.key === "ArrowLeft") show(cur - 1);
     else if (e.key === "ArrowRight") show(cur + 1);
-  });
+  }, true);
 })();
