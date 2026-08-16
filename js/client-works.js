@@ -71,7 +71,7 @@
     const view = opts.chrome ? chromeView : opts.phone ? phoneView : media;
     const corner = live
       ? `<span class="cw-card__go material-symbols-outlined" aria-hidden="true">open_in_new</span>`
-      : `<span class="cw-card__soon">준비중</span>`;
+      : "";
     // 크롬(featured) 카드는 우측 정보 블록이 설명을 담으므로 하단 메타 생략
     const meta = opts.chrome ? "" : `<span class="cw-card__meta">
           <strong class="cw-card__name">${esc(it.title)}</strong>
